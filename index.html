@@ -11,6 +11,59 @@
         background-color: #121212;
         color: #00bfff;
     }
+
+    /* 登录页面样式 */
+    #loginPage {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        text-align: center;
+    }
+    #loginPage img {
+        width: 120px;
+        margin-bottom: 20px;
+    }
+    #loginPage h1 {
+        margin-bottom: 10px;
+        font-size: 2em;
+        color: #1e90ff;
+    }
+    #loginPage p {
+        margin-bottom: 30px;
+        font-size: 1.2em;
+        color: #00bfff;
+    }
+    #loginPage input {
+        width: 250px;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+    }
+    #loginPage button {
+        width: 270px;
+        padding: 10px;
+        margin-top: 15px;
+        border: none;
+        border-radius: 5px;
+        background: linear-gradient(90deg, #1e90ff, #00bfff);
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    #loginPage .error {
+        color: #ff4d4d;
+        margin-top: 10px;
+        display: none;
+    }
+
+    /* 工具中心样式（原有） */
+    #toolPage {
+        display: none;
+    }
     h1 {
         text-align: center;
         margin: 20px 0;
@@ -86,94 +139,125 @@
         .tool {
             width: 90%;
         }
+        #loginPage input, #loginPage button {
+            width: 90%;
+        }
     }
 </style>
 </head>
 <body>
 
-<h1>DodoWheels 工具中心</h1>
+<!-- 登录页面 -->
+<div id="loginPage">
+    <img src="logo.png" alt="DodoWheels Logo">
+    <h1>DodoWheels 内部系统工具平台</h1>
+    <input type="text" id="username" placeholder="用户名">
+    <input type="password" id="password" placeholder="密码">
+    <button onclick="login()">登录</button>
+    <div class="error" id="errorMsg">用户名或密码错误</div>
+</div>
 
-<div class="system">
-    <h2>网站系统</h2>
-    <div class="tools">
-        <div class="tool">
-            <div class="tool-content">
-                <h3>网站产品最新序号获取工具</h3>
-                <a href="https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link" target="_blank">
-                    <button>下载</button>
-                </a>
+<!-- 工具中心页面 -->
+<div id="toolPage">
+    <h1>DodoWheels 工具中心</h1>
+
+    <div class="system">
+        <h2>网站系统</h2>
+        <div class="tools">
+            <div class="tool">
+                <div class="tool-content">
+                    <h3>网站产品最新序号获取工具</h3>
+                    <a href="https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link" target="_blank">
+                        <button>下载</button>
+                    </a>
+                </div>
+            </div>
+            <div class="tool">
+                <div class="tool-content">
+                    <h3>网站产品价格更新工具</h3>
+                    <a href="https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link" target="_blank">
+                        <button>下载</button>
+                    </a>
+                </div>
+            </div>
+            <div class="tool">
+                <div class="tool-content">
+                    <h3>网站新增产品工具</h3>
+                    <a href="https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link" target="_blank">
+                        <button>下载</button>
+                    </a>
+                </div>
+            </div>
+            <div class="tool">
+                <div class="tool-content">
+                    <h3>网站客户端产品检查工具</h3>
+                    <a href="https://drive.google.com/file/d/1kH6Mxeh1JCdeEI_zTbGlAuwiuGoVAii6/view?usp=drive_link" target="_blank">
+                        <button>下载</button>
+                    </a>
+                </div>
+            </div>
+            <div class="tool">
+                <div class="tool-content">
+                    <h3>网站服务端产品检查工具</h3>
+                    <a href="https://drive.google.com/file/d/1txe4Dtx2sjgb-lCd5-nScwBV3D9H4J2-/view?usp=drive_link" target="_blank">
+                        <button>下载</button>
+                    </a>
+                </div>
+            </div>
+            <div class="tool">
+                <div class="tool-content">
+                    <h3>DodoWheels智能AI小助手</h3>
+                    <img src="screenshot_ai.png" alt="AI小助手截图">
+                    <a href="https://drive.google.com/file/d/1HYJPOLjPMvHqK6qJG9TQtnUbnbPVGtRP/view?usp=drive_link" target="_blank">
+                        <button>下载</button>
+                    </a>
+                </div>
+            </div>
+            <div class="tool">
+                <div class="tool-content">
+                    <h3>DodoWheels价格查询工具</h3>
+                    <a href="https://drive.google.com/file/d/1EYrIF0HRo9SBQpq9a8_OiuWZg4C91iUz/view?usp=drive_link" target="_blank">
+                        <button>下载</button>
+                    </a>
+                </div>
+            </div>
+            <div class="tool">
+                <div class="tool-content">
+                    <h3>网站客户端所有产品抓取工具</h3>
+                    <span>开发中</span>
+                </div>
             </div>
         </div>
-        <div class="tool">
-            <div class="tool-content">
-                <h3>网站产品价格更新工具</h3>
-                <a href="https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link" target="_blank">
-                    <button>下载</button>
-                </a>
-            </div>
-        </div>
-        <div class="tool">
-            <div class="tool-content">
-                <h3>网站新增产品工具</h3>
-                <a href="https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link" target="_blank">
-                    <button>下载</button>
-                </a>
-            </div>
-        </div>
-        <div class="tool">
-            <div class="tool-content">
-                <h3>网站客户端产品检查工具</h3>
-                <a href="https://drive.google.com/file/d/1kH6Mxeh1JCdeEI_zTbGlAuwiuGoVAii6/view?usp=drive_link" target="_blank">
-                    <button>下载</button>
-                </a>
-            </div>
-        </div>
-        <div class="tool">
-            <div class="tool-content">
-                <h3>网站服务端产品检查工具</h3>
-                <a href="https://drive.google.com/file/d/1txe4Dtx2sjgb-lCd5-nScwBV3D9H4J2-/view?usp=drive_link" target="_blank">
-                    <button>下载</button>
-                </a>
-            </div>
-        </div>
-        <div class="tool">
-            <div class="tool-content">
-                <h3>DodoWheels智能AI小助手</h3>
-                <img src="screenshot_ai.png" alt="AI小助手截图">
-                <a href="https://drive.google.com/file/d/1HYJPOLjPMvHqK6qJG9TQtnUbnbPVGtRP/view?usp=drive_link" target="_blank">
-                    <button>下载</button>
-                </a>
-            </div>
-        </div>
-        <div class="tool">
-            <div class="tool-content">
-                <h3>DodoWheels价格查询工具</h3>
-                <a href="https://drive.google.com/file/d/1EYrIF0HRo9SBQpq9a8_OiuWZg4C91iUz/view?usp=drive_link" target="_blank">
-                    <button>下载</button>
-                </a>
-            </div>
-        </div>
-        <div class="tool">
-            <div class="tool-content">
-                <h3>网站客户端所有产品抓取工具</h3>
-                <span>开发中</span>
+    </div>
+
+    <div class="system">
+        <h2>ODOO系统</h2>
+        <div class="tools">
+            <div class="tool">
+                <div class="tool-content">
+                    <h3>ODOO智能小助手</h3>
+                    <img src="screenshot_odoo.png" alt="ODOO智能小助手截图">
+                    <span>计划中</span>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="system">
-    <h2>ODOO系统</h2>
-    <div class="tools">
-        <div class="tool">
-            <div class="tool-content">
-                <h3>ODOO智能小助手</h3>
-                <img src="screenshot_odoo.png" alt="ODOO智能小助手截图">
-                <span>计划中</span>
-            </div>
-        </div>
-    </div>
-</div>
+<script>
+    function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const errorMsg = document.getElementById('errorMsg');
+
+        if(username === 'admin' && password === '123456') {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('toolPage').style.display = 'block';
+        } else {
+            errorMsg.style.display = 'block';
+        }
+    }
+</script>
 
 </body>
 </html>
