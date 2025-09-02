@@ -1,208 +1,179 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tim Liu 科技工具平台</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body {
-            background-color: #121212;
-            color: #ffffff;
-            min-height: 100vh;
-            padding: 80px 20px 20px 20px;
-        }
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            text-align: center;
-            color: #00bfff;
-            text-shadow: 0 0 10px #00bfff;
-        }
-        #tabs {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        .tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 10px;
-            background: #1c1c1c;
-            color: #00bfff;
-            font-weight: bold;
-            transition: all 0.2s;
-        }
-        .tab.active {
-            background: #00bfff;
-            color: #121212;
-        }
-        #searchBox {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            border: 1px solid #00bfff;
-            background-color: #1c1c1c;
-            color: #ffffff;
-            font-size: 1rem;
-        }
-        .tool-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DodoWheels 工具中心</title>
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background-color: #121212;
+        color: #00bfff;
+    }
+    h1 {
+        text-align: center;
+        margin: 20px 0;
+        font-size: 2em;
+    }
+    .system {
+        margin: 20px auto;
+        max-width: 1200px;
+        text-align: center;
+    }
+    .system h2 {
+        margin-bottom: 15px;
+        color: #1e90ff;
+        font-size: 1.5em;
+    }
+    .tools {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+    .tool {
+        background: #1c1c1c;
+        border: 1px solid #00bfff50;
+        border-radius: 10px;
+        padding: 15px;
+        width: 250px;
+        box-shadow: 0 0 15px #00bfff30;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: transform 0.2s;
+    }
+    .tool:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 25px #00bfff70;
+    }
+    .tool img {
+        width: 100%;
+        border-radius: 5px;
+        margin: 10px 0;
+        box-shadow: 0 0 15px #00bfff50;
+    }
+    .tool-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .tool button, .tool span {
+        width: 100%;
+        background: linear-gradient(90deg, #1e90ff, #00bfff);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 8px 12px;
+        margin-top: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        text-align: center;
+    }
+    .tool span {
+        background: #444;
+        color: #00bfff;
+        cursor: default;
+    }
+    a {
+        text-decoration: none;
+        width: 100%;
+    }
+    @media (max-width: 600px) {
         .tool {
-            flex: 1 1 250px;
-            background-color: #1c1c1c;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px #00bfff50;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-width: 250px;
+            width: 90%;
         }
-        .tool h3 {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            color: #00bfff;
-        }
-        .buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .tool a, .tool button {
-            text-decoration: none;
-            color: #ffffff;
-            background: #00bfff;
-            padding: 6px 10px;
-            border-radius: 5px;
-            text-align: center;
-            transition: all 0.2s;
-            display: inline-block;
-            font-size: 0.9rem;
-            cursor: pointer;
-        }
-        .tool a:hover, .tool button:hover {
-            background: #3399ff;
-        }
-        .status {
-            color: #ffcc00;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-        @media (max-width: 600px) {
-            .tool-container {
-                flex-direction: column;
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
-    <h1>Tim Liu 科技工具平台</h1>
 
-    <div id="tabs">
-        <div class="tab active" data-target="websiteTools">网站系统</div>
-        <div class="tab" data-target="odooTools">ODOO系统</div>
+<h1>DodoWheels 工具中心</h1>
+
+<div class="system">
+    <h2>网站系统</h2>
+    <div class="tools">
+        <div class="tool">
+            <div class="tool-content">
+                <h3>网站产品最新序号获取工具</h3>
+                <a href="https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link" target="_blank">
+                    <button>下载</button>
+                </a>
+            </div>
+        </div>
+        <div class="tool">
+            <div class="tool-content">
+                <h3>网站产品价格更新工具</h3>
+                <a href="https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link" target="_blank">
+                    <button>下载</button>
+                </a>
+            </div>
+        </div>
+        <div class="tool">
+            <div class="tool-content">
+                <h3>网站新增产品工具</h3>
+                <a href="https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link" target="_blank">
+                    <button>下载</button>
+                </a>
+            </div>
+        </div>
+        <div class="tool">
+            <div class="tool-content">
+                <h3>网站客户端产品检查工具</h3>
+                <a href="https://drive.google.com/file/d/1kH6Mxeh1JCdeEI_zTbGlAuwiuGoVAii6/view?usp=drive_link" target="_blank">
+                    <button>下载</button>
+                </a>
+            </div>
+        </div>
+        <div class="tool">
+            <div class="tool-content">
+                <h3>网站服务端产品检查工具</h3>
+                <a href="https://drive.google.com/file/d/1txe4Dtx2sjgb-lCd5-nScwBV3D9H4J2-/view?usp=drive_link" target="_blank">
+                    <button>下载</button>
+                </a>
+            </div>
+        </div>
+        <div class="tool">
+            <div class="tool-content">
+                <h3>DodoWheels智能AI小助手</h3>
+                <img src="screenshot_ai.png" alt="AI小助手截图">
+                <a href="https://drive.google.com/file/d/1HYJPOLjPMvHqK6qJG9TQtnUbnbPVGtRP/view?usp=drive_link" target="_blank">
+                    <button>下载</button>
+                </a>
+            </div>
+        </div>
+        <div class="tool">
+            <div class="tool-content">
+                <h3>DodoWheels价格查询工具</h3>
+                <a href="https://drive.google.com/file/d/1EYrIF0HRo9SBQpq9a8_OiuWZg4C91iUz/view?usp=drive_link" target="_blank">
+                    <button>下载</button>
+                </a>
+            </div>
+        </div>
+        <div class="tool">
+            <div class="tool-content">
+                <h3>网站客户端所有产品抓取工具</h3>
+                <span>开发中</span>
+            </div>
+        </div>
     </div>
+</div>
 
-    <input type="text" id="searchBox" placeholder="搜索工具名...">
-
-    <div class="tool-container" id="websiteTools">
+<div class="system">
+    <h2>ODOO系统</h2>
+    <div class="tools">
         <div class="tool">
-            <h3>网站产品最新序号获取工具</h3>
-            <div class="buttons">
-                <a href="https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link" target="_blank">下载</a>
-                <button onclick="copyLink('https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link')">复制链接</button>
+            <div class="tool-content">
+                <h3>ODOO智能小助手</h3>
+                <img src="screenshot_odoo.png" alt="ODOO智能小助手截图">
+                <span>计划中</span>
             </div>
-        </div>
-        <div class="tool">
-            <h3>网站产品价格更新工具</h3>
-            <div class="buttons">
-                <a href="https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link" target="_blank">下载</a>
-                <button onclick="copyLink('https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link')">复制链接</button>
-            </div>
-        </div>
-        <div class="tool">
-            <h3>网站新增产品工具</h3>
-            <div class="buttons">
-                <a href="https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link" target="_blank">下载</a>
-                <button onclick="copyLink('https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link')">复制链接</button>
-            </div>
-        </div>
-        <div class="tool">
-            <h3>网站客户端产品检查工具</h3>
-            <div class="buttons">
-                <a href="https://drive.google.com/file/d/1kH6Mxeh1JCdeEI_zTbGlAuwiuGoVAii6/view?usp=drive_link" target="_blank">下载</a>
-                <button onclick="copyLink('https://drive.google.com/file/d/1kH6Mxeh1JCdeEI_zTbGlAuwiuGoVAii6/view?usp=drive_link')">复制链接</button>
-            </div>
-        </div>
-        <div class="tool">
-            <h3>网站服务端产品检查工具</h3>
-            <div class="buttons">
-                <a href="https://drive.google.com/file/d/1txe4Dtx2sjgb-lCd5-nScwBV3D9H4J2-/view?usp=drive_link" target="_blank">下载</a>
-                <button onclick="copyLink('https://drive.google.com/file/d/1txe4Dtx2sjgb-lCd5-nScwBV3D9H4J2-/view?usp=drive_link')">复制链接</button>
-            </div>
-        </div>
-        <div class="tool">
-            <h3>DodoWheels智能AI小助手</h3>
-            <div class="buttons">
-                <a href="https://drive.google.com/file/d/1HYJPOLjPMvHqK6qJG9TQtnUbnbPVGtRP/view?usp=drive_link" target="_blank">下载</a>
-                <button onclick="copyLink('https://drive.google.com/file/d/1HYJPOLjPMvHqK6qJG9TQtnUbnbPVGtRP/view?usp=drive_link')">复制链接</button>
-            </div>
-        </div>
-        <div class="tool">
-            <h3>DodoWheels价格查询工具</h3>
-            <div class="buttons">
-                <a href="https://drive.google.com/file/d/1EYrIF0HRo9SBQpq9a8_OiuWZg4C91iUz/view?usp=drive_link" target="_blank">下载</a>
-                <button onclick="copyLink('https://drive.google.com/file/d/1EYrIF0HRo9SBQpq9a8_OiuWZg4C91iUz/view?usp=drive_link')">复制链接</button>
-            </div>
-        </div>
-        <div class="tool">
-            <h3>网站客户端所有产品抓取工具</h3>
-            <div class="status">开发中</div>
         </div>
     </div>
+</div>
 
-    <div class="tool-container" id="odooTools" style="display:none;">
-        <div class="tool">
-            <h3>ODOO智能小助手</h3>
-            <div class="status">计划中</div>
-        </div>
-    </div>
-
-    <script>
-        function copyLink(link) {
-            navigator.clipboard.writeText(link).then(() => {
-                alert("链接已复制到剪贴板!");
-            });
-        }
-
-        const searchBox = document.getElementById('searchBox');
-        searchBox.addEventListener('input', () => {
-            const filter = searchBox.value.toLowerCase();
-            document.querySelectorAll('.tool-container').forEach(container => {
-                container.querySelectorAll('.tool').forEach(tool => {
-                    const text = tool.querySelector('h3').textContent.toLowerCase();
-                    tool.style.display = text.includes(filter) ? 'flex' : 'none';
-                });
-            });
-        });
-
-        const tabs = document.querySelectorAll('.tab');
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                const target = tab.getAttribute('data-target');
-                document.querySelectorAll('.tool-container').forEach(container => {
-                    container.style.display = container.id === target ? 'flex' : 'none';
-                });
-            });
-        });
-    </script>
 </body>
 </html>
