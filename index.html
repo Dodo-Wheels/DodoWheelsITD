@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DodoWheels 自研工具平台</title>
+<title>DodoWheels 工具中心</title>
 <style>
     body {
         margin: 0;
@@ -20,12 +20,9 @@
         justify-content: center;
         height: 100vh;
         text-align: center;
-        padding: 0 10px; /* 手机端防止贴边 */
-        box-sizing: border-box;
     }
     #loginPage img {
         width: 120px;
-        max-width: 40%;
         margin-bottom: 20px;
     }
     #loginPage h1 {
@@ -33,19 +30,21 @@
         font-size: 2em;
         color: #1e90ff;
     }
+    #loginPage p {
+        margin-bottom: 30px;
+        font-size: 1.2em;
+        color: #00bfff;
+    }
     #loginPage input {
-        width: 100%;
-        max-width: 300px;
+        width: 250px;
         padding: 10px;
         margin: 5px 0;
         border-radius: 5px;
         border: none;
         outline: none;
-        box-sizing: border-box;
     }
     #loginPage button {
-        width: 100%;
-        max-width: 320px;
+        width: 270px;
         padding: 10px;
         margin-top: 15px;
         border: none;
@@ -54,7 +53,6 @@
         color: #fff;
         font-weight: bold;
         cursor: pointer;
-        box-sizing: border-box;
     }
     #loginPage .error {
         color: #ff4d4d;
@@ -65,8 +63,6 @@
     /* 工具中心页面样式 */
     #toolPage {
         display: none;
-        padding: 20px 10px; /* 手机端防止贴边 */
-        box-sizing: border-box;
     }
     h1 {
         text-align: center;
@@ -87,23 +83,19 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 15px;
-        padding: 0 5px;
-        box-sizing: border-box;
+        gap: 20px;
     }
     .tool {
         background: #1c1c1c;
         border: 1px solid #00bfff50;
         border-radius: 10px;
         padding: 15px;
-        width: 100%;
-        max-width: 250px;
+        width: 250px;
         box-shadow: 0 0 15px #00bfff30;
         display: flex;
         flex-direction: column;
         align-items: center;
         transition: transform 0.2s;
-        box-sizing: border-box;
     }
     .tool:hover {
         transform: translateY(-5px);
@@ -111,7 +103,6 @@
     }
     .tool img {
         width: 100%;
-        height: auto;
         border-radius: 5px;
         margin: 10px 0;
         box-shadow: 0 0 15px #00bfff50;
@@ -127,14 +118,15 @@
     /* 按钮和状态统一样式 */
     .tool button,
     .tool span {
-        display: block;
-        width: 100%;
-        padding: 8px 0;
+        display: block;             /* 块级元素 */
+        width: 100%;                /* 占满卡片宽度 */
+        max-width: 100%;            /* 避免溢出 */
+        padding: 8px 0;             /* 上下内边距 */
         margin-top: 10px;
         font-weight: bold;
         text-align: center;
-        box-sizing: border-box;
-        word-break: break-word;
+        box-sizing: border-box;     /* 包含 padding 在宽度内 */
+        word-break: break-word;     /* 超长文字换行 */
         border-radius: 5px;
         border: none;
     }
@@ -154,18 +146,12 @@
         width: 100%;
     }
 
-    /* 移动端优化 */
     @media (max-width: 600px) {
         .tool {
             width: 90%;
-            max-width: none;
         }
-        #loginPage input,
-        #loginPage button {
+        #loginPage input, #loginPage button {
             width: 90%;
-        }
-        #loginPage img {
-            max-width: 60%;
         }
     }
 </style>
@@ -175,7 +161,7 @@
 <!-- 登录页面 -->
 <div id="loginPage">
     <img src="logo.png" alt="DodoWheels Logo">
-    <h1>DodoWheels 自研工具平台</h1>
+    <h1>DodoWheels 内部系统工具平台</h1>
     <input type="text" id="username" placeholder="用户名">
     <input type="password" id="password" placeholder="密码">
     <button onclick="login()">登录</button>
@@ -192,43 +178,58 @@
             <div class="tool">
                 <div class="tool-content">
                     <h3>网站产品最新序号获取工具</h3>
-                    <a href="#" target="_blank"><button>下载</button></a>
+                    <a href="https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link" target="_blank">
+                        <button>下载</button>
+                    </a>
                 </div>
             </div>
             <div class="tool">
                 <div class="tool-content">
                     <h3>网站产品价格更新工具</h3>
-                    <a href="#" target="_blank"><button>下载</button></a>
+                    <a href="https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link" target="_blank">
+                        <button>下载</button>
+                    </a>
                 </div>
             </div>
             <div class="tool">
                 <div class="tool-content">
                     <h3>网站新增产品工具</h3>
-                    <a href="#" target="_blank"><button>下载</button></a>
+                    <a href="https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link" target="_blank">
+                        <button>下载</button>
+                    </a>
                 </div>
             </div>
             <div class="tool">
                 <div class="tool-content">
                     <h3>网站客户端产品检查工具</h3>
-                    <a href="#" target="_blank"><button>下载</button></a>
+                    <a href="https://drive.google.com/file/d/1kH6Mxeh1JCdeEI_zTbGlAuwiuGoVAii6/view?usp=drive_link" target="_blank">
+                        <button>下载</button>
+                    </a>
                 </div>
             </div>
             <div class="tool">
                 <div class="tool-content">
                     <h3>网站服务端产品检查工具</h3>
-                    <span>开发中</span>
+                    <a href="https://drive.google.com/file/d/1txe4Dtx2sjgb-lCd5-nScwBV3D9H4J2-/view?usp=drive_link" target="_blank">
+                        <button>下载</button>
+                    </a>
                 </div>
             </div>
             <div class="tool">
                 <div class="tool-content">
                     <h3>DodoWheels智能AI小助手</h3>
-                    <a href="#" target="_blank"><button>下载</button></a>
+                    <img src="screenshot_ai.png" alt="AI小助手截图">
+                    <a href="https://drive.google.com/file/d/1HYJPOLjPMvHqK6qJG9TQtnUbnbPVGtRP/view?usp=drive_link" target="_blank">
+                        <button>下载</button>
+                    </a>
                 </div>
             </div>
             <div class="tool">
                 <div class="tool-content">
                     <h3>DodoWheels价格查询工具</h3>
-                    <a href="#" target="_blank"><button>下载</button></a>
+                    <a href="https://drive.google.com/file/d/1EYrIF0HRo9SBQpq9a8_OiuWZg4C91iUz/view?usp=drive_link" target="_blank">
+                        <button>下载</button>
+                    </a>
                 </div>
             </div>
             <div class="tool">
