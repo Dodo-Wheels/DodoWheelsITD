@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DodoWheels 自研工具中心</title>
+<title>DodoWheels 工具中心</title>
 <style>
     body {
         margin: 0;
@@ -61,7 +60,7 @@
         display: none;
     }
 
-    /* 工具中心样式（原有） */
+    /* 工具中心页面样式 */
     #toolPage {
         display: none;
     }
@@ -115,27 +114,38 @@
         justify-content: space-between;
         width: 100%;
     }
-    .tool button, .tool span {
-        width: 100%;
-        background: linear-gradient(90deg, #1e90ff, #00bfff);
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 8px 12px;
+
+    /* 按钮和状态统一样式 */
+    .tool button,
+    .tool span {
+        display: block;             /* 块级元素 */
+        width: 100%;                /* 占满卡片宽度 */
+        max-width: 100%;            /* 避免溢出 */
+        padding: 8px 0;             /* 上下内边距 */
         margin-top: 10px;
-        cursor: pointer;
         font-weight: bold;
         text-align: center;
+        box-sizing: border-box;     /* 包含 padding 在宽度内 */
+        word-break: break-word;     /* 超长文字换行 */
+        border-radius: 5px;
+        border: none;
+    }
+    .tool button {
+        background: linear-gradient(90deg, #1e90ff, #00bfff);
+        color: #fff;
+        cursor: pointer;
     }
     .tool span {
         background: #444;
         color: #00bfff;
         cursor: default;
     }
+
     a {
         text-decoration: none;
         width: 100%;
     }
+
     @media (max-width: 600px) {
         .tool {
             width: 90%;
@@ -151,7 +161,7 @@
 <!-- 登录页面 -->
 <div id="loginPage">
     <img src="logo.png" alt="DodoWheels Logo">
-    <h1>DodoWheels 自研工具平台</h1>
+    <h1>DodoWheels 内部系统工具平台</h1>
     <input type="text" id="username" placeholder="用户名">
     <input type="password" id="password" placeholder="密码">
     <button onclick="login()">登录</button>
@@ -200,13 +210,15 @@
             <div class="tool">
                 <div class="tool-content">
                     <h3>网站服务端产品检查工具</h3>
-                    <span>开发中</span>
+                    <a href="https://drive.google.com/file/d/1txe4Dtx2sjgb-lCd5-nScwBV3D9H4J2-/view?usp=drive_link" target="_blank">
+                        <button>下载</button>
                     </a>
                 </div>
             </div>
             <div class="tool">
                 <div class="tool-content">
                     <h3>DodoWheels智能AI小助手</h3>
+                    <img src="screenshot_ai.png" alt="AI小助手截图">
                     <a href="https://drive.google.com/file/d/1HYJPOLjPMvHqK6qJG9TQtnUbnbPVGtRP/view?usp=drive_link" target="_blank">
                         <button>下载</button>
                     </a>
