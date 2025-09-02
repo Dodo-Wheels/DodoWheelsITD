@@ -1,1 +1,238 @@
-Test
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tim Liu 科技工具平台</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #00f0ff;
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #00f0ff;
+            text-align: center;
+        }
+        h2 {
+            font-size: 1.6rem;
+            margin: 20px 0 10px;
+            border-bottom: 1px solid #00f0ff;
+            padding-bottom: 5px;
+        }
+
+        /* 顶部导航栏 */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            flex-wrap: wrap;
+        }
+        nav .logo { font-weight: bold; font-size: 1.2rem; color: #00f0ff; }
+        nav .links { display: flex; gap: 15px; flex-wrap: wrap; }
+        nav .links a {
+            color: #00f0ff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        nav .links a:hover { color: #1e90ff; }
+
+        /* 搜索和环境切换 */
+        .controls {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .controls input[type="text"] {
+            width: 90%;
+            max-width: 400px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 1px solid #00f0ff;
+            background: rgba(0,0,0,0.2);
+            color: #00f0ff;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+        .controls input::placeholder { color: #66f0ff; }
+        .env-toggle {
+            margin-top: 5px;
+        }
+        .env-toggle button {
+            background: linear-gradient(90deg, #00f0ff, #1e90ff);
+            color: #000;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: none;
+            margin: 0 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .env-toggle button:hover { background: linear-gradient(90deg, #1e90ff, #00f0ff); }
+
+        /* 系统卡片 */
+        .system {
+            width: 95%;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        .env {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .tool {
+            flex: 1 1 48%;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid #00f0ff;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .tool:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #00f0ff;
+        }
+        .tool-name { font-weight: bold; }
+        .download-btn {
+            background: linear-gradient(90deg, #00f0ff, #1e90ff);
+            color: #000;
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .download-btn:hover { background: linear-gradient(90deg, #1e90ff, #00f0ff); }
+
+        @media (max-width: 480px) {
+            .tool { flex: 1 1 100%; }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.3rem; }
+            nav { flex-direction: column; gap: 5px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航 -->
+    <nav>
+        <div class="logo">Tim Liu 科技平台</div>
+        <div class="links">
+            <a href="#system-a">系统 A</a>
+            <a href="#system-b">系统 B</a>
+            <a href="#system-c">系统 C</a>
+        </div>
+    </nav>
+
+    <h1>科技工具下载平台</h1>
+
+    <!-- 搜索和环境切换 -->
+    <div class="controls">
+        <input type="text" id="searchInput" placeholder="输入工具名快速搜索...">
+        <div class="env-toggle">
+            <button data-env="all">显示全部</button>
+            <button data-env="test">仅测试环境</button>
+            <button data-env="prod">仅生产环境</button>
+        </div>
+    </div>
+
+    <!-- 系统 A -->
+    <div class="system" id="system-a">
+        <h2>系统 A</h2>
+        <div class="env">
+            <div class="tool" data-env="test">
+                <span class="tool-name">工具 1 (测试)</span>
+                <a class="download-btn" href="https://example.com/tool1-test.zip" target="_blank">下载</a>
+            </div>
+            <div class="tool" data-env="prod">
+                <span class="tool-name">工具 1 (生产)</span>
+                <a class="download-btn" href="https://example.com/tool1-prod.zip" target="_blank">下载</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 系统 B -->
+    <div class="system" id="system-b">
+        <h2>系统 B</h2>
+        <div class="env">
+            <div class="tool" data-env="test">
+                <span class="tool-name">工具 2 (测试)</span>
+                <a class="download-btn" href="https://example.com/tool2-test.zip" target="_blank">下载</a>
+            </div>
+            <div class="tool" data-env="prod">
+                <span class="tool-name">工具 2 (生产)</span>
+                <a class="download-btn" href="https://example.com/tool2-prod.zip" target="_blank">下载</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 系统 C -->
+    <div class="system" id="system-c">
+        <h2>系统 C</h2>
+        <div class="env">
+            <div class="tool" data-env="test">
+                <span class="tool-name">工具 3 (测试)</span>
+                <a class="download-btn" href="https://example.com/tool3-test.zip" target="_blank">下载</a>
+            </div>
+            <div class="tool" data-env="prod">
+                <span class="tool-name">工具 3 (生产)</span>
+                <a class="download-btn" href="https://example.com/tool3-prod.zip" target="_blank">下载</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 搜索功能
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', () => {
+            const filter = searchInput.value.toLowerCase();
+            const tools = document.querySelectorAll('.tool');
+            tools.forEach(tool => {
+                const name = tool.querySelector('.tool-name').textContent.toLowerCase();
+                if(name.includes(filter)) {
+                    tool.style.display = 'flex';
+                } else {
+                    tool.style.display = 'none';
+                }
+            });
+        });
+
+        // 环境切换功能
+        const envButtons = document.querySelectorAll('.env-toggle button');
+        envButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const env = btn.dataset.env;
+                const tools = document.querySelectorAll('.tool');
+                tools.forEach(tool => {
+                    if(env === 'all') {
+                        tool.style.display = 'flex';
+                    } else if(tool.dataset.env === env) {
+                        tool.style.display = 'flex';
+                    } else {
+                        tool.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
