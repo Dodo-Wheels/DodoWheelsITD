@@ -73,6 +73,29 @@
         margin: 20px 0;
         font-size: 2em;
     }
+
+    /* Tab 栏 */
+    .tab-bar {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #00bfff50;
+    }
+    .tab-button {
+        padding: 10px 20px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        color: #aaa;
+        font-weight: bold;
+        font-size: 1em;
+        transition: 0.3s;
+    }
+    .tab-button.active {
+        color: #00bfff;
+        border-bottom: 3px solid #00bfff;
+    }
+
     .system {
         margin: 20px auto;
         max-width: 1200px;
@@ -187,7 +210,14 @@
 <div id="toolPage">
     <h1>DodoWheels工具中心</h1>
 
-    <div class="system">
+    <!-- Tab 栏 -->
+    <div class="tab-bar">
+        <button class="tab-button active" onclick="showTab('web')">网站系统</button>
+        <button class="tab-button" onclick="showTab('odoo')">ODOO系统</button>
+    </div>
+
+    <!-- 网站系统 -->
+    <div class="system tab-content" id="tab-web">
         <h2>网站系统</h2>
         <div class="tools">
             <div class="tool">
@@ -253,7 +283,8 @@
         </div>
     </div>
 
-    <div class="system">
+    <!-- ODOO系统 -->
+    <div class="system tab-content" id="tab-odoo" style="display:none;">
         <h2>ODOO系统</h2>
         <div class="tools">
             <div class="tool">
@@ -279,6 +310,17 @@
         } else {
             errorMsg.style.display = 'block';
         }
+    }
+
+    function showTab(tab) {
+        // 隐藏所有 tab 内容
+        document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+        // 去掉所有按钮的 active
+        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+        // 显示当前 tab
+        document.getElementById('tab-' + tab).style.display = 'block';
+        // 激活按钮
+        event.target.classList.add('active');
     }
 </script>
 
