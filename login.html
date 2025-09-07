@@ -2,132 +2,91 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>DodoWheels 文档中心</title>
-<link rel="stylesheet" href="style.css">
+<title>DodoWheels 登录</title>
+<style>
+body {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background:#0a0a0a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    color:#fff;
+}
+.login-container {
+    background:#141b26;
+    padding:50px 40px;
+    border-radius:20px;
+    text-align:center;
+    width:350px;
+    box-shadow:0 0 30px rgba(0,150,255,0.3);
+}
+.logo {
+    width:80px;
+    margin-bottom:20px;
+}
+h1 {
+    color:#58a6ff;
+    margin-bottom:40px;
+}
+input {
+    width:100%;
+    padding:15px;
+    margin-bottom:20px;
+    border:none;
+    border-radius:10px;
+    background-color:#1f2a38;
+    color:#fff;
+    font-size:16px;
+    outline:none;
+}
+input::placeholder { color:#8b9cb5; }
+input:focus { background-color:#273444; box-shadow:0 0 10px #58a6ff; }
+
+button {
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(90deg,#4facfe,#00f2fe);
+    color:#fff;
+    font-weight:bold;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.5s;
+}
+button:hover { background:linear-gradient(90deg,#00f2fe,#4facfe); transform:scale(1.05); }
+
+</style>
 </head>
 <body>
-
-<!-- 粒子背景 -->
-<canvas id="particles"></canvas>
-
-<h1>DodoWheels 文档中心</h1>
-<div id="userInfo">
-    欢迎 <span id="who"></span>
-    <button id="logoutBtn">登出</button>
+<div class="login-container">
+    <img src="logo.png" class="logo" alt="Logo">
+    <h1>DodoWheels 登录</h1>
+    <input type="text" id="username" placeholder="用户名">
+    <input type="password" id="password" placeholder="密码">
+    <button id="loginBtn">登录</button>
 </div>
 
-<!-- Tab 容器 -->
-<div id="tabsContainer" class="tabs"></div>
-
-<!-- 文件卡片容器 -->
-<div id="filesContainer"></div>
-
 <script>
-// ---------- 当前登录用户 ----------
-const user = sessionStorage.getItem("user");
-if(!user){
-    alert("请先登录");
-    window.location.href="login.html";
-}
-document.getElementById("who").textContent = user;
-
-// ---------- 用户文件配置 ----------
+// 手工写死的用户名密码
 const USERS = {
-    "alice":{folder:"files/alice", files:["a.txt","photo.jpg","doc1.pdf"]},
-    "bob":{folder:"files/bob", files:["b.txt","report.pdf","image.png"]},
-    "carol":{folder:"files/carol", files:["c1.doc","c2.png"]}
+    "alice":"123456",
+    "bob":"abcdef",
+    "carol":"password"
 };
 
-// ---------- 文件类型图标 ----------
-const fileIcons = {
-    "txt":"📄","pdf":"📕","jpg":"🖼️","jpeg":"🖼️","png":"🖼️","doc":"📘","docx":"📘","default":"📁"
-};
-function getIcon(filename){
-    const ext = filename.split('.').pop().toLowerCase();
-    return fileIcons[ext] || fileIcons["default"];
-}
+document.getElementById("loginBtn").addEventListener("click", function(){
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
 
-// ---------- 渲染 Tabs ----------
-const tabsContainer = document.getElementById("tabsContainer");
-const filesContainer = document.getElementById("filesContainer");
-
-Object.keys(USERS).forEach((userName,index)=>{
-    const tab = document.createElement("div");
-    tab.className = "tab" + (index===0?" active":"");
-    tab.textContent = userName;
-    tab.dataset.user = userName;
-    tab.addEventListener("click",()=>{
-        document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-        tab.classList.add("active");
-        renderFiles(userName);
-    });
-    tabsContainer.appendChild(tab);
-});
-
-// ---------- 渲染文件卡片 ----------
-function renderFiles(userName){
-    filesContainer.innerHTML = "";
-    const userFiles = USERS[userName].files;
-    userFiles.forEach(f=>{
-        const card = document.createElement("div");
-        card.className="fileCard";
-
-        const icon = document.createElement("div");
-        icon.className="fileIcon";
-        icon.textContent = getIcon(f);
-
-        const name = document.createElement("div");
-        name.className="fileName";
-        name.textContent=f;
-
-        const link = document.createElement("a");
-        link.className="fileLink";
-        link.href = USERS[userName].folder+"/"+encodeURIComponent(f);
-        link.target="_blank";
-        link.textContent="查看/下载";
-
-        card.appendChild(icon);
-        card.appendChild(name);
-        card.appendChild(link);
-        filesContainer.appendChild(card);
-    });
-}
-
-// ---------- 初始显示第一个 Tab 文件 ----------
-renderFiles(Object.keys(USERS)[0]);
-
-// ---------- 登出 ----------
-document.getElementById("logoutBtn").onclick = function(){
-    sessionStorage.removeItem("user");
-    window.location.href="login.html";
-};
-
-// ---------- 粒子背景 ----------
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
-let particlesArray = [];
-let w,h;
-function initCanvas(){ w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; }
-window.addEventListener('resize',initCanvas);
-initCanvas();
-
-class Particle{
-    constructor(){
-        this.x=Math.random()*w;
-        this.y=Math.random()*h;
-        this.radius=Math.random()*2+1;
-        this.speedX=(Math.random()-0.5)*0.5;
-        this.speedY=(Math.random()-0.5)*0.5;
+    if(USERS[username] && USERS[username] === password){
+        sessionStorage.setItem("user", username);
+        window.location.href="index.html";
+    } else {
+        alert("用户名或密码错误");
     }
-    update(){ this.x+=this.speedX; this.y+=this.speedY; if(this.x<0||this.x>w)this.speedX*=-1; if(this.y<0||this.y>h)this.speedY*=-1; }
-    draw(){ ctx.beginPath(); ctx.arc(this.x,this.y,this.radius,0,Math.PI*2); ctx.fillStyle='#7FDBFF'; ctx.fill(); }
-}
-
-function initParticles(){ particlesArray=[]; for(let i=0;i<150;i++){ particlesArray.push(new Particle()); } }
-initParticles();
-
-function animate(){ ctx.clearRect(0,0,w,h); particlesArray.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(animate); }
-animate();
+});
 </script>
 </body>
 </html>
