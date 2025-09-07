@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DodoWheels内部文档管理系统</title>
+<title>DodoWheels 文档中心</title>
 <style>
 body {
     margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#0a0a0a; color:#fff;
@@ -56,7 +56,7 @@ h1 { text-align:center; margin-bottom:20px; color:#7FDBFF; }
 
 <!-- 登录页面 -->
 <div id="loginPage">
-    <h1>DodoWheels内部软件管理系统</h1>
+    <h1>DodoWheels 文档中心</h1>
     <input type="text" id="username" placeholder="用户名">
     <input type="password" id="password" placeholder="密码">
     <button onclick="login()">登录</button>
@@ -65,7 +65,7 @@ h1 { text-align:center; margin-bottom:20px; color:#7FDBFF; }
 
 <!-- 文件页面 -->
 <div id="filePage">
-    <h1>DodoWheels内部文档管理系统</h1>
+    <h1>DodoWheels 文档中心</h1>
     <div class="tab-bar" id="tabsContainer"></div>
     <div id="filesContainer"></div>
 </div>
@@ -76,20 +76,30 @@ const USERS = {
     "alice": {
         password: "123456",
         folders: {
-            "Warehouse": ["report1.pdf","plan.pdf","summary.pdf"],
-            "Sales": ["market_plan.pdf","ad_campaign.pdf"]
+            "Sales": ["report1.pdf","plan.xlsx","summary.pdf"],
+            "Marketing": ["market_plan.pdf","ad_campaign.pdf"]
         }
     },
     "bob": {
         password: "abcdef",
         folders: {
-            "Sales": ["inventory.pdf","layout.pdf"]
+            "Warehouse": ["inventory.pdf","layout.xlsx"]
         }
     }
 };
 
 // 文件类型图标
-const fileIcons = { "pdf":"📄", "default":"📁" };
+const fileIcons = {
+    "pdf": "📄",
+    "xls": "📊",
+    "xlsx": "📊",
+    "doc": "📃",
+    "docx": "📃",
+    "png": "🖼️",
+    "jpg": "🖼️",
+    "jpeg": "🖼️",
+    "default": "📁"
+};
 
 let currentUser = null;
 
@@ -168,5 +178,6 @@ window.addEventListener('load', ()=>{
     }
 });
 </script>
+
 </body>
 </html>
