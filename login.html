@@ -1,1 +1,48 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>科技感登录</title>
+<style>
+body{margin:0;font-family:sans-serif;background:#0a0a0a;color:#fff;}
+h1{text-align:center;color:#0ff;text-shadow:0 0 15px #0ff;margin-top:50px;}
+#loginBox{max-width:400px;margin:50px auto;background:#111;padding:30px;border-radius:12px;box-shadow:0 0 20px #00f;}
+label{display:block;margin:10px 0;color:#0ff;}
+input{width:100%;padding:10px;border:none;border-radius:6px;background:#222;color:#0ff;}
+button{width:100%;padding:12px;margin-top:20px;border:none;border-radius:6px;background:linear-gradient(45deg,#00f,#0ff);color:#000;font-weight:bold;cursor:pointer;transition:all 0.3s;}
+button:hover{background:linear-gradient(45deg,#0ff,#00f);color:#fff;}
+p{font-size:12px;color:#555;margin-top:10px;}
+</style>
+</head>
+<body>
+<h1>科技感登录</h1>
+<div id="loginBox">
+  <label>用户名</label><input id="username" placeholder="请输入用户名">
+  <label>密码</label><input id="password" type="password" placeholder="请输入密码">
+  <button id="btnLogin">登录</button>
+  <p>仅测试用，用户名/密码在前端，不安全</p>
+</div>
+
+<script>
+// 用户配置
+const USERS = {
+  "alice":"alice123",
+  "bob":"bob123",
+  "carol":"carol123"
+};
+
+document.getElementById("btnLogin").onclick=function(){
+  const u=document.getElementById("username").value.trim();
+  const p=document.getElementById("password").value;
+  if(USERS[u] && USERS[u]===p){
+    // 登录成功，把用户名保存到 sessionStorage，跳转文件页
+    sessionStorage.setItem("user",u);
+    window.location.href="files.html";
+  } else {
+    alert("用户名或密码错误");
+  }
+};
+</script>
+</body>
+</html>
