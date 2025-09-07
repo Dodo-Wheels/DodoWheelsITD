@@ -7,7 +7,6 @@
 </head>
 <body>
 
-<!-- 粒子背景 -->
 <canvas id="particles"></canvas>
 
 <h1>DodoWheels 文档中心</h1>
@@ -16,10 +15,7 @@
     <button id="logoutBtn">登出</button>
 </div>
 
-<!-- Tab 容器 -->
 <div id="tabsContainer" class="tabs"></div>
-
-<!-- 文件卡片容器 -->
 <div id="filesContainer"></div>
 
 <script>
@@ -47,22 +43,16 @@ function getIcon(filename){
     return fileIcons[ext] || fileIcons["default"];
 }
 
-// ---------- 渲染 Tabs ----------
+// ---------- 渲染 Tab（只显示当前用户） ----------
 const tabsContainer = document.getElementById("tabsContainer");
 const filesContainer = document.getElementById("filesContainer");
 
-Object.keys(USERS).forEach((userName,index)=>{
-    const tab = document.createElement("div");
-    tab.className = "tab" + (index===0?" active":"");
-    tab.textContent = userName;
-    tab.dataset.user = userName;
-    tab.addEventListener("click",()=>{
-        document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-        tab.classList.add("active");
-        renderFiles(userName);
-    });
-    tabsContainer.appendChild(tab);
-});
+const tab = document.createElement("div");
+tab.className = "tab active";
+tab.textContent = user;
+tab.dataset.user = user;
+tab.addEventListener("click", () => renderFiles(user));
+tabsContainer.appendChild(tab);
 
 // ---------- 渲染文件卡片 ----------
 function renderFiles(userName){
@@ -78,7 +68,7 @@ function renderFiles(userName){
 
         const name = document.createElement("div");
         name.className="fileName";
-        name.textContent=f;
+        name.textContent = f;
 
         const link = document.createElement("a");
         link.className="fileLink";
@@ -93,8 +83,8 @@ function renderFiles(userName){
     });
 }
 
-// ---------- 初始显示第一个 Tab 文件 ----------
-renderFiles(Object.keys(USERS)[0]);
+// ---------- 初始显示当前用户文件 ----------
+renderFiles(user);
 
 // ---------- 登出 ----------
 document.getElementById("logoutBtn").onclick = function(){
