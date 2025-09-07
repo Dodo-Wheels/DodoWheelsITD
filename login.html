@@ -37,43 +37,50 @@ h1{text-align:center; margin:20px 0; font-size:2em; color:#00bfff;}
     flex:1;
     overflow-y:auto;
     display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-    gap:20px;
-    max-width:1000px;   /* 最大宽度 */
-    margin:0 auto;      /* 水平居中 */
-    padding:20px;       /* 留白 */
-    justify-items:center; /* 卡片居中 */
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    gap:18px;
+    max-width:1000px;
+    margin:0 auto;
+    padding:15px;
+    justify-items:center;
 }
+
+/* 紧凑版文件卡片 */
 .fileCard{
-    width:220px;
+    width:200px;
     background:#111;
     border-radius:12px;
-    padding:20px;
+    padding:12px 15px;
     text-align:center;
-    box-shadow:0 0 15px #7FDBFF;
+    box-shadow:0 0 12px #7FDBFF;
     transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
     display:flex;
     flex-direction:column;
-    justify-content:space-between;
+    justify-content:center;
     align-items:center;
+    min-height:150px;
 }
-.fileCard:hover{transform:translateY(-8px) scale(1.02); box-shadow:0 0 40px #7FDBFF,0 0 60px #00AEEF; background:linear-gradient(135deg,#0a0a0a,#111c2f);}
-.fileIcon{font-size:50px; margin-bottom:10px; transition: transform 0.3s;}
-.fileCard:hover .fileIcon{transform:scale(1.2) rotate(10deg);}
-.fileName{color:#7FDBFF; text-align:center; margin-bottom:10px; word-break:break-word; transition: color 0.3s, text-shadow 0.3s;}
-.fileCard:hover .fileName{color:#00AEEF; text-shadow:0 0 10px #00AEEF,0 0 20px #7FDBFF;}
-.fileInfo{font-size:0.9em; color:#00bfffaa; margin-top:5px; text-align:center; transition: color 0.3s;}
+.fileCard:hover{
+    transform:translateY(-6px) scale(1.02);
+    box-shadow:0 0 25px #7FDBFF,0 0 40px #00AEEF;
+    background:linear-gradient(135deg,#0a0a0a,#111c2f);
+}
+.fileIcon{font-size:40px; margin-bottom:6px; transition: transform 0.3s;}
+.fileCard:hover .fileIcon{transform:scale(1.15) rotate(8deg);}
+.fileName{color:#7FDBFF; text-align:center; margin-bottom:6px; word-break:break-word; transition: color 0.3s, text-shadow 0.3s;}
+.fileCard:hover .fileName{color:#00AEEF; text-shadow:0 0 6px #00AEEF,0 0 12px #7FDBFF;}
+.fileInfo{font-size:0.85em; color:#00bfffaa; margin-top:4px; text-align:center; transition: color 0.3s;}
 .fileCard:hover .fileInfo{color:#7FDBFF;}
-.fileLink{display:block; width:100%; padding:8px 0; margin-top:10px; border-radius:5px; background:linear-gradient(90deg,#1e90ff,#00bfff); color:#fff; text-decoration:none; font-weight:bold; transition:0.3s;}
+.fileLink{display:block; width:100%; padding:6px 0; margin-top:8px; border-radius:5px; background:linear-gradient(90deg,#1e90ff,#00bfff); color:#fff; text-decoration:none; font-weight:bold; transition:0.3s;}
 .fileLink:hover{background:linear-gradient(90deg,#00bfff,#1e90ff);}
 
 /* 空文件提示 */
 .emptyMsg{
     grid-column:1 / -1;
     text-align:center;
-    font-size:1.2em;
+    font-size:1.1em;
     color:#00bfffaa;
-    margin-top:40px;
+    margin-top:30px;
 }
 
 @media(max-width:600px){#loginPage input,#loginPage button{width:90%;}}
@@ -124,7 +131,7 @@ const USERS={
     "charlie":{
         password:"123abc",
         folders:{
-            "EmptyFolder":[ ] // 测试空文件夹
+            "EmptyFolder":[ ] // 空文件夹测试
         }
     }
 };
