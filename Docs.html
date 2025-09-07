@@ -1,10 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DodoWheels内部文档管理系统</title>
+<title>DodoWheels 内部文档管理系统</title>
 <style>
     body {
         margin: 0;
@@ -12,369 +10,151 @@
         background-color: #121212;
         color: #00bfff;
     }
-
-    /* 登录页面样式 */
     #loginPage {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        text-align: center;
-        padding: 0 10px;
-        box-sizing: border-box;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        height: 100vh; text-align: center;
     }
-    #loginPage img {
-        width: 120px;
-        max-width: 40%;
-        margin-bottom: 20px;
-    }
-    #loginPage h1 {
-        margin-bottom: 10px;
-        font-size: 2em;
-        color: #1e90ff;
-    }
-    #loginPage input {
-        width: 100%;
-        max-width: 300px;
-        padding: 10px;
-        margin: 5px 0;
-        border-radius: 5px;
-        border: none;
-        outline: none;
-        box-sizing: border-box;
+    #loginPage h1 { color: #1e90ff; margin-bottom: 20px; }
+    #loginPage input, #loginPage button {
+        width: 250px; padding: 10px; margin: 5px 0;
+        border: none; border-radius: 5px; outline: none;
     }
     #loginPage button {
-        width: 100%;
-        max-width: 320px;
-        padding: 10px;
-        margin-top: 15px;
-        border: none;
-        border-radius: 5px;
-        background: linear-gradient(90deg, #1e90ff, #00bfff);
-        color: #fff;
-        font-weight: bold;
+        background: linear-gradient(90deg, #1e90ff, #00bfff); color: #fff; font-weight: bold;
         cursor: pointer;
-        box-sizing: border-box;
     }
-    #loginPage .error {
-        color: #ff4d4d;
-        margin-top: 10px;
-        display: none;
-    }
+    .error { color: #ff4d4d; margin-top: 10px; display: none; }
 
-    /* 工具中心页面样式 */
-    #toolPage {
-        display: none;
-        padding: 20px 10px;
-        box-sizing: border-box;
-    }
-    h1 {
-        text-align: center;
-        margin: 20px 0;
-        font-size: 2em;
-    }
+    #toolPage { display: none; padding: 20px; }
+    h1 { text-align: center; color: #1e90ff; }
 
-    /* Tab 栏 */
-    .tab-bar {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 20px;
-        border-bottom: 2px solid #00bfff50;
-    }
+    .tab-bar { display: flex; justify-content: center; margin-bottom: 20px; border-bottom: 2px solid #00bfff50; }
     .tab-button {
-        padding: 10px 20px;
-        cursor: pointer;
-        background: none;
-        border: none;
-        color: #aaa;
-        font-weight: bold;
-        font-size: 1em;
-        transition: 0.3s;
+        padding: 10px 20px; border: none; background: none; cursor: pointer;
+        color: #aaa; font-weight: bold;
     }
-    .tab-button.active {
-        color: #00bfff;
-        border-bottom: 3px solid #00bfff;
-    }
+    .tab-button.active { color: #00bfff; border-bottom: 3px solid #00bfff; }
 
-    .system {
-        margin: 20px auto;
-        max-width: 1200px;
-        text-align: center;
-    }
-    .system h2 {
-        margin-bottom: 15px;
-        color: #1e90ff;
-        font-size: 1.5em;
-    }
+    .system { display: none; text-align: center; }
+    .system.active { display: block; }
 
-    /* 响应式卡片布局 + 每行等高 */
-    .tools {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 15px;
-        padding: 0 5px;
-        box-sizing: border-box;
-        grid-auto-rows: 1fr; /* 每行卡片等高 */
-    }
-
-    .tool {
-        background: #1c1c1c;
-        border: 1px solid #00bfff50;
-        border-radius: 10px;
-        padding: 15px;
-        box-shadow: 0 0 15px #00bfff30;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        transition: transform 0.2s;
-        box-sizing: border-box;
-    }
-    .tool:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0 25px #00bfff70;
-    }
-    .tool img {
-        width: 100%;
-        height: auto;
-        border-radius: 5px;
-        margin: 10px 0;
-        box-shadow: 0 0 15px #00bfff50;
-    }
-    .tool-content {
-        flex: 1; /* 拉满卡片高度 */
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between; /* 按钮/状态固定底部 */
-        width: 100%;
-    }
-    .tool h3 {
-        font-size: 1.1em;
-        color: #00bfff;
-        margin-bottom: 10px;
-        word-break: break-word;
-    }
-
-    /* 按钮和状态统一样式 */
-    .tool button,
-    .tool span {
-        display: block;
-        width: 100%;
-        padding: 8px 0;
-        margin-top: 10px;
-        font-weight: bold;
-        text-align: center;
-        box-sizing: border-box;
-        word-break: break-word;
-        border-radius: 5px;
-        border: none;
-    }
-    .tool button {
+    .file-list { max-width: 400px; margin: 0 auto; }
+    .file-list a {
+        display: block; margin: 10px 0; padding: 10px;
         background: linear-gradient(90deg, #1e90ff, #00bfff);
-        color: #fff;
-        cursor: pointer;
-    }
-    .tool span {
-        background: #444;
-        color: #00bfff;
-        cursor: default;
-    }
-
-    a {
-        text-decoration: none;
-        width: 100%;
-    }
-
-    /* 移动端优化 */
-    @media (max-width: 600px) {
-        #loginPage input,
-        #loginPage button {
-            width: 90%;
-        }
-        #loginPage img {
-            max-width: 60%;
-        }
+        color: #fff; text-decoration: none; border-radius: 8px;
     }
 </style>
 </head>
 <body>
 
-<!-- 登录页面 -->
+<!-- 登录页 -->
 <div id="loginPage">
-    <img src="logo.png" alt="DodoWheels Logo">
-    <h1>DodoWheels内部文档管理系统</h1>
+    <h1>DodoWheels 内部文档管理系统</h1>
     <input type="text" id="username" placeholder="用户名">
     <input type="password" id="password" placeholder="密码">
     <button onclick="login()">登录</button>
     <div class="error" id="errorMsg">用户名或密码错误</div>
 </div>
 
-<!-- 工具中心页面 -->
+<!-- 工具页 -->
 <div id="toolPage">
-    <h1>DodoWheels内部文档管理系统</h1>
-
-    <!-- Tab 栏 -->
-    <div class="tab-bar">
-        <button class="tab-button active" onclick="showTab('web', event)">文档1</button>
-        <button class="tab-button" onclick="showTab('qbo', event)">文档2</button>
-        <button class="tab-button" onclick="showTab('odoo', event)">文档3</button>
-    </div>
-
-    <!-- 网站系统 -->
-    <div class="system tab-content" id="tab-web">
-        <h2>网站系统</h2>
-        <div class="tools">
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>网站产品最新序号获取工具</h3>
-                    <a href="https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link" target="_blank"><button>下载</button></a>
-                </div>
-            </div>
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>网站产品价格更新工具</h3>
-                    <a href="https://drive.google.com/file/d/1jyxeqZmkoweW-dRaOkBdwsQTs1jSvPJV/view?usp=drive_link" target="_blank"><button>下载</button></a>
-                </div>
-            </div>
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>网站新增产品工具</h3>
-                    <a href="https://drive.google.com/file/d/1uK37KzRCX0odjZEPdil1pCpTPtdAqXGJ/view?usp=drive_link" target="_blank"><button>下载</button></a>
-                </div>
-            </div>
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>网站客户端产品检查工具</h3>
-                    <a href="https://drive.google.com/file/d/1kH6Mxeh1JCdeEI_zTbGlAuwiuGoVAii6/view?usp=drive_link" target="_blank"><button>下载</button></a>
-                </div>
-            </div>
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>网站服务端产品检查工具</h3>
-                    <span>开发中</span>
-                </div>
-            </div>
-             
-             <div class="tool">
-                <div class="tool-content">
-                    <h3>网站客户端所有产品抓取工具</h3>
-                    <a href="https://drive.google.com/file/d/1tPWJOikRGPq75D0AeLAOPd-rufyc6iVf/view?usp=drive_link" target="_blank">
-                        <button>下载</button>
-                    </a>
-                     </div>
-            </div>
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>网站客户信息抓取工具</h3>
-       
-                    <span>开发中</span>
-                </div>
-            </div>
-             <div class="tool">
-                <div class="tool-content">
-                    <h3>网站服务端所有订单抓取工具</h3>
-            
-                    <span>开发中</span>
-                </div>
-                  </div>
-        </div>
-    </div>
-
-    <!-- QBO系统 -->
-    <div class="system tab-content" id="tab-qbo" style="display:none;">
-        <h2>QBO系统</h2>
-        <div class="tools">
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>QBO产品名称调整工具</h3>
-                    <a href="https://drive.google.com/file/d/1lKVk7PZXAxvXGI_R4bwKlZQ3xtIWVZvJ/view?usp=drive_link" target="_blank"><button>下载</button></a>
-                </div>
-            </div>
-             <div class="tool">
-                <div class="tool-content">
-                    <h3>QBO产品库存初始化预处理工具</h3>
-                    <span>开发中</span>
-                </div>
-            </div>
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>QBO产品库存初始化工具</h3>
-                    <span>开发中</span>
-                </div>
-            </div>
-               <div class="tool">
-                <div class="tool-content">
-                    <h3>QBO产品库存调整预处理OCR工具</h3>
-                    <span>开发中</span>
-                </div>
-            </div>
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>QBO产品库存调整工具</h3>
-                    <span>开发中</span>
-                </div>
-            </div>
-          
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>QBO新建产品工具</h3>
-                    <span>开发中</span>
-                </div>
-            </div>
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>QBO价格维护工具</h3>
-                    <span>开发中</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ODOO系统 -->
-    <div class="system tab-content" id="tab-odoo" style="display:none;">
-        <h2>其他工具</h2>
-        <div class="tools">
-            <div class="tool">
-            <div class="tool-content">
-                    <h3>DodoWheels智能AI小助手</h3>
-                    <a href="https://drive.google.com/file/d/1HYJPOLjPMvHqK6qJG9TQtnUbnbPVGtRP/view?usp=drive_link" target="_blank">
-                        <button>下载</button>
-                    </a>
-                 </div>
-            </div>
-         <div class="tool">
-                <div class="tool-content">
-                    <h3>DodoWheels价格查询工具</h3>
-                    <a href="https://drive.google.com/file/d/1EYrIF0HRo9SBQpq9a8_OiuWZg4C91iUz/view?usp=drive_link" target="_blank">
-                        <button>下载</button>
-                    </a>
-                       </div>
-            </div>
-        </div>
-    </div>
+    <h1>DodoWheels 内部文档管理系统</h1>
+    <div class="tab-bar" id="tabBar"></div>
+    <div id="tabContent"></div>
 </div>
 
 <script>
-    function login() {
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const errorMsg = document.getElementById('errorMsg');
+    // 用户配置（用户名: 密码 + 可访问的tab）
+    const users = {
+        "admin": { password: "123456", tabs: ["web", "qbo", "odoo"] },
+        "webuser": { password: "111111", tabs: ["web"] },
+        "qbouser": { password: "222222", tabs: ["qbo"] },
+        "odoouser": { password: "333333", tabs: ["odoo"] }
+    };
 
-        if(username === 'admin' && password === '123456') {
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('toolPage').style.display = 'block';
+    // 各 Tab 下的文件列表（模拟服务器文件夹）
+    const files = {
+        "web": [
+            { name: "网站产品最新序号获取工具", url: "/files/web/tool1.exe" },
+            { name: "网站价格更新工具", url: "/files/web/tool2.exe" }
+        ],
+        "qbo": [
+            { name: "QBO产品名称调整工具", url: "/files/qbo/tool1.exe" }
+        ],
+        "odoo": [
+            { name: "AI小助手", url: "/files/odoo/ai.exe" },
+            { name: "价格查询工具", url: "/files/odoo/price.exe" }
+        ]
+    };
+
+    let currentUser = null;
+
+    function login() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const errorMsg = document.getElementById("errorMsg");
+
+        if (users[username] && users[username].password === password) {
+            currentUser = username;
+            document.getElementById("loginPage").style.display = "none";
+            document.getElementById("toolPage").style.display = "block";
+            loadTabs();
         } else {
-            errorMsg.style.display = 'block';
+            errorMsg.style.display = "block";
         }
     }
 
-    function showTab(tab, event) {
-        document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-        document.getElementById('tab-' + tab).style.display = 'block';
-        event.currentTarget.classList.add('active');
+    function loadTabs() {
+        const tabBar = document.getElementById("tabBar");
+        const tabContent = document.getElementById("tabContent");
+        tabBar.innerHTML = "";
+        tabContent.innerHTML = "";
+
+        const tabs = users[currentUser].tabs;
+        tabs.forEach((tab, i) => {
+            // 创建 tab 按钮
+            const btn = document.createElement("button");
+            btn.textContent = tab.toUpperCase();
+            btn.className = "tab-button" + (i === 0 ? " active" : "");
+            btn.onclick = () => showTab(tab);
+            tabBar.appendChild(btn);
+
+            // 创建内容
+            const div = document.createElement("div");
+            div.className = "system" + (i === 0 ? " active" : "");
+            div.id = "tab-" + tab;
+
+            const h2 = document.createElement("h2");
+            h2.textContent = tab.toUpperCase() + " 文件夹";
+            div.appendChild(h2);
+
+            const ul = document.createElement("div");
+            ul.className = "file-list";
+            files[tab].forEach(file => {
+                const a = document.createElement("a");
+                a.href = file.url;
+                a.textContent = file.name;
+                a.setAttribute("download", "");
+                ul.appendChild(a);
+            });
+            div.appendChild(ul);
+
+            tabContent.appendChild(div);
+        });
+    }
+
+    function showTab(tab) {
+        document.querySelectorAll(".tab-button").forEach(btn => btn.classList.remove("active"));
+        document.querySelectorAll(".system").forEach(div => div.classList.remove("active"));
+        document.querySelector(`#tabBar button:contains('${tab.toUpperCase()}')`);
+        document.querySelector("#tab-" + tab).classList.add("active");
+
+        // 高亮按钮
+        [...document.querySelectorAll(".tab-button")].forEach(btn => {
+            if (btn.textContent === tab.toUpperCase()) btn.classList.add("active");
+        });
     }
 </script>
-
 </body>
 </html>
