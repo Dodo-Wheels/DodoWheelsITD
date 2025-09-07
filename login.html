@@ -23,58 +23,66 @@ body, html{
 #toolPage{display:none; padding:20px; height:100vh; display:flex; flex-direction:column;}
 h1{text-align:center; margin:20px 0; font-size:2em; color:#00bfff;}
 
-/* 顶部工具栏 */
-.top-bar{display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;}
-.top-bar h1{margin:0;}
-.logoutBtn{padding:8px 16px; border:none; border-radius:6px; background:linear-gradient(90deg,#ff4d4d,#ff8080); color:#fff; font-weight:bold; cursor:pointer; transition:0.3s;}
-.logoutBtn:hover{background:linear-gradient(90deg,#ff8080,#ff4d4d);}
-
+/* Tab 样式 */
 .tab-bar{display:flex; justify-content:center; margin-bottom:20px; border-bottom:2px solid #00bfff50;}
 .tab-button{padding:10px 20px; cursor:pointer; background:none; border:none; color:#aaa; font-weight:bold; transition:0.3s;}
 .tab-button.active{color:#00bfff; border-bottom:3px solid #00bfff;}
 
+/* 文件卡片布局 */
 #filesContainer{
     flex:1;
     overflow-y:auto;
     display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-    gap:18px;
-    max-width:1000px;
+    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    gap:20px;
+    max-width:1200px;
     margin:0 auto;
-    padding:15px;
-    justify-items:center;
+    padding:20px;
 }
 
-/* 紧凑版文件卡片 */
 .fileCard{
-    width:200px;
     background:#111;
     border-radius:12px;
-    padding:12px 15px;
+    padding:20px;
     text-align:center;
-    box-shadow:0 0 12px #7FDBFF;
-    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    box-shadow:0 0 10px rgba(0,191,255,0.4);
+    transition: transform 0.3s, box-shadow 0.3s;
     display:flex;
     flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    min-height:150px;
+    justify-content:space-between;
+    border:1px solid rgba(0,191,255,0.3);
 }
 .fileCard:hover{
-    transform:translateY(-6px) scale(1.02);
-    box-shadow:0 0 25px #7FDBFF,0 0 40px #00AEEF;
-    background:linear-gradient(135deg,#0a0a0a,#111c2f);
+    transform:translateY(-6px);
+    box-shadow:0 0 20px #00bfff;
 }
-.fileIcon{font-size:40px; margin-bottom:6px; transition: transform 0.3s;}
-.fileCard:hover .fileIcon{transform:scale(1.15) rotate(8deg);}
-.fileName{color:#7FDBFF; text-align:center; margin-bottom:6px; word-break:break-word; transition: color 0.3s, text-shadow 0.3s;}
-.fileCard:hover .fileName{color:#00AEEF; text-shadow:0 0 6px #00AEEF,0 0 12px #7FDBFF;}
-.fileInfo{font-size:0.85em; color:#00bfffaa; margin-top:4px; text-align:center; transition: color 0.3s;}
-.fileCard:hover .fileInfo{color:#7FDBFF;}
-.fileLink{display:block; width:100%; padding:6px 0; margin-top:8px; border-radius:5px; background:linear-gradient(90deg,#1e90ff,#00bfff); color:#fff; text-decoration:none; font-weight:bold; transition:0.3s;}
-.fileLink:hover{background:linear-gradient(90deg,#00bfff,#1e90ff);}
+.fileName{
+    font-size:1.1em;
+    color:#00bfff;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+.fileBtn{
+    padding:10px 0;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+.fileBtn.download{
+    background:linear-gradient(90deg,#1e90ff,#00bfff);
+    color:#fff;
+}
+.fileBtn.download:hover{
+    background:linear-gradient(90deg,#00bfff,#1e90ff);
+}
+.fileBtn.disabled{
+    background:#333;
+    color:#aaa;
+    cursor:not-allowed;
+}
 
-/* 空文件提示 */
 .emptyMsg{
     grid-column:1 / -1;
     text-align:center;
@@ -98,10 +106,7 @@ h1{text-align:center; margin:20px 0; font-size:2em; color:#00bfff;}
 </div>
 
 <div id="toolPage">
-    <div class="top-bar">
-        <h1>DodoWheels 文档管理系统</h1>
-        <button class="logoutBtn" onclick="logout()">退出</button>
-    </div>
+    <h1>DodoWheels 文档管理系统</h1>
     <div class="tab-bar" id="tabBar"></div>
     <div id="filesContainer"></div>
 </div>
@@ -113,9 +118,9 @@ const USERS={
         password:"123456",
         folders:{
             "Sales":[
-                {name:"report1.pdf", size:"1.2MB", date:"2025-09-06"},
-                {name:"plan.docx", size:"800KB", date:"2025-09-05"},
-                {name:"budget.xlsx", size:"500KB", date:"2025-09-01"}
+                {name:"report1.pdf", size:"1.2MB", date:"2025-09-06", status:"download"},
+                {name:"plan.docx", size:"800KB", date:"2025-09-05", status:"download"},
+                {name:"budget.xlsx", size:"500KB", date:"2025-09-01", status:"disabled"}
             ]
         }
     },
@@ -123,31 +128,11 @@ const USERS={
         password:"abcdef",
         folders:{
             "Warehouse":[
-                {name:"inventory.pdf", size:"2.3MB", date:"2025-08-30"},
-                {name:"layout.jpg", size:"900KB", date:"2025-08-28"}
+                {name:"inventory.pdf", size:"2.3MB", date:"2025-08-30", status:"download"},
+                {name:"layout.jpg", size:"900KB", date:"2025-08-28", status:"disabled"}
             ]
         }
-    },
-    "charlie":{
-        password:"123abc",
-        folders:{
-            "EmptyFolder":[ ] // 空文件夹测试
-        }
     }
-};
-
-// 文件图标
-const fileIcons={
-    "pdf":"📕",
-    "doc":"📄",
-    "docx":"📄",
-    "xls":"📊",
-    "xlsx":"📊",
-    "jpg":"🖼️",
-    "jpeg":"🖼️",
-    "png":"🖼️",
-    "gif":"🖼️",
-    "default":"📁"
 };
 
 let currentUser="";
@@ -167,15 +152,6 @@ function login(){
     }
 }
 
-// 退出
-function logout(){
-    currentUser="";
-    document.getElementById("username").value="";
-    document.getElementById("password").value="";
-    document.getElementById("toolPage").style.display="none";
-    document.getElementById("loginPage").style.display="flex";
-}
-
 // 渲染 Tab
 function renderTabs(){
     const tabBar=document.getElementById("tabBar");
@@ -192,7 +168,7 @@ function renderTabs(){
     showTab(folders[0]);
 }
 
-// 显示 Tab 文件
+// 显示文件卡片
 function showTab(folder,event){
     if(event){
         document.querySelectorAll(".tab-button").forEach(btn=>btn.classList.remove("active"));
@@ -213,25 +189,17 @@ function showTab(folder,event){
     files.forEach(f=>{
         const card=document.createElement("div");
         card.className="fileCard";
-        const icon=document.createElement("div");
-        icon.className="fileIcon";
-        const ext=f.name.split(".").pop().toLowerCase();
-        icon.textContent=fileIcons[ext] || fileIcons["default"];
         const name=document.createElement("div");
         name.className="fileName";
         name.textContent=f.name;
-        const info=document.createElement("div");
-        info.className="fileInfo";
-        info.textContent=`大小: ${f.size} 上传日期: ${f.date}`;
-        const link=document.createElement("a");
-        link.className="fileLink";
-        link.href=`/files/${currentUser}/${folder}/${f.name}`;
-        link.target="_blank";
-        link.textContent="打开文件";
-        card.appendChild(icon);
+        const btn=document.createElement("button");
+        btn.className="fileBtn " + (f.status==="download" ? "download" : "disabled");
+        btn.textContent=f.status==="download" ? "下载" : "开发中";
+        if(f.status==="download"){
+            btn.onclick=()=>{window.open(`/files/${currentUser}/${folder}/${f.name}`,"_blank");};
+        }
         card.appendChild(name);
-        card.appendChild(info);
-        card.appendChild(link);
+        card.appendChild(btn);
         filesContainer.appendChild(card);
     });
 }
