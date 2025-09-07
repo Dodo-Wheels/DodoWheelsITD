@@ -3,111 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>DodoWheels 文档中心</title>
-<style>
-/* 全局样式 */
-* {margin:0; padding:0; box-sizing:border-box;}
-body{
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background:#0a0a0a;
-    color:#fff;
-    overflow:hidden;
-}
-
-/* 粒子背景 */
-#particles{
-    position:fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    z-index:-1;
-}
-
-/* 标题 */
-h1{
-    text-align:center;
-    color:#7FDBFF;
-    text-shadow:0 0 15px #7FDBFF,0 0 30px #00AEEF;
-    margin-top:30px;
-    font-size:32px;
-}
-
-/* 用户信息 */
-#userInfo{
-    text-align:center;
-    margin-top:10px;
-}
-#logoutBtn{
-    display:inline-block;
-    margin-top:10px;
-    padding:8px 16px;
-    border:none;
-    border-radius:8px;
-    background:linear-gradient(45deg,#7FDBFF,#00AEEF);
-    color:#000;
-    font-weight:bold;
-    cursor:pointer;
-    transition:0.3s;
-}
-#logoutBtn:hover{
-    background:linear-gradient(45deg,#00AEEF,#7FDBFF);
-    color:#fff;
-}
-
-/* 文件卡片容器 */
-#filesContainer{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-    gap:20px;
-    max-width:1000px;
-    margin:40px auto;
-    padding:0 20px;
-}
-
-/* 文件卡片 */
-.fileCard{
-    background:#111;
-    border-radius:12px;
-    padding:20px;
-    box-shadow:0 0 15px #7FDBFF;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:space-between;
-    transition:0.3s;
-}
-.fileCard:hover{
-    transform:translateY(-5px);
-    box-shadow:0 0 30px #7FDBFF,0 0 45px #00AEEF;
-}
-
-/* 文件名和图标 */
-.fileIcon{
-    font-size:50px;
-    margin-bottom:10px;
-}
-.fileName{
-    color:#7FDBFF;
-    text-align:center;
-    margin-bottom:10px;
-    word-break:break-all;
-}
-
-/* 下载按钮 */
-.fileLink{
-    text-decoration:none;
-    background:linear-gradient(90deg,#7FDBFF,#00AEEF);
-    color:#000;
-    padding:10px 0;
-    width:100%;
-    border-radius:8px;
-    text-align:center;
-    font-weight:bold;
-    transition:0.3s;
-}
-.fileLink:hover{
-    background:linear-gradient(90deg,#00AEEF,#7FDBFF);
-    color:#fff;
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -116,19 +12,24 @@ h1{
 
 <h1>DodoWheels 文档中心</h1>
 <div id="userInfo">
-    欢迎 <span id="who"></span> 
+    欢迎 <span id="who"></span>
     <button id="logoutBtn">登出</button>
 </div>
 
+<!-- Tab 容器 -->
+<div id="tabsContainer" class="tabs"></div>
+
+<!-- 文件卡片容器 -->
 <div id="filesContainer"></div>
 
 <script>
-// ---------- 获取当前登录用户 ----------
+// ---------- 当前登录用户 ----------
 const user = sessionStorage.getItem("user");
 if(!user){
     alert("请先登录");
     window.location.href="login.html";
 }
+document.getElementById("who").textContent = user;
 
 // ---------- 用户文件配置 ----------
 const USERS = {
@@ -146,92 +47,87 @@ function getIcon(filename){
     return fileIcons[ext] || fileIcons["default"];
 }
 
-// ---------- 渲染文件卡片 ----------
-const filesContainer=document.getElementById("filesContainer");
-document.getElementById("who").textContent=user;
-USERS[user].files.forEach(f=>{
-    const card = document.createElement("div");
-    card.className="fileCard";
+// ---------- 渲染 Tabs ----------
+const tabsContainer = document.getElementById("tabsContainer");
+const filesContainer = document.getElementById("filesContainer");
 
-    const icon = document.createElement("div");
-    icon.className="fileIcon";
-    icon.textContent = getIcon(f);
-
-    const name = document.createElement("div");
-    name.className="fileName";
-    name.textContent=f;
-
-    const link = document.createElement("a");
-    link.className="fileLink";
-    link.href = USERS[user].folder+"/"+encodeURIComponent(f);
-    link.target="_blank";
-    link.textContent="下载/查看";
-
-    card.appendChild(icon);
-    card.appendChild(name);
-    card.appendChild(link);
-    filesContainer.appendChild(card);
+Object.keys(USERS).forEach((userName,index)=>{
+    const tab = document.createElement("div");
+    tab.className = "tab" + (index===0?" active":"");
+    tab.textContent = userName;
+    tab.dataset.user = userName;
+    tab.addEventListener("click",()=>{
+        document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+        tab.classList.add("active");
+        renderFiles(userName);
+    });
+    tabsContainer.appendChild(tab);
 });
 
+// ---------- 渲染文件卡片 ----------
+function renderFiles(userName){
+    filesContainer.innerHTML = "";
+    const userFiles = USERS[userName].files;
+    userFiles.forEach(f=>{
+        const card = document.createElement("div");
+        card.className="fileCard";
+
+        const icon = document.createElement("div");
+        icon.className="fileIcon";
+        icon.textContent = getIcon(f);
+
+        const name = document.createElement("div");
+        name.className="fileName";
+        name.textContent=f;
+
+        const link = document.createElement("a");
+        link.className="fileLink";
+        link.href = USERS[userName].folder+"/"+encodeURIComponent(f);
+        link.target="_blank";
+        link.textContent="查看/下载";
+
+        card.appendChild(icon);
+        card.appendChild(name);
+        card.appendChild(link);
+        filesContainer.appendChild(card);
+    });
+}
+
+// ---------- 初始显示第一个 Tab 文件 ----------
+renderFiles(Object.keys(USERS)[0]);
+
 // ---------- 登出 ----------
-document.getElementById("logoutBtn").onclick=function(){
+document.getElementById("logoutBtn").onclick = function(){
     sessionStorage.removeItem("user");
     window.location.href="login.html";
 };
 
-// ---------- 粒子背景效果 ----------
+// ---------- 粒子背景 ----------
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
 let particlesArray = [];
-let w, h;
-
-function initCanvas(){
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
-}
+let w,h;
+function initCanvas(){ w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; }
 window.addEventListener('resize',initCanvas);
 initCanvas();
 
 class Particle{
     constructor(){
-        this.x = Math.random()*w;
-        this.y = Math.random()*h;
-        this.radius = Math.random()*2 + 1;
-        this.speedX = (Math.random()-0.5)*0.5;
-        this.speedY = (Math.random()-0.5)*0.5;
+        this.x=Math.random()*w;
+        this.y=Math.random()*h;
+        this.radius=Math.random()*2+1;
+        this.speedX=(Math.random()-0.5)*0.5;
+        this.speedY=(Math.random()-0.5)*0.5;
     }
-    update(){
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if(this.x<0 || this.x>w) this.speedX*=-1;
-        if(this.y<0 || this.y>h) this.speedY*=-1;
-    }
-    draw(){
-        ctx.beginPath();
-        ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
-        ctx.fillStyle = '#7FDBFF';
-        ctx.fill();
-    }
+    update(){ this.x+=this.speedX; this.y+=this.speedY; if(this.x<0||this.x>w)this.speedX*=-1; if(this.y<0||this.y>h)this.speedY*=-1; }
+    draw(){ ctx.beginPath(); ctx.arc(this.x,this.y,this.radius,0,Math.PI*2); ctx.fillStyle='#7FDBFF'; ctx.fill(); }
 }
 
-function initParticles(){
-    particlesArray=[];
-    for(let i=0;i<150;i++){
-        particlesArray.push(new Particle());
-    }
-}
+function initParticles(){ particlesArray=[]; for(let i=0;i<150;i++){ particlesArray.push(new Particle()); } }
 initParticles();
 
-function animate(){
-    ctx.clearRect(0,0,w,h);
-    particlesArray.forEach(p=>{
-        p.update();
-        p.draw();
-    });
-    requestAnimationFrame(animate);
-}
+function animate(){ ctx.clearRect(0,0,w,h); particlesArray.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(animate); }
 animate();
 </script>
-
 </body>
 </html>
