@@ -33,8 +33,30 @@ h1{text-align:center; margin:20px 0; font-size:2em; color:#00bfff;}
 .tab-button{padding:10px 20px; cursor:pointer; background:none; border:none; color:#aaa; font-weight:bold; transition:0.3s;}
 .tab-button.active{color:#00bfff; border-bottom:3px solid #00bfff;}
 
-#filesContainer{flex:1; overflow-y:auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:20px; max-width:1200px; margin:0 auto;}
-.fileCard{background:#111; border-radius:12px; padding:20px; text-align:center; box-shadow:0 0 15px #7FDBFF; transition: transform 0.3s, box-shadow 0.3s, background 0.3s; display:flex; flex-direction:column; justify-content:space-between; align-items:center;}
+#filesContainer{
+    flex:1;
+    overflow-y:auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:20px;
+    max-width:1000px;   /* 最大宽度 */
+    margin:0 auto;      /* 水平居中 */
+    padding:20px;       /* 留白 */
+    justify-items:center; /* 卡片居中 */
+}
+.fileCard{
+    width:220px;
+    background:#111;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 0 15px #7FDBFF;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    align-items:center;
+}
 .fileCard:hover{transform:translateY(-8px) scale(1.02); box-shadow:0 0 40px #7FDBFF,0 0 60px #00AEEF; background:linear-gradient(135deg,#0a0a0a,#111c2f);}
 .fileIcon{font-size:50px; margin-bottom:10px; transition: transform 0.3s;}
 .fileCard:hover .fileIcon{transform:scale(1.2) rotate(10deg);}
@@ -44,6 +66,15 @@ h1{text-align:center; margin:20px 0; font-size:2em; color:#00bfff;}
 .fileCard:hover .fileInfo{color:#7FDBFF;}
 .fileLink{display:block; width:100%; padding:8px 0; margin-top:10px; border-radius:5px; background:linear-gradient(90deg,#1e90ff,#00bfff); color:#fff; text-decoration:none; font-weight:bold; transition:0.3s;}
 .fileLink:hover{background:linear-gradient(90deg,#00bfff,#1e90ff);}
+
+/* 空文件提示 */
+.emptyMsg{
+    grid-column:1 / -1;
+    text-align:center;
+    font-size:1.2em;
+    color:#00bfffaa;
+    margin-top:40px;
+}
 
 @media(max-width:600px){#loginPage input,#loginPage button{width:90%;}}
 </style>
@@ -75,7 +106,9 @@ const USERS={
         password:"123456",
         folders:{
             "Sales":[
-                {name:"1.pdf", size:"1.2MB", date:"2025-09-06"}
+                {name:"report1.pdf", size:"1.2MB", date:"2025-09-06"},
+                {name:"plan.docx", size:"800KB", date:"2025-09-05"},
+                {name:"budget.xlsx", size:"500KB", date:"2025-09-01"}
             ]
         }
     },
@@ -86,6 +119,12 @@ const USERS={
                 {name:"inventory.pdf", size:"2.3MB", date:"2025-08-30"},
                 {name:"layout.jpg", size:"900KB", date:"2025-08-28"}
             ]
+        }
+    },
+    "charlie":{
+        password:"123abc",
+        folders:{
+            "EmptyFolder":[ ] // 测试空文件夹
         }
     }
 };
@@ -155,6 +194,15 @@ function showTab(folder,event){
     const filesContainer=document.getElementById("filesContainer");
     filesContainer.innerHTML="";
     const files=USERS[currentUser].folders[folder];
+
+    if(files.length === 0){
+        const msg=document.createElement("div");
+        msg.className="emptyMsg";
+        msg.textContent="📂 暂无文件";
+        filesContainer.appendChild(msg);
+        return;
+    }
+
     files.forEach(f=>{
         const card=document.createElement("div");
         card.className="fileCard";
@@ -170,7 +218,6 @@ function showTab(folder,event){
         info.textContent=`大小: ${f.size} 上传日期: ${f.date}`;
         const link=document.createElement("a");
         link.className="fileLink";
-        // 假设文件路径: /files/用户名/文件夹/文件名
         link.href=`/files/${currentUser}/${folder}/${f.name}`;
         link.target="_blank";
         link.textContent="打开文件";
