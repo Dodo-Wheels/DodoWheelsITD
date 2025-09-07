@@ -4,84 +4,149 @@
 <meta charset="UTF-8">
 <title>科技感文件中心</title>
 <style>
-body{margin:0;font-family:sans-serif;background:#0a0a0a;color:#fff;}
-h1{text-align:center;color:#0ff;text-shadow:0 0 15px #0ff;margin-top:40px;}
-#fileArea{max-width:1000px;margin:30px auto;padding:0 20px;}
-#filesContainer{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px;}
-.fileCard{background:#111;border-radius:12px;padding:20px;box-shadow:0 0 10px #00f;display:flex;flex-direction:column;justify-content:space-between;transition:0.3s;}
-.fileCard:hover{transform:translateY(-5px);box-shadow:0 0 25px #0ff;}
-.fileName{text-align:center;color:#0ff;margin:10px 0;word-break:break-all;}
-.fileLink{text-decoration:none;background:linear-gradient(90deg,#00f,#0ff);color:#000;padding:8px;border-radius:6px;text-align:center;font-weight:bold;transition:0.3s;}
-.fileLink:hover{background:linear-gradient(90deg,#0ff,#00f);color:#fff;}
-.fileIcon{font-size:40px;text-align:center;margin-bottom:10px;}
-#logoutBtn{display:inline-block;margin-top:10px;padding:8px 16px;border:none;border-radius:6px;background: linear-gradient(45deg,#0ff,#00f); color:#000;font-weight:bold; cursor:pointer; transition: all 0.3s;}
-#logoutBtn:hover{background:linear-gradient(45deg,#00f,#0ff);color:#fff;}
+body{
+    margin:0;
+    font-family:sans-serif;
+    background:#0a0a0a;
+    color:#fff;
+}
+h1{
+    text-align:center;
+    color:#7FDBFF; /* 浅蓝色 */
+    text-shadow:0 0 15px #7FDBFF;
+    margin-top:40px;
+}
+#fileArea{
+    max-width:1000px;
+    margin:30px auto;
+    padding:0 20px;
+}
+#filesContainer{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    gap:20px;
+}
+.fileCard{
+    background:#111;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 0 10px #7FDBFF;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    transition:0.3s;
+}
+.fileCard:hover{
+    transform:translateY(-5px);
+    box-shadow:0 0 25px #7FDBFF, 0 0 40px #00AEEF;
+}
+.fileName{
+    text-align:center;
+    color:#7FDBFF;
+    margin:10px 0;
+    word-break:break-all;
+}
+.fileLink{
+    text-decoration:none;
+    background:linear-gradient(90deg,#7FDBFF,#00AEEF);
+    color:#000;
+    padding:8px;
+    border-radius:6px;
+    text-align:center;
+    font-weight:bold;
+    transition:0.3s;
+}
+.fileLink:hover{
+    background:linear-gradient(90deg,#00AEEF,#7FDBFF);
+    color:#fff;
+}
+.fileIcon{
+    font-size:40px;
+    text-align:center;
+    margin-bottom:10px;
+}
+#logoutBtn{
+    display:inline-block;
+    margin-top:10px;
+    padding:8px 16px;
+    border:none;
+    border-radius:6px;
+    background: linear-gradient(45deg,#7FDBFF,#00AEEF);
+    color:#000;
+    font-weight:bold;
+    cursor:pointer;
+    transition: all 0.3s;
+}
+#logoutBtn:hover{
+    background:linear-gradient(45deg,#00AEEF,#7FDBFF);
+    color:#fff;
+}
 </style>
 </head>
 <body>
 <h1>科技感文件中心</h1>
 
 <div id="fileArea">
-  <h2>欢迎 <span id="who"></span></h2>
-  <button id="logoutBtn">登出</button>
-  <div id="filesContainer"></div>
+    <h2>欢迎 <span id="who"></span></h2>
+    <button id="logoutBtn">登出</button>
+    <div id="filesContainer"></div>
 </div>
 
 <script>
-// ---------- 从 sessionStorage 获取用户名 ----------
+// ---------- 获取用户名 ----------
 const user = sessionStorage.getItem("user");
 if(!user){
-  alert("请先登录");
-  window.location.href="login.html";
+    alert("请先登录");
+    window.location.href="login.html";
 }
 
 // ---------- 用户文件配置 ----------
 const USERS = {
-  "alice":{folder:"files/alice", files:["a.txt","photo.jpg","doc1.pdf"]},
-  "bob":{folder:"files/bob", files:["b.txt","report.pdf","image.png"]},
-  "carol":{folder:"files/carol", files:["c1.doc","c2.png"]}
+    "alice":{folder:"files/alice", files:["a.txt","photo.jpg","doc1.pdf"]},
+    "bob":{folder:"files/bob", files:["b.txt","report.pdf","image.png"]},
+    "carol":{folder:"files/carol", files:["c1.doc","c2.png"]}
 };
 
 // ---------- 文件类型图标 ----------
 const fileIcons = {
-  "txt":"📄","pdf":"📕","jpg":"🖼️","jpeg":"🖼️","png":"🖼️","doc":"📘","docx":"📘","default":"📁"
+    "txt":"📄","pdf":"📕","jpg":"🖼️","jpeg":"🖼️","png":"🖼️","doc":"📘","docx":"📘","default":"📁"
 };
 function getIcon(filename){
-  const ext = filename.split('.').pop().toLowerCase();
-  return fileIcons[ext] || fileIcons["default"];
+    const ext = filename.split('.').pop().toLowerCase();
+    return fileIcons[ext] || fileIcons["default"];
 }
 
 // ---------- 渲染文件卡片 ----------
 const filesContainer=document.getElementById("filesContainer");
 document.getElementById("who").textContent=user;
 USERS[user].files.forEach(f=>{
-  const card = document.createElement("div");
-  card.className="fileCard";
+    const card = document.createElement("div");
+    card.className="fileCard";
 
-  const icon = document.createElement("div");
-  icon.className="fileIcon";
-  icon.textContent = getIcon(f);
+    const icon = document.createElement("div");
+    icon.className="fileIcon";
+    icon.textContent = getIcon(f);
 
-  const name = document.createElement("div");
-  name.className="fileName";
-  name.textContent=f;
+    const name = document.createElement("div");
+    name.className="fileName";
+    name.textContent=f;
 
-  const link = document.createElement("a");
-  link.className="fileLink";
-  link.href = USERS[user].folder+"/"+encodeURIComponent(f);
-  link.target="_blank";
-  link.textContent="下载/查看";
+    const link = document.createElement("a");
+    link.className="fileLink";
+    link.href = USERS[user].folder+"/"+encodeURIComponent(f);
+    link.target="_blank";
+    link.textContent="下载/查看";
 
-  card.appendChild(icon);
-  card.appendChild(name);
-  card.appendChild(link);
-  filesContainer.appendChild(card);
+    card.appendChild(icon);
+    card.appendChild(name);
+    card.appendChild(link);
+    filesContainer.appendChild(card);
 });
 
 // ---------- 登出 ----------
 document.getElementById("logoutBtn").onclick=function(){
-  sessionStorage.removeItem("user");
-  window.location.href="login.html";
+    sessionStorage.removeItem("user");
+    window.location.href="login.html";
 };
 </script>
 </body>
