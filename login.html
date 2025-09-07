@@ -3,24 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DodoWheels文档中心</title>
+<title>DodoWheels 文档中心</title>
 <style>
-/* 全局 */
 body {
     margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#0a0a0a; color:#fff;
 }
-/* 登录页面 */
+
+/* 登录 */
 #loginPage {
     display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; padding:0 10px; box-sizing:border-box;
 }
-#loginPage img { width:120px; margin-bottom:20px;}
-#loginPage h1 { color:#7FDBFF; margin-bottom:20px; }
 #loginPage input, #loginPage button {
     width:100%; max-width:300px; padding:12px; margin:5px 0; border:none; border-radius:8px; outline:none; box-sizing:border-box;
 }
 #loginPage input { background:#1f2a38; color:#fff; }
 #loginPage input::placeholder { color:#8b9cb5; }
-#loginPage input:focus { box-shadow:0 0 12px #7FDBFF; background:#273444; }
 #loginPage button {
     background:linear-gradient(90deg,#4facfe,#00f2fe); color:#fff; font-weight:bold; cursor:pointer; transition:0.3s;
 }
@@ -29,7 +26,7 @@ body {
 
 /* 文件页面 */
 #filePage { display:none; padding:20px; box-sizing:border-box; }
-h1 { text-align:center; margin-bottom:20px; color:#7FDBFF; text-shadow:0 0 15px #7FDBFF,0 0 30px #00AEEF; }
+h1 { text-align:center; margin-bottom:20px; color:#7FDBFF; }
 
 /* Tab 栏 */
 .tab-bar { display:flex; justify-content:center; margin-bottom:20px; border-bottom:2px solid #00bfff50; flex-wrap:wrap; }
@@ -53,20 +50,13 @@ h1 { text-align:center; margin-bottom:20px; color:#7FDBFF; text-shadow:0 0 15px 
     margin-top:10px; padding:8px 0; width:100%; border-radius:8px; background:linear-gradient(90deg,#7FDBFF,#00AEEF); color:#000; font-weight:bold; text-decoration:none; transition:0.3s;
 }
 .fileCard a:hover { background:linear-gradient(90deg,#00AEEF,#7FDBFF); color:#fff; }
-
-/* 响应式 */
-@media (max-width:600px){
-    #loginPage input, #loginPage button { max-width:90%; }
-    .tab-bar { flex-direction:column; align-items:center; }
-}
 </style>
 </head>
 <body>
 
 <!-- 登录页面 -->
 <div id="loginPage">
-    <img src="logo.png" alt="Logo">
-    <h1>DodoWheels文档中心</h1>
+    <h1>DodoWheels 文档中心</h1>
     <input type="text" id="username" placeholder="用户名">
     <input type="password" id="password" placeholder="密码">
     <button onclick="login()">登录</button>
@@ -75,7 +65,7 @@ h1 { text-align:center; margin-bottom:20px; color:#7FDBFF; text-shadow:0 0 15px 
 
 <!-- 文件页面 -->
 <div id="filePage">
-    <h1>DodoWheels文档中心</h1>
+    <h1>DodoWheels 文档中心</h1>
     <div class="tab-bar" id="tabsContainer"></div>
     <div id="filesContainer"></div>
 </div>
@@ -86,30 +76,20 @@ const USERS = {
     "alice": {
         password: "123456",
         folders: {
-            "Sales": ["report1.pdf","plan.xlsx","photo1.jpg"],
-            "Marketing": ["market_plan.pdf","ad.png"]
+            "Sales": ["report1.pdf","plan.pdf","summary.pdf"],
+            "Marketing": ["market_plan.pdf","ad_campaign.pdf"]
         }
     },
     "bob": {
         password: "abcdef",
         folders: {
-            "Warehouse": ["inventory.xlsx","map.png"]
-        }
-    },
-    "carol": {
-        password: "password",
-        folders: {
-            "Finance": ["budget.xlsx","invoice.pdf"],
-            "HR": ["employee_list.xlsx"]
+            "Warehouse": ["inventory.pdf","layout.pdf"]
         }
     }
 };
 
 // 文件类型图标
-const fileIcons = {
-    "pdf":"📄", "xlsx":"📊", "xls":"📊", "doc":"📘", "docx":"📘",
-    "jpg":"🖼️","jpeg":"🖼️","png":"🖼️","txt":"📄","default":"📁"
-};
+const fileIcons = { "pdf":"📄", "default":"📁" };
 
 let currentUser = null;
 
@@ -188,6 +168,5 @@ window.addEventListener('load', ()=>{
     }
 });
 </script>
-
 </body>
 </html>
