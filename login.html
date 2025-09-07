@@ -151,7 +151,7 @@ document.getElementById("btnLogin").onclick=function(){
     if(USERS[u] && USERS[u]===p){
         // 登录成功，保存用户名并跳转文件页
         sessionStorage.setItem("user",u);
-        window.location.href="files.html";
+        window.location.href="file.html";
     } else {
         alert("用户名或密码错误");
     }
