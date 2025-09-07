@@ -2,178 +2,192 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>DodoWheels 内部文档管理系统</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DodoWheels文档中心</title>
 <style>
-/* 基础样式 */
-body, html {
-    margin:0; padding:0;
-    width:100%; height:100%;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background:#0a0a0a;
-    overflow:hidden;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    color:#fff;
+/* 全局 */
+body {
+    margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#0a0a0a; color:#fff;
 }
+/* 登录页面 */
+#loginPage {
+    display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; padding:0 10px; box-sizing:border-box;
+}
+#loginPage img { width:120px; margin-bottom:20px;}
+#loginPage h1 { color:#7FDBFF; margin-bottom:20px; }
+#loginPage input, #loginPage button {
+    width:100%; max-width:300px; padding:12px; margin:5px 0; border:none; border-radius:8px; outline:none; box-sizing:border-box;
+}
+#loginPage input { background:#1f2a38; color:#fff; }
+#loginPage input::placeholder { color:#8b9cb5; }
+#loginPage input:focus { box-shadow:0 0 12px #7FDBFF; background:#273444; }
+#loginPage button {
+    background:linear-gradient(90deg,#4facfe,#00f2fe); color:#fff; font-weight:bold; cursor:pointer; transition:0.3s;
+}
+#loginPage button:hover { background:linear-gradient(90deg,#00f2fe,#4facfe); transform:scale(1.05); }
+.error { color:#ff4d4d; margin-top:10px; display:none; }
 
-/* 粒子背景 */
-#particles{
-    position:fixed; top:0; left:0;
-    width:100%; height:100%;
-    z-index:-1;
-}
+/* 文件页面 */
+#filePage { display:none; padding:20px; box-sizing:border-box; }
+h1 { text-align:center; margin-bottom:20px; color:#7FDBFF; text-shadow:0 0 15px #7FDBFF,0 0 30px #00AEEF; }
 
-/* 登录框 */
-.login-container{
-    position:relative;
-    background:#141b26;
-    padding:50px 40px;
-    border-radius:20px;
-    text-align:center;
-    width:360px;
-    box-shadow:0 0 50px rgba(0,150,255,0.3);
-    animation:fadeIn 1s ease-in-out;
+/* Tab 栏 */
+.tab-bar { display:flex; justify-content:center; margin-bottom:20px; border-bottom:2px solid #00bfff50; flex-wrap:wrap; }
+.tab-button {
+    padding:10px 20px; margin:3px; cursor:pointer; background:none; border:none; color:#aaa; font-weight:bold; font-size:1em; transition:0.3s; border-radius:8px;
 }
+.tab-button.active { color:#00bfff; border-bottom:3px solid #00bfff; }
 
-/* Logo */
-.logo{
-    width:100px;
-    margin-bottom:20px;
-    animation:logoBounce 1s ease-in-out;
+/* 文件卡片 */
+#filesContainer {
+    display:grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap:20px; max-width:1000px; margin:0 auto;
 }
+.fileCard {
+    background:#111; border-radius:12px; padding:20px; text-align:center; box-shadow:0 0 15px #7FDBFF; transition: transform 0.2s;
+    display:flex; flex-direction:column; justify-content:space-between; align-items:center;
+}
+.fileCard:hover { transform:translateY(-5px); box-shadow:0 0 30px #7FDBFF,0 0 45px #00AEEF; }
+.fileCard .fileIcon { font-size:40px; margin-bottom:10px; }
+.fileCard .fileName { margin-bottom:10px; color:#7FDBFF; word-break:break-word; text-align:center; }
+.fileCard a {
+    margin-top:10px; padding:8px 0; width:100%; border-radius:8px; background:linear-gradient(90deg,#7FDBFF,#00AEEF); color:#000; font-weight:bold; text-decoration:none; transition:0.3s;
+}
+.fileCard a:hover { background:linear-gradient(90deg,#00AEEF,#7FDBFF); color:#fff; }
 
-/* 标题 */
-h1{
-    color:#58a6ff;
-    margin-bottom:40px;
-    font-size:22px;
-    white-space:nowrap; /* 防止中文换行 */
-    text-shadow:0 0 15px #58a6ff;
-}
-
-/* 输入框统一风格 */
-input{
-    width:100%;
-    padding:15px;
-    margin-bottom:20px;
-    border:none;
-    border-radius:12px;
-    background-color:#1f2a38;
-    color:#fff;
-    font-size:16px;
-    outline:none;
-    transition:0.3s;
-}
-input::placeholder { color:#8b9cb5; }
-input:focus{
-    background-color:#273444;
-    box-shadow:0 0 12px #58a6ff;
-}
-
-/* 按钮统一风格 */
-button{
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:12px;
-    background:linear-gradient(90deg,#4facfe,#00f2fe);
-    color:#fff;
-    font-weight:bold;
-    font-size:16px;
-    cursor:pointer;
-    transition:0.4s;
-    display:block;
-    margin-top:10px;
-}
-button:hover{
-    background:linear-gradient(90deg,#00f2fe,#4facfe);
-    transform:scale(1.05);
-    box-shadow:0 0 15px #00f2fe;
-}
-
-/* 动画 */
-@keyframes fadeIn{
-    from{opacity:0; transform:translateY(-20px);}
-    to{opacity:1; transform:translateY(0);}
-}
-@keyframes logoBounce{
-    0%{transform:translateY(-20px); opacity:0;}
-    50%{transform:translateY(10px); opacity:1;}
-    100%{transform:translateY(0);}
+/* 响应式 */
+@media (max-width:600px){
+    #loginPage input, #loginPage button { max-width:90%; }
+    .tab-bar { flex-direction:column; align-items:center; }
 }
 </style>
 </head>
 <body>
 
-<!-- 粒子背景 -->
-<canvas id="particles"></canvas>
-
-<div class="login-container">
-    <img src="logo.png" class="logo" alt="Logo">
-    <h1>DodoWheels 内部文档管理系统</h1>
+<!-- 登录页面 -->
+<div id="loginPage">
+    <img src="logo.png" alt="Logo">
+    <h1>DodoWheels文档中心</h1>
     <input type="text" id="username" placeholder="用户名">
     <input type="password" id="password" placeholder="密码">
-    <button id="loginBtn">登录</button>
+    <button onclick="login()">登录</button>
+    <div class="error" id="errorMsg">用户名或密码错误</div>
+</div>
+
+<!-- 文件页面 -->
+<div id="filePage">
+    <h1>DodoWheels文档中心</h1>
+    <div class="tab-bar" id="tabsContainer"></div>
+    <div id="filesContainer"></div>
 </div>
 
 <script>
-// ---------- 默认用户名和密码 ----------
+// 用户配置
 const USERS = {
-    "alice":"123456",
-    "bob":"abcdef",
-    "carol":"password"
+    "alice": {
+        password: "123456",
+        folders: {
+            "Sales": ["report1.pdf","plan.xlsx","photo1.jpg"],
+            "Marketing": ["market_plan.pdf","ad.png"]
+        }
+    },
+    "bob": {
+        password: "abcdef",
+        folders: {
+            "Warehouse": ["inventory.xlsx","map.png"]
+        }
+    },
+    "carol": {
+        password: "password",
+        folders: {
+            "Finance": ["budget.xlsx","invoice.pdf"],
+            "HR": ["employee_list.xlsx"]
+        }
+    }
 };
 
-// 登录验证
-document.getElementById("loginBtn").addEventListener("click",function(){
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
+// 文件类型图标
+const fileIcons = {
+    "pdf":"📄", "xlsx":"📊", "xls":"📊", "doc":"📘", "docx":"📘",
+    "jpg":"🖼️","jpeg":"🖼️","png":"🖼️","txt":"📄","default":"📁"
+};
 
-    if(USERS[username] && USERS[username] === password){
-        sessionStorage.setItem("user",username);
-        window.location.href="file.html";
-    }else{
-        alert("用户名或密码错误");
-    }
-});
+let currentUser = null;
 
-// ---------- 粒子背景 ----------
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
-let particlesArray = [];
-let w,h;
+// 登录
+function login(){
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const errorMsg = document.getElementById('errorMsg');
 
-function initCanvas(){ w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; }
-window.addEventListener('resize',initCanvas);
-initCanvas();
-
-class Particle{
-    constructor(){
-        this.x=Math.random()*w;
-        this.y=Math.random()*h;
-        this.radius=Math.random()*2+1;
-        this.speedX=(Math.random()-0.5)*0.5;
-        this.speedY=(Math.random()-0.5)*0.5;
-    }
-    update(){
-        this.x+=this.speedX; this.y+=this.speedY;
-        if(this.x<0||this.x>w) this.speedX*=-1;
-        if(this.y<0||this.y>h) this.speedY*=-1;
-    }
-    draw(){
-        ctx.beginPath();
-        ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
-        ctx.fillStyle='#7FDBFF';
-        ctx.fill();
+    if(USERS[username] && USERS[username].password === password){
+        currentUser = username;
+        sessionStorage.setItem("user", username);
+        document.getElementById('loginPage').style.display='none';
+        document.getElementById('filePage').style.display='block';
+        initTabs();
+    } else {
+        errorMsg.style.display='block';
     }
 }
 
-function initParticles(){ particlesArray=[]; for(let i=0;i<150;i++) particlesArray.push(new Particle()); }
-initParticles();
+// 初始化 Tab
+function initTabs(){
+    const tabsContainer = document.getElementById('tabsContainer');
+    tabsContainer.innerHTML='';
+    const userFolders = USERS[currentUser].folders;
 
-function animate(){ ctx.clearRect(0,0,w,h); particlesArray.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(animate); }
-animate();
+    for(let folderName in userFolders){
+        const tab = document.createElement('button');
+        tab.className='tab-button';
+        tab.textContent=folderName;
+        tab.dataset.folder=folderName;
+        tab.addEventListener('click', ()=>{
+            document.querySelectorAll('.tab-button').forEach(t=>t.classList.remove('active'));
+            tab.classList.add('active');
+            renderFiles(folderName);
+        });
+        tabsContainer.appendChild(tab);
+    }
+
+    // 默认显示第一个 Tab
+    const firstTab = tabsContainer.querySelector('.tab-button');
+    if(firstTab){
+        firstTab.classList.add('active');
+        renderFiles(firstTab.dataset.folder);
+    }
+}
+
+// 渲染文件
+function renderFiles(folderName){
+    const filesContainer = document.getElementById('filesContainer');
+    filesContainer.innerHTML='';
+    const files = USERS[currentUser].folders[folderName];
+    if(!files) return;
+    files.forEach(f=>{
+        const ext = f.split('.').pop().toLowerCase();
+        const icon = fileIcons[ext] || fileIcons["default"];
+        const card = document.createElement('div');
+        card.className='fileCard';
+        card.innerHTML = `
+            <div class="fileIcon">${icon}</div>
+            <div class="fileName">${f}</div>
+            <a href="files/${currentUser}/${folderName}/${encodeURIComponent(f)}" target="_blank">查看/下载</a>
+        `;
+        filesContainer.appendChild(card);
+    });
+}
+
+// 页面刷新自动登录
+window.addEventListener('load', ()=>{
+    const savedUser = sessionStorage.getItem('user');
+    if(savedUser && USERS[savedUser]){
+        currentUser = savedUser;
+        document.getElementById('loginPage').style.display='none';
+        document.getElementById('filePage').style.display='block';
+        initTabs();
+    }
+});
 </script>
+
 </body>
 </html>
