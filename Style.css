@@ -1,0 +1,126 @@
+/* 全局样式 */
+* {margin:0; padding:0; box-sizing:border-box;}
+body{
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background:#0a0a0a;
+    color:#fff;
+    overflow-x:hidden;
+}
+
+/* 粒子背景 */
+#particles{
+    position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;
+}
+
+/* 标题 */
+h1{
+    text-align:center;
+    color:#7FDBFF;
+    text-shadow:0 0 15px #7FDBFF,0 0 30px #00AEEF;
+    margin-top:30px;
+    font-size:32px;
+}
+
+/* 用户信息 */
+#userInfo{
+    text-align:center;
+    margin-top:10px;
+}
+#logoutBtn{
+    display:inline-block;
+    margin-top:10px;
+    padding:8px 16px;
+    border:none;
+    border-radius:8px;
+    background:linear-gradient(45deg,#7FDBFF,#00AEEF);
+    color:#000;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+#logoutBtn:hover{
+    background:linear-gradient(45deg,#00AEEF,#7FDBFF);
+    color:#fff;
+}
+
+/* Tabs */
+.tabs {
+    display:flex;
+    justify-content:center;
+    margin:30px 0 10px;
+    gap:15px;
+}
+.tab {
+    padding:10px 25px;
+    border-radius:12px;
+    background:linear-gradient(90deg,#4facfe,#00f2fe);
+    color:#fff;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+.tab:hover {
+    background:linear-gradient(90deg,#00f2fe,#4facfe);
+    transform:scale(1.05);
+}
+.tab.active { box-shadow:0 0 15px #7FDBFF; }
+
+/* 文件卡片容器 */
+#filesContainer{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:25px;
+    max-width:1200px;
+    margin:0 auto;
+    padding:0 20px;
+}
+
+/* 文件卡片 */
+.fileCard{
+    background:#111;
+    border-radius:15px;
+    padding:25px;
+    box-shadow:0 0 20px #7FDBFF50;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:space-between;
+    transition:0.3s;
+    cursor:pointer;
+}
+.fileCard:hover{
+    transform:translateY(-5px) scale(1.03);
+    box-shadow:0 0 40px #7FDBFF,0 0 50px #00AEEF;
+}
+
+/* 文件图标 */
+.fileIcon{
+    font-size:50px;
+    margin-bottom:15px;
+}
+
+/* 文件名 */
+.fileName{
+    color:#7FDBFF;
+    text-align:center;
+    margin-bottom:15px;
+    word-break:break-word;
+    font-weight:500;
+}
+
+/* 下载/查看按钮 */
+.fileLink{
+    text-decoration:none;
+    background:linear-gradient(90deg,#4facfe,#00f2fe);
+    color:#fff;
+    padding:12px 0;
+    width:100%;
+    border-radius:12px;
+    text-align:center;
+    font-weight:bold;
+    transition:0.4s;
+}
+.fileLink:hover{
+    background:linear-gradient(90deg,#00f2fe,#4facfe);
+    transform:scale(1.05);
+}
