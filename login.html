@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>DodoWheels内部文档管理系统</title>
+<title>DodoWheels 内部文档管理系统</title>
 <style>
 /* 基础样式 */
 body, html {
@@ -32,7 +32,7 @@ body, html {
     border-radius:20px;
     text-align:center;
     width:360px;
-    box-shadow:0 0 40px rgba(0,150,255,0.3);
+    box-shadow:0 0 50px rgba(0,150,255,0.3);
     animation:fadeIn 1s ease-in-out;
 }
 
@@ -47,10 +47,12 @@ body, html {
 h1{
     color:#58a6ff;
     margin-bottom:40px;
+    font-size:22px;
+    white-space:nowrap; /* 防止中文换行 */
     text-shadow:0 0 15px #58a6ff;
 }
 
-/* 输入框 */
+/* 输入框统一风格 */
 input{
     width:100%;
     padding:15px;
@@ -69,7 +71,7 @@ input:focus{
     box-shadow:0 0 12px #58a6ff;
 }
 
-/* 按钮 */
+/* 按钮统一风格 */
 button{
     width:100%;
     padding:15px;
@@ -80,11 +82,14 @@ button{
     font-weight:bold;
     font-size:16px;
     cursor:pointer;
-    transition:0.5s;
+    transition:0.4s;
+    display:block;
+    margin-top:10px;
 }
 button:hover{
     background:linear-gradient(90deg,#00f2fe,#4facfe);
     transform:scale(1.05);
+    box-shadow:0 0 15px #00f2fe;
 }
 
 /* 动画 */
@@ -106,7 +111,7 @@ button:hover{
 
 <div class="login-container">
     <img src="logo.png" class="logo" alt="Logo">
-    <h1>DodoWheels内部文档管理系统</h1>
+    <h1>DodoWheels 内部文档管理系统</h1>
     <input type="text" id="username" placeholder="用户名">
     <input type="password" id="password" placeholder="密码">
     <button id="loginBtn">登录</button>
