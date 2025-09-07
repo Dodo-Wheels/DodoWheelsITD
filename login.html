@@ -106,7 +106,7 @@ button:hover{
 
 <div class="login-container">
     <img src="logo.png" class="logo" alt="Logo">
-    <h1>DodoWheels 登录</h1>
+    <h1>DodoWheels内部文档管理系统</h1>
     <input type="text" id="username" placeholder="用户名">
     <input type="password" id="password" placeholder="密码">
     <button id="loginBtn">登录</button>
@@ -127,7 +127,7 @@ document.getElementById("loginBtn").addEventListener("click",function(){
 
     if(USERS[username] && USERS[username] === password){
         sessionStorage.setItem("user",username);
-        window.location.href="index.html";
+        window.location.href="file.html";
     }else{
         alert("用户名或密码错误");
     }
