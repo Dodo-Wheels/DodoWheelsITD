@@ -67,7 +67,7 @@
 <script>
     // 用户配置（用户名: 密码 + Tab 权限）
     const users = {
-        "admin":   { password:"123456", tabs:["web","qbo","odoo"] },
+        "admin":   { password:"123456", tabs:["Sales","Warehouse"] },
         "webuser": { password:"111111", tabs:["web"] },
         "qbouser": { password:"222222", tabs:["qbo"] },
         "odoouser":{ password:"333333", tabs:["odoo"] }
@@ -75,16 +75,11 @@
 
     // 各 Tab 下的文件列表
     const files = {
-        "web": [
-            { name:"网站产品最新序号获取工具", url:"/files/web/tool1.exe" },
-            { name:"网站价格更新工具", url:"/files/web/tool2.exe" }
+        "Sales": [
+            { name:"网站产品最新序号获取工具", url:"/Sales/1.pdf" }
         ],
-        "qbo": [
-            { name:"QBO产品名称调整工具", url:"/files/qbo/tool1.exe" }
-        ],
-        "odoo": [
-            { name:"AI小助手", url:"/files/odoo/ai.exe" },
-            { name:"价格查询工具", url:"/files/odoo/price.exe" }
+        "Warehouse": [
+            { name:"QBO产品名称调整工具", url:"/Warehouse/1.pdf" }
         ]
     };
 
