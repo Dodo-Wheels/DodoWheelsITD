@@ -20,12 +20,20 @@ body, html{
 #loginPage button{width:100%; max-width:320px; padding:10px; margin-top:15px; border:none; border-radius:5px; background:linear-gradient(90deg,#1e90ff,#00bfff); color:#fff; font-weight:bold; cursor:pointer; box-sizing:border-box;}
 #errorMsg{color:#ff4d4d; margin-top:10px; display:none;}
 
-#toolPage{display:none; padding:20px;}
+#toolPage{display:none; padding:20px; height:100vh; display:flex; flex-direction:column;}
 h1{text-align:center; margin:20px 0; font-size:2em; color:#00bfff;}
+
+/* 顶部工具栏 */
+.top-bar{display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;}
+.top-bar h1{margin:0;}
+.logoutBtn{padding:8px 16px; border:none; border-radius:6px; background:linear-gradient(90deg,#ff4d4d,#ff8080); color:#fff; font-weight:bold; cursor:pointer; transition:0.3s;}
+.logoutBtn:hover{background:linear-gradient(90deg,#ff8080,#ff4d4d);}
+
 .tab-bar{display:flex; justify-content:center; margin-bottom:20px; border-bottom:2px solid #00bfff50;}
 .tab-button{padding:10px 20px; cursor:pointer; background:none; border:none; color:#aaa; font-weight:bold; transition:0.3s;}
 .tab-button.active{color:#00bfff; border-bottom:3px solid #00bfff;}
-#filesContainer{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:20px; max-width:1200px; margin:0 auto;}
+
+#filesContainer{flex:1; overflow-y:auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:20px; max-width:1200px; margin:0 auto;}
 .fileCard{background:#111; border-radius:12px; padding:20px; text-align:center; box-shadow:0 0 15px #7FDBFF; transition: transform 0.3s, box-shadow 0.3s, background 0.3s; display:flex; flex-direction:column; justify-content:space-between; align-items:center;}
 .fileCard:hover{transform:translateY(-8px) scale(1.02); box-shadow:0 0 40px #7FDBFF,0 0 60px #00AEEF; background:linear-gradient(135deg,#0a0a0a,#111c2f);}
 .fileIcon{font-size:50px; margin-bottom:10px; transition: transform 0.3s;}
@@ -52,7 +60,10 @@ h1{text-align:center; margin:20px 0; font-size:2em; color:#00bfff;}
 </div>
 
 <div id="toolPage">
-    <h1>DodoWheels 文档管理系统</h1>
+    <div class="top-bar">
+        <h1>DodoWheels 文档管理系统</h1>
+        <button class="logoutBtn" onclick="logout()">退出</button>
+    </div>
     <div class="tab-bar" id="tabBar"></div>
     <div id="filesContainer"></div>
 </div>
@@ -65,7 +76,8 @@ const USERS={
         folders:{
             "Sales":[
                 {name:"report1.pdf", size:"1.2MB", date:"2025-09-06"},
-                {name:"plan.pdf", size:"800KB", date:"2025-09-05"}
+                {name:"plan.docx", size:"800KB", date:"2025-09-05"},
+                {name:"budget.xlsx", size:"500KB", date:"2025-09-01"}
             ]
         }
     },
@@ -74,12 +86,26 @@ const USERS={
         folders:{
             "Warehouse":[
                 {name:"inventory.pdf", size:"2.3MB", date:"2025-08-30"},
-                {name:"layout.pdf", size:"900KB", date:"2025-08-28"}
+                {name:"layout.jpg", size:"900KB", date:"2025-08-28"}
             ]
         }
     }
 };
-const fileIcons={"pdf":"📕","default":"📁"};
+
+// 文件图标
+const fileIcons={
+    "pdf":"📕",
+    "doc":"📄",
+    "docx":"📄",
+    "xls":"📊",
+    "xlsx":"📊",
+    "jpg":"🖼️",
+    "jpeg":"🖼️",
+    "png":"🖼️",
+    "gif":"🖼️",
+    "default":"📁"
+};
+
 let currentUser="";
 
 // 登录
@@ -90,9 +116,20 @@ function login(){
     if(USERS[username] && USERS[username].password===password){
         currentUser=username;
         document.getElementById("loginPage").style.display="none";
-        document.getElementById("toolPage").style.display="block";
+        document.getElementById("toolPage").style.display="flex";
         renderTabs();
-    }else{errorMsg.style.display="block";}
+    }else{
+        errorMsg.style.display="block";
+    }
+}
+
+// 退出
+function logout(){
+    currentUser="";
+    document.getElementById("username").value="";
+    document.getElementById("password").value="";
+    document.getElementById("toolPage").style.display="none";
+    document.getElementById("loginPage").style.display="flex";
 }
 
 // 渲染 Tab
@@ -125,7 +162,8 @@ function showTab(folder,event){
         card.className="fileCard";
         const icon=document.createElement("div");
         icon.className="fileIcon";
-        icon.textContent=fileIcons[f.name.split(".").pop().toLowerCase()] || fileIcons["default"];
+        const ext=f.name.split(".").pop().toLowerCase();
+        icon.textContent=fileIcons[ext] || fileIcons["default"];
         const name=document.createElement("div");
         name.className="fileName";
         name.textContent=f.name;
@@ -134,7 +172,7 @@ function showTab(folder,event){
         info.textContent=`大小: ${f.size} 上传日期: ${f.date}`;
         const link=document.createElement("a");
         link.className="fileLink";
-        // 文件 URL 假设服务器上路径: /files/用户名/文件夹/文件名
+        // 假设文件路径: /files/用户名/文件夹/文件名
         link.href=`/files/${currentUser}/${folder}/${f.name}`;
         link.target="_blank";
         link.textContent="打开文件";
