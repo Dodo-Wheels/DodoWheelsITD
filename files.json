@@ -1,19 +1,86 @@
 {
-    "Sales": {
-        "报价单": [
-            { "name": "报价单v1", "path": "Sales/报价单/v1.pdf", "status": "download" },
-            { "name": "报价单v2", "path": "Sales/报价单/v2.pdf", "status": "download" }
-        ],
-        "合同": [
-            { "name": "合同模板", "path": "Sales/合同/template.pdf", "status": "download" }
+  "Sales": {
+    "报价单": [
+      {
+        "type": "file",
+        "name": "2025年1月报价单",
+        "status": "download",
+        "path": "files/sales/quotation_202501.pdf"
+      },
+      {
+        "type": "file",
+        "name": "2025年2月报价单",
+        "status": "download",
+        "path": "files/sales/quotation_202502.pdf"
+      }
+    ],
+    "合同": [
+      {
+        "type": "folder",
+        "name": "2025",
+        "children": [
+          {
+            "type": "file",
+            "name": "一月合同",
+            "status": "download",
+            "path": "files/sales/contracts/2025_01.pdf"
+          },
+          {
+            "type": "file",
+            "name": "二月合同",
+            "status": "download",
+            "path": "files/sales/contracts/2025_02.pdf"
+          }
         ]
-    },
-    "Warehouse": {
-        "入库单": [
-            { "name": "2023入库单", "path": "Warehouse/入库单/2023.pdf", "status": "download" }
-        ],
-        "出库单": [
-            { "name": "2023出库单", "path": "Warehouse/出库单/2023.pdf", "status": "download" }
+      },
+      {
+        "type": "folder",
+        "name": "2024",
+        "children": [
+          {
+            "type": "file",
+            "name": "全年合同汇总",
+            "status": "download",
+            "path": "files/sales/contracts/2024_summary.pdf"
+          }
         ]
-    }
+      }
+    ]
+  },
+  "Warehouse": {
+    "入库单": [
+      {
+        "type": "file",
+        "name": "1月入库记录",
+        "status": "download",
+        "path": "files/warehouse/inbound_202501.xlsx"
+      },
+      {
+        "type": "file",
+        "name": "2月入库记录",
+        "status": "download",
+        "path": "files/warehouse/inbound_202502.xlsx"
+      }
+    ],
+    "出库单": [
+      {
+        "type": "folder",
+        "name": "2025",
+        "children": [
+          {
+            "type": "file",
+            "name": "一月出库记录",
+            "status": "download",
+            "path": "files/warehouse/outbound_202501.xlsx"
+          },
+          {
+            "type": "file",
+            "name": "二月出库记录",
+            "status": "download",
+            "path": "files/warehouse/outbound_202502.xlsx"
+          }
+        ]
+      }
+    ]
+  }
 }
