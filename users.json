@@ -4,12 +4,5 @@
         "tabs": [
             { "key": "ADMINISTRATION", "label": "ADMINISTRATION" }
         ]
-    },
-    
-    "sales": {
-        "password": "123456",
-        "tabs": [
-            { "key": "ADMINISTRATION", "label": "ADMINISTRATION" }
-        ]
     }
 }
