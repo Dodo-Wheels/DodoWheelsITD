@@ -20,41 +20,6 @@
         "path": "files/sales/从采购到正式启动销售全流程和关键时间节点.docx"
       }
     ]
-  },
-  "Warehouse": {
-    "入库单": [
-      {
-        "type": "file",
-        "name": "1月入库记录",
-        "status": "download",
-        "path": "files/warehouse/inbound_202501.xlsx"
-      },
-      {
-        "type": "file",
-        "name": "2月入库记录",
-        "status": "download",
-        "path": "files/warehouse/inbound_202502.xlsx"
-      }
-    ],
-    "出库单": [
-      {
-        "type": "folder",
-        "name": "2025",
-        "children": [
-          {
-            "type": "file",
-            "name": "一月出库记录",
-            "status": "download",
-            "path": "files/warehouse/outbound_202501.xlsx"
-          },
-          {
-            "type": "file",
-            "name": "二月出库记录",
-            "status": "download",
-            "path": "files/warehouse/outbound_202502.xlsx"
-          }
-        ]
-      }
-    ]
+  }
   }
 }
