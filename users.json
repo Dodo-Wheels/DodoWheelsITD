@@ -7,13 +7,13 @@
         ]
     },
     "sales": {
-        "password": "123",
+        "password": "123456",
         "tabs": [
             { "key": "Sales", "label": "销售部" }
         ]
     },
     "warehouse": {
-        "password": "123",
+        "password": "123456",
         "tabs": [
             { "key": "Warehouse", "label": "仓库部" }
         ]
