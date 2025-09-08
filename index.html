@@ -12,69 +12,137 @@
         color: #00bfff;
     }
 
-    /* 文件夹整体容器 */
-    .folder-block {
-        width: 70%;
-        margin: 0 auto 25px auto; /* 居中 + 下间距 */
+    /* 登录页面 */
+    #loginPage {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        text-align: center;
+    }
+    #loginPage h1 {
+        color: #1e90ff;
+        margin-bottom: 20px;
+    }
+    #loginPage input, #loginPage button {
+        width: 260px;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 5px;
+        border: none;
+    }
+    #loginPage button {
+        background: linear-gradient(90deg, #1e90ff, #00bfff);
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    #errorMsg {
+        color: red;
+        margin-top: 10px;
+        display: none;
+    }
+
+    /* 工具中心 */
+    #toolPage {
+        display: none;
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Tab 栏 */
+    .tab-bar {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #00bfff50;
+    }
+    .tab-button {
+        padding: 10px 20px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        color: #aaa;
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+    .tab-button.active {
+        color: #00bfff;
+        border-bottom: 3px solid #00bfff;
+    }
+
+    /* 控制区 */
+    .tab-controls {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    .tab-controls input {
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: none;
+        width: 200px;
+    }
+    .tab-controls button {
+        padding: 5px 15px;
+        border-radius: 5px;
+        border: none;
+        background: linear-gradient(90deg, #1e90ff, #00bfff);
+        color: white;
+        cursor: pointer;
+    }
+
+    /* Tab 内部 - 多列布局 */
+    .tab-columns {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    .folder-column {
         background: #1c1c1c;
-        border: 1px solid #00bfff40;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 0 15px #00bfff30;
+        border: 1px solid #00bfff50;
+        border-radius: 10px;
+        padding: 15px;
+        width: 280px;
+        box-shadow: 0 0 10px #00bfff30;
     }
 
     /* 文件夹标题 */
     .folder-title {
         cursor: pointer;
-        padding: 12px 16px;
-        background: #0d1a26;
+        padding: 8px;
+        background: #0d2a40;
+        border-radius: 5px;
+        margin-bottom: 8px;
         font-size: 1.1em;
-        font-weight: bold;
         display: flex;
         align-items: center;
-        justify-content: flex-start;
-        gap: 10px;
-        transition: background 0.3s;
-    }
-    .folder-title:hover {
-        background: #12324d;
-    }
-    .folder-title.expanded {
-        background: #0d2a40;
+        gap: 8px;
         color: #1e90ff;
     }
     .folder-icon {
         font-weight: bold;
         color: #00bfff;
-        font-size: 1.2em;
     }
-
-    /* 文件夹内容 */
     .folder-content {
         display: none;
-        padding: 15px 20px;
-        border-top: 1px solid #00bfff30;
-    }
-
-    /* 文件列表竖向排列 */
-    .tools {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
+        margin-left: 15px;
     }
 
     /* 文件卡片 */
     .tool {
         background: #222;
         border: 1px solid #00bfff30;
-        border-radius: 10px;
-        padding: 12px;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 10px;
         text-align: center;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .tool:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 0 12px #00bfff60;
     }
     .tool h3 {
         color: #00bfff;
@@ -83,7 +151,7 @@
     }
     .tool button {
         width: 100%;
-        padding: 8px;
+        padding: 6px;
         border: none;
         border-radius: 5px;
         background: linear-gradient(90deg, #1e90ff, #00bfff);
@@ -96,12 +164,11 @@
     }
     .tool span {
         display: block;
-        padding: 8px;
+        padding: 6px;
         border-radius: 5px;
         background: #444;
         color: #aaa;
     }
-
     mark {
         background: yellow;
         color: black;
@@ -109,32 +176,105 @@
 </style>
 </head>
 <body>
-<div id="tabContent"></div>
+
+<!-- 登录页面 -->
+<div id="loginPage">
+    <img src="logo.png" alt="DodoWheels Logo" style="width:120px; margin-bottom:20px;">
+    <h1>DodoWheels 文档管理系统</h1>
+    <input type="text" id="username" placeholder="用户名">
+    <input type="password" id="password" placeholder="密码">
+    <button onclick="login()">登录</button>
+    <div id="errorMsg">用户名或密码错误</div>
+</div>
+
+<!-- 工具中心 -->
+<div id="toolPage">
+    <h1>DodoWheels 文档管理系统</h1>
+    <div class="tab-bar" id="tabBar"></div>
+    <div id="tabContent"></div>
+</div>
 
 <script>
-// 模拟数据
-const files = {
-    "Sales": {
-        "合同文件": [
-            { name: "销售合同 A", path: "files/sales/a.pdf", status: "download" },
-            { name: "销售合同 B", path: "files/sales/b.pdf", status: "download" }
-        ],
-        "报价单": [
-            { name: "报价单 2024", path: "files/sales/quote.pdf", status: "download" }
-        ]
-    }
-};
+let currentUser = null;
+let users = {};
+let files = {};
 
-// 渲染函数
-function showTab(tabKey) {
+// 登录
+async function login() {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const errorMsg = document.getElementById("errorMsg");
+
+    if (!Object.keys(users).length) {
+        const res = await fetch("users.json");
+        users = await res.json();
+    }
+
+    if (users[username] && users[username].password === password) {
+        currentUser = users[username];
+        document.getElementById("loginPage").style.display = "none";
+        document.getElementById("toolPage").style.display = "block";
+        loadFiles();
+    } else {
+        errorMsg.style.display = "block";
+    }
+}
+
+// 加载文件
+async function loadFiles() {
+    const res = await fetch("files.json");
+    files = await res.json();
+    renderTabs();
+}
+
+// 渲染 Tabs
+function renderTabs() {
+    const tabBar = document.getElementById("tabBar");
+    tabBar.innerHTML = "";
+
+    currentUser.tabs.forEach((tab, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "tab-button" + (idx === 0 ? " active" : "");
+        btn.innerText = tab.label;
+        btn.onclick = () => showTab(tab.key, btn);
+        tabBar.appendChild(btn);
+    });
+
+    showTab(currentUser.tabs[0].key, tabBar.children[0]);
+}
+
+// 渲染 Tab 内容
+function showTab(tabKey, btn) {
+    document.querySelectorAll(".tab-button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
     const tabContent = document.getElementById("tabContent");
     tabContent.innerHTML = "";
 
     const tabData = files[tabKey] || {};
 
+    // 控制区
+    const controlsDiv = document.createElement("div");
+    controlsDiv.className = "tab-controls";
+
+    const searchInput = document.createElement("input");
+    searchInput.type = "text";
+    searchInput.placeholder = "搜索文件...";
+    controlsDiv.appendChild(searchInput);
+
+    const toggleBtn = document.createElement("button");
+    toggleBtn.innerText = "全部展开";
+    controlsDiv.appendChild(toggleBtn);
+
+    tabContent.appendChild(controlsDiv);
+
+    // 顶层子文件夹 → 多列
+    const columnsDiv = document.createElement("div");
+    columnsDiv.className = "tab-columns";
+
     Object.keys(tabData).forEach(subFolder => {
-        const folderBlock = document.createElement("div");
-        folderBlock.className = "folder-block";
+        const col = document.createElement("div");
+        col.className = "folder-column";
 
         const folderTitle = document.createElement("div");
         folderTitle.className = "folder-title";
@@ -152,10 +292,91 @@ function showTab(tabKey) {
         const folderContent = document.createElement("div");
         folderContent.className = "folder-content";
 
-        const toolsDiv = document.createElement("div");
-        toolsDiv.className = "tools";
+        buildFolder(folderContent, tabData[subFolder]);
 
-        (tabData[subFolder] || []).forEach(f => {
+        folderTitle.addEventListener("click", () => {
+            const expanded = folderContent.style.display === "block";
+            folderContent.style.display = expanded ? "none" : "block";
+            icon.innerText = expanded ? "+" : "-";
+        });
+
+        col.appendChild(folderTitle);
+        col.appendChild(folderContent);
+        columnsDiv.appendChild(col);
+    });
+
+    tabContent.appendChild(columnsDiv);
+
+    // 一键展开/收起
+    toggleBtn.onclick = () => {
+        const expanded = toggleBtn.innerText === "全部收起";
+        tabContent.querySelectorAll(".folder-content").forEach(fc => {
+            fc.style.display = expanded ? "none" : "block";
+        });
+        tabContent.querySelectorAll(".folder-icon").forEach(ic => {
+            ic.innerText = expanded ? "+" : "-";
+        });
+        toggleBtn.innerText = expanded ? "全部展开" : "全部收起";
+    };
+
+    // 搜索功能
+    searchInput.addEventListener("input", () => {
+        const query = searchInput.value.toLowerCase();
+
+        tabContent.querySelectorAll(".tool").forEach(card => {
+            const titleEl = card.querySelector("h3");
+            const text = titleEl.innerText;
+            const lower = text.toLowerCase();
+
+            if (!query) {
+                card.style.display = "block";
+                titleEl.innerHTML = text;
+                return;
+            }
+
+            if (lower.includes(query)) {
+                card.style.display = "block";
+                const regex = new RegExp(`(${query})`, "gi");
+                titleEl.innerHTML = text.replace(regex, "<mark>$1</mark>");
+            } else {
+                card.style.display = "none";
+                titleEl.innerHTML = text;
+            }
+        });
+    });
+}
+
+// 递归渲染文件夹
+function buildFolder(container, items) {
+    (items || []).forEach(f => {
+        if (f.type === "folder") {
+            const folderTitle = document.createElement("div");
+            folderTitle.className = "folder-title";
+
+            const icon = document.createElement("span");
+            icon.className = "folder-icon";
+            icon.innerText = "+";
+
+            const label = document.createElement("span");
+            label.innerText = f.name;
+
+            folderTitle.appendChild(icon);
+            folderTitle.appendChild(label);
+
+            const subContent = document.createElement("div");
+            subContent.className = "folder-content";
+
+            buildFolder(subContent, f.children);
+
+            folderTitle.addEventListener("click", () => {
+                const expanded = subContent.style.display === "block";
+                subContent.style.display = expanded ? "none" : "block";
+                icon.innerText = expanded ? "+" : "-";
+            });
+
+            container.appendChild(folderTitle);
+            container.appendChild(subContent);
+        } else {
             const card = document.createElement("div");
             card.className = "tool";
 
@@ -188,26 +409,10 @@ function showTab(tabKey) {
                 card.appendChild(span);
             }
 
-            toolsDiv.appendChild(card);
-        });
-
-        folderContent.appendChild(toolsDiv);
-
-        folderTitle.addEventListener("click", () => {
-            const expanded = folderContent.style.display === "block";
-            folderContent.style.display = expanded ? "none" : "block";
-            folderTitle.classList.toggle("expanded", !expanded);
-            icon.innerText = expanded ? "+" : "-";
-        });
-
-        folderBlock.appendChild(folderTitle);
-        folderBlock.appendChild(folderContent);
-        tabContent.appendChild(folderBlock);
+            container.appendChild(card);
+        }
     });
 }
-
-// 测试：渲染 Sales
-showTab("Sales");
 </script>
 </body>
 </html>
