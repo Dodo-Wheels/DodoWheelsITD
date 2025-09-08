@@ -1,49 +1,23 @@
 {
-  "Sales": {
-    "报价单": [
+  "ADMINISTRATION": {
+    "RULES & SOP": [
       {
         "type": "file",
-        "name": "2025年1月报价单",
+        "name": "Standard Operating Procedure - Delivery Operations",
         "status": "download",
-        "path": "files/sales/quotation_202501.pdf"
+        "path": "files/sales/Standard Operating Procedure - Delivery Operations.docx"
       },
       {
         "type": "file",
-        "name": "2025年2月报价单",
+        "name": "Standard Operating Procedure - Warehouse Operations",
         "status": "download",
-        "path": "files/sales/quotation_202502.pdf"
+        "path": "files/sales/Standard Operating Procedure - Warehouse Operations.docx"
       }
-    ],
-    "合同": [
-      {
-        "type": "folder",
-        "name": "2025",
-        "children": [
-          {
-            "type": "file",
-            "name": "一月合同",
-            "status": "download",
-            "path": "files/sales/contracts/2025_01.pdf"
-          },
-          {
-            "type": "file",
-            "name": "二月合同",
-            "status": "download",
-            "path": "files/sales/contracts/2025_02.pdf"
-          }
-        ]
-      },
-      {
-        "type": "folder",
-        "name": "2024",
-        "children": [
-          {
-            "type": "file",
-            "name": "全年合同汇总",
-            "status": "download",
-            "path": "files/sales/contracts/2024_summary.pdf"
-          }
-        ]
+       {
+        "type": "file",
+        "name": "从采购到正式启动销售全流程和关键时间节点",
+        "status": "download",
+        "path": "files/sales/从采购到正式启动销售全流程和关键时间节点.docx"
       }
     ]
   },
