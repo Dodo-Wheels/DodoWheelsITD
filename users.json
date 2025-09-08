@@ -1,15 +1,21 @@
 {
-  "admin": {
-    "password": "123456",
-    "tabs": [
-      {"key": "sales", "label": "销售文档"},
-      {"key": "warehouse", "label": "仓库文档"}
-    ]
-  },
-  "user1": {
-    "password": "111111",
-    "tabs": [
-      {"key": "sales", "label": "销售文档"}
-    ]
-  }
+    "admin": {
+        "password": "123456",
+        "tabs": [
+            { "key": "Sales", "label": "销售部" },
+            { "key": "Warehouse", "label": "仓库部" }
+        ]
+    },
+    "sales": {
+        "password": "123",
+        "tabs": [
+            { "key": "Sales", "label": "销售部" }
+        ]
+    },
+    "warehouse": {
+        "password": "123",
+        "tabs": [
+            { "key": "Warehouse", "label": "仓库部" }
+        ]
+    }
 }
