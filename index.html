@@ -20,58 +20,38 @@
         justify-content: center;
         height: 100vh;
         text-align: center;
-        padding: 0 10px;
-        box-sizing: border-box;
-    }
-    #loginPage img {
-        width: 120px;
-        max-width: 40%;
-        margin-bottom: 20px;
     }
     #loginPage h1 {
-        margin-bottom: 20px;
-        font-size: 2em;
         color: #1e90ff;
+        margin-bottom: 20px;
     }
-    #loginPage input {
-        width: 100%;
-        max-width: 300px;
+    #loginPage input, #loginPage button {
+        width: 260px;
         padding: 10px;
-        margin: 8px 0;
+        margin: 5px 0;
         border-radius: 5px;
         border: none;
-        outline: none;
-        box-sizing: border-box;
     }
     #loginPage button {
-        width: 100%;
-        max-width: 320px;
-        padding: 10px;
-        margin-top: 15px;
-        border: none;
-        border-radius: 5px;
         background: linear-gradient(90deg, #1e90ff, #00bfff);
-        color: #fff;
+        color: white;
         font-weight: bold;
         cursor: pointer;
     }
-    #loginPage .error {
-        color: #ff4d4d;
+    #errorMsg {
+        color: red;
         margin-top: 10px;
         display: none;
     }
 
-    /* 文档中心 */
+    /* 工具中心 */
     #toolPage {
         display: none;
         padding: 20px;
-        box-sizing: border-box;
     }
-    #toolPage h1 {
+    h1 {
         text-align: center;
-        margin: 10px 0 20px;
-        font-size: 2em;
-        color: #1e90ff;
+        margin-bottom: 20px;
     }
 
     /* Tab 栏 */
@@ -80,82 +60,55 @@
         justify-content: center;
         margin-bottom: 20px;
         border-bottom: 2px solid #00bfff50;
-        flex-wrap: wrap;
     }
     .tab-button {
-        padding: 10px 25px;
+        padding: 10px 20px;
         cursor: pointer;
         background: none;
         border: none;
         color: #aaa;
         font-weight: bold;
         font-size: 1.1em;
-        transition: 0.3s;
     }
     .tab-button.active {
         color: #00bfff;
         border-bottom: 3px solid #00bfff;
     }
 
-    /* 文件容器 */
-    #filesContainer {
+    /* 文件卡片 */
+    .tools {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 15px;
-        margin-top: 20px;
     }
-
-    /* 文件卡片 */
-    .fileCard {
+    .tool {
         background: #1c1c1c;
         border: 1px solid #00bfff50;
         border-radius: 10px;
         padding: 15px;
+        text-align: center;
         box-shadow: 0 0 15px #00bfff30;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        transition: transform 0.2s;
     }
-    .fileCard:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 0 25px #00bfff70;
-    }
-    .fileName {
-        font-size: 1.1em;
-        font-weight: bold;
-        margin-bottom: 8px;
+    .tool h3 {
         color: #00bfff;
+        font-size: 1em;
+        margin-bottom: 10px;
     }
-    .fileMeta {
-        font-size: 0.9em;
-        color: #aaa;
-        margin-bottom: 12px;
-    }
-    .fileBtn {
-        padding: 8px 0;
+    .tool button {
+        width: 100%;
+        padding: 8px;
         border: none;
         border-radius: 5px;
-        font-weight: bold;
-        text-align: center;
-        cursor: pointer;
-    }
-    .fileBtn.download {
         background: linear-gradient(90deg, #1e90ff, #00bfff);
         color: #fff;
+        cursor: pointer;
     }
-    .fileBtn.disabled {
+    .tool span {
+        display: block;
+        padding: 8px;
+        border-radius: 5px;
         background: #444;
         color: #aaa;
-        cursor: default;
-    }
-
-    /* 空文件提示 */
-    .emptyMsg {
-        text-align: center;
-        color: #aaa;
-        font-size: 1.1em;
-        grid-column: 1/-1;
     }
 </style>
 </head>
@@ -163,120 +116,105 @@
 
 <!-- 登录页面 -->
 <div id="loginPage">
-    <img src="logo.png" alt="DodoWheels Logo">
     <h1>DodoWheels 文档管理系统</h1>
     <input type="text" id="username" placeholder="用户名">
     <input type="password" id="password" placeholder="密码">
     <button onclick="login()">登录</button>
-    <div class="error" id="errorMsg">用户名或密码错误</div>
+    <div id="errorMsg">用户名或密码错误</div>
 </div>
 
-<!-- 文档中心 -->
+<!-- 工具中心 -->
 <div id="toolPage">
-    <h1>DodoWheels 文档管理系统</h1>
-    <div id="tabBar" class="tab-bar"></div>
-    <div id="filesContainer"></div>
+    <h1>工具中心</h1>
+    <div class="tab-bar" id="tabBar"></div>
+    <div id="tabContent"></div>
 </div>
 
 <script>
-    let users = {};
-    let files = {};
-    let currentUser = "";
+let currentUser = null;
+let users = {};
+let files = {};
 
-    // Tab 名字映射（英文 key → 中文名）
-    const tabNames = {
-        "sales": "销售文档",
-        "warehouse": "仓储文档",
-        "other": "其他文档"
-    };
+// 登录函数
+async function login() {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const errorMsg = document.getElementById("errorMsg");
 
-    // 读取配置文件
-    Promise.all([
-        fetch("users.json").then(res => res.json()),
-        fetch("files.json").then(res => res.json())
-    ])
-    .then(([usersData, filesData]) => {
-        users = usersData;
-        files = filesData;
-    })
-    .catch(err => console.error("加载配置失败:", err));
-
-    function login() {
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value.trim();
-        const errorMsg = document.getElementById('errorMsg');
-
-        if (users[username] && users[username].password === password) {
-            currentUser = username;
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('toolPage').style.display = 'block';
-            renderTabs();
-        } else {
-            errorMsg.style.display = 'block';
-        }
+    // 加载用户配置
+    if (!Object.keys(users).length) {
+        const res = await fetch("users.json");
+        users = await res.json();
     }
 
-    function renderTabs() {
-        const tabBar = document.getElementById("tabBar");
-        tabBar.innerHTML = "";
-
-        const userTabs = users[currentUser].tabs;
-        userTabs.forEach((tabKey, index) => {
-            const btn = document.createElement("button");
-            btn.className = "tab-button";
-            btn.textContent = tabNames[tabKey] || tabKey;
-            if (index === 0) btn.classList.add("active");
-            btn.onclick = (e) => showTab(tabKey, e);
-            tabBar.appendChild(btn);
-        });
-
-        showTab(userTabs[0]);
+    if (users[username] && users[username].password === password) {
+        currentUser = users[username];
+        document.getElementById("loginPage").style.display = "none";
+        document.getElementById("toolPage").style.display = "block";
+        loadFiles();
+    } else {
+        errorMsg.style.display = "block";
     }
+}
 
-    function showTab(folder, event) {
-        if (event) {
-            document.querySelectorAll(".tab-button").forEach(btn => btn.classList.remove("active"));
-            event.currentTarget.classList.add("active");
-        }
-        const filesContainer = document.getElementById("filesContainer");
-        filesContainer.innerHTML = "";
+// 加载文件配置
+async function loadFiles() {
+    const res = await fetch("files.json");
+    files = await res.json();
+    renderTabs();
+}
 
-        const fileList = files[folder] || [];
-        if (fileList.length === 0) {
-            const msg = document.createElement("div");
-            msg.className = "emptyMsg";
-            msg.textContent = "📂 暂无文档";
-            filesContainer.appendChild(msg);
-            return;
-        }
+// 渲染 Tab
+function renderTabs() {
+    const tabBar = document.getElementById("tabBar");
+    tabBar.innerHTML = "";
 
-        fileList.forEach(f => {
-            const card = document.createElement("div");
-            card.className = "fileCard";
+    currentUser.tabs.forEach((tab, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "tab-button" + (idx === 0 ? " active" : "");
+        btn.innerText = tab.label;
+        btn.onclick = () => showTab(tab.key, btn);
+        tabBar.appendChild(btn);
+    });
 
-            const name = document.createElement("div");
-            name.className = "fileName";
-            name.textContent = f.name;
+    showTab(currentUser.tabs[0].key, tabBar.children[0]);
+}
 
-            const meta = document.createElement("div");
-            meta.className = "fileMeta";
-            meta.textContent = `${f.size} ｜ ${f.date}`;
+// 渲染文件卡片
+function showTab(tabKey, btn) {
+    document.querySelectorAll(".tab-button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
 
+    const tabContent = document.getElementById("tabContent");
+    tabContent.innerHTML = "";
+
+    const toolsDiv = document.createElement("div");
+    toolsDiv.className = "tools";
+
+    (files[tabKey] || []).forEach(f => {
+        const card = document.createElement("div");
+        card.className = "tool";
+
+        const title = document.createElement("h3");
+        title.innerText = f.name;
+        card.appendChild(title);
+
+        if (f.status === "download") {
             const btn = document.createElement("button");
-            btn.className = "fileBtn " + (f.status === "download" ? "download" : "disabled");
-            btn.textContent = f.status === "download" ? "下载" : "开发中";
-
-            if (f.status === "download") {
-                btn.onclick = () => { window.open(`/files/${folder}/${f.name}`, "_blank"); };
-            }
-
-            card.appendChild(name);
-            card.appendChild(meta);
+            btn.innerText = "下载";
+            btn.onclick = () => window.open(f.path, "_blank");
             card.appendChild(btn);
-            filesContainer.appendChild(card);
-        });
-    }
-</script>
+        } else {
+            const span = document.createElement("span");
+            span.innerText = f.status;
+            card.appendChild(span);
+        }
 
+        toolsDiv.appendChild(card);
+    });
+
+    tabContent.appendChild(toolsDiv);
+}
+</script>
 </body>
 </html>
