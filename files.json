@@ -1,14 +1,10 @@
 {
   "sales": [
-    { "name": "1.pdf", "size": "1.2MB", "date": "2025-09-06", "status": "download" },
-    { "name": "plan.docx", "size": "800KB", "date": "2025-09-05", "status": "download" },
-    { "name": "budget.xlsx", "size": "500KB", "date": "2025-09-01", "status": "disabled" }
+    {"name": "销售工具 1", "path": "files/sales/1.pdf", "status": "download"},
+    {"name": "销售工具 2", "path": "files/sales/2.pdf", "status": "开发中"}
   ],
   "warehouse": [
-    { "name": "inventory.pdf", "size": "2.3MB", "date": "2025-08-30", "status": "download" },
-    { "name": "layout.jpg", "size": "900KB", "date": "2025-08-28", "status": "disabled" }
-  ],
-  "other": [
-    { "name": "notes.txt", "size": "15KB", "date": "2025-09-02", "status": "download" }
+    {"name": "仓库工具 1", "path": "files/warehouse/1.pdf", "status": "download"},
+    {"name": "仓库工具 2", "path": "files/warehouse/2.pdf", "status": "开发中"}
   ]
 }
