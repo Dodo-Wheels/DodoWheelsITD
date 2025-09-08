@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DodoWheels文档管理系统</title>
+<title>DodoWheels 自研系统平台</title>
 <style>
     body {
         margin: 0;
@@ -12,24 +12,66 @@
         color: #00bfff;
     }
 
-    /* 工具页面标题居中 + 下划线 */
+    /* 登录页面 */
+    #loginPage {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        text-align: center;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+    #loginPage img {
+        width: 120px;
+        max-width: 40%;
+        margin-bottom: 20px;
+    }
+    #loginPage h1 {
+        margin-bottom: 20px;
+        font-size: 2em;
+        color: #1e90ff;
+    }
+    #loginPage input {
+        width: 100%;
+        max-width: 300px;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+        box-sizing: border-box;
+    }
+    #loginPage button {
+        width: 100%;
+        max-width: 320px;
+        padding: 10px;
+        margin-top: 15px;
+        border: none;
+        border-radius: 5px;
+        background: linear-gradient(90deg, #1e90ff, #00bfff);
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    #loginPage .error {
+        color: #ff4d4d;
+        margin-top: 10px;
+        display: none;
+    }
+
+    /* 工具中心 */
+    #toolPage {
+        display: none;
+        padding: 20px;
+        box-sizing: border-box;
+    }
     #toolPage h1 {
         text-align: center;
+        margin: 10px 0 20px;
         font-size: 2em;
-        font-weight: bold;
         color: #1e90ff;
-        margin-bottom: 10px;
-        position: relative;
-        padding-bottom: 8px;
-    }
-    #toolPage h1::after {
-        content: "";
-        display: block;
-        width: 60%;
-        height: 2px;
-        background: #00bfff50;
-        margin: 8px auto 0 auto;
-        border-radius: 2px;
     }
 
     /* Tab 栏 */
@@ -37,172 +79,195 @@
         display: flex;
         justify-content: center;
         margin-bottom: 20px;
-        border-bottom: none;
-        position: relative;
+        border-bottom: 2px solid #00bfff50;
+        flex-wrap: wrap;
     }
     .tab-button {
-        padding: 12px 25px;
+        padding: 10px 25px;
         cursor: pointer;
         background: none;
         border: none;
         color: #aaa;
-        font-size: 1.1em;
         font-weight: bold;
+        font-size: 1.1em;
         transition: 0.3s;
-        position: relative;
     }
     .tab-button.active {
         color: #00bfff;
-    }
-    .tab-button.active::after {
-        content: "";
-        display: block;
-        width: 60%;
-        height: 2px;
-        background: linear-gradient(90deg, #1e90ff, #00bfff);
-        margin: 6px auto 0 auto;
-        border-radius: 2px;
-        animation: underlineSlide 0.3s ease forwards;
+        border-bottom: 3px solid #00bfff;
     }
 
-    @keyframes underlineSlide {
-        from { width: 0; opacity: 0; }
-        to { width: 60%; opacity: 1; }
-    }
-
-    .system {
-        margin: 20px auto;
-        max-width: 1200px;
-        text-align: center;
-    }
-    .system h2 {
-        margin-bottom: 15px;
-        color: #1e90ff;
-        font-size: 1.5em;
-    }
-
-    /* 卡片布局 */
-    .tools {
+    /* 文件容器 */
+    #filesContainer {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 15px;
-        padding: 0 5px;
-        box-sizing: border-box;
+        margin-top: 20px;
     }
 
-    .tool {
+    /* 文件卡片 */
+    .fileCard {
         background: #1c1c1c;
         border: 1px solid #00bfff50;
         border-radius: 10px;
-        padding: 12px;
-        min-height: 140px;
-        box-shadow: 0 0 10px #00bfff30;
+        padding: 15px;
+        box-shadow: 0 0 15px #00bfff30;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         transition: transform 0.2s;
     }
-    .tool:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0 20px #00bfff70;
+    .fileCard:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 0 25px #00bfff70;
     }
-    .tool h3 {
-        font-size: 1em;
+    .fileName {
+        font-size: 1.1em;
+        font-weight: bold;
+        margin-bottom: 8px;
         color: #00bfff;
-        margin-bottom: 6px;
-        word-break: break-word;
     }
-    .tool p {
-        font-size: 0.85em;
-        margin: 2px 0;
+    .fileMeta {
+        font-size: 0.9em;
+        color: #aaa;
+        margin-bottom: 12px;
     }
-    .tool button,
-    .tool span {
-        display: block;
-        width: 100%;
-        padding: 6px 0;
-        margin-top: 8px;
+    .fileBtn {
+        padding: 8px 0;
+        border: none;
+        border-radius: 5px;
         font-weight: bold;
         text-align: center;
-        border-radius: 5px;
-        border: none;
-    }
-    .tool button {
-        background: linear-gradient(90deg, #1e90ff, #00bfff);
-        color: #fff;
         cursor: pointer;
     }
-    .tool span {
+    .fileBtn.download {
+        background: linear-gradient(90deg, #1e90ff, #00bfff);
+        color: #fff;
+    }
+    .fileBtn.disabled {
         background: #444;
-        color: #00bfff;
+        color: #aaa;
+        cursor: default;
+    }
+
+    /* 空文件提示 */
+    .emptyMsg {
+        text-align: center;
+        color: #aaa;
+        font-size: 1.1em;
+        grid-column: 1/-1;
     }
 </style>
 </head>
 <body>
 
+<!-- 登录页面 -->
+<div id="loginPage">
+    <img src="logo.png" alt="DodoWheels Logo">
+    <h1>DodoWheels 自研系统平台</h1>
+    <input type="text" id="username" placeholder="用户名">
+    <input type="password" id="password" placeholder="密码">
+    <button onclick="login()">登录</button>
+    <div class="error" id="errorMsg">用户名或密码错误</div>
+</div>
+
+<!-- 工具中心 -->
 <div id="toolPage">
-    <h1>DodoWheels 文档管理系统</h1>
-
-    <!-- Tab 栏 -->
-    <div class="tab-bar">
-        <button class="tab-button active" onclick="showTab('sales', event)">Sales</button>
-        <button class="tab-button" onclick="showTab('warehouse', event)">Warehouse</button>
-        <button class="tab-button" onclick="showTab('other', event)">Other</button>
-    </div>
-
-    <!-- Sales -->
-    <div class="system tab-content" id="tab-sales">
-        <h2>Sales</h2>
-        <div class="tools">
-            <div class="tool">
-                <h3>report1.pdf</h3>
-                <p>大小: 1.2MB</p>
-                <p>日期: 2025-09-06</p>
-                <button>下载</button>
-            </div>
-            <div class="tool">
-                <h3>plan.docx</h3>
-                <p>大小: 800KB</p>
-                <p>日期: 2025-09-05</p>
-                <button>下载</button>
-            </div>
-           
-        </div>
-    </div>
-
-    <!-- Warehouse -->
-    <div class="system tab-content" id="tab-warehouse" style="display:none;">
-        <h2>Warehouse</h2>
-        <div class="tools">
-            <div class="tool">
-                <h3>inventory.xlsx</h3>
-                <p>大小: 1.5MB</p>
-                <p>日期: 2025-09-03</p>
-                <button>下载</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Other -->
-    <div class="system tab-content" id="tab-other" style="display:none;">
-        <h2>Other</h2>
-        <div class="tools">
-            <div class="tool">
-                <h3>notes.txt</h3>
-                <p>大小: 100KB</p>
-                <p>日期: 2025-09-02</p>
-                <button>下载</button>
-            </div>
-        </div>
-    </div>
+    <h1>DodoWheels 工具中心</h1>
+    <div id="tabBar" class="tab-bar"></div>
+    <div id="filesContainer"></div>
 </div>
 
 <script>
-    function showTab(tab, event) {
-        document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-        document.getElementById('tab-' + tab).style.display = 'block';
-        event.currentTarget.classList.add('active');
+    let users = {};
+    let files = {};
+    let currentUser = "";
+
+    // 读取配置文件
+    Promise.all([
+        fetch("users.json").then(res => res.json()),
+        fetch("files.json").then(res => res.json())
+    ])
+    .then(([usersData, filesData]) => {
+        users = usersData;
+        files = filesData;
+    })
+    .catch(err => console.error("加载配置失败:", err));
+
+    function login() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const errorMsg = document.getElementById('errorMsg');
+
+        if (users[username] && users[username].password === password) {
+            currentUser = username;
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('toolPage').style.display = 'block';
+            renderTabs();
+        } else {
+            errorMsg.style.display = 'block';
+        }
+    }
+
+    function renderTabs() {
+        const tabBar = document.getElementById("tabBar");
+        tabBar.innerHTML = "";
+
+        const userTabs = users[currentUser].tabs;
+        userTabs.forEach((tabName, index) => {
+            const btn = document.createElement("button");
+            btn.className = "tab-button";
+            btn.textContent = tabName.charAt(0).toUpperCase() + tabName.slice(1);
+            if (index === 0) btn.classList.add("active");
+            btn.onclick = (e) => showTab(tabName, e);
+            tabBar.appendChild(btn);
+        });
+
+        showTab(userTabs[0]);
+    }
+
+    function showTab(folder, event) {
+        if (event) {
+            document.querySelectorAll(".tab-button").forEach(btn => btn.classList.remove("active"));
+            event.currentTarget.classList.add("active");
+        }
+        const filesContainer = document.getElementById("filesContainer");
+        filesContainer.innerHTML = "";
+
+        const fileList = files[folder] || [];
+        if (fileList.length === 0) {
+            const msg = document.createElement("div");
+            msg.className = "emptyMsg";
+            msg.textContent = "📂 暂无文件";
+            filesContainer.appendChild(msg);
+            return;
+        }
+
+        fileList.forEach(f => {
+            const card = document.createElement("div");
+            card.className = "fileCard";
+
+            const name = document.createElement("div");
+            name.className = "fileName";
+            name.textContent = f.name;
+
+            const meta = document.createElement("div");
+            meta.className = "fileMeta";
+            meta.textContent = `${f.size} ｜ ${f.date}`;
+
+            const btn = document.createElement("button");
+            btn.className = "fileBtn " + (f.status === "download" ? "download" : "disabled");
+            btn.textContent = f.status === "download" ? "下载" : "开发中";
+
+            if (f.status === "download") {
+                btn.onclick = () => { window.open(`/files/${folder}/${f.name}`, "_blank"); };
+            }
+
+            card.appendChild(name);
+            card.appendChild(meta);
+            card.appendChild(btn);
+            filesContainer.appendChild(card);
+        });
     }
 </script>
 
