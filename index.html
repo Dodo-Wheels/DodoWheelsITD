@@ -202,6 +202,18 @@
         background: yellow;
         color: black;
     }
+
+    /* 日志框 */
+    #logBox {
+        background:#111;
+        color:#0f0;
+        padding:10px;
+        font-size:12px;
+        height:120px;
+        overflow:auto;
+        border-top:1px solid #333;
+        margin-top:15px;
+    }
 </style>
 </head>
 <body>
@@ -226,6 +238,7 @@
     </div>
     <div class="tab-bar" id="tabBar"></div>
     <div id="tabContent"></div>
+    <div id="logBox"></div>
 </div>
 
 <script>
@@ -234,29 +247,51 @@ let users = {};
 let files = {};
 let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
 
+// 日志方法
+function log(msg) {
+    const logBox = document.getElementById("logBox");
+    const time = new Date().toLocaleTimeString();
+    if (logBox) {
+        logBox.innerHTML += `[${time}] ${msg}<br>`;
+        logBox.scrollTop = logBox.scrollHeight;
+    }
+    console.log(msg);
+}
+
 // 登录
 async function login() {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
     const errorMsg = document.getElementById("errorMsg");
 
-    if (!Object.keys(users).length) {
-        const res = await fetch("users.json");
-        users = await res.json();
-    }
+    log(`尝试登录: 用户名=${username}`);
 
-    if (users[username] && users[username].password === password) {
-        currentUser = users[username];
-        document.getElementById("loginPage").style.display = "none";
-        document.getElementById("toolPage").style.display = "block";
-        loadFiles();
-    } else {
+    try {
+        if (!Object.keys(users).length) {
+            const res = await fetch("users.json");
+            users = await res.json();
+            log("已加载 users.json");
+        }
+
+        if (users[username] && users[username].password === password) {
+            currentUser = users[username];
+            log("登录成功: " + username);
+            document.getElementById("loginPage").style.display = "none";
+            document.getElementById("toolPage").style.display = "block";
+            loadFiles();
+        } else {
+            log("登录失败: 用户名或密码错误");
+            errorMsg.style.display = "block";
+        }
+    } catch (e) {
+        log("登录异常: " + e);
         errorMsg.style.display = "block";
     }
 }
 
 // 退出
 function logout() {
+    log("用户退出: " + (currentUser ? JSON.stringify(currentUser) : "未登录"));
     currentUser = null;
     document.getElementById("toolPage").style.display = "none";
     document.getElementById("loginPage").style.display = "flex";
@@ -264,9 +299,14 @@ function logout() {
 
 // 加载文件
 async function loadFiles() {
-    const res = await fetch("files.json");
-    files = await res.json();
-    renderTabs();
+    try {
+        const res = await fetch("files.json");
+        files = await res.json();
+        log("已加载 files.json");
+        renderTabs();
+    } catch (e) {
+        log("加载 files.json 失败: " + e);
+    }
 }
 
 // 渲染 Tabs
@@ -289,10 +329,13 @@ function renderTabs() {
         tabBar.appendChild(btn);
         if (idx === 0) btn.click(); // 默认打开第一个
     });
+
+    log("Tabs 渲染完成: " + currentUser.tabs.map(t => t.label).join(", "));
 }
 
 // 渲染收藏夹
 function showFavorites(btn) {
+    log("打开收藏夹");
     document.querySelectorAll(".tab-button").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
@@ -317,7 +360,10 @@ function showFavorites(btn) {
 
         const btn = document.createElement("button");
         btn.innerText = "下载";
-        btn.onclick = () => window.open(f.path, "_blank");
+        btn.onclick = () => {
+            log("下载收藏文件: " + f.path);
+            window.open(f.path, "_blank");
+        };
         card.appendChild(btn);
 
         const fav = document.createElement("span");
@@ -334,6 +380,7 @@ function showFavorites(btn) {
 
 // 渲染 Tab 内容
 function showTab(tabKey, btn) {
+    log("打开 Tab: " + tabKey);
     document.querySelectorAll(".tab-button").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
@@ -406,6 +453,7 @@ function showTab(tabKey, btn) {
             ic.innerText = expanded ? "+" : "-";
         });
         toggleBtn.innerText = expanded ? "全部展开" : "全部收起";
+        log((expanded ? "收起" : "展开") + "所有文件夹");
     };
 
     // 搜索功能
@@ -479,13 +527,19 @@ function buildFolder(container, items) {
                     .then(res => {
                         if (res.ok) {
                             btn.disabled = false;
-                            btn.onclick = () => window.open(f.path, "_blank");
+                            btn.onclick = () => {
+                                log("下载文件: " + f.path);
+                                window.open(f.path, "_blank");
+                            };
+                            log("文件可用: " + f.path);
                         } else {
                             btn.innerText = "文件缺失";
+                            log("文件缺失: " + f.path);
                         }
                     })
                     .catch(() => {
                         btn.innerText = "文件缺失";
+                        log("文件检测失败: " + f.path);
                     });
 
                 card.appendChild(btn);
@@ -515,9 +569,11 @@ function toggleFavorite(file, el, removeFromFav = false) {
     if (isFavorite(file)) {
         favorites = favorites.filter(f => f.path !== file.path);
         el.classList.remove("active");
+        log("取消收藏: " + file.name);
     } else {
         favorites.push(file);
         el.classList.add("active");
+        log("添加收藏: " + file.name);
     }
     localStorage.setItem("favorites", JSON.stringify(favorites));
     if (removeFromFav) showFavorites(document.querySelector(".tab-button.active"));
