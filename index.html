@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DodoWheels 文档管理系统</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <style>
     body {
         margin: 0;
@@ -14,152 +12,74 @@
         color: #00bfff;
     }
 
-    /* 登录页面 */
-    #loginPage {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        text-align: center;
-    }
-    #loginPage h1 {
-        color: #1e90ff;
-        margin-bottom: 20px;
-    }
-    #loginPage input, #loginPage button {
-        width: 260px;
-        padding: 10px;
-        margin: 5px 0;
-        border-radius: 5px;
-        border: none;
-    }
-    #loginPage button {
-        background: linear-gradient(90deg, #1e90ff, #00bfff);
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    #errorMsg {
-        color: red;
-        margin-top: 10px;
-        display: none;
+    /* 文件夹整体容器 */
+    .folder-block {
+        width: 70%;
+        margin: 0 auto 25px auto; /* 居中 + 下间距 */
+        background: #1c1c1c;
+        border: 1px solid #00bfff40;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 0 15px #00bfff30;
     }
 
-    /* 工具中心 */
-    #toolPage {
-        display: none;
-        padding: 20px;
-    }
-    h1 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    /* 顶部控制条 */
-    .top-bar {
-        display: flex;
-        justify-content: flex-end;
-        margin-bottom: 10px;
-    }
-    .logout-btn {
-        padding: 6px 15px;
-        border-radius: 5px;
-        border: none;
-        background: linear-gradient(90deg, #ff4b4b, #ff0000);
-        color: white;
-        cursor: pointer;
-    }
-
-    /* Tab 栏 */
-    .tab-bar {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 20px;
-        border-bottom: 2px solid #00bfff50;
-    }
-    .tab-button {
-        padding: 10px 20px;
-        cursor: pointer;
-        background: none;
-        border: none;
-        color: #aaa;
-        font-weight: bold;
-        font-size: 1.1em;
-    }
-    .tab-button.active {
-        color: #00bfff;
-        border-bottom: 3px solid #00bfff;
-    }
-
-    /* 控制区 */
-    .tab-controls {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-bottom: 15px;
-        flex-wrap: wrap;
-    }
-    .tab-controls input {
-        padding: 5px 10px;
-        border-radius: 5px;
-        border: none;
-        width: 200px;
-    }
-    .tab-controls button {
-        padding: 5px 15px;
-        border-radius: 5px;
-        border: none;
-        background: linear-gradient(90deg, #1e90ff, #00bfff);
-        color: white;
-        cursor: pointer;
-    }
-
-    /* 子文件夹 */
+    /* 文件夹标题 */
     .folder-title {
         cursor: pointer;
-        padding: 8px;
-        background: #1c1c1c;
-        border: 1px solid #00bfff50;
-        border-radius: 5px;
-        margin: 10px 0 5px;
+        padding: 12px 16px;
+        background: #0d1a26;
         font-size: 1.1em;
+        font-weight: bold;
         display: flex;
         align-items: center;
-        gap: 8px;
+        justify-content: flex-start;
+        gap: 10px;
+        transition: background 0.3s;
     }
-    .folder-icon {
-        font-weight: bold;
-        color: #00bfff;
+    .folder-title:hover {
+        background: #12324d;
     }
     .folder-title.expanded {
         background: #0d2a40;
         color: #1e90ff;
     }
+    .folder-icon {
+        font-weight: bold;
+        color: #00bfff;
+        font-size: 1.2em;
+    }
+
+    /* 文件夹内容 */
     .folder-content {
         display: none;
-        margin-bottom: 15px;
+        padding: 15px 20px;
+        border-top: 1px solid #00bfff30;
+    }
+
+    /* 文件列表竖向排列 */
+    .tools {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
     }
 
     /* 文件卡片 */
-    .tools {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 15px;
-    }
     .tool {
-        background: #1c1c1c;
-        border: 1px solid #00bfff50;
+        background: #222;
+        border: 1px solid #00bfff30;
         border-radius: 10px;
-        padding: 15px;
+        padding: 12px;
         text-align: center;
-        box-shadow: 0 0 15px #00bfff30;
-        position: relative;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .tool:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0 12px #00bfff60;
     }
     .tool h3 {
         color: #00bfff;
         font-size: 1em;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
     .tool button {
         width: 100%;
@@ -181,28 +101,6 @@
         background: #444;
         color: #aaa;
     }
-    .meta {
-        font-size: 0.8em;
-        color: #aaa;
-        margin-top: 5px;
-    }
-    .fav-btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        cursor: pointer;
-        font-size: 18px;
-        color: #888;
-    }
-    .fav-btn.active {
-        color: gold;
-    }
-    .select-file {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        transform: scale(1.2);
-    }
 
     mark {
         background: yellow;
@@ -211,252 +109,33 @@
 </style>
 </head>
 <body>
-
-<!-- 登录页面 -->
-<div id="loginPage">
-    <img src="logo.png" alt="DodoWheels Logo" style="width:120px; margin-bottom:20px;">
-    <h1>DodoWheels 文档管理系统</h1>
-    <input type="text" id="username" placeholder="用户名">
-    <input type="password" id="password" placeholder="密码">
-    <button onclick="login()">登录</button>
-    <div id="errorMsg">用户名或密码错误</div>
-</div>
-
-<!-- 工具中心 -->
-<div id="toolPage">
-    <div class="top-bar">
-        <button class="logout-btn" onclick="logout()">退出登录</button>
-    </div>
-    <h1>DodoWheels 文档管理系统</h1>
-    <div class="tab-bar" id="tabBar"></div>
-    <div id="tabContent"></div>
-</div>
+<div id="tabContent"></div>
 
 <script>
-let currentUser = null;
-let users = {};
-let files = {};
-let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-let selectedFiles = [];
-
-// 登录函数
-async function login() {
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-    const errorMsg = document.getElementById("errorMsg");
-
-    if (!Object.keys(users).length) {
-        const res = await fetch("users.json");
-        users = await res.json();
+// 模拟数据
+const files = {
+    "Sales": {
+        "合同文件": [
+            { name: "销售合同 A", path: "files/sales/a.pdf", status: "download" },
+            { name: "销售合同 B", path: "files/sales/b.pdf", status: "download" }
+        ],
+        "报价单": [
+            { name: "报价单 2024", path: "files/sales/quote.pdf", status: "download" }
+        ]
     }
+};
 
-    if (users[username] && users[username].password === password) {
-        currentUser = users[username];
-        document.getElementById("loginPage").style.display = "none";
-        document.getElementById("toolPage").style.display = "block";
-        loadFiles();
-    } else {
-        errorMsg.style.display = "block";
-    }
-}
-
-// 登出函数
-function logout() {
-    currentUser = null;
-    document.getElementById("toolPage").style.display = "none";
-    document.getElementById("loginPage").style.display = "flex";
-}
-
-// 加载文件配置
-async function loadFiles() {
-    const res = await fetch("files.json");
-    files = await res.json();
-    renderTabs();
-}
-
-// 渲染 Tab
-function renderTabs() {
-    const tabBar = document.getElementById("tabBar");
-    tabBar.innerHTML = "";
-
-    // 收藏夹 Tab
-    const favBtn = document.createElement("button");
-    favBtn.className = "tab-button";
-    favBtn.innerText = "⭐ 收藏夹";
-    favBtn.onclick = () => showFavorites(favBtn);
-    tabBar.appendChild(favBtn);
-
-    currentUser.tabs.forEach((tab, idx) => {
-        const btn = document.createElement("button");
-        btn.className = "tab-button";
-        btn.innerText = tab.label;
-        btn.onclick = () => showTab(tab.key, btn);
-        tabBar.appendChild(btn);
-    });
-
-    // 默认显示收藏夹
-    showFavorites(favBtn);
-}
-
-// 渲染收藏夹
-function showFavorites(btn) {
-    document.querySelectorAll(".tab-button").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-
-    const tabContent = document.getElementById("tabContent");
-    tabContent.innerHTML = "<h2>我的收藏</h2>";
-
-    const toolsDiv = document.createElement("div");
-    toolsDiv.className = "tools";
-
-    favorites.forEach(f => {
-        toolsDiv.appendChild(renderFileCard(f, true));
-    });
-
-    if (!favorites.length) {
-        tabContent.innerHTML += "<p style='text-align:center;color:#aaa;'>暂无收藏</p>";
-    } else {
-        tabContent.appendChild(toolsDiv);
-    }
-}
-
-// 渲染文件卡片
-function renderFileCard(f, fromFav = false) {
-    const card = document.createElement("div");
-    card.className = "tool";
-
-    // 选择框
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.className = "select-file";
-    checkbox.onchange = () => {
-        if (checkbox.checked) {
-            selectedFiles.push(f);
-        } else {
-            selectedFiles = selectedFiles.filter(x => x.path !== f.path);
-        }
-    };
-    card.appendChild(checkbox);
-
-    const title = document.createElement("h3");
-    title.innerText = f.name;
-    card.appendChild(title);
-
-    // 收藏按钮
-    const fav = document.createElement("span");
-    fav.className = "fav-btn" + (favorites.some(x => x.path === f.path) ? " active" : "");
-    fav.innerText = "★";
-    fav.onclick = () => toggleFavorite(f, fav, fromFav, card);
-    card.appendChild(fav);
-
-    if (f.status === "download") {
-        const btn = document.createElement("button");
-        btn.innerText = "下载";
-        btn.disabled = true;
-
-        fetch(f.path, { method: "HEAD" })
-            .then(res => {
-                if (res.ok) {
-                    btn.disabled = false;
-                    btn.onclick = () => window.open(f.path, "_blank");
-
-                    const lastMod = res.headers.get("last-modified");
-                    if (lastMod) {
-                        const meta = document.createElement("div");
-                        meta.className = "meta";
-                        meta.innerText = "更新时间: " + new Date(lastMod).toLocaleString();
-                        card.appendChild(meta);
-                    }
-                } else {
-                    btn.innerText = "文件缺失";
-                }
-            })
-            .catch(() => {
-                btn.innerText = "文件缺失";
-            });
-
-        card.appendChild(btn);
-    } else {
-        const span = document.createElement("span");
-        span.innerText = f.status;
-        card.appendChild(span);
-    }
-
-    return card;
-}
-
-// 收藏操作
-function toggleFavorite(f, favBtn, fromFav, card) {
-    const idx = favorites.findIndex(x => x.path === f.path);
-    if (idx >= 0) {
-        favorites.splice(idx, 1);
-        favBtn.classList.remove("active");
-        if (fromFav) card.remove();
-    } else {
-        favorites.push(f);
-        favBtn.classList.add("active");
-    }
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-}
-
-// 批量下载
-async function batchDownload() {
-    if (!selectedFiles.length) {
-        alert("请先选择文件！");
-        return;
-    }
-
-    const zip = new JSZip();
-    const folder = zip.folder("DodoWheels_Files");
-
-    for (let f of selectedFiles) {
-        try {
-            const response = await fetch(f.path);
-            const blob = await response.blob();
-            folder.file(f.name + ".pdf", blob);
-        } catch (e) {
-            console.warn("下载失败:", f.path);
-        }
-    }
-
-    zip.generateAsync({ type: "blob" }).then(content => {
-        saveAs(content, "DodoWheels_Files.zip");
-    });
-}
-
-// 渲染某个 Tab
-function showTab(tabKey, btn) {
-    document.querySelectorAll(".tab-button").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    selectedFiles = []; // 清空选择
-
+// 渲染函数
+function showTab(tabKey) {
     const tabContent = document.getElementById("tabContent");
     tabContent.innerHTML = "";
 
     const tabData = files[tabKey] || {};
 
-    // 控制区
-    const controlsDiv = document.createElement("div");
-    controlsDiv.className = "tab-controls";
-
-    const searchInput = document.createElement("input");
-    searchInput.type = "text";
-    searchInput.placeholder = "搜索文件...";
-    controlsDiv.appendChild(searchInput);
-
-    const toggleBtn = document.createElement("button");
-    toggleBtn.innerText = "全部展开";
-    controlsDiv.appendChild(toggleBtn);
-
-    const batchBtn = document.createElement("button");
-    batchBtn.innerText = "批量下载";
-    batchBtn.onclick = batchDownload;
-    controlsDiv.appendChild(batchBtn);
-
-    tabContent.appendChild(controlsDiv);
-
-    // 渲染子文件夹
     Object.keys(tabData).forEach(subFolder => {
+        const folderBlock = document.createElement("div");
+        folderBlock.className = "folder-block";
+
         const folderTitle = document.createElement("div");
         folderTitle.className = "folder-title";
 
@@ -477,7 +156,39 @@ function showTab(tabKey, btn) {
         toolsDiv.className = "tools";
 
         (tabData[subFolder] || []).forEach(f => {
-            toolsDiv.appendChild(renderFileCard(f));
+            const card = document.createElement("div");
+            card.className = "tool";
+
+            const title = document.createElement("h3");
+            title.innerText = f.name;
+            card.appendChild(title);
+
+            if (f.status === "download") {
+                const btn = document.createElement("button");
+                btn.innerText = "下载";
+                btn.disabled = true;
+
+                fetch(f.path, { method: "HEAD" })
+                    .then(res => {
+                        if (res.ok) {
+                            btn.disabled = false;
+                            btn.onclick = () => window.open(f.path, "_blank");
+                        } else {
+                            btn.innerText = "文件缺失";
+                        }
+                    })
+                    .catch(() => {
+                        btn.innerText = "文件缺失";
+                    });
+
+                card.appendChild(btn);
+            } else {
+                const span = document.createElement("span");
+                span.innerText = f.status;
+                card.appendChild(span);
+            }
+
+            toolsDiv.appendChild(card);
         });
 
         folderContent.appendChild(toolsDiv);
@@ -487,74 +198,16 @@ function showTab(tabKey, btn) {
             folderContent.style.display = expanded ? "none" : "block";
             folderTitle.classList.toggle("expanded", !expanded);
             icon.innerText = expanded ? "+" : "-";
-
-            const allExpanded = [...tabContent.querySelectorAll(".folder-content")]
-                .every(fc => fc.style.display === "block");
-            toggleBtn.innerText = allExpanded ? "全部收起" : "全部展开";
         });
 
-        tabContent.appendChild(folderTitle);
-        tabContent.appendChild(folderContent);
-    });
-
-    // 一键展开/收起
-    toggleBtn.onclick = () => {
-        const expanded = toggleBtn.innerText === "全部收起";
-        tabContent.querySelectorAll(".folder-content").forEach(fc => {
-            fc.style.display = expanded ? "none" : "block";
-        });
-        tabContent.querySelectorAll(".folder-title").forEach(ft => {
-            ft.classList.toggle("expanded", !expanded);
-            ft.querySelector(".folder-icon").innerText = expanded ? "+" : "-";
-        });
-        toggleBtn.innerText = expanded ? "全部展开" : "全部收起";
-    };
-
-    // 搜索功能
-    searchInput.addEventListener("input", () => {
-        const query = searchInput.value.toLowerCase();
-
-        const folders = tabContent.querySelectorAll(".folder-content");
-        const titles = tabContent.querySelectorAll(".folder-title");
-
-        if (query) {
-            folders.forEach(fc => fc.style.display = "block");
-            titles.forEach(ft => {
-                ft.classList.add("expanded");
-                ft.querySelector(".folder-icon").innerText = "-";
-            });
-            toggleBtn.innerText = "全部收起";
-        } else {
-            folders.forEach(fc => fc.style.display = "none");
-            titles.forEach(ft => {
-                ft.classList.remove("expanded");
-                ft.querySelector(".folder-icon").innerText = "+";
-            });
-            toggleBtn.innerText = "全部展开";
-        }
-
-        tabContent.querySelectorAll(".tool").forEach(card => {
-            const titleEl = card.querySelector("h3");
-            const text = titleEl.innerText;
-            const lower = text.toLowerCase();
-
-            if (!query) {
-                card.style.display = "block";
-                titleEl.innerHTML = text;
-                return;
-            }
-
-            if (lower.includes(query)) {
-                card.style.display = "block";
-                const regex = new RegExp(`(${query})`, "gi");
-                titleEl.innerHTML = text.replace(regex, "<mark>$1</mark>");
-            } else {
-                card.style.display = "none";
-                titleEl.innerHTML = text;
-            }
-        });
+        folderBlock.appendChild(folderTitle);
+        folderBlock.appendChild(folderContent);
+        tabContent.appendChild(folderBlock);
     });
 }
+
+// 测试：渲染 Sales
+showTab("Sales");
 </script>
 </body>
 </html>
