@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DodoWheels 文档管理系统</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <style>
     body {
         margin: 0;
@@ -54,6 +56,21 @@
         margin-bottom: 20px;
     }
 
+    /* 顶部控制条 */
+    .top-bar {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 10px;
+    }
+    .logout-btn {
+        padding: 6px 15px;
+        border-radius: 5px;
+        border: none;
+        background: linear-gradient(90deg, #ff4b4b, #ff0000);
+        color: white;
+        cursor: pointer;
+    }
+
     /* Tab 栏 */
     .tab-bar {
         display: flex;
@@ -81,6 +98,7 @@
         justify-content: center;
         gap: 10px;
         margin-bottom: 15px;
+        flex-wrap: wrap;
     }
     .tab-controls input {
         padding: 5px 10px;
@@ -136,6 +154,7 @@
         padding: 15px;
         text-align: center;
         box-shadow: 0 0 15px #00bfff30;
+        position: relative;
     }
     .tool h3 {
         color: #00bfff;
@@ -162,6 +181,29 @@
         background: #444;
         color: #aaa;
     }
+    .meta {
+        font-size: 0.8em;
+        color: #aaa;
+        margin-top: 5px;
+    }
+    .fav-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 18px;
+        color: #888;
+    }
+    .fav-btn.active {
+        color: gold;
+    }
+    .select-file {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        transform: scale(1.2);
+    }
+
     mark {
         background: yellow;
         color: black;
@@ -182,6 +224,9 @@
 
 <!-- 工具中心 -->
 <div id="toolPage">
+    <div class="top-bar">
+        <button class="logout-btn" onclick="logout()">退出登录</button>
+    </div>
     <h1>DodoWheels 文档管理系统</h1>
     <div class="tab-bar" id="tabBar"></div>
     <div id="tabContent"></div>
@@ -191,6 +236,8 @@
 let currentUser = null;
 let users = {};
 let files = {};
+let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+let selectedFiles = [];
 
 // 登录函数
 async function login() {
@@ -213,6 +260,13 @@ async function login() {
     }
 }
 
+// 登出函数
+function logout() {
+    currentUser = null;
+    document.getElementById("toolPage").style.display = "none";
+    document.getElementById("loginPage").style.display = "flex";
+}
+
 // 加载文件配置
 async function loadFiles() {
     const res = await fetch("files.json");
@@ -225,21 +279,156 @@ function renderTabs() {
     const tabBar = document.getElementById("tabBar");
     tabBar.innerHTML = "";
 
+    // 收藏夹 Tab
+    const favBtn = document.createElement("button");
+    favBtn.className = "tab-button";
+    favBtn.innerText = "⭐ 收藏夹";
+    favBtn.onclick = () => showFavorites(favBtn);
+    tabBar.appendChild(favBtn);
+
     currentUser.tabs.forEach((tab, idx) => {
         const btn = document.createElement("button");
-        btn.className = "tab-button" + (idx === 0 ? " active" : "");
+        btn.className = "tab-button";
         btn.innerText = tab.label;
         btn.onclick = () => showTab(tab.key, btn);
         tabBar.appendChild(btn);
     });
 
-    showTab(currentUser.tabs[0].key, tabBar.children[0]);
+    // 默认显示收藏夹
+    showFavorites(favBtn);
+}
+
+// 渲染收藏夹
+function showFavorites(btn) {
+    document.querySelectorAll(".tab-button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    const tabContent = document.getElementById("tabContent");
+    tabContent.innerHTML = "<h2>我的收藏</h2>";
+
+    const toolsDiv = document.createElement("div");
+    toolsDiv.className = "tools";
+
+    favorites.forEach(f => {
+        toolsDiv.appendChild(renderFileCard(f, true));
+    });
+
+    if (!favorites.length) {
+        tabContent.innerHTML += "<p style='text-align:center;color:#aaa;'>暂无收藏</p>";
+    } else {
+        tabContent.appendChild(toolsDiv);
+    }
 }
 
 // 渲染文件卡片
+function renderFileCard(f, fromFav = false) {
+    const card = document.createElement("div");
+    card.className = "tool";
+
+    // 选择框
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.className = "select-file";
+    checkbox.onchange = () => {
+        if (checkbox.checked) {
+            selectedFiles.push(f);
+        } else {
+            selectedFiles = selectedFiles.filter(x => x.path !== f.path);
+        }
+    };
+    card.appendChild(checkbox);
+
+    const title = document.createElement("h3");
+    title.innerText = f.name;
+    card.appendChild(title);
+
+    // 收藏按钮
+    const fav = document.createElement("span");
+    fav.className = "fav-btn" + (favorites.some(x => x.path === f.path) ? " active" : "");
+    fav.innerText = "★";
+    fav.onclick = () => toggleFavorite(f, fav, fromFav, card);
+    card.appendChild(fav);
+
+    if (f.status === "download") {
+        const btn = document.createElement("button");
+        btn.innerText = "下载";
+        btn.disabled = true;
+
+        fetch(f.path, { method: "HEAD" })
+            .then(res => {
+                if (res.ok) {
+                    btn.disabled = false;
+                    btn.onclick = () => window.open(f.path, "_blank");
+
+                    const lastMod = res.headers.get("last-modified");
+                    if (lastMod) {
+                        const meta = document.createElement("div");
+                        meta.className = "meta";
+                        meta.innerText = "更新时间: " + new Date(lastMod).toLocaleString();
+                        card.appendChild(meta);
+                    }
+                } else {
+                    btn.innerText = "文件缺失";
+                }
+            })
+            .catch(() => {
+                btn.innerText = "文件缺失";
+            });
+
+        card.appendChild(btn);
+    } else {
+        const span = document.createElement("span");
+        span.innerText = f.status;
+        card.appendChild(span);
+    }
+
+    return card;
+}
+
+// 收藏操作
+function toggleFavorite(f, favBtn, fromFav, card) {
+    const idx = favorites.findIndex(x => x.path === f.path);
+    if (idx >= 0) {
+        favorites.splice(idx, 1);
+        favBtn.classList.remove("active");
+        if (fromFav) card.remove();
+    } else {
+        favorites.push(f);
+        favBtn.classList.add("active");
+    }
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+}
+
+// 批量下载
+async function batchDownload() {
+    if (!selectedFiles.length) {
+        alert("请先选择文件！");
+        return;
+    }
+
+    const zip = new JSZip();
+    const folder = zip.folder("DodoWheels_Files");
+
+    for (let f of selectedFiles) {
+        try {
+            const response = await fetch(f.path);
+            const blob = await response.blob();
+            folder.file(f.name + ".pdf", blob);
+        } catch (e) {
+            console.warn("下载失败:", f.path);
+        }
+    }
+
+    zip.generateAsync({ type: "blob" }).then(content => {
+        saveAs(content, "DodoWheels_Files.zip");
+    });
+}
+
+// 渲染某个 Tab
 function showTab(tabKey, btn) {
     document.querySelectorAll(".tab-button").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
+    selectedFiles = []; // 清空选择
 
     const tabContent = document.getElementById("tabContent");
     tabContent.innerHTML = "";
@@ -258,6 +447,11 @@ function showTab(tabKey, btn) {
     const toggleBtn = document.createElement("button");
     toggleBtn.innerText = "全部展开";
     controlsDiv.appendChild(toggleBtn);
+
+    const batchBtn = document.createElement("button");
+    batchBtn.innerText = "批量下载";
+    batchBtn.onclick = batchDownload;
+    controlsDiv.appendChild(batchBtn);
 
     tabContent.appendChild(controlsDiv);
 
@@ -283,39 +477,7 @@ function showTab(tabKey, btn) {
         toolsDiv.className = "tools";
 
         (tabData[subFolder] || []).forEach(f => {
-            const card = document.createElement("div");
-            card.className = "tool";
-
-            const title = document.createElement("h3");
-            title.innerText = f.name;
-            card.appendChild(title);
-
-            if (f.status === "download") {
-                const btn = document.createElement("button");
-                btn.innerText = "下载";
-                btn.disabled = true;
-
-                fetch(f.path, { method: "HEAD" })
-                    .then(res => {
-                        if (res.ok) {
-                            btn.disabled = false;
-                            btn.onclick = () => window.open(f.path, "_blank");
-                        } else {
-                            btn.innerText = "文件缺失";
-                        }
-                    })
-                    .catch(() => {
-                        btn.innerText = "文件缺失";
-                    });
-
-                card.appendChild(btn);
-            } else {
-                const span = document.createElement("span");
-                span.innerText = f.status;
-                card.appendChild(span);
-            }
-
-            toolsDiv.appendChild(card);
+            toolsDiv.appendChild(renderFileCard(f));
         });
 
         folderContent.appendChild(toolsDiv);
