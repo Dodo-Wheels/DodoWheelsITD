@@ -1,0 +1,14 @@
+{
+  "admin": {
+    "password": "123456",
+    "tabs": ["sales", "warehouse", "other"]
+  },
+  "sales": {
+    "password": "123456",
+    "tabs": ["sales"]
+  },
+  "warehouse": {
+    "password": "123456",
+    "tabs": ["warehouse"]
+  }
+}
