@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DodoWheels 自研系统平台</title>
+<title>DodoWheels 文档管理系统</title>
 <style>
     body {
         margin: 0;
@@ -61,7 +61,7 @@
         display: none;
     }
 
-    /* 工具中心 */
+    /* 文档中心 */
     #toolPage {
         display: none;
         padding: 20px;
@@ -164,16 +164,16 @@
 <!-- 登录页面 -->
 <div id="loginPage">
     <img src="logo.png" alt="DodoWheels Logo">
-    <h1>DodoWheels 自研系统平台</h1>
+    <h1>DodoWheels 文档管理系统</h1>
     <input type="text" id="username" placeholder="用户名">
     <input type="password" id="password" placeholder="密码">
     <button onclick="login()">登录</button>
     <div class="error" id="errorMsg">用户名或密码错误</div>
 </div>
 
-<!-- 工具中心 -->
+<!-- 文档中心 -->
 <div id="toolPage">
-    <h1>DodoWheels 工具中心</h1>
+    <h1>DodoWheels 文档管理系统</h1>
     <div id="tabBar" class="tab-bar"></div>
     <div id="filesContainer"></div>
 </div>
@@ -182,6 +182,13 @@
     let users = {};
     let files = {};
     let currentUser = "";
+
+    // Tab 名字映射（英文 key → 中文名）
+    const tabNames = {
+        "sales": "销售文档",
+        "warehouse": "仓储文档",
+        "other": "其他文档"
+    };
 
     // 读取配置文件
     Promise.all([
@@ -214,12 +221,12 @@
         tabBar.innerHTML = "";
 
         const userTabs = users[currentUser].tabs;
-        userTabs.forEach((tabName, index) => {
+        userTabs.forEach((tabKey, index) => {
             const btn = document.createElement("button");
             btn.className = "tab-button";
-            btn.textContent = tabName.charAt(0).toUpperCase() + tabName.slice(1);
+            btn.textContent = tabNames[tabKey] || tabKey;
             if (index === 0) btn.classList.add("active");
-            btn.onclick = (e) => showTab(tabName, e);
+            btn.onclick = (e) => showTab(tabKey, e);
             tabBar.appendChild(btn);
         });
 
@@ -238,7 +245,7 @@
         if (fileList.length === 0) {
             const msg = document.createElement("div");
             msg.className = "emptyMsg";
-            msg.textContent = "📂 暂无文件";
+            msg.textContent = "📂 暂无文档";
             filesContainer.appendChild(msg);
             return;
         }
