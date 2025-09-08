@@ -110,13 +110,20 @@
         background: #444;
         color: #aaa;
     }
+
+    /* 子文件夹标题 */
+    h2 {
+        color: #1e90ff;
+        margin: 20px 0 10px;
+        font-size: 1.2em;
+    }
 </style>
 </head>
 <body>
 
 <!-- 登录页面 -->
 <div id="loginPage">
-        <img src="logo.png" alt="DodoWheels Logo" style="width:120px; margin-bottom:20px;">
+    <img src="logo.png" alt="DodoWheels Logo" style="width:120px; margin-bottom:20px;">
     <h1>DodoWheels 文档管理系统</h1>
     <input type="text" id="username" placeholder="用户名">
     <input type="password" id="password" placeholder="密码">
@@ -181,7 +188,7 @@ function renderTabs() {
     showTab(currentUser.tabs[0].key, tabBar.children[0]);
 }
 
-// 渲染文件卡片
+// 渲染文件卡片 (支持子文件夹)
 function showTab(tabKey, btn) {
     document.querySelectorAll(".tab-button").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
@@ -189,32 +196,44 @@ function showTab(tabKey, btn) {
     const tabContent = document.getElementById("tabContent");
     tabContent.innerHTML = "";
 
-    const toolsDiv = document.createElement("div");
-    toolsDiv.className = "tools";
+    const tabData = files[tabKey] || {};
 
-    (files[tabKey] || []).forEach(f => {
-        const card = document.createElement("div");
-        card.className = "tool";
+    // 遍历子文件夹
+    Object.keys(tabData).forEach(subFolder => {
+        // 子文件夹标题
+        const folderTitle = document.createElement("h2");
+        folderTitle.innerText = subFolder;
+        tabContent.appendChild(folderTitle);
 
-        const title = document.createElement("h3");
-        title.innerText = f.name;
-        card.appendChild(title);
+        // 文件卡片容器
+        const toolsDiv = document.createElement("div");
+        toolsDiv.className = "tools";
 
-        if (f.status === "download") {
-            const btn = document.createElement("button");
-            btn.innerText = "下载";
-            btn.onclick = () => window.open(f.path, "_blank");
-            card.appendChild(btn);
-        } else {
-            const span = document.createElement("span");
-            span.innerText = f.status;
-            card.appendChild(span);
-        }
+        // 遍历文件
+        (tabData[subFolder] || []).forEach(f => {
+            const card = document.createElement("div");
+            card.className = "tool";
 
-        toolsDiv.appendChild(card);
+            const title = document.createElement("h3");
+            title.innerText = f.name;
+            card.appendChild(title);
+
+            if (f.status === "download") {
+                const btn = document.createElement("button");
+                btn.innerText = "下载";
+                btn.onclick = () => window.open(f.path, "_blank");
+                card.appendChild(btn);
+            } else {
+                const span = document.createElement("span");
+                span.innerText = f.status;
+                card.appendChild(span);
+            }
+
+            toolsDiv.appendChild(card);
+        });
+
+        tabContent.appendChild(toolsDiv);
     });
-
-    tabContent.appendChild(toolsDiv);
 }
 </script>
 </body>
