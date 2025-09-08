@@ -1,6 +1,6 @@
 {
   "sales": [
-    { "name": "report1.pdf", "size": "1.2MB", "date": "2025-09-06", "status": "download" },
+    { "name": "1.pdf", "size": "1.2MB", "date": "2025-09-06", "status": "download" },
     { "name": "plan.docx", "size": "800KB", "date": "2025-09-05", "status": "download" },
     { "name": "budget.xlsx", "size": "500KB", "date": "2025-09-01", "status": "disabled" }
   ],
