@@ -253,21 +253,11 @@ function showTab(tabKey, btn) {
 
     const toggleBtn = document.createElement("button");
     toggleBtn.innerText = "全部展开";
-    toggleBtn.onclick = () => {
-        const expanded = toggleBtn.innerText === "全部收起";
-        document.querySelectorAll(".folder-content").forEach(fc => {
-            fc.style.display = expanded ? "none" : "block";
-        });
-        document.querySelectorAll(".folder-title").forEach(ft => {
-            ft.classList.toggle("expanded", !expanded);
-        });
-        toggleBtn.innerText = expanded ? "全部展开" : "全部收起";
-    };
     controlsDiv.appendChild(toggleBtn);
 
     tabContent.appendChild(controlsDiv);
 
-    // 遍历子文件夹
+    // 渲染子文件夹
     Object.keys(tabData).forEach(subFolder => {
         const folderTitle = document.createElement("h2");
         folderTitle.className = "folder-title";
@@ -303,39 +293,51 @@ function showTab(tabKey, btn) {
 
         folderContent.appendChild(toolsDiv);
 
-        folderTitle.onclick = () => {
+        // 点击标题展开/收起
+        folderTitle.addEventListener("click", () => {
             const expanded = folderContent.style.display === "block";
             folderContent.style.display = expanded ? "none" : "block";
             folderTitle.classList.toggle("expanded", !expanded);
 
-            const allExpanded = [...document.querySelectorAll(".folder-content")].every(fc => fc.style.display === "block");
+            const allExpanded = [...tabContent.querySelectorAll(".folder-content")]
+                .every(fc => fc.style.display === "block");
             toggleBtn.innerText = allExpanded ? "全部收起" : "全部展开";
-        };
+        });
 
         tabContent.appendChild(folderTitle);
         tabContent.appendChild(folderContent);
     });
 
-    // 搜索功能：过滤 + 高亮 + 自动展开
+    // 一键展开/收起
+    toggleBtn.onclick = () => {
+        const expanded = toggleBtn.innerText === "全部收起";
+        tabContent.querySelectorAll(".folder-content").forEach(fc => {
+            fc.style.display = expanded ? "none" : "block";
+        });
+        tabContent.querySelectorAll(".folder-title").forEach(ft => {
+            ft.classList.toggle("expanded", !expanded);
+        });
+        toggleBtn.innerText = expanded ? "全部展开" : "全部收起";
+    };
+
+    // 搜索功能
     searchInput.addEventListener("input", () => {
         const query = searchInput.value.toLowerCase();
 
-        const folders = document.querySelectorAll(".folder-content");
-        const titles = document.querySelectorAll(".folder-title");
+        const folders = tabContent.querySelectorAll(".folder-content");
+        const titles = tabContent.querySelectorAll(".folder-title");
 
         if (query) {
-            // 自动展开所有
             folders.forEach(fc => fc.style.display = "block");
             titles.forEach(ft => ft.classList.add("expanded"));
             toggleBtn.innerText = "全部收起";
         } else {
-            // 搜索清空，全部收起
             folders.forEach(fc => fc.style.display = "none");
             titles.forEach(ft => ft.classList.remove("expanded"));
             toggleBtn.innerText = "全部展开";
         }
 
-        document.querySelectorAll(".tool").forEach(card => {
+        tabContent.querySelectorAll(".tool").forEach(card => {
             const titleEl = card.querySelector("h3");
             const text = titleEl.innerText;
             const lower = text.toLowerCase();
