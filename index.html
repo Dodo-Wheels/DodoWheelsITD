@@ -75,6 +75,54 @@
         border-bottom: 3px solid #00bfff;
     }
 
+    /* 控制区 */
+    .tab-controls {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    .tab-controls input {
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: none;
+        width: 200px;
+    }
+    .tab-controls button {
+        padding: 5px 15px;
+        border-radius: 5px;
+        border: none;
+        background: linear-gradient(90deg, #1e90ff, #00bfff);
+        color: white;
+        cursor: pointer;
+    }
+
+    /* 子文件夹 */
+    .folder-title {
+        cursor: pointer;
+        padding: 8px;
+        background: #1c1c1c;
+        border: 1px solid #00bfff50;
+        border-radius: 5px;
+        margin: 10px 0 5px;
+        font-size: 1.1em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .folder-icon {
+        font-weight: bold;
+        color: #00bfff;
+    }
+    .folder-title.expanded {
+        background: #0d2a40;
+        color: #1e90ff;
+    }
+    .folder-content {
+        display: none;
+        margin-bottom: 15px;
+    }
+
     /* 文件卡片 */
     .tools {
         display: grid;
@@ -103,6 +151,10 @@
         color: #fff;
         cursor: pointer;
     }
+    .tool button:disabled {
+        background: #555;
+        cursor: not-allowed;
+    }
     .tool span {
         display: block;
         padding: 8px;
@@ -110,57 +162,9 @@
         background: #444;
         color: #aaa;
     }
-
-    /* 子文件夹标题 */
-    h2.folder-title {
-        color: #1e90ff;
-        margin: 20px 0 10px;
-        font-size: 1.2em;
-        cursor: pointer;
-        user-select: none;
-    }
-    h2.folder-title::before {
-        content: "▶ ";
-        font-size: 0.9em;
-    }
-    h2.folder-title.expanded::before {
-        content: "▼ ";
-    }
-    .folder-content {
-        margin-left: 10px;
-        display: none;
-    }
-
-    /* 一键按钮 + 搜索框 */
-    .tab-controls {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 10px 0 20px;
-    }
-    .tab-controls input {
-        padding: 8px 12px;
-        border-radius: 5px;
-        border: 1px solid #00bfff50;
-        background: #1c1c1c;
-        color: #00bfff;
-        width: 200px;
-    }
-    .tab-controls button {
-        padding: 8px 16px;
-        border: none;
-        border-radius: 5px;
-        background: linear-gradient(90deg, #1e90ff, #00bfff);
-        color: #fff;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    /* 搜索高亮 */
     mark {
-        background: none;
-        color: #1e90ff;
-        font-weight: bold;
+        background: yellow;
+        color: black;
     }
 </style>
 </head>
@@ -242,7 +246,7 @@ function showTab(tabKey, btn) {
 
     const tabData = files[tabKey] || {};
 
-    // 控制区：搜索框 + 全部展开/收起
+    // 控制区
     const controlsDiv = document.createElement("div");
     controlsDiv.className = "tab-controls";
 
@@ -259,9 +263,18 @@ function showTab(tabKey, btn) {
 
     // 渲染子文件夹
     Object.keys(tabData).forEach(subFolder => {
-        const folderTitle = document.createElement("h2");
+        const folderTitle = document.createElement("div");
         folderTitle.className = "folder-title";
-        folderTitle.innerText = subFolder;
+
+        const icon = document.createElement("span");
+        icon.className = "folder-icon";
+        icon.innerText = "+";
+
+        const label = document.createElement("span");
+        label.innerText = subFolder;
+
+        folderTitle.appendChild(icon);
+        folderTitle.appendChild(label);
 
         const folderContent = document.createElement("div");
         folderContent.className = "folder-content";
@@ -280,7 +293,21 @@ function showTab(tabKey, btn) {
             if (f.status === "download") {
                 const btn = document.createElement("button");
                 btn.innerText = "下载";
-                btn.onclick = () => window.open(f.path, "_blank");
+                btn.disabled = true;
+
+                fetch(f.path, { method: "HEAD" })
+                    .then(res => {
+                        if (res.ok) {
+                            btn.disabled = false;
+                            btn.onclick = () => window.open(f.path, "_blank");
+                        } else {
+                            btn.innerText = "文件缺失";
+                        }
+                    })
+                    .catch(() => {
+                        btn.innerText = "文件缺失";
+                    });
+
                 card.appendChild(btn);
             } else {
                 const span = document.createElement("span");
@@ -293,11 +320,11 @@ function showTab(tabKey, btn) {
 
         folderContent.appendChild(toolsDiv);
 
-        // 点击标题展开/收起
         folderTitle.addEventListener("click", () => {
             const expanded = folderContent.style.display === "block";
             folderContent.style.display = expanded ? "none" : "block";
             folderTitle.classList.toggle("expanded", !expanded);
+            icon.innerText = expanded ? "+" : "-";
 
             const allExpanded = [...tabContent.querySelectorAll(".folder-content")]
                 .every(fc => fc.style.display === "block");
@@ -316,6 +343,7 @@ function showTab(tabKey, btn) {
         });
         tabContent.querySelectorAll(".folder-title").forEach(ft => {
             ft.classList.toggle("expanded", !expanded);
+            ft.querySelector(".folder-icon").innerText = expanded ? "+" : "-";
         });
         toggleBtn.innerText = expanded ? "全部展开" : "全部收起";
     };
@@ -329,11 +357,17 @@ function showTab(tabKey, btn) {
 
         if (query) {
             folders.forEach(fc => fc.style.display = "block");
-            titles.forEach(ft => ft.classList.add("expanded"));
+            titles.forEach(ft => {
+                ft.classList.add("expanded");
+                ft.querySelector(".folder-icon").innerText = "-";
+            });
             toggleBtn.innerText = "全部收起";
         } else {
             folders.forEach(fc => fc.style.display = "none");
-            titles.forEach(ft => ft.classList.remove("expanded"));
+            titles.forEach(ft => {
+                ft.classList.remove("expanded");
+                ft.querySelector(".folder-icon").innerText = "+";
+            });
             toggleBtn.innerText = "全部展开";
         }
 
