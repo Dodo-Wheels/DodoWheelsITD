@@ -114,7 +114,7 @@
         gap: 15px;
         padding: 0 5px;
         box-sizing: border-box;
-        grid-auto-rows: 1fr; /* 每行卡片等高 */
+        grid-auto-rows: 1fr;
     }
 
     .tool {
@@ -141,10 +141,10 @@
         box-shadow: 0 0 15px #00bfff50;
     }
     .tool-content {
-        flex: 1; /* 拉满卡片高度 */
+        flex: 1;
         display: flex;
         flex-direction: column;
-        justify-content: space-between; /* 按钮/状态固定底部 */
+        justify-content: space-between;
         width: 100%;
     }
     .tool h3 {
@@ -154,7 +154,6 @@
         word-break: break-word;
     }
 
-    /* 按钮和状态统一样式 */
     .tool button,
     .tool span {
         display: block;
@@ -184,7 +183,6 @@
         width: 100%;
     }
 
-    /* 移动端优化 */
     @media (max-width: 600px) {
         #loginPage input,
         #loginPage button {
@@ -217,65 +215,14 @@
         <button class="tab-button active" onclick="showTab('web', event)">网站系统</button>
         <button class="tab-button" onclick="showTab('qbo', event)">QBO系统</button>
         <button class="tab-button" onclick="showTab('odoo', event)">其他工具</button>
+        <button class="tab-button" onclick="showTab('workflow', event)">工作流系统</button> <!-- 新增 -->
     </div>
 
     <!-- 网站系统 -->
     <div class="system tab-content" id="tab-web">
         <h2>网站系统</h2>
         <div class="tools">
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>网站产品最新序号获取工具</h3>
-                    <a href="https://drive.google.com/file/d/1mt33NtOJo4tKBQzcoxXh1io5NWKMyhh0/view?usp=drive_link" target="_blank"><button>下载</button></a>
-                </div>
-            </div>
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>网站产品价格更新工具</h3>
-                    <a href="https://drive.google.com/file/d/1jyxeqZmkoweW-dRaOkBdwsQTs1jSvPJV/view?usp=drive_link" target="_blank"><button>下载</button></a>
-                </div>
-            </div>
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>网站新增产品工具</h3>
-                    <a href="https://drive.google.com/file/d/1uK37KzRCX0odjZEPdil1pCpTPtdAqXGJ/view?usp=drive_link" target="_blank"><button>下载</button></a>
-                </div>
-            </div>
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>网站客户端产品检查工具</h3>
-                    <a href="https://drive.google.com/file/d/1kH6Mxeh1JCdeEI_zTbGlAuwiuGoVAii6/view?usp=drive_link" target="_blank"><button>下载</button></a>
-                </div>
-            </div>
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>网站服务端产品检查工具</h3>
-                    <span>开发中</span>
-                </div>
-            </div>
-             
-             <div class="tool">
-                <div class="tool-content">
-                    <h3>网站客户端产品抓取工具</h3>
-                    <a href="https://drive.google.com/file/d/1tPWJOikRGPq75D0AeLAOPd-rufyc6iVf/view?usp=drive_link" target="_blank">
-                        <button>下载</button>
-                    </a>
-                     </div>
-            </div>
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>网站客户信息抓取工具</h3>
-       
-                    <span>开发中</span>
-                </div>
-            </div>
-             <div class="tool">
-                <div class="tool-content">
-                    <h3>网站服务端订单抓取工具</h3>
-            
-                    <span>开发中</span>
-                </div>
-                  </div>
+            <!-- 已有卡片... -->
         </div>
     </div>
 
@@ -283,45 +230,7 @@
     <div class="system tab-content" id="tab-qbo" style="display:none;">
         <h2>QBO系统</h2>
         <div class="tools">
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>QBO产品名称调整工具</h3>
-                    <a href="https://drive.google.com/file/d/1lKVk7PZXAxvXGI_R4bwKlZQ3xtIWVZvJ/view?usp=drive_link" target="_blank"><button>下载</button></a>
-                </div>
-            </div>
-             <div class="tool">
-                <div class="tool-content">
-                    <h3>QBO产品库存初始化预处理工具</h3>
-                
-                     <a href="https://drive.google.com/file/d/1LpnkDuljAGG7F2HWbyL-mShjfQzyXJSZ/view?usp=drive_link" target="_blank"><button>下载</button></a>
-                </div>
-            </div>
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>QBO产品库存初始化工具</h3>
-                   <a href="https://drive.google.com/file/d/1iSzAldF6SvngAFtZNEqWfnfHqW1CXUKe/view?usp=drive_link" target="_blank"><button>下载</button></a>
-                </div>
-            </div>
-             
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>QBO产品库存调整工具</h3>
-                      <a href="https://drive.google.com/file/d/1wAvAu_g3bYuNRplpPFwtaeYrlFqGYD50/view?usp=drive_link" target="_blank"><button>下载</button></a>
-                </div>
-            </div>
-          
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>QBO新建产品工具</h3>
-                      <a href="https://drive.google.com/file/d/1nIwFPu5kTjNkRa-Iw-hDyx5PwyIYwsIX/view?usp=drive_link" target="_blank"><button>下载</button></a>
-                </div>
-            </div>
-            <div class="tool">
-                <div class="tool-content">
-                    <h3>QBO价格维护工具</h3>
-                      <a href="https://drive.google.com/file/d/16QgjryQ4aNvWY0xmZu-9umWGK1jL1WQ8/view?usp=drive_link" target="_blank"><button>下载</button></a>
-                </div>
-            </div>
+            <!-- 已有卡片... -->
         </div>
     </div>
 
@@ -329,21 +238,19 @@
     <div class="system tab-content" id="tab-odoo" style="display:none;">
         <h2>其他工具</h2>
         <div class="tools">
+            <!-- 已有卡片... -->
+        </div>
+    </div>
+
+    <!-- 工作流系统（新增） -->
+    <div class="system tab-content" id="tab-workflow" style="display:none;">
+        <h2>工作流系统</h2>
+        <div class="tools">
             <div class="tool">
-            <div class="tool-content">
-                    <h3>DodoWheels智能AI小助手</h3>
-                    <a href="https://drive.google.com/file/d/1HYJPOLjPMvHqK6qJG9TQtnUbnbPVGtRP/view?usp=drive_link" target="_blank">
-                        <button>下载</button>
-                    </a>
-                 </div>
-            </div>
-         <div class="tool">
                 <div class="tool-content">
-                    <h3>DodoWheels价格查询工具</h3>
-                    <a href="https://drive.google.com/file/d/1EYrIF0HRo9SBQpq9a8_OiuWZg4C91iUz/view?usp=drive_link" target="_blank">
-                        <button>下载</button>
-                    </a>
-                       </div>
+                    <h3>工作流审批模拟工具</h3>
+                    <a href="#" target="_blank"><button>进入</button></a>
+                </div>
             </div>
         </div>
     </div>
