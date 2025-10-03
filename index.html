@@ -1,12 +1,144 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels 自研系统平台</title>
-    <style>
-        /* 样式同之前提供的样式 */
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DodoWheels 自研系统平台</title>
+<style>
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+    background-color: #1e1e1e;
+    color: #fff;
+}
+
+#loginPage, #toolPage {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+#loginPage {
+    display: flex;
+}
+
+input {
+    padding: 8px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+}
+
+button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    background-color: #007aff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.error {
+    color: #ff4d4f;
+    display: none;
+    margin-top: 4px;
+}
+
+.menu-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background-color: #2c2c2e;
+    align-items: center;
+}
+
+.menu-left {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.menu-right span {
+    margin-left: 12px;
+}
+
+.main-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+.app-icon {
+    width: 160px;
+    height: 140px;
+    background-color: #2c2c2e;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+    position: relative;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.app-icon img {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 8px;
+}
+
+.app-icon span {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.app-icon:hover {
+    transform: translateY(-5px);
+    background-color: #3a3a3c;
+}
+
+.hidden {
+    display: none;
+}
+
+.dock {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    background-color: #2c2c2e;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    gap: 24px;
+}
+
+.dock-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.dock-item img {
+    width: 32px;
+    height: 32px;
+}
+
+.dock-item.exit {
+    font-size: 24px;
+    color: #ff4d4f;
+}
+</style>
 </head>
 <body>
 
@@ -20,7 +152,7 @@
 </div>
 
 <!-- 工具页 -->
-<div id="toolPage">
+<div id="toolPage" style="display:flex; flex-direction:column; height:100vh;">
     <!-- 顶部菜单栏 -->
     <div class="menu-bar">
         <div class="menu-left"> DodoWheels</div>
@@ -31,62 +163,62 @@
         </div>
     </div>
 
-    <!-- 中间内容：圆形图标显示 -->
+    <!-- 中间内容：卡片形式显示 -->
     <div class="main-content" id="appContainer">
         <!-- Web 系统 -->
-        <div class="app-icon" data-category="web">
+        <div class="app-icon" data-category="web" onclick="launchApp('网站产品最新序号获取工具')">
             <img src="icon_web.svg" alt="网站产品最新序号获取工具">
-            <div class="app-tooltip">网站产品最新序号获取工具</div>
+            <span>网站产品最新序号获取工具</span>
         </div>
-        <div class="app-icon" data-category="web">
+        <div class="app-icon" data-category="web" onclick="launchApp('网站产品价格更新工具')">
             <img src="icon_web_price.svg" alt="网站产品价格更新工具">
-            <div class="app-tooltip">网站产品价格更新工具</div>
+            <span>网站产品价格更新工具</span>
         </div>
-        <div class="app-icon" data-category="web">
+        <div class="app-icon" data-category="web" onclick="launchApp('网站新增产品工具')">
             <img src="icon_web_add.svg" alt="网站新增产品工具">
-            <div class="app-tooltip">网站新增产品工具</div>
+            <span>网站新增产品工具</span>
         </div>
-        <div class="app-icon" data-category="web">
+        <div class="app-icon" data-category="web" onclick="launchApp('网站订单导出工具')">
             <img src="icon_web_order.svg" alt="网站订单导出工具">
-            <div class="app-tooltip">网站订单导出工具</div>
+            <span>网站订单导出工具</span>
         </div>
-        <div class="app-icon" data-category="web">
+        <div class="app-icon" data-category="web" onclick="launchApp('网站库存检查工具')">
             <img src="icon_web_stock.svg" alt="网站库存检查工具">
-            <div class="app-tooltip">网站库存检查工具</div>
+            <span>网站库存检查工具</span>
         </div>
 
         <!-- QBO 系统 -->
-        <div class="app-icon" data-category="qbo">
+        <div class="app-icon" data-category="qbo" onclick="launchApp('QBO产品名称调整工具')">
             <img src="icon_qbo_name.svg" alt="QBO产品名称调整工具">
-            <div class="app-tooltip">QBO产品名称调整工具</div>
+            <span>QBO产品名称调整工具</span>
         </div>
-        <div class="app-icon" data-category="qbo">
+        <div class="app-icon" data-category="qbo" onclick="launchApp('QBO产品库存调整工具')">
             <img src="icon_qbo_stock.svg" alt="QBO产品库存调整工具">
-            <div class="app-tooltip">QBO产品库存调整工具</div>
+            <span>QBO产品库存调整工具</span>
         </div>
-        <div class="app-icon" data-category="qbo">
+        <div class="app-icon" data-category="qbo" onclick="launchApp('QBO报表导出工具')">
             <img src="icon_qbo_report.svg" alt="QBO报表导出工具">
-            <div class="app-tooltip">QBO报表导出工具</div>
+            <span>QBO报表导出工具</span>
         </div>
 
         <!-- Workflow 系统 -->
-        <div class="app-icon" data-category="workflow">
+        <div class="app-icon" data-category="workflow" onclick="launchApp('工作流自动任务分配工具')">
             <img src="icon_workflow_assign.svg" alt="工作流自动任务分配工具">
-            <div class="app-tooltip">工作流自动任务分配工具</div>
+            <span>工作流自动任务分配工具</span>
         </div>
-        <div class="app-icon" data-category="workflow">
+        <div class="app-icon" data-category="workflow" onclick="launchApp('工作流数据同步工具')">
             <img src="icon_workflow_sync.svg" alt="工作流数据同步工具">
-            <div class="app-tooltip">工作流数据同步工具</div>
+            <span>工作流数据同步工具</span>
         </div>
 
         <!-- Other 系统 -->
-        <div class="app-icon" data-category="odoo">
+        <div class="app-icon" data-category="odoo" onclick="launchApp('DodoWheels智能AI助手')">
             <img src="icon_ai.svg" alt="DodoWheels智能AI助手">
-            <div class="app-tooltip">DodoWheels智能AI助手</div>
+            <span>DodoWheels智能AI助手</span>
         </div>
-        <div class="app-icon" data-category="odoo">
+        <div class="app-icon" data-category="odoo" onclick="launchApp('仓库管理系统 Demo')">
             <img src="icon_warehouse.svg" alt="仓库管理系统 Demo">
-            <div class="app-tooltip">仓库管理系统 Demo</div>
+            <span>仓库管理系统 Demo</span>
         </div>
     </div>
 
@@ -109,44 +241,48 @@
 </div>
 
 <script>
-    function login() {
-        const pwd = document.getElementById("password").value;
-        if(pwd === "010203") {
-            document.getElementById("loginPage").style.display="none";
-            document.getElementById("toolPage").style.display="flex";
-            showTab('web'); // 默认显示 Web 系统
+function login() {
+    const pwd = document.getElementById("password").value;
+    if(pwd === "010203") {
+        document.getElementById("loginPage").style.display="none";
+        document.getElementById("toolPage").style.display="flex";
+        showTab('web'); // 默认显示 Web 系统
+    } else {
+        document.getElementById("errorMsg").style.display="block";
+    }
+}
+
+function logout() {
+    document.getElementById("toolPage").style.display="none";
+    document.getElementById("loginPage").style.display="flex";
+    document.getElementById("password").value = "";
+    document.getElementById("errorMsg").style.display="none";
+}
+
+function showTab(category) {
+    const apps = document.querySelectorAll(".app-icon");
+    apps.forEach(app => {
+        if(app.getAttribute("data-category") === category){
+            app.classList.remove("hidden");
         } else {
-            document.getElementById("errorMsg").style.display="block";
+            app.classList.add("hidden");
         }
-    }
+    });
+}
 
-    function logout() {
-        document.getElementById("toolPage").style.display="none";
-        document.getElementById("loginPage").style.display="flex";
-        document.getElementById("password").value = "";
-        document.getElementById("errorMsg").style.display="none";
-    }
+function updateTime() {
+    const now = new Date();
+    document.getElementById("time").innerText = 
+        now.toLocaleDateString("zh-CN", { month:"short", day:"numeric"}) + " " +
+        now.toLocaleTimeString("zh-CN", { hour: '2-digit', minute:'2-digit'});
+}
+setInterval(updateTime, 1000);
+updateTime();
 
-    // 显示指定分类的 App 并带淡入淡出动画
-    function showTab(category) {
-        const apps = document.querySelectorAll(".app-icon");
-        apps.forEach(app => {
-            if(app.getAttribute("data-category") === category){
-                app.classList.remove("hidden");
-            } else {
-                app.classList.add("hidden");
-            }
-        });
-    }
-
-    function updateTime() {
-        const now = new Date();
-        document.getElementById("time").innerText = 
-            now.toLocaleDateString("zh-CN", { month:"short", day:"numeric"}) + " " +
-            now.toLocaleTimeString("zh-CN", { hour: '2-digit', minute:'2-digit'});
-    }
-    setInterval(updateTime, 1000);
-    updateTime();
+// 模拟启动 App
+function launchApp(appName) {
+    alert("启动应用: " + appName);
+}
 </script>
 
 </body>
