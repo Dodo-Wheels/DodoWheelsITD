@@ -12,7 +12,7 @@
         color: #f0f0f0;
     }
 
-    /* ---------------- 登录页 (macOS风格) ---------------- */
+    /* ---------------- 登录页 ---------------- */
     #loginPage {
         display: flex;
         flex-direction: column;
@@ -64,11 +64,10 @@
         display: none;
     }
 
-    /* ---------------- 工具中心页 ---------------- */
+    /* ---------------- 工具页 ---------------- */
     #toolPage {
         display: none;
         height: 100vh;
-        display: flex;
         flex-direction: column;
     }
 
@@ -164,6 +163,7 @@
         color: #ccc;
         cursor: pointer;
         transition: transform 0.2s;
+        font-size: 0.8em;
     }
     .dock-item img {
         width: 48px;
@@ -175,6 +175,23 @@
     .dock-item:hover {
         transform: scale(1.2);
         color: #00bfff;
+    }
+    .dock-item.exit {
+        font-size: 2em;
+        line-height: 48px;
+        color: #ccc;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .dock-item.exit:hover {
+        background: #ff4d4d;
+        color: #fff;
+        transform: scale(1.1);
     }
 </style>
 </head>
@@ -258,6 +275,7 @@
         <div class="dock-item" onclick="showTab('odoo')">
             <img src="icon_other.png"><div>其他</div>
         </div>
+        <div class="dock-item exit" onclick="logout()">⏻</div>
     </div>
 </div>
 
@@ -270,6 +288,13 @@
         } else {
             document.getElementById("errorMsg").style.display="block";
         }
+    }
+
+    function logout() {
+        document.getElementById("toolPage").style.display="none";
+        document.getElementById("loginPage").style.display="flex";
+        document.getElementById("password").value = "";
+        document.getElementById("errorMsg").style.display="none";
     }
 
     function showTab(tab) {
