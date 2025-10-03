@@ -12,7 +12,7 @@
         color: #f0f0f0;
     }
 
-    /* ---------------- 登录页 ---------------- */
+    /* 登录页 */
     #loginPage {
         display: flex;
         flex-direction: column;
@@ -64,7 +64,7 @@
         display: none;
     }
 
-    /* ---------------- 工具页 ---------------- */
+    /* 工具页 */
     #toolPage {
         display: none;
         height: 100vh;
@@ -92,56 +92,62 @@
         align-items: center;
     }
 
-    /* 中间内容 */
+    /* 中间内容 圆形图标显示 */
     .main-content {
         flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 30px;
+        padding-bottom: 80px;
         overflow-y: auto;
-        padding: 30px 20px 80px;
-        text-align: center;
+        position: relative;
     }
-    .system h2 {
-        margin: 20px 0;
-        color: #00bfff;
-    }
-    .tools {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 20px;
-        max-width: 1200px;
-        margin: auto;
-    }
-    .tool {
+    .app-icon {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
         background: #2a2a2a;
-        border-radius: 12px;
-        padding: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        cursor: pointer;
+        position: relative;
         box-shadow: 0 4px 20px rgba(0,191,255,0.2);
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition: transform 0.3s, box-shadow 0.3s, opacity 0.3s;
+        opacity: 1;
     }
-    .tool:hover {
-        transform: translateY(-5px);
+    .app-icon img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        margin-bottom: 5px;
+    }
+    .app-icon:hover {
+        transform: scale(1.2);
         box-shadow: 0 6px 25px rgba(0,191,255,0.5);
     }
-    .tool h3 {
-        color: #00bfff;
-        margin-bottom: 10px;
+    .app-icon.hidden {
+        opacity: 0;
+        pointer-events: none;
     }
-    .tool button, .tool span {
-        width: 100%;
-        padding: 10px;
-        margin-top: 8px;
-        border-radius: 8px;
-        border: none;
-        font-weight: bold;
-        cursor: pointer;
+    .app-tooltip {
+        position: absolute;
+        bottom: -25px;
+        background: #000;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.75em;
+        color: #fff;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
     }
-    .tool button {
-        background: linear-gradient(90deg, #1e90ff, #00bfff);
-        color: white;
-    }
-    .tool span {
-        background: #444;
-        color: #aaa;
-        cursor: default;
+    .app-icon:hover .app-tooltip {
+        opacity: 1;
     }
 
     /* Dock 栏 */
@@ -168,13 +174,9 @@
     .dock-item img {
         width: 48px;
         height: 48px;
-        border-radius: 12px;
+        border-radius: 50%;
         margin-bottom: 5px;
         box-shadow: 0 2px 8px rgba(0,191,255,0.4);
-    }
-    .dock-item:hover {
-        transform: scale(1.2);
-        color: #00bfff;
     }
     .dock-item.exit {
         font-size: 2em;
@@ -218,46 +220,62 @@
         </div>
     </div>
 
-    <!-- 中间内容 -->
-    <div class="main-content">
+    <!-- 中间内容：圆形图标显示 -->
+    <div class="main-content" id="appContainer">
         <!-- Web 系统 -->
-        <div class="system tab-content" id="tab-web">
-            <h2>网站系统</h2>
-            <div class="tools">
-                <div class="tool"><h3>网站产品最新序号获取工具</h3><button>下载</button></div>
-                <div class="tool"><h3>网站产品价格更新工具</h3><button>下载</button></div>
-                <div class="tool"><h3>网站新增产品工具</h3><button>下载</button></div>
-                <div class="tool"><h3>网站订单导出工具</h3><button>下载</button></div>
-                <div class="tool"><h3>网站库存检查工具</h3><button>下载</button></div>
-            </div>
+        <div class="app-icon" data-category="web">
+            <img src="icon_web_seq.png" alt="网站产品最新序号获取工具">
+            <div class="app-tooltip">网站产品最新序号获取工具</div>
+        </div>
+        <div class="app-icon" data-category="web">
+            <img src="icon_web_price.png" alt="网站产品价格更新工具">
+            <div class="app-tooltip">网站产品价格更新工具</div>
+        </div>
+        <div class="app-icon" data-category="web">
+            <img src="icon_web_add.png" alt="网站新增产品工具">
+            <div class="app-tooltip">网站新增产品工具</div>
+        </div>
+        <div class="app-icon" data-category="web">
+            <img src="icon_web_order.png" alt="网站订单导出工具">
+            <div class="app-tooltip">网站订单导出工具</div>
+        </div>
+        <div class="app-icon" data-category="web">
+            <img src="icon_web_stock.png" alt="网站库存检查工具">
+            <div class="app-tooltip">网站库存检查工具</div>
         </div>
 
         <!-- QBO 系统 -->
-        <div class="system tab-content" id="tab-qbo" style="display:none;">
-            <h2>QBO系统</h2>
-            <div class="tools">
-                <div class="tool"><h3>QBO产品名称调整工具</h3><button>下载</button></div>
-                <div class="tool"><h3>QBO产品库存调整工具</h3><button>下载</button></div>
-                <div class="tool"><h3>QBO报表导出工具</h3><button>下载</button></div>
-            </div>
+        <div class="app-icon" data-category="qbo">
+            <img src="icon_qbo_name.png" alt="QBO产品名称调整工具">
+            <div class="app-tooltip">QBO产品名称调整工具</div>
+        </div>
+        <div class="app-icon" data-category="qbo">
+            <img src="icon_qbo_stock.png" alt="QBO产品库存调整工具">
+            <div class="app-tooltip">QBO产品库存调整工具</div>
+        </div>
+        <div class="app-icon" data-category="qbo">
+            <img src="icon_qbo_report.png" alt="QBO报表导出工具">
+            <div class="app-tooltip">QBO报表导出工具</div>
         </div>
 
-        <!-- 工作流 -->
-        <div class="system tab-content" id="tab-workflow" style="display:none;">
-            <h2>工作流系统</h2>
-            <div class="tools">
-                <div class="tool"><h3>工作流自动任务分配工具</h3><button>下载</button></div>
-                <div class="tool"><h3>工作流数据同步工具</h3><button>下载</button></div>
-            </div>
+        <!-- Workflow 系统 -->
+        <div class="app-icon" data-category="workflow">
+            <img src="icon_workflow_assign.png" alt="工作流自动任务分配工具">
+            <div class="app-tooltip">工作流自动任务分配工具</div>
+        </div>
+        <div class="app-icon" data-category="workflow">
+            <img src="icon_workflow_sync.png" alt="工作流数据同步工具">
+            <div class="app-tooltip">工作流数据同步工具</div>
         </div>
 
-        <!-- 其他工具 -->
-        <div class="system tab-content" id="tab-odoo" style="display:none;">
-            <h2>其他工具</h2>
-            <div class="tools">
-                <div class="tool"><h3>DodoWheels智能AI助手</h3><button>下载</button></div>
-                <div class="tool"><h3>仓库管理系统 Demo</h3><button>下载</button></div>
-            </div>
+        <!-- Other 系统 -->
+        <div class="app-icon" data-category="odoo">
+            <img src="icon_ai.png" alt="DodoWheels智能AI助手">
+            <div class="app-tooltip">DodoWheels智能AI助手</div>
+        </div>
+        <div class="app-icon" data-category="odoo">
+            <img src="icon_warehouse.png" alt="仓库管理系统 Demo">
+            <div class="app-tooltip">仓库管理系统 Demo</div>
         </div>
     </div>
 
@@ -280,36 +298,44 @@
 </div>
 
 <script>
-    function login() {
-        const pwd = document.getElementById("password").value;
-        if(pwd === "010203") {
-            document.getElementById("loginPage").style.display="none";
-            document.getElementById("toolPage").style.display="flex";
+function login() {
+    const pwd = document.getElementById("password").value;
+    if(pwd === "010203") {
+        document.getElementById("loginPage").style.display="none";
+        document.getElementById("toolPage").style.display="flex";
+        showTab('web'); // 默认显示 Web 系统
+    } else {
+        document.getElementById("errorMsg").style.display="block";
+    }
+}
+
+function logout() {
+    document.getElementById("toolPage").style.display="none";
+    document.getElementById("loginPage").style.display="flex";
+    document.getElementById("password").value = "";
+    document.getElementById("errorMsg").style.display="none";
+}
+
+// 显示指定分类的 App 并带淡入淡出动画
+function showTab(category) {
+    const apps = document.querySelectorAll(".app-icon");
+    apps.forEach(app => {
+        if(app.getAttribute("data-category") === category){
+            app.classList.remove("hidden");
         } else {
-            document.getElementById("errorMsg").style.display="block";
+            app.classList.add("hidden");
         }
-    }
+    });
+}
 
-    function logout() {
-        document.getElementById("toolPage").style.display="none";
-        document.getElementById("loginPage").style.display="flex";
-        document.getElementById("password").value = "";
-        document.getElementById("errorMsg").style.display="none";
-    }
-
-    function showTab(tab) {
-        document.querySelectorAll(".tab-content").forEach(el => el.style.display = "none");
-        document.getElementById("tab-" + tab).style.display = "block";
-    }
-
-    function updateTime() {
-        const now = new Date();
-        document.getElementById("time").innerText = 
-            now.toLocaleDateString("zh-CN", { month:"short", day:"numeric"}) + " " +
-            now.toLocaleTimeString("zh-CN", { hour: '2-digit', minute:'2-digit'});
-    }
-    setInterval(updateTime, 1000);
-    updateTime();
+function updateTime() {
+    const now = new Date();
+    document.getElementById("time").innerText = 
+        now.toLocaleDateString("zh-CN", { month:"short", day:"numeric"}) + " " +
+        now.toLocaleTimeString("zh-CN", { hour: '2-digit', minute:'2-digit'});
+}
+setInterval(updateTime, 1000);
+updateTime();
 </script>
 </body>
 </html>
