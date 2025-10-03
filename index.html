@@ -303,7 +303,9 @@ function login() {
     if(pwd === "010203") {
         document.getElementById("loginPage").style.display="none";
         document.getElementById("toolPage").style.display="flex";
-        showTab('web'); // 默认显示 Web 系统
+        // 初始显示所有 App
+        const apps = document.querySelectorAll(".app-icon");
+        apps.forEach(app => app.classList.remove("hidden"));
     } else {
         document.getElementById("errorMsg").style.display="block";
     }
@@ -316,7 +318,7 @@ function logout() {
     document.getElementById("errorMsg").style.display="none";
 }
 
-// 显示指定分类的 App 并带淡入淡出动画
+// Dock 分类切换
 function showTab(category) {
     const apps = document.querySelectorAll(".app-icon");
     apps.forEach(app => {
@@ -328,6 +330,7 @@ function showTab(category) {
     });
 }
 
+// 时间显示
 function updateTime() {
     const now = new Date();
     document.getElementById("time").innerText = 
