@@ -25,13 +25,12 @@ body {
     height: 100vh;
     text-align: center;
     padding: 0 20px;
-    background-color: #1c1c1e;
 }
 #loginPage .login-box {
     background-color: #2c2c2e;
     padding: 40px 30px;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
     width: 100%;
     max-width: 350px;
     display: flex;
@@ -39,8 +38,6 @@ body {
     align-items: center;
     position: relative;
 }
-
-/* 用户头像动画 */
 #loginPage .avatar {
     width: 80px;
     height: 80px;
@@ -50,15 +47,8 @@ body {
     margin-bottom: 20px;
     animation: float 3s ease-in-out infinite;
 }
-#loginPage .avatar:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 30px rgba(10,132,255,0.9);
-}
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
-}
-
+#loginPage .avatar:hover { transform: scale(1.1); box-shadow: 0 0 30px rgba(10,132,255,0.9); }
+@keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);} }
 #loginPage h1 { margin-bottom: 20px; font-size: 1.8em; color: #0a84ff; }
 #loginPage input {
     width: 100%;
@@ -87,13 +77,53 @@ body {
     box-shadow: 0 4px 12px rgba(0, 132, 255, 0.5);
     transition: transform 0.2s, box-shadow 0.2s;
 }
-#loginPage button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(0, 132, 255, 0.7);
-}
+#loginPage button:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,132,255,0.7); }
 #loginPage .error { color: #ff453a; margin-top: 10px; display: none; }
 
-/* 工具中心页面及Dock保持之前样式，略 */
+/* 工具中心页面 */
+#toolPage { display: none; flex: 1; flex-direction: column; }
+#topBar {
+    height: 40px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 15px; border-bottom: 1px solid #3a3a3c; background-color: #2c2c2e;
+}
+#topBar .title { font-weight: 600; color: #fff; }
+#topBar .info { font-size: 0.9em; color: #ccc; }
+#toolsContainerWrapper {
+    flex: 1; display: flex; justify-content: center; align-items: flex-start;
+    padding: 15px; overflow-y: auto;
+}
+#toolsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px; max-width: 1400px; width: 100%;
+}
+
+.tool {
+    background: #2c2c2e; border-radius: 12px;
+    padding: 10px; display: flex; flex-direction: column; align-items: center;
+    justify-content: space-between; box-shadow: 0 2px 10px rgba(10,132,255,0.2);
+    transition: transform 0.3s, opacity 0.3s;
+    min-height: 120px; font-size: 0.9em;
+}
+.tool:hover { transform: translateY(-3px); box-shadow: 0 4px 20px rgba(10,132,255,0.4); }
+.tool svg { width: 40px; height: 40px; margin-bottom: 8px; fill: #0a84ff; }
+.tool h3 { font-size: 0.9em; color: #0a84ff; margin-bottom: 6px; text-align: center; }
+.tool button, .tool span { width: 100%; padding: 6px 0; margin-top: 6px; font-weight: 600; text-align: center; border-radius: 6px; border: none; }
+.tool button { background: linear-gradient(90deg, #0a84ff, #5ac8fa); color: #fff; cursor: pointer; }
+.tool span { background: #3a3a3c; color: #0a84ff; cursor: default; }
+a { text-decoration: none; width: 100%; }
+
+#dock {
+    height: 60px; display: flex; justify-content: center; align-items: center;
+    background: #2c2c2e; border-top: 1px solid #3a3a3c; padding: 0 10px;
+}
+.dock-item {
+    width: 50px; height: 50px; margin: 0 8px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s;
+}
+.dock-item:hover { transform: scale(1.2); }
+.dock-item svg { width: 28px; height: 28px; fill: #0a84ff; margin-bottom: 2px; }
+.dock-item span { font-size: 0.7em; color: #0a84ff; text-align: center; }
 </style>
 </head>
 <body>
@@ -109,12 +139,37 @@ body {
     </div>
 </div>
 
-<!-- 工具中心保持原来代码 -->
 <div id="toolPage">
-    <!-- 顶部栏、卡片区域、Dock 同之前示例 -->
+    <div id="topBar">
+        <div class="title">DodoWheels工具中心</div>
+        <div class="info" id="dateTime"></div>
+    </div>
+    <div id="toolsContainerWrapper">
+        <div id="toolsContainer"></div>
+    </div>
+    <div id="dock">
+        <div class="dock-item" onclick="filterCategory('web')"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28"/></svg><span>Web</span></div>
+        <div class="dock-item" onclick="filterCategory('qbo')"><svg viewBox="0 0 64 64"><rect x="12" y="12" width="40" height="40"/></svg><span>QBO</span></div>
+        <div class="dock-item" onclick="filterCategory('workflow')"><svg viewBox="0 0 64 64"><polygon points="32,8 56,56 8,56"/></svg><span>Workflow</span></div>
+        <div class="dock-item" onclick="filterCategory('other')"><svg viewBox="0 0 64 64"><path d="M16 32h32M32 16v32"/></svg><span>其他</span></div>
+    </div>
 </div>
 
 <script>
+const toolsData = [
+    {name: "网站产品最新序号获取工具", status: "download", category:"web"},
+    {name: "网站产品价格更新工具", status: "download", category:"web"},
+    {name: "网站新增产品工具", status: "download", category:"web"},
+    {name: "网站客户端产品检查工具", status: "download", category:"web"},
+    {name: "网站服务端产品检查工具", status: "dev", category:"web"},
+    {name: "QBO产品名称调整工具", status: "download", category:"qbo"},
+    {name: "QBO产品库存初始化工具", status: "download", category:"qbo"},
+    {name: "DodoWheels智能AI小助手", status: "download", category:"other"},
+    {name: "公司库内大屏显示工具", status: "download", category:"other"},
+    {name: "工作流数据工具", status: "download", category:"workflow"},
+    {name: "OCR识别工具", status: "download", category:"workflow"}
+];
+
 function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -122,9 +177,31 @@ function login() {
     if(username === 'admin' && password === '010203') {
         document.getElementById('loginPage').style.display = 'none';
         document.getElementById('toolPage').style.display = 'flex';
-        // renderTools(); // 调用工具中心渲染
-        // updateDateTime();
+        renderTools();
+        updateDateTime();
     } else { errorMsg.style.display = 'block'; }
+}
+
+function renderTools(category=null) {
+    const container = document.getElementById('toolsContainer');
+    container.innerHTML = '';
+    let filteredTools = category ? toolsData.filter(t=>t.category===category) : toolsData;
+    filteredTools.forEach(tool => {
+        const div = document.createElement('div');
+        div.className = 'tool';
+        div.innerHTML = `<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28"/></svg>`;
+        const h3 = document.createElement('h3'); h3.innerText = tool.name; div.appendChild(h3);
+        if(tool.status === 'download') { const btn = document.createElement('button'); btn.innerText = '下载'; div.appendChild(btn); }
+        else { const span = document.createElement('span'); span.innerText = '开发中'; div.appendChild(span); }
+        container.appendChild(div);
+    });
+}
+
+function filterCategory(category) { renderTools(category); }
+
+function updateDateTime() {
+    const dt = document.getElementById('dateTime');
+    setInterval(() => { dt.innerText = new Date().toLocaleString(); }, 1000);
 }
 </script>
 
