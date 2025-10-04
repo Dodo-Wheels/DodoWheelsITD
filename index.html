@@ -1,256 +1,128 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DodoWheels 自研系统平台</title>
-<style>
-    body {
-        margin: 0;
-        background: linear-gradient(160deg, #1e1e1e, #2a2a2a);
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        min-height: 100vh;
-        color: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    /* 登录页 */
-    #loginPage {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 12px;
-        padding: 40px;
-        border-radius: 20px;
-        background: rgba(255,255,255,0.08);
-        backdrop-filter: blur(12px);
-        box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    }
-    #loginPage input {
-        padding: 10px 14px;
-        border-radius: 10px;
-        border: none;
-        background: rgba(255,255,255,0.1);
-        color: #fff;
-        outline: none;
-    }
-    #loginPage button {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 10px;
-        background: #0a84ff;
-        color: #fff;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background 0.3s;
-    }
-    #loginPage button:hover { background: #0066cc; }
-    #errorMsg { color: #ff453a; display: none; }
-
-    /* 主页面 */
-    #toolPage {
-        display: none;
-        flex-direction: column;
-        width: 100%;
-        height: 100vh;
-    }
-
-    .topbar {
-        height: 28px;
-        background: rgba(30,30,30,0.8);
-        color: #fff;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        padding: 0 20px;
-        font-size: 13px;
-        backdrop-filter: blur(10px);
-    }
-
-    .main {
-        flex: 1;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 30px;
-        padding: 40px;
-        box-sizing: border-box;
-    }
-
-    .category {
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(12px);
-        border-radius: 20px;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .category:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 28px rgba(0,0,0,0.4);
-    }
-    .category-title {
-        color: #eee;
-        font-size: 16px;
-        margin-bottom: 20px;
-    }
-
-    .app-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-        gap: 20px;
-        justify-items: center;
-        width: 100%;
-    }
-    .app-icon {
-        width: 70px;
-        height: 70px;
-        border-radius: 18px;
-        background: rgba(255,255,255,0.1);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: transform 0.25s, background 0.3s;
-        cursor: pointer;
-        backdrop-filter: blur(8px);
-    }
-    .app-icon:hover {
-        transform: scale(1.2);
-        background: rgba(255,255,255,0.2);
-    }
-    .app-icon img {
-        width: 50%;
-        height: 50%;
-    }
-
-    /* Dock */
-    .dock {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        gap: 20px;
-        background: rgba(40, 40, 40, 0.7);
-        padding: 12px 20px;
-        border-radius: 25px;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-    }
-    .dock-icon {
-        width: 60px;
-        height: 60px;
-        border-radius: 15px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: transform 0.25s;
-        cursor: pointer;
-    }
-    .dock-icon img { width: 65%; height: 65%; }
-    .dock-icon:hover { transform: scale(1.3); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>应用程序分类展示</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        .category {
+            width: 22%;
+            margin: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            text-align: center;
+        }
+        .category h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .app-icons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .app-icon {
+            width: 60px;
+            height: 60px;
+            margin: 10px;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+        .app-icon:hover {
+            transform: scale(1.1);
+        }
+        svg {
+            width: 40px;
+            height: 40px;
+            fill: #333;
+        }
+    </style>
 </head>
 <body>
-    <!-- 登录页 -->
-    <div id="loginPage">
-        <img src="https://www.svgrepo.com/show/532420/user.svg" width="80" height="80" style="border-radius:50%; background:#333; padding:10px;">
-        <h2>管理员</h2>
-        <input type="password" id="password" placeholder="输入密码">
-        <button onclick="login()">登录</button>
-        <div id="errorMsg">密码错误</div>
-    </div>
 
-    <!-- 主页面 -->
-    <div id="toolPage">
-        <div class="topbar">
-            <span id="time"></span>
-        </div>
-        <div class="main">
-            <div class="category">
-                <div class="category-title">WEB</div>
-                <div class="app-grid">
-                    <div class="app-icon"><img src="https://www.svgrepo.com/show/354202/chrome.svg"></div>
-                    <div class="app-icon"><img src="https://www.svgrepo.com/show/452091/github.svg"></div>
-                </div>
+<div class="container">
+    <!-- WEB 类别 -->
+    <div class="category">
+        <h3>WEB</h3>
+        <div class="app-icons">
+            <div class="app-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 3h18v18H3z"/></svg>
             </div>
-            <div class="category">
-                <div class="category-title">QBO</div>
-                <div class="app-grid">
-                    <div class="app-icon"><img src="https://www.svgrepo.com/show/354200/visual-studio-code.svg"></div>
-                    <div class="app-icon"><img src="https://www.svgrepo.com/show/303251/mysql-logo.svg"></div>
-                </div>
+            <div class="app-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
             </div>
-            <div class="category">
-                <div class="category-title">OTHER</div>
-                <div class="app-grid">
-                    <div class="app-icon"><img src="https://www.svgrepo.com/show/353498/python.svg"></div>
-                    <div class="app-icon"><img src="https://www.svgrepo.com/show/354259/figma.svg"></div>
-                </div>
+            <div class="app-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polygon points="12,2 22,22 2,22"/></svg>
             </div>
-            <div class="category">
-                <div class="category-title">SYSTEM</div>
-                <div class="app-grid">
-                    <div class="app-icon"><img src="https://www.svgrepo.com/show/452228/docker.svg"></div>
-                    <div class="app-icon"><img src="https://www.svgrepo.com/show/452196/slack.svg"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Dock -->
-        <div class="dock" id="dock" style="display:none;">
-            <div class="dock-icon" onclick="filterCategory('ALL')"><img src="https://www.svgrepo.com/show/532395/apps.svg"></div>
-            <div class="dock-icon" onclick="filterCategory('WEB')"><img src="https://www.svgrepo.com/show/488319/browser.svg"></div>
-            <div class="dock-icon" onclick="filterCategory('QBO')"><img src="https://www.svgrepo.com/show/374101/database.svg"></div>
-            <div class="dock-icon" onclick="filterCategory('OTHER')"><img src="https://www.svgrepo.com/show/473614/tools.svg"></div>
-            <div class="dock-icon" onclick="filterCategory('SYSTEM')"><img src="https://www.svgrepo.com/show/473750/settings.svg"></div>
-            <div class="dock-icon" onclick="logout()"><img src="https://www.svgrepo.com/show/503099/power-off.svg"></div>
         </div>
     </div>
 
-<script>
-function login() {
-    const pwd = document.getElementById("password").value;
-    if (pwd === "010203") {
-        document.getElementById("loginPage").style.display = "none";
-        document.getElementById("toolPage").style.display = "flex";
-        document.getElementById("dock").style.display = "flex";
-    } else {
-        document.getElementById("errorMsg").style.display = "block";
-    }
-}
+    <!-- QBO 类别 -->
+    <div class="category">
+        <h3>QBO</h3>
+        <div class="app-icons">
+            <div class="app-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0L15 10H9z"/></svg>
+            </div>
+            <div class="app-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 2h20v20H2z"/></svg>
+            </div>
+            <div class="app-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+            </div>
+        </div>
+    </div>
 
-function logout() {
-    document.getElementById("toolPage").style.display = "none";
-    document.getElementById("loginPage").style.display = "flex";
-    document.getElementById("password").value = "";
-    document.getElementById("errorMsg").style.display = "none";
-}
+    <!-- OTHER 类别 -->
+    <div class="category">
+        <h3>OTHER</h3>
+        <div class="app-icons">
+            <div class="app-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 12h20M12 2v20"/></svg>
+            </div>
+            <div class="app-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 3h18v18H3z"/></svg>
+            </div>
+            <div class="app-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+            </div>
+        </div>
+    </div>
 
-/* 时间显示 */
-function updateTime() {
-    const now = new Date();
-    document.getElementById("time").innerText =
-        now.toLocaleString("zh-CN", { weekday: "short", hour: "2-digit", minute: "2-digit" });
-}
-setInterval(updateTime, 1000);
-updateTime();
+    <!-- SYSTEM 类别 -->
+    <div class="category">
+        <h3>SYSTEM</h3>
+        <div class="app-icons">
+            <div class="app-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2L15 10H9z"/></svg>
+            </div>
+            <div class="app-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 2h20v20H2z"/></svg>
+            </div>
+            <div class="app-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+            </div>
+        </div>
+    </div>
+</div>
 
-/* Dock 分类切换 */
-function filterCategory(cat) {
-    const categories = document.querySelectorAll(".category");
-    categories.forEach(c => {
-        if (cat === "ALL" || c.querySelector(".category-title").innerText === cat) {
-            c.style.display = "flex";
-        } else {
-            c.style.display = "none";
-        }
-    });
-}
-</script>
 </body>
 </html>
