@@ -10,6 +10,28 @@
         font-family: 'Segoe UI', Arial, sans-serif;
         background-color: #121212;
         color: #00bfff;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    /* Mac 顶部状态栏 */
+    #macStatusBar {
+        height: 30px;
+        background: #1a1a1a;
+        color: #aaa;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 0 10px;
+        font-size: 0.8em;
+        border-bottom: 1px solid #00bfff50;
+        gap: 15px;
+    }
+    #macStatusBar img {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
     }
 
     /* 登录页面样式 */
@@ -67,6 +89,9 @@
         display: none;
         padding: 20px 10px;
         box-sizing: border-box;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
     }
     h1 {
         text-align: center;
@@ -74,32 +99,11 @@
         font-size: 2em;
     }
 
-    /* Tab 栏 */
-    .tab-bar {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 20px;
-        border-bottom: 2px solid #00bfff50;
-    }
-    .tab-button {
-        padding: 10px 20px;
-        cursor: pointer;
-        background: none;
-        border: none;
-        color: #aaa;
-        font-weight: bold;
-        font-size: 1em;
-        transition: 0.3s;
-    }
-    .tab-button.active {
-        color: #00bfff;
-        border-bottom: 3px solid #00bfff;
-    }
-
     .system {
-        margin: 20px auto;
+        margin: 0 auto;
         max-width: 1200px;
         text-align: center;
+        flex: 1;
     }
     .system h2 {
         margin-bottom: 15px;
@@ -107,7 +111,6 @@
         font-size: 1.5em;
     }
 
-    /* 响应式卡片布局 + 每行等高 */
     .tools {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -134,11 +137,9 @@
         box-shadow: 0 0 25px #00bfff70;
     }
     .tool img {
-        width: 100%;
-        height: auto;
-        border-radius: 5px;
-        margin: 10px 0;
-        box-shadow: 0 0 15px #00bfff50;
+        width: 50px;
+        height: 50px;
+        margin-bottom: 10px;
     }
     .tool-content {
         flex: 1;
@@ -146,12 +147,14 @@
         flex-direction: column;
         justify-content: space-between;
         width: 100%;
+        align-items: center;
     }
     .tool h3 {
         font-size: 1.1em;
         color: #00bfff;
         margin-bottom: 10px;
         word-break: break-word;
+        text-align: center;
     }
 
     .tool button,
@@ -183,6 +186,40 @@
         width: 100%;
     }
 
+    /* Dock 样式 - Mac 风格 */
+    #dock {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        padding: 15px 0;
+        background: #1a1a1a;
+        border-top: 1px solid #00bfff50;
+        position: relative;
+    }
+    .dock-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 15px;
+        cursor: pointer;
+        color: #aaa;
+        font-size: 0.9em;
+        transition: transform 0.2s, color 0.2s;
+    }
+    .dock-item.active {
+        color: #00bfff;
+    }
+    .dock-item img {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        transition: transform 0.2s;
+    }
+    .dock-item:hover img {
+        transform: scale(1.5);
+    }
+
     @media (max-width: 600px) {
         #loginPage input,
         #loginPage button {
@@ -190,6 +227,17 @@
         }
         #loginPage img {
             max-width: 60%;
+        }
+        .dock-item {
+            margin: 0 8px;
+        }
+        .dock-item img {
+            width: 30px;
+            height: 30px;
+        }
+        .tool img {
+            width: 40px;
+            height: 40px;
         }
     }
 </style>
@@ -208,81 +256,98 @@
 
 <!-- 工具中心页面 -->
 <div id="toolPage">
+    <!-- Mac 状态栏 -->
+    <div id="macStatusBar">
+        <span id="time">00:00</span>
+        <span id="battery">🔋100%</span>
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="User">
+    </div>
+
     <h1>DodoWheels工具中心</h1>
 
-    <!-- Tab 栏 -->
-    <div class="tab-bar">
-        <button class="tab-button active" onclick="showTab('web', event)">网站系统</button>
-        <button class="tab-button" onclick="showTab('qbo', event)">QBO系统</button>
-        <button class="tab-button" onclick="showTab('workflow', event)">工作流系统</button>
-        <button class="tab-button" onclick="showTab('odoo', event)">其他工具</button>
+    <div class="system">
+        <h2 id="systemTitle">所有工具</h2>
+        <div class="tools" id="toolsContainer"></div>
     </div>
 
-    <!-- 网站系统 -->
-    <div class="system tab-content" id="tab-web">
-        <h2>网站系统</h2>
-        <div class="tools">
-            <!-- ✅ 这里保留你原来的所有卡片 -->
-            <div class="tool"><div class="tool-content"><h3>网站产品最新序号获取工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>网站产品价格更新工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>网站新增产品工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>网站客户端产品检查工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>网站服务端产品检查工具</h3><span>开发中</span></div></div>
-            <div class="tool"><div class="tool-content"><h3>网站客户端产品抓取工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>网站客户信息抓取工具</h3><span>开发中</span></div></div>
-            <div class="tool"><div class="tool-content"><h3>网站服务端订单抓取工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>网站车辆适配信息工具</h3><span>开发中</span></div></div>
-            <div class="tool"><div class="tool-content"><h3>网站OnHand库存-Name更新工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>网站OnHand库存-Sku更新工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>网站产品SKU更新工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>网站产品名称更新工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>网站PO数量-DNS更新工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
+    <!-- 底部 Dock -->
+    <div id="dock">
+        <div class="dock-item active" data-category="all" onclick="showCategory('all', this)">
+            <img src="https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/grid.svg" alt="全部">
+            <span>全部</span>
         </div>
-    </div>
-
-    <!-- QBO系统 -->
-    <div class="system tab-content" id="tab-qbo" style="display:none;">
-        <h2>QBO系统</h2>
-        <div class="tools">
-            <div class="tool"><div class="tool-content"><h3>QBO产品名称调整工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>QBO产品库存初始化预处理工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>QBO产品库存初始化工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>QBO产品库存调整工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>QBO新建产品工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>QBO价格维护工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>QBO产品SKU更新工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-                       
-
-    </div>
-
-    <!-- ODOO系统 -->
-    <div class="system tab-content" id="tab-odoo" style="display:none;">
-        <h2>其他工具</h2>
-        <div class="tools">
-            <div class="tool"><div class="tool-content"><h3>DodoWheels智能AI小助手</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>DodoWheels价格查询工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>QBO和WEB库存数量校验工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-            <div class="tool"><div class="tool-content"><h3>车辆数据适配预处理工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-             <div class="tool"><div class="tool-content"><h3>QBO和WEB库存数据校验工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-             <div class="tool"><div class="tool-content"><h3>QBO分仓库存更新WEB数据预处理工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-              <div class="tool"><div class="tool-content"><h3>QBO分仓库存更新WEB数据同步工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-             <div class="tool"><div class="tool-content"><h3>公司库内大屏显示工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-
-
+        <div class="dock-item" data-category="web" onclick="showCategory('web', this)">
+            <img src="https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/world.svg" alt="网站系统">
+            <span>网站</span>
         </div>
-    </div>
-
-    <!-- 工作流系统（新增） -->
-    <div class="system tab-content" id="tab-workflow" style="display:none;">
-        <h2>工作流系统</h2>
-        <div class="tools">
-            <div class="tool"><div class="tool-content"><h3>工作流数据工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-                        <div class="tool"><div class="tool-content"><h3>OCR识别工具</h3><a href="#" target="_blank"><button>下载</button></a></div></div>
-                                    <div class="tool"><div class="tool-content"><h3>DodoWheels数据中心</h3><a href="#" target="_blank"><span>开发中</span></div></div>
+        <div class="dock-item" data-category="qbo" onclick="showCategory('qbo', this)">
+            <img src="https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/database.svg" alt="QBO系统">
+            <span>QBO</span>
+        </div>
+        <div class="dock-item" data-category="workflow" onclick="showCategory('workflow', this)">
+            <img src="https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/flow.svg" alt="工作流系统">
+            <span>工作流</span>
+        </div>
+        <div class="dock-item" data-category="odoo" onclick="showCategory('odoo', this)">
+            <img src="https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/tool.svg" alt="其他工具">
+            <span>其他</span>
+        </div>
     </div>
 </div>
 
 <script>
+    // 更新顶部时间
+    function updateTime() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2,'0');
+        const mins = String(now.getMinutes()).padStart(2,'0');
+        document.getElementById('time').innerText = `${hours}:${mins}`;
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    const toolsData = [
+        // 网站系统
+        {name: "网站产品最新序号获取工具", category: "web", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/file-text.svg"},
+        {name: "网站产品价格更新工具", category: "web", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/currency-dollar.svg"},
+        {name: "网站新增产品工具", category: "web", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/plus.svg"},
+        {name: "网站客户端产品检查工具", category: "web", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/search.svg"},
+        {name: "网站服务端产品检查工具", category: "web", status: "dev", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/eye.svg"},
+        {name: "网站客户端产品抓取工具", category: "web", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/download.svg"},
+        {name: "网站客户信息抓取工具", category: "web", status: "dev", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/users.svg"},
+        {name: "网站服务端订单抓取工具", category: "web", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/package.svg"},
+        {name: "网站车辆适配信息工具", category: "web", status: "dev", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/steering-wheel.svg"},
+        {name: "网站OnHand库存-Name更新工具", category: "web", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/box.svg"},
+        {name: "网站OnHand库存-Sku更新工具", category: "web", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/barcode.svg"},
+        {name: "网站产品SKU更新工具", category: "web", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/tag.svg"},
+        {name: "网站产品名称更新工具", category: "web", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/align-left.svg"},
+        {name: "网站PO数量-DNS更新工具", category: "web", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/file-invoice.svg"},
+
+        // QBO系统
+        {name: "QBO产品名称调整工具", category: "qbo", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/edit.svg"},
+        {name: "QBO产品库存初始化预处理工具", category: "qbo", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/box.svg"},
+        {name: "QBO产品库存初始化工具", category: "qbo", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/package.svg"},
+        {name: "QBO产品库存调整工具", category: "qbo", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/sliders.svg"},
+        {name: "QBO新建产品工具", category: "qbo", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/plus.svg"},
+        {name: "QBO价格维护工具", category: "qbo", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/currency-dollar.svg"},
+        {name: "QBO产品SKU更新工具", category: "qbo", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/barcode.svg"},
+
+        // 工作流系统
+        {name: "工作流数据工具", category: "workflow", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/flow.svg"},
+        {name: "OCR识别工具", category: "workflow", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/eye.svg"},
+        {name: "DodoWheels数据中心", category: "workflow", status: "dev", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/database.svg"},
+
+        // 其他工具
+        {name: "DodoWheels智能AI小助手", category: "odoo", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/robot.svg"},
+        {name: "DodoWheels价格查询工具", category: "odoo", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/search.svg"},
+        {name: "QBO和WEB库存数量校验工具", category: "odoo", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/check.svg"},
+        {name: "车辆数据适配预处理工具", category: "odoo", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/steering-wheel.svg"},
+        {name: "QBO和WEB库存数据校验工具", category: "odoo", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/check.svg"},
+        {name: "QBO分仓库存更新WEB数据预处理工具", category: "odoo", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/refresh.svg"},
+        {name: "QBO分仓库存更新WEB数据同步工具", category: "odoo", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/refresh.svg"},
+        {name: "公司库内大屏显示工具", category: "odoo", status: "download", icon:"https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/monitor.svg"}
+    ];
+
     function login() {
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
@@ -290,19 +355,58 @@
 
         if(username === 'admin' && password === '010203') {
             document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('toolPage').style.display = 'block';
+            document.getElementById('toolPage').style.display = 'flex';
+            showCategory('all');
         } else {
             errorMsg.style.display = 'block';
         }
     }
 
-    function showTab(tab, event) {
-        document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-        document.getElementById('tab-' + tab).style.display = 'block';
-        event.currentTarget.classList.add('active');
+    function showCategory(category, element) {
+        const container = document.getElementById('toolsContainer');
+        const title = document.getElementById('systemTitle');
+        container.innerHTML = '';
+
+        const filtered = category === 'all' ? toolsData : toolsData.filter(t => t.category === category);
+
+        filtered.forEach(tool => {
+            const toolDiv = document.createElement('div');
+            toolDiv.className = 'tool';
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'tool-content';
+
+            const img = document.createElement('img');
+            img.src = tool.icon || 'https://cdn.jsdelivr.net/gh/tabler/tabler-icons/icons/tool.svg';
+            img.alt = tool.name;
+            contentDiv.appendChild(img);
+
+            const h3 = document.createElement('h3');
+            h3.innerText = tool.name;
+            contentDiv.appendChild(h3);
+
+            if(tool.status === 'download') {
+                const btn = document.createElement('a');
+                btn.href = '#';
+                btn.target = '_blank';
+                btn.innerHTML = '<button>下载</button>';
+                contentDiv.appendChild(btn);
+            } else {
+                const span = document.createElement('span');
+                span.innerText = '开发中';
+                contentDiv.appendChild(span);
+            }
+
+            toolDiv.appendChild(contentDiv);
+            container.appendChild(toolDiv);
+        });
+
+        title.innerText = category === 'all' ? '所有工具' : element ? element.querySelector('span').innerText : '工具中心';
+
+        if(element) {
+            document.querySelectorAll('.dock-item').forEach(d => d.classList.remove('active'));
+            element.classList.add('active');
+        }
     }
 </script>
-
 </body>
 </html>
