@@ -7,13 +7,15 @@
 <style>
     body {
         margin: 0;
-        font-family: 'Segoe UI', Arial, sans-serif;
-        background-color: #121212;
-        color: #00bfff;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        background-color: #1c1c1e;
+        color: #fff;
         display: flex;
         flex-direction: column;
         min-height: 100vh;
+        overflow: hidden;
     }
+    /* 登录页面 */
     #loginPage {
         display: flex;
         flex-direction: column;
@@ -22,66 +24,68 @@
         height: 100vh;
         text-align: center;
         padding: 0 10px;
-        box-sizing: border-box;
+        background-color: #1c1c1e;
     }
-    #loginPage img { width: 120px; margin-bottom: 20px; }
-    #loginPage h1 { margin-bottom: 10px; font-size: 2em; color: #1e90ff; }
-    #loginPage input { width: 100%; max-width: 300px; padding: 10px; margin: 5px 0; border-radius: 5px; border: none; outline: none; box-sizing: border-box; }
-    #loginPage button { width: 100%; max-width: 320px; padding: 10px; margin-top: 15px; border: none; border-radius: 5px; background: linear-gradient(90deg, #1e90ff, #00bfff); color: #fff; font-weight: bold; cursor: pointer; }
-    #loginPage .error { color: #ff4d4d; margin-top: 10px; display: none; }
+    #loginPage img { width: 100px; margin-bottom: 20px; }
+    #loginPage h1 { margin-bottom: 10px; font-size: 2em; color: #0a84ff; }
+    #loginPage input { width: 100%; max-width: 250px; padding: 8px; margin: 5px 0; border-radius: 6px; border: none; outline: none; box-sizing: border-box; background-color: #2c2c2e; color: #fff; }
+    #loginPage button { width: 100%; max-width: 260px; padding: 8px; margin-top: 15px; border: none; border-radius: 6px; background: linear-gradient(90deg, #0a84ff, #5ac8fa); color: #fff; font-weight: bold; cursor: pointer; }
+    #loginPage .error { color: #ff453a; margin-top: 10px; display: none; }
 
+    /* 工具中心页面 */
     #toolPage { display: none; flex: 1; flex-direction: column; }
+
+    /* 顶部栏 */
     #topBar {
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 15px;
-        border-bottom: 1px solid #00bfff50;
-        background: #1c1c1c;
+        height: 40px; display: flex; align-items: center;
+        justify-content: space-between; padding: 0 15px;
+        border-bottom: 1px solid #3a3a3c; background-color: #2c2c2e;
     }
-    #topBar .title { font-weight: bold; }
-    #topBar .info { font-size: 0.9em; }
-    #toolsContainerWrapper { flex: 1; display: flex; justify-content: center; align-items: flex-start; padding: 20px; overflow-y: auto; }
-    #toolsContainer { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; max-width: 1200px; width: 100%; }
+    #topBar .title { font-weight: 600; color: #fff; }
+    #topBar .info { font-size: 0.9em; color: #ccc; }
+
+    /* 中间卡片区域 */
+    #toolsContainerWrapper {
+        flex: 1; display: flex; justify-content: center; align-items: flex-start;
+        padding: 15px; overflow-y: auto;
+    }
+    #toolsContainer {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px; max-width: 1400px; width: 100%;
+        transition: all 0.4s ease;
+    }
 
     .tool {
-        background: #1c1c1c;
-        border: 1px solid #00bfff50;
-        border-radius: 10px;
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 0 15px #00bfff30;
-        transition: transform 0.2s;
-        min-height: 160px;
+        background: #2c2c2e; border-radius: 12px;
+        padding: 10px; display: flex; flex-direction: column; align-items: center;
+        justify-content: space-between; box-shadow: 0 2px 10px rgba(10, 132, 255, 0.2);
+        transition: transform 0.3s, opacity 0.3s;
+        min-height: 120px; font-size: 0.9em;
     }
-    .tool:hover { transform: translateY(-5px); box-shadow: 0 0 25px #00bfff70; }
-    .tool svg { width: 50px; height: 50px; margin-bottom: 10px; fill: #00bfff; }
-    .tool h3 { font-size: 1.1em; color: #00bfff; margin-bottom: 10px; text-align: center; }
-    .tool button, .tool span { width: 100%; padding: 8px 0; margin-top: 10px; font-weight: bold; text-align: center; border-radius: 5px; border: none; }
-    .tool button { background: linear-gradient(90deg, #1e90ff, #00bfff); color: #fff; cursor: pointer; }
-    .tool span { background: #444; color: #00bfff; cursor: default; }
+    .tool:hover { transform: translateY(-3px); box-shadow: 0 4px 20px rgba(10, 132, 255, 0.4); }
+    .tool svg { width: 40px; height: 40px; margin-bottom: 8px; fill: #0a84ff; }
+    .tool h3 { font-size: 0.95em; color: #0a84ff; margin-bottom: 6px; text-align: center; }
+    .tool button, .tool span { width: 100%; padding: 6px 0; margin-top: 6px; font-weight: 600; text-align: center; border-radius: 6px; border: none; }
+    .tool button { background: linear-gradient(90deg, #0a84ff, #5ac8fa); color: #fff; cursor: pointer; }
+    .tool span { background: #3a3a3c; color: #0a84ff; cursor: default; }
     a { text-decoration: none; width: 100%; }
 
+    /* 底部 Dock */
     #dock {
-        height: 70px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #1c1c1c;
-        border-top: 1px solid #00bfff50;
-        padding: 0 10px;
-        box-sizing: border-box;
+        height: 60px; display: flex; justify-content: center; align-items: center;
+        background: #2c2c2e; border-top: 1px solid #3a3a3c; padding: 0 10px;
     }
-    .dock-item { width: 60px; height: 60px; margin: 0 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
-    .dock-item svg { width: 30px; height: 30px; fill: #00bfff; margin-bottom: 3px; }
-    .dock-item span { font-size: 0.7em; color: #00bfff; text-align: center; }
+    .dock-item {
+        width: 50px; height: 50px; margin: 0 8px; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s;
+    }
+    .dock-item:hover { transform: scale(1.2); }
+    .dock-item svg { width: 28px; height: 28px; fill: #0a84ff; margin-bottom: 2px; }
+    .dock-item span { font-size: 0.7em; color: #0a84ff; text-align: center; }
 
-    @media (max-width: 1200px) { #toolsContainer { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 900px) { #toolsContainer { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 1200px) { #toolsContainer { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); } }
+    @media (max-width: 900px) { #toolsContainer { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); } }
     @media (max-width: 600px) { #toolsContainer { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -113,7 +117,7 @@
 </div>
 
 <script>
-// 工具数据，带分类
+// 所有 App 数据
 const toolsData = [
     {name: "网站产品最新序号获取工具", status: "download", category:"web"},
     {name: "网站产品价格更新工具", status: "download", category:"web"},
@@ -142,39 +146,31 @@ function login() {
 
 function renderTools(category=null) {
     const container = document.getElementById('toolsContainer');
-    container.innerHTML = '';
-    let filteredTools = category ? toolsData.filter(t=>t.category===category) : toolsData;
-    filteredTools.forEach(tool => {
-        const div = document.createElement('div');
-        div.className = 'tool';
-        div.innerHTML = `<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28"/></svg>`;
-        const h3 = document.createElement('h3');
-        h3.innerText = tool.name;
-        div.appendChild(h3);
-        if(tool.status === 'download') {
-            const btn = document.createElement('button');
-            btn.innerText = '下载';
-            div.appendChild(btn);
-        } else {
-            const span = document.createElement('span');
-            span.innerText = '开发中';
-            div.appendChild(span);
-        }
-        container.appendChild(div);
-    });
+    const oldTools = Array.from(container.children);
+    // 渐隐旧卡片
+    oldTools.forEach(el => { el.style.opacity = 0; });
+    setTimeout(() => {
+        container.innerHTML = '';
+        let filteredTools = category ? toolsData.filter(t=>t.category===category) : toolsData;
+        filteredTools.forEach(tool => {
+            const div = document.createElement('div');
+            div.className = 'tool';
+            div.style.opacity = 0;
+            div.innerHTML = `<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28"/></svg>`;
+            const h3 = document.createElement('h3'); h3.innerText = tool.name; div.appendChild(h3);
+            if(tool.status === 'download') { const btn = document.createElement('button'); btn.innerText = '下载'; div.appendChild(btn); }
+            else { const span = document.createElement('span'); span.innerText = '开发中'; div.appendChild(span); }
+            container.appendChild(div);
+            setTimeout(() => { div.style.opacity = 1; }, 50);
+        });
+    }, 200);
 }
 
-function filterCategory(category) {
-    renderTools(category);
-}
+function filterCategory(category) { renderTools(category); }
 
-// 更新顶部时间
 function updateDateTime() {
     const dt = document.getElementById('dateTime');
-    setInterval(() => {
-        const now = new Date();
-        dt.innerText = now.toLocaleString();
-    }, 1000);
+    setInterval(() => { dt.innerText = new Date().toLocaleString(); }, 1000);
 }
 </script>
 </body>
