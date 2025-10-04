@@ -44,18 +44,24 @@ body {
 #topBar .title { font-weight:600; color:#fff; }
 #topBar .info { font-size:0.9em; color:#ccc; }
 
-#toolsContainerWrapper { flex:1; overflow:hidden; padding:15px; display:flex; justify-content:center; gap:15px; }
+#toolsContainerWrapper {
+    flex:1; display:flex; justify-content:center; align-items:flex-start;
+    gap:15px; padding:15px; overflow:auto;
+}
 
-/* 每列固定宽度，独立滚动 */
+/* 四列外框 */
 .column {
     display:flex;
     flex-direction:column;
-    min-width:160px;
-    max-width:160px;
-    background: #1c1c1e;
-    border-radius: 10px;
-    padding:8px;
+    min-width:180px;
+    max-width:180px;
+    background: #2c2c2e;
+    border-radius: 12px;
+    padding:10px;
+    gap:10px;
+    flex-shrink:0;
     overflow-y:auto;
+    height: calc(100% - 20px); /* 留出padding */
     scrollbar-width: thin;
     scrollbar-color: #0a84ff #2c2c2e;
 }
@@ -63,31 +69,31 @@ body {
 .column::-webkit-scrollbar-thumb { background:#0a84ff; border-radius:3px; }
 .column::-webkit-scrollbar-track { background:#2c2c2e; }
 
-.column h2 { text-align:center; color:#0a84ff; margin-bottom:8px; font-size:1em; flex-shrink:0; }
+/* 列顶部标题 */
+.column h2 { text-align:center; color:#0a84ff; font-size:1em; margin-bottom:8px; flex-shrink:0; }
 
 /* 卡片样式 */
 .tool {
-    background: #2c2c2e;
+    background: #3a3a3c;
     border-radius: 10px;
     padding: 8px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    width: 140px;  
-    height: 120px; 
+    width: 160px;  
+    height: 110px; 
     font-size: 0.85em;
     box-shadow: 0 2px 8px rgba(10,132,255,0.2);
     transition: transform 0.2s, box-shadow 0.2s;
-    margin-bottom:10px;
     flex-shrink:0;
 }
 .tool:hover { transform: translateY(-3px); box-shadow: 0 4px 16px rgba(10,132,255,0.4); }
-.tool svg { width:32px; height:32px; margin-bottom:6px; fill:#0a84ff; }
-.tool h3 { font-size:0.85em; color:#0a84ff; margin-bottom:4px; text-align:center; }
-.tool button, .tool span { width:100%; padding:5px 0; margin-top:4px; font-weight:600; text-align:center; border-radius:6px; border:none; font-size:0.8em; }
+.tool svg { width:28px; height:28px; margin-bottom:6px; fill:#0a84ff; }
+.tool h3 { font-size:0.8em; color:#0a84ff; margin-bottom:4px; text-align:center; }
+.tool button, .tool span { width:100%; padding:4px 0; margin-top:4px; font-weight:600; text-align:center; border-radius:6px; border:none; font-size:0.75em; }
 .tool button { background:linear-gradient(90deg,#0a84ff,#5ac8fa); color:#fff; cursor:pointer; }
-.tool span { background:#3a3a3c; color:#0a84ff; cursor:default; }
+.tool span { background:#2c2c2e; color:#0a84ff; cursor:default; }
 
 /* Dock */
 #dock {
@@ -100,7 +106,6 @@ body {
 .dock-item:hover { transform: scale(1.2); }
 .dock-item svg { width:24px; height:24px; fill:#0a84ff; margin-bottom:2px; }
 .dock-item span { font-size:0.7em; color:#0a84ff; text-align:center; }
-
 </style>
 </head>
 <body>
@@ -123,9 +128,12 @@ body {
         <div class="title">DodoWheels工具中心</div>
         <div class="info" id="dateTime"></div>
     </div>
+
     <div id="toolsContainerWrapper">
+        <!-- 四列容器 -->
         <div id="toolsContainer"></div>
     </div>
+
     <div id="dock">
         <div class="dock-item"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28"/></svg><span>Web</span></div>
         <div class="dock-item"><svg viewBox="0 0 64 64"><rect x="12" y="12" width="40" height="40"/></svg><span>QBO</span></div>
@@ -179,6 +187,9 @@ function login(){
 function renderTools(){
     const container=document.getElementById('toolsContainer');
     container.innerHTML='';
+    container.style.display='flex';
+    container.style.gap='15px';
+
     const order=['web','qbo','workflow','other'];
     order.forEach(category=>{
         const col=document.createElement('div');
@@ -186,6 +197,7 @@ function renderTools(){
         const title=document.createElement('h2');
         title.innerText=category.toUpperCase();
         col.appendChild(title);
+
         toolsData[category].forEach(name=>{
             const div=document.createElement('div');
             div.className='tool';
