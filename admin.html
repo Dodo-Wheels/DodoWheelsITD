@@ -14,8 +14,6 @@
         flex-direction: column;
         min-height: 100vh;
     }
-
-    /* 登录页面 */
     #loginPage {
         display: flex;
         flex-direction: column;
@@ -28,26 +26,14 @@
     }
     #loginPage img { width: 120px; margin-bottom: 20px; }
     #loginPage h1 { margin-bottom: 10px; font-size: 2em; color: #1e90ff; }
-    #loginPage input {
-        width: 100%; max-width: 300px; padding: 10px; margin: 5px 0;
-        border-radius: 5px; border: none; outline: none; box-sizing: border-box;
-    }
-    #loginPage button {
-        width: 100%; max-width: 320px; padding: 10px; margin-top: 15px;
-        border: none; border-radius: 5px;
-        background: linear-gradient(90deg, #1e90ff, #00bfff);
-        color: #fff; font-weight: bold; cursor: pointer;
-    }
+    #loginPage input { width: 100%; max-width: 300px; padding: 10px; margin: 5px 0; border-radius: 5px; border: none; outline: none; box-sizing: border-box; }
+    #loginPage button { width: 100%; max-width: 320px; padding: 10px; margin-top: 15px; border: none; border-radius: 5px; background: linear-gradient(90deg, #1e90ff, #00bfff); color: #fff; font-weight: bold; cursor: pointer; }
     #loginPage .error { color: #ff4d4d; margin-top: 10px; display: none; }
-
-    /* 工具中心页面 */
     #toolPage { display: none; padding: 20px; flex: 1; box-sizing: border-box; }
     h1 { text-align: center; margin: 20px 0; font-size: 2em; }
-
-    /* 网格卡片布局 */
     .tools {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-template-columns: repeat(4, 1fr);
         gap: 15px;
     }
     .tool {
@@ -58,30 +44,24 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: space-between;
         box-shadow: 0 0 15px #00bfff30;
         transition: transform 0.2s;
+        min-height: 160px;
     }
     .tool:hover { transform: translateY(-5px); box-shadow: 0 0 25px #00bfff70; }
-    .tool img { width: 50px; height: 50px; margin-bottom: 10px; }
+    .tool svg { width: 50px; height: 50px; margin-bottom: 10px; fill: #00bfff; }
     .tool h3 { font-size: 1.1em; color: #00bfff; margin-bottom: 10px; text-align: center; }
-    .tool button, .tool span {
-        width: 100%; padding: 8px 0; margin-top: 10px;
-        font-weight: bold; text-align: center; border-radius: 5px; border: none;
-    }
+    .tool button, .tool span { width: 100%; padding: 8px 0; margin-top: 10px; font-weight: bold; text-align: center; border-radius: 5px; border: none; }
     .tool button { background: linear-gradient(90deg, #1e90ff, #00bfff); color: #fff; cursor: pointer; }
     .tool span { background: #444; color: #00bfff; cursor: default; }
-
     a { text-decoration: none; width: 100%; }
-
-    @media (max-width: 600px) {
-        #loginPage input, #loginPage button { width: 90%; }
-        .tool img { width: 40px; height: 40px; }
-    }
+    @media (max-width: 1200px) { .tools { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 900px)  { .tools { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px)  { .tools { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
-
-<!-- 登录页面 -->
 <div id="loginPage">
     <img src="logo.png" alt="DodoWheels Logo">
     <h1>DodoWheels自研系统平台</h1>
@@ -91,7 +71,6 @@
     <div class="error" id="errorMsg">用户名或密码错误</div>
 </div>
 
-<!-- 工具中心页面 -->
 <div id="toolPage">
     <h1>所有工具</h1>
     <div class="tools" id="toolsContainer"></div>
@@ -99,38 +78,38 @@
 
 <script>
 const toolsData = [
-    {name: "网站产品最新序号获取工具", status: "download"},
-    {name: "网站产品价格更新工具", status: "download"},
-    {name: "网站新增产品工具", status: "download"},
-    {name: "网站客户端产品检查工具", status: "download"},
-    {name: "网站服务端产品检查工具", status: "dev"},
-    {name: "网站客户端产品抓取工具", status: "download"},
-    {name: "网站客户信息抓取工具", status: "dev"},
-    {name: "网站服务端订单抓取工具", status: "download"},
-    {name: "网站车辆适配信息工具", status: "dev"},
-    {name: "网站OnHand库存-Name更新工具", status: "download"},
-    {name: "网站OnHand库存-Sku更新工具", status: "download"},
-    {name: "网站产品SKU更新工具", status: "download"},
-    {name: "网站产品名称更新工具", status: "download"},
-    {name: "网站PO数量-DNS更新工具", status: "download"},
-    {name: "QBO产品名称调整工具", status: "download"},
-    {name: "QBO产品库存初始化预处理工具", status: "download"},
-    {name: "QBO产品库存初始化工具", status: "download"},
-    {name: "QBO产品库存调整工具", status: "download"},
-    {name: "QBO新建产品工具", status: "download"},
-    {name: "QBO价格维护工具", status: "download"},
-    {name: "QBO产品SKU更新工具", status: "download"},
-    {name: "工作流数据工具", status: "download"},
-    {name: "OCR识别工具", status: "download"},
-    {name: "DodoWheels数据中心", status: "dev"},
-    {name: "DodoWheels智能AI小助手", status: "download"},
-    {name: "DodoWheels价格查询工具", status: "download"},
-    {name: "QBO和WEB库存数量校验工具", status: "download"},
-    {name: "车辆数据适配预处理工具", status: "download"},
-    {name: "QBO和WEB库存数据校验工具", status: "download"},
-    {name: "QBO分仓库存更新WEB数据预处理工具", status: "download"},
-    {name: "QBO分仓库存更新WEB数据同步工具", status: "download"},
-    {name: "公司库内大屏显示工具", status: "download"}
+    {name: "网站产品最新序号获取工具", status: "download", icon: '<circle cx="32" cy="32" r="30"/>'},
+    {name: "网站产品价格更新工具", status: "download", icon: '<rect x="12" y="12" width="40" height="40" rx="5"/>'},
+    {name: "网站新增产品工具", status: "download", icon: '<polygon points="32,8 56,56 8,56"/>'},
+    {name: "网站客户端产品检查工具", status: "download", icon: '<path d="M16 32h32M32 16v32"/>'},
+    {name: "网站服务端产品检查工具", status: "dev", icon: '<circle cx="32" cy="32" r="24"/>'},
+    {name: "网站客户端产品抓取工具", status: "download", icon: '<path d="M16 16h32v32H16z"/>'},
+    {name: "网站客户信息抓取工具", status: "dev", icon: '<polygon points="32,8 56,32 32,56 8,32"/>'},
+    {name: "网站服务端订单抓取工具", status: "download", icon: '<circle cx="32" cy="32" r="20"/>'},
+    {name: "网站车辆适配信息工具", status: "dev", icon: '<rect x="16" y="16" width="32" height="32"/>'},
+    {name: "网站OnHand库存-Name更新工具", status: "download", icon: '<path d="M16 32h32"/>'},
+    {name: "网站OnHand库存-Sku更新工具", status: "download", icon: '<path d="M32 16v32"/>'},
+    {name: "网站产品SKU更新工具", status: "download", icon: '<circle cx="32" cy="32" r="12"/>'},
+    {name: "网站产品名称更新工具", status: "download", icon: '<rect x="20" y="20" width="24" height="24"/>'},
+    {name: "网站PO数量-DNS更新工具", status: "download", icon: '<polygon points="32,16 48,48 16,48"/>'},
+    {name: "QBO产品名称调整工具", status: "download", icon: '<circle cx="32" cy="32" r="28"/>'},
+    {name: "QBO产品库存初始化预处理工具", status: "download", icon: '<rect x="12" y="12" width="40" height="40"/>'},
+    {name: "QBO产品库存初始化工具", status: "download", icon: '<polygon points="32,8 56,56 8,56"/>'},
+    {name: "QBO产品库存调整工具", status: "download", icon: '<path d="M16 32h32M32 16v32"/>'},
+    {name: "QBO新建产品工具", status: "download", icon: '<circle cx="32" cy="32" r="24"/>'},
+    {name: "QBO价格维护工具", status: "download", icon: '<path d="M16 16h32v32H16z"/>'},
+    {name: "QBO产品SKU更新工具", status: "download", icon: '<polygon points="32,8 56,32 32,56 8,32"/>'},
+    {name: "工作流数据工具", status: "download", icon: '<circle cx="32" cy="32" r="20"/>'},
+    {name: "OCR识别工具", status: "download", icon: '<rect x="16" y="16" width="32" height="32"/>'},
+    {name: "DodoWheels数据中心", status: "dev", icon: '<path d="M16 32h32"/>'},
+    {name: "DodoWheels智能AI小助手", status: "download", icon: '<path d="M32 16v32"/>'},
+    {name: "DodoWheels价格查询工具", status: "download", icon: '<circle cx="32" cy="32" r="12"/>'},
+    {name: "QBO和WEB库存数量校验工具", status: "download", icon: '<rect x="20" y="20" width="24" height="24"/>'},
+    {name: "车辆数据适配预处理工具", status: "download", icon: '<polygon points="32,16 48,48 16,48"/>'},
+    {name: "QBO和WEB库存数据校验工具", status: "download", icon: '<circle cx="32" cy="32" r="28"/>'},
+    {name: "QBO分仓库存更新WEB数据预处理工具", status: "download", icon: '<rect x="12" y="12" width="40" height="40"/>'},
+    {name: "QBO分仓库存更新WEB数据同步工具", status: "download", icon: '<polygon points="32,8 56,56 8,56"/>'},
+    {name: "公司库内大屏显示工具", status: "download", icon: '<path d="M16 32h32M32 16v32"/>'}
 ];
 
 function login() {
@@ -149,6 +128,8 @@ function renderTools() {
     toolsData.forEach(tool => {
         const div = document.createElement('div');
         div.className = 'tool';
+        // 插入 SVG
+        div.innerHTML = `<svg viewBox="0 0 64 64">${tool.icon}</svg>`;
         const h3 = document.createElement('h3');
         h3.innerText = tool.name;
         div.appendChild(h3);
@@ -165,6 +146,5 @@ function renderTools() {
     });
 }
 </script>
-
 </body>
 </html>
