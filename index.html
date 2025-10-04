@@ -10,10 +10,10 @@
         background: linear-gradient(160deg, #1e1e1e, #2a2a2a);
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         min-height: 100vh;
+        color: #fff;
         display: flex;
         justify-content: center;
         align-items: center;
-        color: #fff;
     }
 
     /* 登录页 */
@@ -165,7 +165,7 @@
         <div id="errorMsg">密码错误</div>
     </div>
 
-    <!-- 工具主页面 -->
+    <!-- 主页面 -->
     <div id="toolPage">
         <div class="topbar">
             <span id="time"></span>
@@ -201,13 +201,14 @@
             </div>
         </div>
 
-        <!-- Dock（默认隐藏，登录后显示） -->
+        <!-- Dock -->
         <div class="dock" id="dock" style="display:none;">
             <div class="dock-icon" onclick="filterCategory('ALL')"><img src="https://www.svgrepo.com/show/532395/apps.svg"></div>
             <div class="dock-icon" onclick="filterCategory('WEB')"><img src="https://www.svgrepo.com/show/488319/browser.svg"></div>
             <div class="dock-icon" onclick="filterCategory('QBO')"><img src="https://www.svgrepo.com/show/374101/database.svg"></div>
             <div class="dock-icon" onclick="filterCategory('OTHER')"><img src="https://www.svgrepo.com/show/473614/tools.svg"></div>
             <div class="dock-icon" onclick="filterCategory('SYSTEM')"><img src="https://www.svgrepo.com/show/473750/settings.svg"></div>
+            <div class="dock-icon" onclick="logout()"><img src="https://www.svgrepo.com/show/503099/power-off.svg"></div>
         </div>
     </div>
 
@@ -223,6 +224,13 @@ function login() {
     }
 }
 
+function logout() {
+    document.getElementById("toolPage").style.display = "none";
+    document.getElementById("loginPage").style.display = "flex";
+    document.getElementById("password").value = "";
+    document.getElementById("errorMsg").style.display = "none";
+}
+
 /* 时间显示 */
 function updateTime() {
     const now = new Date();
@@ -232,7 +240,7 @@ function updateTime() {
 setInterval(updateTime, 1000);
 updateTime();
 
-/* Dock 点击过滤分类 */
+/* Dock 分类切换 */
 function filterCategory(cat) {
     const categories = document.querySelectorAll(".category");
     categories.forEach(c => {
