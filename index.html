@@ -44,15 +44,18 @@ body {
 #topBar .title { font-weight:600; color:#fff; }
 #topBar .info { font-size:0.9em; color:#ccc; }
 
-#toolsContainerWrapper { flex:1; overflow-y:auto; padding:15px; display:flex; justify-content:center; }
+#toolsContainerWrapper { flex:1; overflow-y:auto; padding:15px; display:flex; justify-content:center; gap:15px; }
+
+/* 每列固定宽度，四列布局 */
 .column {
     display:flex;
     flex-direction:column;
-    margin:0 10px;
-    min-width:160px; 
+    min-width:160px;
     max-width:160px;
 }
 .column h2 { text-align:center; color:#0a84ff; margin-bottom:8px; font-size:1em; }
+
+/* 卡片样式 */
 .tool {
     background: #2c2c2e;
     border-radius: 10px;
@@ -75,6 +78,7 @@ body {
 .tool button { background:linear-gradient(90deg,#0a84ff,#5ac8fa); color:#fff; cursor:pointer; }
 .tool span { background:#3a3a3c; color:#0a84ff; cursor:default; }
 
+/* Dock */
 #dock {
     height:60px; display:flex; justify-content:center; align-items:center; background:#2c2c2e; border-top:1px solid #3a3a3c;
 }
@@ -156,7 +160,9 @@ function login(){
 function renderTools(){
     const container=document.getElementById('toolsContainer');
     container.innerHTML='';
-    for(const category in toolsData){
+    // 循环四个菜单生成列
+    const order=['web','qbo','workflow','other'];
+    order.forEach(category=>{
         const col=document.createElement('div');
         col.className='column';
         const title=document.createElement('h2');
@@ -169,7 +175,7 @@ function renderTools(){
             col.appendChild(div);
         });
         container.appendChild(col);
-    }
+    });
 }
 
 function updateDateTime(){
