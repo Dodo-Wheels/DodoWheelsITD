@@ -66,7 +66,7 @@
                 仓储库存管理系统（WMS）升级方案
             </h1>
             <p class="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
-                本次升级的首要目标是<strong class="text-secondary font-bold">解决产品库位和数量的实时准确性问题</strong>，需全新开发一套WMS系统，以取代QBO库位，实现精细化库存控制与流程优化。
+                本次升级的首要目标是<strong class="text-secondary font-bold">解决产品库位和数量的实时准确性问题</strong>，需全新开发一套WMS系统，以取代QBO系统使用描述显示库位和数量，实现精细化库存控制与流程优化。
             </p>
         </header>
 
@@ -154,7 +154,7 @@
                                 缺点 (Drawback)
                             </h4>
                             <ul class="list-disc list-inside text-sm text-red-600 space-y-0.5">
-                                <li>QBO下单时需同步操作WMS，增加客服负担。</li>
+                                <li>QBO下单时需同步操作WMS，增加客服操作。</li>
                                 <li>**核心缺陷：** 库位信息仍依赖库内人员手动勾选或遵循，存在人为错误风险。</li>
                             </ul>
                         </div>
@@ -169,9 +169,9 @@
                     </div>
                     
                     <div class="space-y-4 text-gray-600 mb-6">
-                        <p><strong class="font-medium text-gray-900">系统要求：</strong> 需**专门开发一套库内人员的手机端使用系统**，以支持实时拣货操作。</p>
-                        <p><strong class="font-medium text-gray-900">操作流程：</strong> 库位所有人员通过手机端在WMS拣货时，**实时选择产品的拣货位置和数量**进行操作。操作完成后，系统批处理更新网站数据。</p>
-                        <p><strong class="font-medium text-secondary">扣减逻辑：</strong> 库内人员实时操作，WMS根据实际拣货**仓位和数量**进行扣减。</p>
+                        <p><strong class="font-medium text-gray-900">系统要求：</strong> 需开发定制化的**移动操作终端 (PDA/手持设备)** 应用程序，并具备与前端销售/ERP系统（如QBO）的**API集成能力**。</p>
+                        <p><strong class="font-medium text-gray-900">操作流程：</strong> 仓储操作员（Picker/Packer）通过移动终端扫描作业单据，并执行拣货任务。系统将**强制扫描**实际拣货库位和商品条码，进行数量校验并确认出库。</p>
+                        <p><strong class="font-medium text-secondary">扣减逻辑：</strong> 基于**实际物理作业**的库位和数量进行实时精确扣减（<strong class='text-secondary'>What-You-Scan-Is-What-You-Get原则</strong>）。</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -181,9 +181,9 @@
                                 优点 (Advantage)
                             </h4>
                             <ul class="list-disc list-inside text-sm text-green-600 space-y-0.5">
-                                <li>**核心优势：** 可以**实时扣减准确的仓位和数量**。</li>
-                                <li>库存数据最真实反映物理位置，支持精细化管理。</li>
-                                <li>客服流程得以简化。</li>
+                                <li>**核心优势：** 实现**基于物理位置的库存可视化与实时精确管理**。</li>
+                                <li>库存数据最真实反映物理位置，支持精细化管理和**先进先出（FIFO）**等复杂策略。</li>
+                                <li>客服下单流程得以简化，实现业务流程优化。</li>
                             </ul>
                         </div>
                         <div class="p-3 bg-red-50 rounded-lg border border-red-200">
@@ -192,8 +192,8 @@
                                 缺点 (Drawback)
                             </h4>
                             <ul class="list-disc list-inside text-sm text-red-600 space-y-0.5">
-                                <li>**成本高：** 需额外开发手机端系统，增加开发与维护成本。</li>
-                                <li>**风险高：** 库内人员不稳定，操作规范性差可能导致数据错误。</li>
+                                <li>涉及定制化移动应用开发，**项目实施周期和初期投入成本显著高于方案一**。</li>
+                                <li>对库内操作人员的培训和流程合规性要求极高，初期数据采集和操作失误风险较大。</li>
                             </ul>
                         </div>
                     </div>
@@ -251,7 +251,7 @@
 
     <!-- 底部脚注 -->
     <footer class="mt-16 text-center text-gray-500 text-sm">
-        &copy; 2024 [公司名称/部门] 运营优化项目组
+        &copy; 2025 [DodoWheels/ITD]
     </footer>
 
 </body>
