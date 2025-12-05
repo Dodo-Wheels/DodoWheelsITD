@@ -9,28 +9,28 @@
     <!-- 使用现代字体链，强调简洁 -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* 1. 颜色变量 (更精致的蓝色和灰色调) */
+        /* 1. 颜色变量 (Mac 暗黑模式调色板) */
         :root {
-            --primary-blue: #007AFF; /* 鲜明的主蓝色 */
-            --light-blue: #f0f8ff; /* 极浅的蓝色背景，用于悬停/引用 */
-            --page-bg: #f8f8f8; /* 干净的页面背景 */
-            --card-bg: white;
-            --dark-text: #1c1c1e; /* 几乎黑色，用于强调 */
-            --medium-text: #666666; /* 中灰色，用于辅助文字 */
-            --border-light: #e6e6e6; /* 极浅边框 */
-            --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.02);
-            --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.05); /* 软阴影 */
+            --primary-blue: #0A84FF; /* 鲜明的 Mac 蓝色 */
+            --page-bg: #1A1A1A; /* 极深页面背景 */
+            --card-bg: #2C2C2C; /* 略浅的卡片背景，提供层次感 */
+            --dark-text: #FDFDFD; /* 主文本色 (白色) */
+            --medium-text: #9E9E9E; /* 辅助文本色 (中灰色) */
+            --border-light: #444444; /* 深色边框和分隔线 */
+            --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+            --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.2); /* 更深的软阴影 */
+            --hover-bg: #3A3A40; /* 列表项悬停/引用背景 */
+            --error-red: #FF453A; /* iOS 风格的错误红 */
         }
 
         /* 2. 全局样式和字体调整 */
         body {
-            /* 尝试模拟 Mac/iOS 系统的字体链，并使用更轻的默认字重 */
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
             background-color: var(--page-bg);
-            color: var(--dark-text);
+            color: var(--dark-text); /* 默认文字颜色为亮色 */
             min-height: 100vh;
         }
 
@@ -47,12 +47,13 @@
 
         .auth-card {
             background-color: var(--card-bg);
-            padding: 50px 40px; /* 增加上下留白 */
-            border-radius: 16px; /* 更圆润的圆角 */
+            padding: 50px 40px;
+            border-radius: 16px;
             box-shadow: var(--shadow-card);
-            max-width: 380px; /* 进一步收窄，更精致 */
+            max-width: 380px;
             width: 100%;
-            border: 1px solid var(--border-light); /* 增加微妙的边框 */
+            /* 移除顶部分割线，使用边框和阴影提供层次 */
+            border: 1px solid var(--border-light); 
         }
 
         /* 4. 认证输入及按钮样式 */
@@ -70,6 +71,7 @@
         .auth-card img {
             height: 32px;
             margin-right: 10px;
+            /* 增加一点对比度，确保在暗色背景下清晰 */
         }
 
         .auth-card p {
@@ -79,18 +81,25 @@
 
         input[type="password"] {
             width: calc(100% - 24px);
-            padding: 14px 12px; /* 增加输入框高度 */
+            padding: 14px 12px;
+            background-color: #1e1e1e; /* 输入框背景更深 */
             border: 1px solid var(--border-light);
+            color: var(--dark-text); /* 输入文字颜色 */
             border-radius: 10px;
             font-size: 1em;
             box-sizing: border-box;
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
+        /* placeholder 颜色适应暗黑模式 */
+        input::placeholder {
+            color: var(--medium-text); 
+            opacity: 0.7;
+        }
 
         input[type="password"]:focus {
             border-color: var(--primary-blue);
             outline: none;
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.15); /* 更柔和的聚焦光环 */
+            box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.3); /* 蓝色聚焦光环 */
         }
 
         button {
@@ -109,15 +118,12 @@
         }
 
         button:hover {
-            background-color: #0060e6;
+            background-color: #0072e6; /* 蓝色加深 */
             transform: translateY(-1px);
-        }
-        button:active {
-            transform: translateY(0);
         }
 
         .error-message {
-            color: #ff3b30;
+            color: var(--error-red);
             margin-top: 10px;
             font-weight: 400;
             font-size: 0.9em;
@@ -138,7 +144,7 @@
         }
 
         header {
-            background-color: var(--card-bg);
+            background-color: var(--card-bg); /* 标题栏使用卡片背景色 */
             color: var(--dark-text);
             padding: 20px 0;
             text-align: center;
@@ -155,7 +161,7 @@
         }
         
         .main-content {
-            max-width: 750px; /* 略微收窄，更聚焦 */
+            max-width: 750px;
             margin: 0 auto;
             background-color: var(--card-bg);
             padding: 40px;
@@ -182,15 +188,14 @@
         .sop-list li {
             margin-bottom: 12px;
             padding-left: 20px;
-            /* 细且柔和的左侧装饰线 */
-            border-left: 3px solid var(--primary-blue); 
+            border-left: 3px solid var(--primary-blue);
             transition: background-color 0.2s ease, transform 0.1s ease;
             border-radius: 4px;
         }
 
         .sop-list li:hover {
-            background-color: var(--light-blue);
-            transform: translateX(3px); /* 略微位移，提供交互反馈 */
+            background-color: var(--hover-bg); /* 暗黑模式下的悬停背景 */
+            transform: translateX(3px);
         }
 
         .sop-list a {
@@ -199,7 +204,7 @@
             font-size: 1.1em;
             font-weight: 400;
             display: block;
-            padding: 15px 10px; /* 增加点击区域和留白 */
+            padding: 15px 10px;
         }
 
         .sop-list a:hover {
@@ -214,7 +219,7 @@
         }
 
         blockquote {
-            background-color: var(--light-blue);
+            background-color: var(--hover-bg); /* 暗黑模式下的引用背景 */
             border-left: 4px solid var(--primary-blue);
             padding: 15px;
             margin-top: 40px;
