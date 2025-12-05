@@ -3,396 +3,428 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOP 访问 / SOP Access / Accès SOP</title>
+    <title data-key="title_page">【DodoWheels】库存信息录入规范通知</title>
+    <!-- 引入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Mac Dark Mode Base Styles */
-        :root {
-            --color-bg-primary: #1e1e1e; 
-            --color-bg-secondary: #2c2c2c; /* Sidebar background */
-            --color-text-primary: #ffffff;
-            --color-text-secondary: #cccccc;
-            --color-accent-blue: #0a84ff;
-            --color-accent-hover: #3895ff;
-            --color-border: #444444;
-            --color-shadow: rgba(0, 0, 0, 0.5);
-            --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-        }
-
-        /* 基础样式：居中、全屏 */
+        /* 引入Inter字体 */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
         body {
-            font-family: var(--font-family-sans);
-            background-color: var(--color-bg-primary);
-            color: var(--color-text-primary);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden; 
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
         }
-        
-        /* 登录页容器：居中显示 */
-        #password-page {
-            padding: 50px;
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px var(--color-shadow);
-            background-color: var(--color-bg-primary); 
-            position: relative;
-            z-index: 2;
+        .header-bg {
+            background-image: linear-gradient(135deg, #004d99 0%, #007bff 100%); /* Deep blue gradient */
         }
-        
-        /* 全屏容器：用于登录后 */
-        .main-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw; 
-            height: 100vh;
-            display: none; 
-            background-color: var(--color-bg-primary); 
-            z-index: 1; 
-            flex-direction: column;
+        .rule-item {
+            border-left: 4px solid #007bff; /* Blue border for data entry emphasis */
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+            background-color: #f8fbff; /* Very light blue background */
+            padding: 1rem;
+            border-radius: 0.5rem;
         }
-
-        /* 目录布局 */
-        #sop-directory {
-            flex-grow: 1;
-            overflow: hidden;
-            display: flex; 
+        .rule-item.picking {
+            border-left: 4px solid #8b5cf6; /* Purple border for picking rules */
+            background-color: #fcf9ff; /* Very light purple background */
         }
-
-        /* --- 左侧菜单 (Sidebar) --- */
-        #sidebar {
-            /* 关键调整: 宽度从 280px 缩小到 220px */
-            width: **220px**; 
-            background-color: var(--color-bg-secondary);
-            padding: 20px 0;
-            flex-shrink: 0;
-            border-right: 1px solid var(--color-border);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-            box-sizing: border-box;
+        .rule-item.audit {
+            border-left: 4px solid #f97316; /* Orange border for audit rules */
+            background-color: #fffbeb; /* Light yellow background */
         }
-
-        #menu-top {
-            overflow-y: auto; 
-        }
-
-        #sidebar h2 {
-            color: var(--color-accent-blue);
-            /* 缩小标题左右间距 */
-            margin: 0 **15px** 20px; 
+        .format-example {
+            background-color: #e2e8f0;
+            color: #333;
             font-weight: 600;
-            font-size: 18px; /* 略微缩小字体 */
-            border-bottom: 1px solid var(--color-border);
-            padding-bottom: 10px;
-        }
-
-        .menu-item {
-            display: block;
-            /* 缩小菜单项垂直和水平内边距 */
-            padding: **10px 15px**; 
-            margin: 2px 0;
-            color: var(--color-text-primary);
-            text-decoration: none;
-            cursor: pointer;
-            transition: background-color 0.2s, color 0.2s;
-            border-left: 3px solid transparent;
-        }
-
-        .menu-item:hover {
-            background-color: #383838;
-        }
-
-        .menu-item.active {
-            background-color: rgba(10, 132, 255, 0.2); 
-            border-left-color: var(--color-accent-blue);
-            font-weight: 500;
-        }
-        
-        /* --- 底部控制区 (语言切换/退出) --- */
-        #sidebar-footer {
-            border-top: 1px solid var(--color-border);
-            padding: **15px**; /* 缩小内边距 */
-            flex-shrink: 0;
-        }
-        
-        #language-switcher {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 15px;
-        }
-
-        .lang-button {
-            background-color: var(--color-bg-primary); 
-            color: var(--color-text-secondary);
-            border: 1px solid var(--color-border);
-            padding: 5px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .lang-button.active {
-            background-color: var(--color-accent-blue);
-            color: var(--color-text-primary);
-            border-color: var(--color-accent-blue);
-        }
-
-        #logout-button {
-            width: 100%;
-            background-color: #ff453a; 
-            color: var(--color-text-primary);
-            border: none;
-            padding: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
-        
-        #logout-button:hover {
-            background-color: #d1322b;
-        }
-
-        /* --- 右侧内容区 (Content) --- */
-        #content-area {
-            flex-grow: 1;
-            padding: 0;
-            background-color: var(--color-bg-primary);
-            overflow: hidden;
-        }
-
-        #sop-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background-color: var(--color-bg-primary);
-        }
-        
-        #initial-message {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-            color: var(--color-text-secondary);
-            font-size: 18px;
-            text-align: center;
-        }
-
-        /* 密码页元素样式 */
-        #password-page h1 {
-            color: var(--color-accent-blue);
-            margin-bottom: 30px;
-        }
-        #password-input {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 20px;
-            background-color: var(--color-bg-secondary);
-            border: 1px solid var(--color-border);
-            border-radius: 8px;
-            color: var(--color-text-primary);
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-
-        #submit-button {
-            width: 100%;
-            background-color: var(--color-accent-blue);
-            color: var(--color-text-primary);
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            overflow-x: auto;
+            white-space: nowrap;
         }
     </style>
 </head>
-<body>
-    
-    <div id="password-page">
-        <h1 data-key="title-pass">🔐 SOP 访问验证</h1>
-        <p data-key="prompt-pass">请输入访问码查看目录：</p>
-        <input type="password" id="password-input" placeholder="访问码" onkeypress="handleKeyPress(event)">
-        <button id="submit-button" onclick="checkPassword()" data-key="btn-enter">进入目录</button>
-        <p id="error-message" style="display: none;" data-key="error-pass">访问码错误，请重试。</p>
-    </div>
+<body class="p-4 sm:p-8 min-h-screen flex justify-center items-start">
 
-    <div class="main-wrapper" id="main-wrapper">
+    <!-- 主通知卡片容器 -->
+    <div class="w-full max-w-4xl bg-white shadow-2xl rounded-xl overflow-hidden mt-8">
+
+        <!-- 头部 - 标题与日期 -->
+        <header class="header-bg text-white p-6 sm:p-8">
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight" data-key="title_main">【DodoWheels】库存录入规范通知</h1>
+            <p class="text-sm sm:text-base opacity-90 mt-2" data-key="title_sop">Inventory Data Entry Standard Operating Procedure (SOP)</p>
+            <div class="text-right text-xs mt-4" data-key="date_effective">本规范自发布之日起立即生效</div>
+        </header>
+
+        <!-- 语言切换按钮 -->
+        <div class="p-4 bg-gray-100 flex justify-end space-x-2 border-b">
+            <button onclick="setLanguage('zh-CN')" class="lang-btn bg-indigo-500 hover:bg-indigo-600 text-white text-xs px-3 py-1 rounded-full shadow-md transition duration-150 ease-in-out" data-lang="zh-CN">中文</button>
+            <button onclick="setLanguage('en-US')" class="lang-btn bg-gray-300 hover:bg-gray-400 text-gray-800 text-xs px-3 py-1 rounded-full shadow-md transition duration-150 ease-in-out" data-lang="en-US">English</button>
+            <button onclick="setLanguage('fr-FR')" class="lang-btn bg-gray-300 hover:bg-gray-400 text-gray-800 text-xs px-3 py-1 rounded-full shadow-md transition duration-150 ease-in-out" data-lang="fr-FR">Français</button>
+        </div>
         
-        <div id="sop-directory">
-            
-            <div id="sidebar">
-                
-                <div id="menu-top">
-                    <h2 data-key="title-dir">📚 SOP 目录</h2>
-                    
-                    <a id="sop-item-inv" class="menu-item" 
-                       data-key="card-title-inv" 
-                       data-url="https://dodo-wheels.github.io/DodoWheelsITD/whsop.html" 
-                       onclick="loadSOP(this)">
-                        库存录入规范
-                    </a>
+        <!-- 内容主体 -->
+        <main class="p-6 sm:p-8">
+            <p class="text-lg text-gray-700 mb-6 border-b pb-4" data-key="intro_text">
+                为确保 Quickbooks Online (QBO) 系统中库存数据的准确性、一致性及可追溯性，现对所有库存相关业务的 **Description (描述)** 字段录入规范进行统一，请各部门及相关人员严格执行。
+            </p>
+
+            <!-- 1. 涉及仓库 -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-indigo-500 pb-2 mb-4" data-key="sec1_title">1. 涉及仓库范围</h2>
+                <div class="flex flex-wrap gap-4">
+                    <span class="bg-indigo-100 text-indigo-800 text-sm font-medium px-4 py-2 rounded-full shadow-md">MT 仓</span>
+                    <span class="bg-indigo-100 text-indigo-800 text-sm font-medium px-4 py-2 rounded-full shadow-md">GT 仓</span>
+                    <span class="bg-indigo-100 text-indigo-800 text-sm font-medium px-4 py-2 rounded-full shadow-md">QC 仓</span>
+                </div>
+                <p class="text-sm text-gray-500 mt-2 border-t pt-2 mt-4" data-key="sec1_clarification">
+                    <strong class="font-bold">澄清：</strong>本规范重点涉及以上三个主要仓库。但在<strong class="text-red-600">规则三</strong>中列出的所有仓库代码（LS, LC, LGTN 等）均须遵循其录入顺序要求。
+                </p>
+            </section>
+
+            <!-- 2. 核心操作与数据规范 -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-indigo-500 pb-2 mb-4" data-key="sec2_title">2. 核心操作与数据规范 (Core Operations & Data Standards)</h2>
+
+                <!-- 2.1. 拣货人员操作要求 -->
+                <h3 class="text-xl font-semibold text-purple-700 border-b border-purple-300 pb-1 mb-4 mt-6" data-key="sec2_1_title">2.1. 拣货人员操作要求 (前端作业 - Picking Operations)</h3>
+                <div class="space-y-4">
+                    <div class="rule-item picking">
+                        <p class="font-semibold text-gray-700" data-key="req1_title">要求一：拣货准确性、圈选与签字 <strong class="text-red-600">(MANDATORY)</strong></p>
+                        <ul class="list-disc ml-6 text-gray-600 space-y-1">
+                            <li data-key="req1_1">**【至关重要】** 拣货时，必须在对应的纸质单据上<strong class="font-extrabold text-purple-700">准确圈选/标记</strong>实际取货的<strong class="text-red-600">库位（仓位）位置及数量</strong>，确保信息一致性。</li>
+                            <li data-key="req1_2">完成拣货后，<strong class="font-extrabold text-purple-700">相关单据（如出库单）必须由拣货人员亲自签字确认</strong>，以建立明确的责任制。</li>
+                        </ul>
+                    </div>
+                    <div class="rule-item picking">
+                        <p class="font-semibold text-gray-700" data-key="req2_title">要求二：优化拣货路径与原则</p>
+                        <ul class="list-disc ml-6 text-gray-600 space-y-1">
+                            <li data-key="req2_1">执行拣货任务时，必须遵循<strong class="font-extrabold text-purple-700">“优先小量”原则</strong>，即：首先从持有目标物料数量<strong class="text-red-600">较少</strong>的库位取货。</li>
+                            <li data-key="req2_2">目标是<strong class="text-red-600">最大限度地避免</strong>同一物料分散存储在多个仓位，提高后续库存盘点和拣货效率。</li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div id="sidebar-footer">
-                    <div id="language-switcher">
-                        <button class="lang-button active" data-lang="zh" onclick="setLanguage('zh')">中文</button>
-                        <button class="lang-button" data-lang="en" onclick="setLanguage('en')">EN</button>
-                        <button class="lang-button" data-lang="fr" onclick="setLanguage('fr')">FR</button>
+                <!-- 2.2. QBO系统信息录入规范 -->
+                <h3 class="text-xl font-semibold text-blue-700 border-b border-blue-300 pb-1 mb-4 mt-8" data-key="sec2_2_title">2.2. QBO系统信息录入规范 (后端确认 - Data Entry Rules)</h3>
+                <div class="space-y-4">
+                    <!-- Rule 3 & 2 -->
+                    <div class="rule-item">
+                        <p class="font-semibold text-gray-700" data-key="rule1_title">规则一：特殊描述与库存信息分离</p>
+                        <ul class="list-disc ml-6 text-gray-600 space-y-1">
+                            <li data-key="rule1_1">如有任何<strong class="text-red-600">特殊描述或备注</strong>，请务必将其添加在 `@` 符号<strong class="text-red-600">前面</strong>。</li>
+                            <li data-key="rule1_2">`@` 符号<strong class="text-red-600">后面</strong>的内容，<strong class="font-extrabold text-blue-700">只允许填写库位及数量信息</strong>，禁止填写任何其他无关文字或符号。</li>
+                        </ul>
+                    </div>
+
+                    <!-- Rule 4 & 5 -->
+                    <div class="rule-item">
+                        <p class="font-semibold text-gray-700" data-key="rule2_title">规则二：库位数量信息格式统一</p>
+                        <ul class="list-disc ml-6 text-gray-600 space-y-1">
+                            <li data-key="rule2_1">库位数量部分的格式必须严格遵守：<br class="sm:hidden">
+                                <span class="font-mono text-base font-bold text-green-700" data-key="rule2_format">仓库简写 / 库位 (完整描述) * 数量</span>
+                            </li>
+                            <li data-key="rule2_2">如果涉及多个库位或数量，每个信息块之间必须使用<strong class="text-red-600">英文逗号 (,)</strong> 进行分隔。</li>
+                        </ul>
                     </div>
                     
-                    <button id="logout-button" onclick="logout()" data-key="btn-logout">退出</button>
+                    <!-- Warehouse Order -->
+                    <div class="rule-item">
+                        <p class="font-semibold text-gray-700" data-key="rule3_title">规则三：多仓库信息录入顺序</p>
+                        <ul class="list-disc ml-6 text-gray-600 space-y-1">
+                            <li data-key="rule3_1">在 `@` 符号后的库位及数量信息中，若涉及多个仓库物料，请严格按照以下优先级顺序进行录入，以确保数据的一致性：</li>
+                            <li class="font-mono text-sm mt-1 p-2 bg-blue-50 rounded text-blue-800 break-all">
+                                <strong class="text-blue-600">LS</strong>, <strong class="text-blue-600">LC</strong>, <strong class="text-blue-600">LLS04</strong>, <strong class="text-blue-600">L4875</strong>, <strong class="text-blue-600">L2184</strong>,
+                                <strong class="text-blue-600">LNAN</strong>, <strong class="text-blue-600">LDMCC</strong>, <strong class="text-blue-600">GT</strong>, <strong class="text-blue-600">LGTN</strong>, <strong class="text-blue-600">LOTA</strong>, <strong class="text-blue-600">QC</strong>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
 
-            <div id="content-area">
-                <div id="initial-message">
-                    <span data-key="msg-initial">请从左侧菜单选择一个 SOP 查看内容。</span>
+                <!-- 格式总览 -->
+                <div class="mt-6 p-4 border rounded-lg bg-gray-100 shadow-md">
+                    <p class="font-bold text-blue-700 mb-2 text-lg" data-key="format_title">【完整格式示例】</p>
+                    <div class="format-example" data-key="format_example_template">
+                        [特殊描述] @ [仓库简写]/[完整库位]*[数量], [仓库简写]/[完整库位]*[数量]
+                    </div>
+                    <p class="font-bold text-blue-700 mt-4 mb-2" data-key="format_example_note">示例 (遵循顺序 LS > GT > QC):</p>
+                    <div class="format-example mb-3">
+                         @ LS/A10*50, GT/B20*120
+                    </div>
                 </div>
-                <iframe id="sop-iframe" name="sop-frame" src="" frameborder="0" style="display: none;"></iframe>
-            </div>
-        </div>
+            </section>
+
+            <!-- 3. 审计与合规要求 (新增) -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-indigo-500 pb-2 mb-4" data-key="sec3_title">3. 审计与合规要求 (Audit and Compliance)</h2>
+                <div class="space-y-4">
+                    <div class="rule-item audit">
+                        <p class="font-semibold text-gray-700" data-key="audit_req1_title">要求一：单据留存与核验</p>
+                        <ul class="list-disc ml-6 text-gray-600 space-y-1">
+                            <li data-key="audit_req1_1">所有经签字确认的拣货单据，必须<strong class="font-extrabold text-orange-700">妥善留存</strong>，作为QBO系统录入数据的<strong class="text-red-600">原始凭证</strong>。</li>
+                            <li data-key="audit_req1_2">仓库主管或指定人员需定期对已签字单据与QBO系统Description字段的录入信息进行<strong class="font-extrabold text-orange-700">抽查核验</strong>。</li>
+                        </ul>
+                    </div>
+                    <div class="rule-item audit">
+                        <p class="font-semibold text-gray-700" data-key="audit_req2_title">要求二：违规处理机制</p>
+                        <ul class="list-disc ml-6 text-gray-600 space-y-1">
+                            <li data-key="audit_req2_1">对于录入格式不规范、圈选/签字缺失或拣货原则违反等行为，将根据公司规定进行记录和<strong class="font-extrabold text-orange-700">问责处理</strong>，以确保SOP的严肃性。</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- 4. 责任与流程时效 (原3) -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-indigo-500 pb-2 mb-4" data-key="sec4_title">4. 执行责任与流程时效 (Accountability and Timeliness)</h2>
+
+                <div class="p-4 bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800 rounded-lg">
+                    <p class="font-semibold text-lg mb-1" data-key="sec4_main_responsible">主要责任人：</p>
+                    <p class="text-sm">
+                        <strong class="font-extrabold text-blue-900" data-key="sec4_p1_title">1. 拣货人员：</strong> <span data-key="sec4_p1_text">对拣货的<strong class="text-red-600">准确性、圈选标记及单据签字</strong>负首要责任。</span>
+                    </p>
+                    <p class="text-sm mt-1">
+                        <strong class="font-extrabold text-blue-900" data-key="sec4_p2_title">2. 信息录入人员 (库内人员)：</strong> <span data-key="sec4_p2_text">对信息录入的<strong class="text-red-600">格式、顺序和时效性</strong>负主要责任。</span>
+                    </p>
+                    <p class="font-semibold mt-3 text-lg mb-1" data-key="sec4_timing_title">流程时效要求：</p>
+                    <p class="text-sm">
+                        <strong class="font-extrabold text-blue-900" data-key="sec4_t1_title">1. 拣货人员时效：</strong> <span data-key="sec4_t1_text">必须在<strong class="text-red-600">完成拣货并签字后立即</strong>将单据移交至信息录入人员，不得滞留。</span>
+                    </p>
+                    <p class="text-sm mt-1">
+                        <strong class="font-extrabold text-blue-900" data-key="sec4_t2_title">2. 信息录入时效：</strong> <span data-key="sec4_t2_text">在收到已签字和圈选的单据后，<strong class="text-red-600">及时进行QBO系统的录入工作</strong>，确保库存数据的实时准确性。</span>
+                    </p>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- 底部 -->
+        <footer class="header-bg p-4 text-center text-sm opacity-90">
+            <p data-key="footer_text">&copy; [DodoWheels] </p>
+        </footer>
     </div>
 
     <script>
-        const CORRECT_PASSWORD = 'dodo';
-        const passwordInput = document.getElementById('password-input');
-        const passwordPage = document.getElementById('password-page');
-        const mainWrapper = document.getElementById('main-wrapper');
-        const errorMessage = document.getElementById('error-message');
-        const sopIframe = document.getElementById('sop-iframe');
-        const initialMessage = document.getElementById('initial-message');
-        const logoutButton = document.getElementById('logout-button');
-        
+        // --- Translation Data ---
         const translations = {
-            'zh': {
-                'title-pass': '🔐 SOP 访问验证',
-                'prompt-pass': '请输入访问码查看目录：',
-                'btn-enter': '进入目录',
-                'error-pass': '访问码错误，请重试。',
-                'title-dir': '📚 SOP 目录',
-                'card-title-inv': '库存录入规范',
-                'msg-initial': '请从左侧菜单选择一个 SOP 查看内容。',
-                'btn-logout': '退出'
+            'zh-CN': {
+                title_page: '【DodoWheels】库存信息录入规范通知',
+                title_main: '【DodoWheels】库存录入规范通知',
+                title_sop: 'Inventory Data Entry Standard Operating Procedure (SOP)',
+                date_effective: '本规范自发布之日起立即生效',
+                intro_text: '为确保 Quickbooks Online (QBO) 系统中库存数据的准确性、一致性及可追溯性，现对所有库存相关业务的 **Description (描述)** 字段录入规范进行统一，请各部门及相关人员严格执行。',
+                sec1_title: '1. 涉及仓库范围',
+                sec1_clarification: '澄清：本规范重点涉及以上三个主要仓库。但在<strong class="text-red-600">规则三</strong>中列出的所有仓库代码（LS, LC, LGTN 等）均须遵循其录入顺序要求。',
+                sec2_title: '2. 核心操作与数据规范 (Core Operations & Data Standards)',
+                sec2_1_title: '2.1. 拣货人员操作要求 (前端作业 - Picking Operations)',
+                req1_title: '要求一：拣货准确性、圈选与签字 <strong class="text-red-600">(MANDATORY)</strong>',
+                req1_1: '**【至关重要】** 拣货时，必须在对应的纸质单据上<strong class="font-extrabold text-purple-700">准确圈选/标记</strong>实际取货的<strong class="text-red-600">库位（仓位）位置及数量</strong>，确保信息一致性。',
+                req1_2: '完成拣货后，<strong class="font-extrabold text-purple-700">相关单据（如出库单）必须由拣货人员亲自签字确认</strong>，以建立明确的责任制。',
+                req2_title: '要求二：优化拣货路径与原则',
+                req2_1: '执行拣货任务时，必须遵循<strong class="font-extrabold text-purple-700">“优先小量”原则</strong>，即：首先从持有目标物料数量<strong class="text-red-600">较少</strong>的库位取货。',
+                req2_2: '目标是<strong class="text-red-600">最大限度地避免</strong>同一物料分散存储在多个仓位，提高后续库存盘点和拣货效率。',
+                sec2_2_title: '2.2. QBO系统信息录入规范 (后端确认 - Data Entry Rules)',
+                rule1_title: '规则一：特殊描述与库存信息分离',
+                rule1_1: '如有任何<strong class="text-red-600">特殊描述或备注</strong>，请务必将其添加在 `@` 符号<strong class="text-red-600">前面</strong>。',
+                rule1_2: '`@` 符号<strong class="text-red-600">后面</strong>的内容，<strong class="font-extrabold text-blue-700">只允许填写库位及数量信息</strong>，禁止填写任何其他无关文字或符号。',
+                rule2_title: '规则二：库位数量信息格式统一',
+                rule2_1: '库位数量部分的格式必须严格遵守：<br class="sm:hidden"> <span class="font-mono text-base font-bold text-green-700">仓库简写 / 库位 (完整描述) * 数量</span>',
+                rule2_format: '仓库简写 / 库位 (完整描述) * 数量',
+                rule2_2: '如果涉及多个库位或数量，每个信息块之间必须使用<strong class="text-red-600">英文逗号 (,)</strong> 进行分隔。',
+                rule3_title: '规则三：多仓库信息录入顺序',
+                rule3_1: '在 `@` 符号后的库位及数量信息中，若涉及多个仓库物料，请严格按照以下优先级顺序进行录入，以确保数据的一致性：',
+                format_title: '【完整格式示例】',
+                format_example_template: '[特殊描述] @ [仓库简写]/[完整库位]*[数量], [仓库简写]/[完整库位]*[数量]',
+                format_example_note: '示例 (遵循顺序 LS > GT > QC):',
+                sec3_title: '3. 审计与合规要求 (Audit and Compliance)',
+                audit_req1_title: '要求一：单据留存与核验',
+                audit_req1_1: '所有经签字确认的拣货单据，必须<strong class="font-extrabold text-orange-700">妥善留存</strong>，作为QBO系统录入数据的<strong class="text-red-600">原始凭证</strong>。',
+                audit_req1_2: '仓库主管或指定人员需定期对已签字单据与QBO系统Description字段的录入信息进行<strong class="font-extrabold text-orange-700">抽查核验</strong>。',
+                audit_req2_title: '要求二：违规处理机制',
+                audit_req2_1: '对于录入格式不规范、圈选/签字缺失或拣货原则违反等行为，将根据公司规定进行记录和<strong class="font-extrabold text-orange-700">问责处理</strong>，以确保SOP的严肃性。',
+                sec4_title: '4. 执行责任与流程时效 (Accountability and Timeliness)',
+                sec4_main_responsible: '主要责任人：',
+                sec4_p1_title: '1. 拣货人员：',
+                sec4_p1_text: '对拣货的<strong class="text-red-600">准确性、圈选标记及单据签字</strong>负首要责任。',
+                sec4_p2_title: '2. 信息录入人员 (库内人员)：',
+                sec4_p2_text: '对信息录入的<strong class="text-red-600">格式、顺序和时效性</strong>负主要责任。',
+                sec4_timing_title: '流程时效要求：',
+                sec4_t1_title: '1. 拣货人员时效：',
+                sec4_t1_text: '必须在<strong class="text-red-600">完成拣货并签字后立即</strong>将单据移交至信息录入人员，不得滞留。',
+                sec4_t2_title: '2. 信息录入时效：',
+                sec4_t2_text: '在收到已签字和圈选的单据后，<strong class="text-red-600">及时进行QBO系统的录入工作</strong>，确保库存数据的实时准确性。',
+                footer_text: '&copy; [DodoWheels] ',
             },
-            'en': {
-                'title-pass': '🔐 SOP Access Verification',
-                'prompt-pass': 'Please enter the access code to view the directory:',
-                'btn-enter': 'Enter Directory',
-                'error-pass': 'Incorrect access code, please try again.',
-                'title-dir': '📚 SOP Directory',
-                'card-title-inv': 'Inventory Entry SOP',
-                'msg-initial': 'Please select an SOP from the left menu to view the content.',
-                'btn-logout': 'Logout'
+            'en-US': {
+                title_page: '【DodoWheels】Inventory Data Entry Standard Notification',
+                title_main: '【DodoWheels】Inventory Data Entry Standard',
+                title_sop: 'Inventory Data Entry Standard Operating Procedure (SOP)',
+                date_effective: 'Effective immediately upon release',
+                intro_text: 'To ensure the accuracy, consistency, and traceability of inventory data in the Quickbooks Online (QBO) system, we are standardizing the entry format for the **Description** field across all inventory-related operations. All departments and personnel are required to strictly adhere to this standard.',
+                sec1_title: '1. Applicable Warehouses',
+                sec1_clarification: 'Clarification: This standard primarily covers the three main warehouses listed above. However, all warehouse codes listed under <strong class="text-red-600">Rule 3</strong> (LS, LC, LGTN, etc.) must follow the specified entry sequence.',
+                sec2_title: '2. Core Operations & Data Standards',
+                sec2_1_title: '2.1. Picker Operational Requirements (Front-end - Picking Operations)',
+                req1_title: 'Requirement 1: Picking Accuracy, Location Marking, and Signature <strong class="text-red-600">(MANDATORY)</strong>',
+                req1_1: '**【Crucial】** When picking, the **actual bin location (warehouse slot) and quantity** from which the material was taken must be <strong class="font-extrabold text-purple-700">accurately circled/marked</strong> on the corresponding physical documentation to ensure consistency.',
+                req1_2: 'Upon completion of picking, the <strong class="font-extrabold text-purple-700">relevant documents (e.g., outbound slip) must be personally signed by the picker</strong> to establish clear accountability.',
+                req2_title: 'Requirement 2: Optimizing Picking Path and Principle',
+                req2_1: 'When executing picking tasks, the <strong class="font-extrabold text-purple-700">“Prioritize Small Quantity” principle</strong> must be followed, meaning: first pick materials from bin locations holding the <strong class="text-red-600">lowest quantity</strong> of the target material.',
+                req2_2: 'The goal is to <strong class="text-red-600">minimize</strong> the scattering of the same material across multiple bin locations, improving subsequent inventory counts and picking efficiency.',
+                sec2_2_title: '2.2. QBO System Data Entry Standard (Back-end - Data Entry Rules)',
+                rule1_title: 'Rule 1: Separation of Special Descriptions and Inventory Data',
+                rule1_1: 'If there is any <strong class="text-red-600">special description or remark</strong>, it must be added <strong class="text-red-600">before</strong> the `@` symbol.',
+                rule1_2: 'The content <strong class="text-red-600">after</strong> the `@` symbol <strong class="font-extrabold text-blue-700">must only contain bin location and quantity information</strong>. No other irrelevant text or symbols are allowed.',
+                rule2_title: 'Rule 2: Unified Format for Bin Location and Quantity Data',
+                rule2_1: 'The bin location and quantity section must strictly follow the format: <br class="sm:hidden"> <span class="font-mono text-base font-bold text-green-700">Warehouse Abbreviation / Full Bin Location * Quantity</span>',
+                rule2_format: 'Warehouse Abbreviation / Full Bin Location * Quantity',
+                rule2_2: 'If multiple bin locations or quantities are involved, an <strong class="text-red-600">English comma (,)</strong> must be used to separate each block of information.',
+                rule3_title: 'Rule 3: Multi-Warehouse Data Entry Sequence',
+                rule3_1: 'When entering bin location and quantity information after the `@` symbol involving materials from multiple warehouses, strictly follow the priority sequence below to ensure data consistency:',
+                format_title: '【Complete Format Example】',
+                format_example_template: '[Special Description] @ [Whse Abbr]/[Full Bin]*[Qty], [Whse Abbr]/[Full Bin]*[Qty]',
+                format_example_note: 'Example (Following sequence LS > GT > QC):',
+                sec3_title: '3. Audit and Compliance Requirements',
+                audit_req1_title: 'Requirement 1: Document Retention and Verification',
+                audit_req1_1: 'All signed and confirmed picking documents must be <strong class="font-extrabold text-orange-700">properly retained</strong> as the <strong class="text-red-600">original source document</strong> for QBO system entries.',
+                audit_req1_2: 'Warehouse supervisors or designated personnel must regularly conduct <strong class="font-extrabold text-orange-700">spot checks and verification</strong> between the signed documents and the data entered in the QBO Description field.',
+                audit_req2_title: 'Requirement 2: Violation Handling Mechanism',
+                audit_req2_1: 'Actions such as non-compliant entry format, missing circle/signature, or violation of picking principles will be recorded and subject to <strong class="font-extrabold text-orange-700">accountability measures</strong> according to company regulations, ensuring the seriousness of the SOP.',
+                sec4_title: '4. Accountability and Timeliness',
+                sec4_main_responsible: 'Primary Responsible Parties:',
+                sec4_p1_title: '1. Picker:',
+                sec4_p1_text: 'Bears primary responsibility for the <strong class="text-red-600">accuracy, location marking, and signature</strong> of the picking process.',
+                sec4_p2_title: '2. Data Entry Personnel (Warehouse Staff):',
+                sec4_p2_text: 'Bears primary responsibility for the <strong class="text-red-600">format, sequence, and timeliness</strong> of data entry.',
+                sec4_timing_title: 'Process Timeliness Requirements:',
+                sec4_t1_title: '1. Picker Timeline:',
+                sec4_t1_text: 'Must <strong class="text-red-600">immediately</strong> hand over the documents to the Data Entry Personnel upon <strong class="text-red-600">completion of picking and signing</strong>; no delay is permitted.',
+                sec4_t2_title: '2. Data Entry Timeline:',
+                sec4_t2_text: 'Must <strong class="text-red-600">promptly carry out the QBO system entry</strong> upon receiving the signed and marked documents to ensure real-time inventory data accuracy.',
+                footer_text: '&copy; [DodoWheels] ',
             },
-            'fr': {
-                'title-pass': '🔐 Vérification d\'accès SOP',
-                'prompt-pass': 'Veuillez entrer le code d\'accès pour consulter le répertoire :',
-                'btn-enter': 'Entrer dans le répertoire',
-                'error-pass': 'Code d\'accès incorrect, veuillez réessayer.',
-                'title-dir': '📚 Répertoire SOP',
-                'card-title-inv': 'Procédure d\'Entrée d\'Inventaire',
-                'msg-initial': 'Veuillez sélectionner un SOP dans le menu de gauche pour afficher le contenu.',
-                'btn-logout': 'Déconnexion'
+            'fr-FR': {
+                title_page: '【DodoWheels】Notification de la Norme de Saisie d\'Inventaire',
+                title_main: '【DodoWheels】Norme de Saisie d\'Inventaire',
+                title_sop: 'Procédure Opérationnelle Standard de Saisie de Données d\'Inventaire (POS)',
+                date_effective: 'En vigueur immédiatement dès publication',
+                intro_text: 'Afin de garantir l\'exactitude, la cohérence et la traçabilité des données d\'inventaire dans le système Quickbooks Online (QBO), nous standardisons le format de saisie pour le champ **Description** dans toutes les opérations liées à l\'inventaire. Tous les départements et le personnel sont tenus de respecter strictement cette norme.',
+                sec1_title: '1. Entrepôts Applicables',
+                sec1_clarification: 'Clarification : Cette norme couvre principalement les trois entrepôts principaux énumérés ci-dessus. Cependant, tous les codes d\'entrepôt listés sous la <strong class="text-red-600">Règle 3</strong> (LS, LC, LGTN, etc.) doivent suivre la séquence de saisie spécifiée.',
+                sec2_title: '2. Opérations de Base et Normes de Données',
+                sec2_1_title: '2.1. Exigences Opérationnelles du Préparateur (Opérations de Préparation - Picking Operations)',
+                req1_title: 'Exigence 1 : Précision de la Préparation, Marquage de l\'Emplacement et Signature <strong class="text-red-600">(OBLIGATOIRE)</strong>',
+                req1_1: '**【Essentiel】** Lors de la préparation, <strong class="font-extrabold text-purple-700">l\'emplacement réel (slot d\'entrepôt) et la quantité</strong> du matériel prélevé doivent être <strong class="font-extrabold text-purple-700">clairement encerclés/marqués</strong> sur la documentation physique correspondante pour garantir la cohérence.',
+                req1_2: 'Une fois la préparation terminée, les <strong class="font-extrabold text-purple-700">documents pertinents (ex. bon de sortie) doivent être signés personnellement par le préparateur</strong> pour établir une responsabilité claire.',
+                req2_title: 'Exigence 2 : Optimisation du Chemin et du Principe de Préparation',
+                req2_1: 'Lors de l\'exécution des tâches de préparation, le <strong class="font-extrabold text-purple-700">principe « Priorité à la Petite Quantité »</strong> doit être suivi, c\'est-à-dire : prélever d\'abord les matériaux dans les emplacements qui détiennent la <strong class="text-red-600">plus petite quantité</strong> du matériel ciblé.',
+                req2_2: 'L\'objectif est de <strong class="text-red-600">minimiser</strong> la dispersion d\'un même matériel dans plusieurs emplacements, améliorant ainsi les futurs inventaires et l\'efficacité de la préparation.',
+                sec2_2_title: '2.2. Norme de Saisie de Données du Système QBO (Back-end - Règles de Saisie)',
+                rule1_title: 'Règle 1 : Séparation des Descriptions Spéciales et des Données d\'Inventaire',
+                rule1_1: 'S\'il y a une <strong class="text-red-600">description spéciale ou une remarque</strong>, elle doit impérativement être ajoutée <strong class="text-red-600">avant</strong> le symbole `@`.',
+                rule1_2: 'Le contenu <strong class="text-red-600">après</strong> le symbole `@` <strong class="font-extrabold text-blue-700">doit uniquement contenir les informations d\'emplacement et de quantité</strong>. Aucun autre texte ou symbole non pertinent n\'est autorisé.',
+                rule2_title: 'Règle 2 : Format Unifié pour les Données d\'Emplacement et de Quantité',
+                rule2_1: 'La section d\'emplacement et de quantité doit strictement suivre le format : <br class="sm:hidden"> <span class="font-mono text-base font-bold text-green-700">Abréviation Entrepôt / Emplacement Complet * Quantité</span>',
+                rule2_format: 'Abréviation Entrepôt / Emplacement Complet * Quantité',
+                rule2_2: 'Si plusieurs emplacements ou quantités sont impliqués, une <strong class="text-red-600">virgule anglaise (,)</strong> doit être utilisée pour séparer chaque bloc d\'information.',
+                rule3_title: 'Règle 3 : Séquence de Saisie des Données Multi-Entrepôts',
+                rule3_1: 'Lors de la saisie des informations d\'emplacement et de quantité après le symbole `@` impliquant des matériaux de plusieurs entrepôts, suivez strictement la séquence de priorité ci-dessous pour assurer la cohérence des données :',
+                format_title: '【Exemple de Format Complet】',
+                format_example_template: '[Description Spéciale] @ [Abrév. Entrepôt]/[Emplacement Complet]*[Qté], [Abrév. Entrepôt]/[Emplacement Complet]*[Qté]',
+                format_example_note: 'Exemple (Suivant la séquence LS > GT > QC):',
+                sec3_title: '3. Exigences d\'Audit et de Conformité',
+                audit_req1_title: 'Exigence 1 : Rétention et Vérification des Documents',
+                audit_req1_1: 'Tous les documents de préparation signés et confirmés doivent être <strong class="font-extrabold text-orange-700">correctement conservés</strong> en tant que <strong class="text-red-600">pièce justificative originale</strong> pour les entrées du système QBO.',
+                audit_req1_2: 'Le superviseur de l\'entrepôt ou le personnel désigné doit effectuer régulièrement des <strong class="font-extrabold text-orange-700">vérifications ponctuelles</strong> entre les documents signés et les données saisies dans le champ Description de QBO.',
+                audit_req2_title: 'Exigence 2 : Mécanisme de Traitement des Violations',
+                audit_req2_1: 'Les actions telles que le format de saisie non conforme, le cercle/signature manquant ou la violation des principes de préparation seront enregistrées et soumises à des <strong class="font-extrabold text-orange-700">mesures de responsabilité</strong> conformément à la réglementation de l\'entreprise, garantissant le sérieux de la POS.',
+                sec4_title: '4. Responsabilité et Délais de Processus (Accountability and Timeliness)',
+                sec4_main_responsible: 'Parties Principales Responsables :',
+                sec4_p1_title: '1. Préparateur :',
+                sec4_p1_text: 'Assume la responsabilité principale de la <strong class="text-red-600">précision, du marquage de l\'emplacement et de la signature</strong> du processus de préparation.',
+                sec4_p2_title: '2. Personnel de Saisie de Données (Personnel d\'Entrepôt) :',
+                sec4_p2_text: 'Assume la responsabilité principale du <strong class="text-red-600">format, de la séquence et du respect des délais</strong> de la saisie des données.',
+                sec4_timing_title: 'Exigences de Délais de Processus :',
+                sec4_t1_title: '1. Délai du Préparateur :',
+                sec4_t1_text: 'Doit <strong class="text-red-600">immédiatement</strong> remettre les documents au Personnel de Saisie de Données après <strong class="text-red-600">avoir terminé la préparation et signé</strong> ; aucun retard n\'est autorisé.',
+                sec4_t2_title: '2. Délai de Saisie de Données :',
+                sec4_t2_text: 'Doit <strong class="text-red-600">procéder rapidement à la saisie dans le système QBO</strong> après réception des documents signés et marqués pour assurer l\'exactitude des données d\'inventaire en temps réel.',
+                footer_text: '&copy; [DodoWheels] ',
             }
         };
 
-        let currentLang = 'zh';
-
-        function setLanguage(lang) {
-            currentLang = lang;
-            const elements = document.querySelectorAll('[data-key]');
-            
-            elements.forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (translations[lang] && translations[lang][key]) {
-                    el.textContent = translations[lang][key];
-                }
-            });
-
-            if (lang === 'zh') {
-                passwordInput.placeholder = '访问码';
-            } else if (lang === 'en') {
-                passwordInput.placeholder = 'Access Code';
-            } else if (lang === 'fr') {
-                passwordInput.placeholder = 'Code d\'accès';
-            }
-
-            document.querySelectorAll('.lang-button').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
-            });
-            
-            document.documentElement.lang = lang;
-        }
-
-        // 初始化语言
-        setLanguage(currentLang);
-
-        function checkPassword() {
-            if (passwordInput.value === CORRECT_PASSWORD) {
-                // 密码正确
-                passwordPage.style.display = 'none'; // 隐藏密码页
-                mainWrapper.style.display = 'flex'; // 显示全屏内容
-
-                // 自动加载第一个菜单项 (库存录入规范)
-                const firstMenuItem = document.getElementById('sop-item-inv');
-                if (firstMenuItem) {
-                    loadSOP(firstMenuItem);
-                }
-            } else {
-                errorMessage.style.display = 'block';
-                passwordInput.value = '';
-                passwordInput.focus();
-            }
-        }
-
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') {
-                checkPassword();
-            }
-        }
-
-        function loadSOP(menuItem) {
-            const url = menuItem.getAttribute('data-url');
-
-            // 移除所有菜单项的激活状态
-            document.querySelectorAll('.menu-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            // 添加当前菜单项的激活状态
-            menuItem.classList.add('active');
-
-            // 隐藏初始提示信息并显示 iframe
-            initialMessage.style.display = 'none';
-            sopIframe.style.display = 'block';
-            
-            // 设置 iframe 的 src 加载页面
-            sopIframe.src = url;
-        }
+        const defaultLang = 'zh-CN';
         
-        function logout() {
-            // 清空密码输入，显示密码页，隐藏全屏目录
-            passwordInput.value = '';
-            passwordPage.style.display = 'flex'; // 重新居中显示
-            mainWrapper.style.display = 'none';
-            
-            // 重置 iframe
-            sopIframe.src = '';
-            sopIframe.style.display = 'none';
-            initialMessage.style.display = 'flex';
+        /**
+         * Converts HTML text content stored in the translation object into the corresponding DOM element.
+         * This allows for retaining inline strong/em tags within the translated text.
+         * @param {string} key The key for the translation text.
+         * @param {string} lang The target language code.
+         * @returns {string} HTML string.
+         */
+        function getTranslatedHTML(key, lang) {
+            const text = translations[lang][key] || translations[defaultLang][key] || '';
+            // Simple replacement for **text** with <strong>text</strong> (used in Chinese translation data)
+            return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         }
-    </script>
 
+        /**
+         * Sets the language of the entire document.
+         * @param {string} lang The language code (e.g., 'zh-CN', 'en-US').
+         */
+        function setLanguage(lang) {
+            const currentTranslations = translations[lang] || translations[defaultLang];
+
+            // 1. Update all elements with a data-key attribute
+            document.querySelectorAll('[data-key]').forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (key === 'title_page') {
+                    // Special handling for document title
+                    document.title = currentTranslations[key];
+                } else if (currentTranslations[key]) {
+                    // Use innerHTML to allow strong/em tags in the translation strings
+                    element.innerHTML = getTranslatedHTML(key, lang);
+                }
+            });
+
+            // 2. Update the document's lang attribute
+            document.documentElement.lang = lang;
+
+            // 3. Highlight the active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.remove('bg-gray-300', 'hover:bg-gray-400', 'text-gray-800');
+                    btn.classList.add('bg-indigo-500', 'hover:bg-indigo-600', 'text-white');
+                } else {
+                    btn.classList.remove('bg-indigo-500', 'hover:bg-indigo-600', 'text-white');
+                    btn.classList.add('bg-gray-300', 'hover:bg-gray-400', 'text-gray-800');
+                }
+            });
+
+            // 4. Save preference
+            localStorage.setItem('docLang', lang);
+        }
+
+        /**
+         * Initialization function: Load saved language or use default.
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            let savedLang = localStorage.getItem('docLang');
+            // If no saved language, try to use browser preference (simplified check)
+            if (!savedLang) {
+                const browserLang = navigator.language;
+                if (browserLang.startsWith('en')) {
+                    savedLang = 'en-US';
+                } else if (browserLang.startsWith('fr')) {
+                    savedLang = 'fr-FR';
+                } else {
+                    savedLang = defaultLang;
+                }
+            }
+            // Ensure the initial load is processed
+            setLanguage(savedLang);
+        });
+    </script>
 </body>
 </html>
