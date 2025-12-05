@@ -3,318 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels 标准操作流程 (SOP)</title>
-    <link rel="icon" href="https://dodo-wheels.github.io/DodoWheelsITD/images/favicon.ico" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>SOP 访问</title>
     <style>
-        /* 1. 颜色变量 (Mac 暗黑模式调色板) */
+        /* Mac Dark Mode Base Styles */
         :root {
-            --primary-blue: #0A84FF; /* 鲜明的 Mac 蓝色 */
-            --page-bg: #1A1A1A; /* 极深页面背景 */
-            --card-bg: #2C2C2C; /* 略浅的卡片背景，提供层次感 */
-            --dark-text: #FDFDFD; /* 主文本色 (白色) */
-            --medium-text: #9E9E9E; /* 辅助文本色 (中灰色) */
-            --border-light: #444444; /* 深色边框和分隔线 */
-            --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-            --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.2); /* 更深的软阴影 */
-            --hover-bg: #3A3A40; /* 列表项悬停/引用背景 */
-            --error-red: #FF453A; /* iOS 风格的错误红 */
+            --color-bg-primary: #1e1e1e; /* Dark background */
+            --color-bg-secondary: #2c2c2c; /* Card/Input background */
+            --color-text-primary: #ffffff; /* Primary text color */
+            --color-text-secondary: #cccccc; /* Secondary text color */
+            --color-accent-blue: #0a84ff; /* macOS/iOS accent blue */
+            --color-accent-hover: #3895ff; /* Lighter blue for hover */
+            --color-border: #444444;
+            --color-shadow: rgba(0, 0, 0, 0.5);
+            --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
         }
 
-        /* 2. 全局样式和字体调整 */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-            line-height: 1.6;
+            font-family: var(--font-family-sans);
+            background-color: var(--color-bg-primary);
+            color: var(--color-text-primary);
             margin: 0;
             padding: 0;
-            background-color: var(--page-bg);
-            color: var(--dark-text); /* 默认文字颜色为亮色 */
-            min-height: 100vh;
-        }
-
-        /* 3. 访问认证容器样式 (默认居中显示) */
-        #auth-container {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+        }
+
+        /* General Container and Card Styling */
+        .container {
+            padding: 30px;
+            max-width: 800px;
+            width: 90%;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px var(--color-shadow);
+        }
+
+        h1 {
+            color: var(--color-accent-blue);
             text-align: center;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .auth-card {
-            background-color: var(--card-bg);
-            padding: 50px 40px;
-            border-radius: 16px;
-            box-shadow: var(--shadow-card);
-            max-width: 380px;
-            width: 100%;
-            /* 移除顶部分割线，使用边框和阴影提供层次 */
-            border: 1px solid var(--border-light); 
-        }
-
-        /* 4. 认证输入及按钮样式 */
-        .auth-card h1 {
-            color: var(--primary-blue);
-            font-size: 1.8em;
+            margin-bottom: 30px;
             font-weight: 600;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            letter-spacing: -0.5px;
         }
 
-        .auth-card img {
-            height: 32px;
-            margin-right: 10px;
-            /* 增加一点对比度，确保在暗色背景下清晰 */
-        }
-
-        .auth-card p {
-            color: var(--medium-text);
-            margin-bottom: 30px;
-        }
-
-        input[type="password"] {
-            width: calc(100% - 24px);
-            padding: 14px 12px;
-            background-color: #1e1e1e; /* 输入框背景更深 */
-            border: 1px solid var(--border-light);
-            color: var(--dark-text); /* 输入文字颜色 */
-            border-radius: 10px;
-            font-size: 1em;
-            box-sizing: border-box;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-        /* placeholder 颜色适应暗黑模式 */
-        input::placeholder {
-            color: var(--medium-text); 
-            opacity: 0.7;
-        }
-
-        input[type="password"]:focus {
-            border-color: var(--primary-blue);
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.3); /* 蓝色聚焦光环 */
-        }
-
-        button {
-            background-color: var(--primary-blue);
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            width: 100%;
-            margin-top: 25px;
-            box-shadow: var(--shadow-subtle);
-        }
-
-        button:hover {
-            background-color: #0072e6; /* 蓝色加深 */
-            transform: translateY(-1px);
-        }
-
-        .error-message {
-            color: var(--error-red);
-            margin-top: 10px;
-            font-weight: 400;
-            font-size: 0.9em;
-            opacity: 0;
-            height: 0;
-            overflow: hidden;
-            transition: opacity 0.3s ease, height 0.3s ease;
-        }
-
-        .error-message.show {
-            opacity: 1;
-            height: auto;
-        }
-
-        /* 5. SOP 目录部分样式 */
-        #sop-directory-container {
-            display: none; /* 默认隐藏 */
-        }
-
-        header {
-            background-color: var(--card-bg); /* 标题栏使用卡片背景色 */
-            color: var(--dark-text);
-            padding: 20px 0;
+        /* --- Password Page Styles --- */
+        #password-page {
             text-align: center;
-            box-shadow: var(--shadow-subtle);
-            border-bottom: 1px solid var(--border-light);
-            margin-bottom: 40px;
         }
 
-        header h1 {
-            font-size: 1.8em;
-            font-weight: 600;
-            margin: 0;
-            color: var(--dark-text);
-        }
-        
-        .main-content {
-            max-width: 750px;
-            margin: 0 auto;
-            background-color: var(--card-bg);
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: var(--shadow-card);
-            border: 1px solid var(--border-light);
-        }
-
-        .main-content h2 {
-            color: var(--dark-text);
-            font-size: 1.4em;
-            font-weight: 500;
-            border-bottom: 1px solid var(--border-light);
-            padding-bottom: 10px;
-            margin-top: 0;
-            margin-bottom: 30px;
-        }
-
-        .sop-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sop-list li {
-            margin-bottom: 12px;
-            padding-left: 20px;
-            border-left: 3px solid var(--primary-blue);
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            border-radius: 4px;
-        }
-
-        .sop-list li:hover {
-            background-color: var(--hover-bg); /* 暗黑模式下的悬停背景 */
-            transform: translateX(3px);
-        }
-
-        .sop-list a {
-            text-decoration: none;
-            color: var(--dark-text);
-            font-size: 1.1em;
-            font-weight: 400;
-            display: block;
-            padding: 15px 10px;
-        }
-
-        .sop-list a:hover {
-            color: var(--primary-blue);
-        }
-
-        .sop-list small {
-            display: block;
-            font-size: 0.85em;
-            color: var(--medium-text);
-            margin-top: 3px;
-        }
-
-        blockquote {
-            background-color: var(--hover-bg); /* 暗黑模式下的引用背景 */
-            border-left: 4px solid var(--primary-blue);
+        #password-input {
+            width: 100%;
             padding: 15px;
-            margin-top: 40px;
+            margin-bottom: 20px;
+            background-color: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
             border-radius: 8px;
-            color: var(--medium-text);
-            font-style: italic;
-            font-size: 0.9em;
+            color: var(--color-text-primary);
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        #password-input:focus {
+            border-color: var(--color-accent-blue);
+            outline: none;
+        }
+
+        #submit-button {
+            background-color: var(--color-accent-blue);
+            color: var(--color-text-primary);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.2s ease, transform 0.1s;
+        }
+
+        #submit-button:hover {
+            background-color: var(--color-accent-hover);
+        }
+
+        #submit-button:active {
+            transform: scale(0.98);
+        }
+
+        #error-message {
+            color: #ff453a; /* macOS Red for error */
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        /* --- SOP Directory Styles --- */
+        #sop-directory {
+            display: none; /* Initially hidden */
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .sop-card {
+            background-color: var(--color-bg-secondary);
+            border-radius: 10px;
+            padding: 20px;
+            text-decoration: none;
+            color: var(--color-text-primary);
+            box-shadow: 0 4px 15px var(--color-shadow);
+            transition: transform 0.2s, box-shadow 0.2s, border 0.2s;
+            display: block;
+            border: 1px solid transparent; /* Subtle border for hover effect */
+        }
+
+        .sop-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px var(--color-shadow);
+            border: 1px solid var(--color-accent-blue);
+        }
+
+        .card-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+            color: var(--color-accent-blue);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .card-subtitle {
+            font-size: 14px;
+            color: var(--color-text-secondary);
         }
     </style>
 </head>
 <body>
 
-    <div id="auth-container">
-        <div class="auth-card">
-            <h1>
-                <img src="https://dodo-wheels.github.io/DodoWheelsITD/images/logo_icon.png" alt="DodoWheels Logo">
-                DodoWheels 认证
-            </h1>
-            <p style="font-size: 0.95em; color: var(--medium-text);">
-                请输入您的员工访问码以查阅标准操作流程。
-            </p>
-            
-            <div class="input-group">
-                <input type="password" id="accessCode" placeholder="输入访问码">
-            </div>
-            
-            <button onclick="checkAccessCode()">进入 SOP 目录</button>
-            
-            <p id="errorMessage" class="error-message"></p>
-        </div>
+    <div id="password-page" class="container">
+        <h1>🔐 SOP 访问验证</h1>
+        <p>请输入访问码查看目录：</p>
+        <input type="password" id="password-input" placeholder="访问码" onkeypress="handleKeyPress(event)">
+        <button id="submit-button" onclick="checkPassword()">进入目录</button>
+        <p id="error-message" style="display: none;">访问码错误，请重试。</p>
     </div>
 
-    <div id="sop-directory-container">
-        <header>
-            <h1>
-                <img src="https://dodo-wheels.github.io/DodoWheelsITD/images/logo_icon.png" alt="DodoWheels Logo">
-                DodoWheels 标准操作流程 (SOP)
-            </h1>
-        </header>
+    <div id="sop-directory" class="container">
+        <h1>📚 SOP 目录</h1>
 
-        <div class="main-content">
-            <h2>流程目录</h2>
-
-            <ul class="sop-list">
-                <li>
-                    <a href="https://dodo-wheels.github.io/DodoWheelsITD/whsop.html" target="_blank"> 
-                        SOP-01: 库存录入规范
-                        <br><small>（文件编号：WH-SOP-001。指导仓库人员准确、高效地进行库存数据录入。）</small>
-                    </a>
-                </li>
-                <li>
-                    <a href="https://dodo-wheels.io/DodoWheelsITD/purchasing.html" target="_blank"> 
-                        SOP-02: 零部件采购与询价流程
-                        <br><small>（文件编号：PRC-SOP-002。规范采购部门从需求提出到合同签订的完整步骤。）</small>
-                    </a>
-                </li>
-                <li>
-                    <a href="https://dodo-wheels.io/DodoWheelsITD/qcsop.html" target="_blank"> 
-                        SOP-03: 进料质量检验 (IQC) 标准
-                        <br><small>（文件编号：QC-SOP-003。明确进厂原材料的检验标准、抽样率及异常处理程序。）</small>
-                    </a>
-                </li>
-            </ul>
+        <div class="card-grid">
+            <a href="https://dodo-wheels.github.io/DodoWheelsITD/whsop.html" target="_blank" class="sop-card">
+                <div class="card-icon">📄</div>
+                <div class="card-title">库存录入规范</div>
+                <div class="card-subtitle">Warehouse Inventory Entry SOP</div>
+            </a>
             
-            <blockquote>
-                <strong>信息提示：</strong> 本目录文件为DodoWheels内部文件。所有流程请务必严格遵守并实时更新。
-            </blockquote>
-        </div>
+            </div>
     </div>
 
     <script>
-        function checkAccessCode() {
-            const correctCode = "wheels2025"; // **已更新**：设置正确的访问码为 wheels2025
-            const enteredCode = document.getElementById("accessCode").value;
-            const errorMessageElement = document.getElementById("errorMessage");
-            const authContainer = document.getElementById("auth-container");
-            const sopContainer = document.getElementById("sop-directory-container");
+        const CORRECT_PASSWORD = 'dodo';
+        const passwordInput = document.getElementById('password-input');
+        const passwordPage = document.getElementById('password-page');
+        const sopDirectory = document.getElementById('sop-directory');
+        const errorMessage = document.getElementById('error-message');
 
-            if (enteredCode === correctCode) {
-                // 验证成功：隐藏认证界面，显示 SOP 目录界面
-                authContainer.style.display = 'none';
-                sopContainer.style.display = 'block';
-                // 清除 URL 中的可能的错误提示
-                history.pushState(null, '', location.pathname); 
+        function checkPassword() {
+            if (passwordInput.value === CORRECT_PASSWORD) {
+                // 密码正确，切换到目录页面
+                passwordPage.style.display = 'none';
+                sopDirectory.style.display = 'block';
+                errorMessage.style.display = 'none';
             } else {
-                // 验证失败：显示错误信息
-                errorMessageElement.textContent = "访问码错误，请重新输入。";
-                errorMessageElement.classList.add("show");
+                // 密码错误，显示错误信息
+                errorMessage.style.display = 'block';
+                passwordInput.value = ''; // 清空输入框
+                passwordInput.focus();
             }
         }
 
-        // 允许按回车键提交
-        document.getElementById("accessCode").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                checkAccessCode();
+        function handleKeyPress(event) {
+            // 允许用户按 Enter 键提交
+            if (event.key === 'Enter') {
+                checkPassword();
             }
-        });
+        }
     </script>
 
 </body>
