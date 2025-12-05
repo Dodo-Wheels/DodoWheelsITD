@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DodoWheels 标准操作流程 (SOP)</title>
-    <!-- 假设这个路径在您的仓库中存在，用于图标 -->
     <link rel="icon" href="https://dodo-wheels.github.io/DodoWheelsITD/images/favicon.ico" type="image/x-icon">
-    <!-- 使用现代字体链，强调简洁 -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* 1. 颜色变量 (Mac 暗黑模式调色板) */
@@ -232,7 +230,6 @@
 </head>
 <body>
 
-    <!-- 访问认证界面 -->
     <div id="auth-container">
         <div class="auth-card">
             <h1>
@@ -253,7 +250,6 @@
         </div>
     </div>
 
-    <!-- SOP 目录界面 -->
     <div id="sop-directory-container">
         <header>
             <h1>
@@ -272,6 +268,18 @@
                         <br><small>（文件编号：WH-SOP-001。指导仓库人员准确、高效地进行库存数据录入。）</small>
                     </a>
                 </li>
+                <li>
+                    <a href="https://dodo-wheels.io/DodoWheelsITD/purchasing.html" target="_blank"> 
+                        SOP-02: 零部件采购与询价流程
+                        <br><small>（文件编号：PRC-SOP-002。规范采购部门从需求提出到合同签订的完整步骤。）</small>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://dodo-wheels.io/DodoWheelsITD/qcsop.html" target="_blank"> 
+                        SOP-03: 进料质量检验 (IQC) 标准
+                        <br><small>（文件编号：QC-SOP-003。明确进厂原材料的检验标准、抽样率及异常处理程序。）</small>
+                    </a>
+                </li>
             </ul>
             
             <blockquote>
@@ -282,7 +290,7 @@
 
     <script>
         function checkAccessCode() {
-            const correctCode = "dodo"; // 设置正确的访问码
+            const correctCode = "wheels2025"; // **已更新**：设置正确的访问码为 wheels2025
             const enteredCode = document.getElementById("accessCode").value;
             const errorMessageElement = document.getElementById("errorMessage");
             const authContainer = document.getElementById("auth-container");
