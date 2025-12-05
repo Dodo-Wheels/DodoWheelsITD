@@ -2,8 +2,9 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <!-- 关键的响应式设置：确保页面宽度适配设备宽度 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-key="title_page">【DodoWheels】库存信息录入规范</title>
+    <title data-key="title_page">【DodoWheels】库存信息录入规范通知</title>
     <!-- 引入 Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -16,6 +17,7 @@
         .header-bg {
             background-image: linear-gradient(135deg, #004d99 0%, #007bff 100%); /* Deep blue gradient */
         }
+        /* 针对手机浏览优化边框和背景 */
         .rule-item {
             border-left: 4px solid #007bff; /* Blue border for data entry emphasis */
             padding-left: 1rem;
@@ -39,31 +41,34 @@
             padding: 0.5rem 1rem;
             border-radius: 0.5rem;
             font-family: monospace;
-            overflow-x: auto;
+            /* 关键：确保长代码示例在手机上可以水平滚动，避免页面撑开 */
+            overflow-x: auto; 
             white-space: nowrap;
         }
     </style>
 </head>
+<!-- 调整 mt-8 为 mt-4，让卡片在手机上更靠近顶部 -->
 <body class="p-4 sm:p-8 min-h-screen flex justify-center items-start">
 
     <!-- 主通知卡片容器 -->
-    <div class="w-full max-w-4xl bg-white shadow-2xl rounded-xl overflow-hidden mt-8">
+    <div class="w-full max-w-4xl bg-white shadow-2xl rounded-xl overflow-hidden mt-4 sm:mt-8">
 
         <!-- 头部 - 标题与日期 -->
         <header class="header-bg text-white p-6 sm:p-8">
-            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight" data-key="title_main">【DodoWheels】库存录入规范</h1>
+            <!-- 标题字体大小适配：手机上 text-3xl，桌面 sm:text-4xl -->
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight" data-key="title_main">【DodoWheels】库存录入规范通知</h1>
             <p class="text-sm sm:text-base opacity-90 mt-2" data-key="title_sop">Inventory Data Entry Standard Operating Procedure (SOP)</p>
             <div class="text-right text-xs mt-4" data-key="date_effective">本规范自发布之日起立即生效</div>
         </header>
 
-        <!-- 语言切换按钮 -->
+        <!-- 语言切换按钮 - 保持弹性布局，适应手机屏幕 -->
         <div class="p-4 bg-gray-100 flex justify-end space-x-2 border-b">
             <button onclick="setLanguage('zh-CN')" class="lang-btn bg-indigo-500 hover:bg-indigo-600 text-white text-xs px-3 py-1 rounded-full shadow-md transition duration-150 ease-in-out" data-lang="zh-CN">中文</button>
             <button onclick="setLanguage('en-US')" class="lang-btn bg-gray-300 hover:bg-gray-400 text-gray-800 text-xs px-3 py-1 rounded-full shadow-md transition duration-150 ease-in-out" data-lang="en-US">English</button>
             <button onclick="setLanguage('fr-FR')" class="lang-btn bg-gray-300 hover:bg-gray-400 text-gray-800 text-xs px-3 py-1 rounded-full shadow-md transition duration-150 ease-in-out" data-lang="fr-FR">Français</button>
         </div>
         
-        <!-- 内容主体 -->
+        <!-- 内容主体 - 统一使用 p-6 sm:p-8 确保在手机上有足够的内边距 -->
         <main class="p-6 sm:p-8">
             <p class="text-lg text-gray-700 mb-6 border-b pb-4" data-key="intro_text">
                 为确保 Quickbooks Online (QBO) 系统中库存数据的准确性、一致性及可追溯性，现对所有库存相关业务的 **Description (描述)** 字段录入规范进行统一，请各部门及相关人员严格执行。
@@ -72,7 +77,8 @@
             <!-- 1. 涉及仓库 -->
             <section class="mb-8">
                 <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-indigo-500 pb-2 mb-4" data-key="sec1_title">1. 涉及仓库范围</h2>
-                <div class="flex flex-wrap gap-4">
+                <!-- 使用 flex-wrap 确保仓库标签在手机上自动换行 -->
+                <div class="flex flex-wrap gap-3">
                     <span class="bg-indigo-100 text-indigo-800 text-sm font-medium px-4 py-2 rounded-full shadow-md">MT 仓</span>
                     <span class="bg-indigo-100 text-indigo-800 text-sm font-medium px-4 py-2 rounded-full shadow-md">GT 仓</span>
                     <span class="bg-indigo-100 text-indigo-800 text-sm font-medium px-4 py-2 rounded-full shadow-md">QC 仓</span>
@@ -133,6 +139,7 @@
                         <p class="font-semibold text-gray-700" data-key="rule3_title">规则三：多仓库信息录入顺序</p>
                         <ul class="list-disc ml-6 text-gray-600 space-y-1">
                             <li data-key="rule3_1">在 `@` 符号后的库位及数量信息中，若涉及多个仓库物料，请严格按照以下优先级顺序进行录入，以确保数据的一致性：</li>
+                            <!-- 确保长列表在手机上也能正常换行显示 -->
                             <li class="font-mono text-sm mt-1 p-2 bg-blue-50 rounded text-blue-800 break-all">
                                 <strong class="text-blue-600">LS</strong>, <strong class="text-blue-600">LC</strong>, <strong class="text-blue-600">LLS04</strong>, <strong class="text-blue-600">L4875</strong>, <strong class="text-blue-600">L2184</strong>,
                                 <strong class="text-blue-600">LNAN</strong>, <strong class="text-blue-600">LDMCC</strong>, <strong class="text-blue-600">GT</strong>, <strong class="text-blue-600">LGTN</strong>, <strong class="text-blue-600">LOTA</strong>, <strong class="text-blue-600">QC</strong>
@@ -144,6 +151,7 @@
                 <!-- 格式总览 -->
                 <div class="mt-6 p-4 border rounded-lg bg-gray-100 shadow-md">
                     <p class="font-bold text-blue-700 mb-2 text-lg" data-key="format_title">【完整格式示例】</p>
+                    <!-- 使用了 .format-example 样式来处理 overflow-x: auto; 保证长字符串不破坏布局 -->
                     <div class="format-example" data-key="format_example_template">
                         [特殊描述] @ [仓库简写]/[完整库位]*[数量], [仓库简写]/[完整库位]*[数量]
                     </div>
@@ -209,8 +217,8 @@
         // --- Translation Data ---
         const translations = {
             'zh-CN': {
-                title_page: '【DodoWheels】库存信息录入规范',
-                title_main: '【DodoWheels】库存录入规范',
+                title_page: '【DodoWheels】库存信息录入规范通知',
+                title_main: '【DodoWheels】库存录入规范通知',
                 title_sop: 'Inventory Data Entry Standard Operating Procedure (SOP)',
                 date_effective: '本规范自发布之日起立即生效',
                 intro_text: '为确保 Quickbooks Online (QBO) 系统中库存数据的准确性、一致性及可追溯性，现对所有库存相关业务的 **Description (描述)** 字段录入规范进行统一，请各部门及相关人员严格执行。',
@@ -344,12 +352,12 @@
                 sec4_p1_title: '1. Préparateur :',
                 sec4_p1_text: 'Assume la responsabilité principale de la <strong class="text-red-600">précision, du marquage de l\'emplacement et de la signature</strong> du processus de préparation.',
                 sec4_p2_title: '2. Personnel de Saisie de Données (Personnel d\'Entrepôt) :',
-                sec4_p2_text: 'Assume la responsabilité principale du <strong class="text-red-600">format, de la séquence et du respect des délais</strong> de la saisie des données.',
+                sec4_p2_text: 'Assume la responsabilité principale du <strong class="text-red-600">format, de la séquence et du respect des délais</strong> de la saisie des données。',
                 sec4_timing_title: 'Exigences de Délais de Processus :',
                 sec4_t1_title: '1. Délai du Préparateur :',
-                sec4_t1_text: 'Doit <strong class="text-red-600">immédiatement</strong> remettre les documents au Personnel de Saisie de Données après <strong class="text-red-600">avoir terminé la préparation et signé</strong> ; aucun retard n\'est autorisé.',
+                sec4_t1_text: 'Doit <strong class="text-red-600">immédiatement</strong> remettre les documents au Personnel de Saisie de Données après <strong class="text-red-600">avoir terminé la préparation et signé</strong> ; aucun retard n\'est autorisé。',
                 sec4_t2_title: '2. Délai de Saisie de Données :',
-                sec4_t2_text: 'Doit <strong class="text-red-600">procéder rapidement à la saisie dans le système QBO</strong> après réception des documents signés et marqués pour assurer l\'exactitude des données d\'inventaire en temps réel.',
+                sec4_t2_text: 'Doit <strong class="text-red-600">procéder rapidement à la saisie dans le système QBO</strong> après réception des documents signés et marqués pour assurer l\'exactitude des données d\'inventaire en temps réel。',
                 footer_text: '&copy; [DodoWheels] ',
             }
         };
