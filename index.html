@@ -67,12 +67,12 @@
 
         /* --- 左侧菜单 (Sidebar) --- */
         #sidebar {
-            width: 280px;
+            /* 关键调整: 宽度从 280px 缩小到 220px */
+            width: **220px**; 
             background-color: var(--color-bg-secondary);
             padding: 20px 0;
             flex-shrink: 0;
             border-right: 1px solid var(--color-border);
-            /* 使用 flex column 布局来将语言和退出按钮推到底部 */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -81,22 +81,24 @@
         }
 
         #menu-top {
-            overflow-y: auto; /* 仅菜单项可滚动 */
+            overflow-y: auto; 
         }
 
         #sidebar h2 {
             color: var(--color-accent-blue);
-            margin: 0 20px 20px;
+            /* 缩小标题左右间距 */
+            margin: 0 **15px** 20px; 
             font-weight: 600;
-            font-size: 20px;
+            font-size: 18px; /* 略微缩小字体 */
             border-bottom: 1px solid var(--color-border);
             padding-bottom: 10px;
         }
 
         .menu-item {
             display: block;
-            padding: 12px 20px;
-            margin: 4px 0;
+            /* 缩小菜单项垂直和水平内边距 */
+            padding: **10px 15px**; 
+            margin: 2px 0;
             color: var(--color-text-primary);
             text-decoration: none;
             cursor: pointer;
@@ -117,7 +119,7 @@
         /* --- 底部控制区 (语言切换/退出) --- */
         #sidebar-footer {
             border-top: 1px solid var(--color-border);
-            padding: 20px;
+            padding: **15px**; /* 缩小内边距 */
             flex-shrink: 0;
         }
         
@@ -128,7 +130,7 @@
         }
 
         .lang-button {
-            background-color: var(--color-bg-primary); /* 调整背景色与侧边栏区分 */
+            background-color: var(--color-bg-primary); 
             color: var(--color-text-secondary);
             border: 1px solid var(--color-border);
             padding: 5px 10px;
@@ -145,7 +147,7 @@
 
         #logout-button {
             width: 100%;
-            background-color: #ff453a; /* macOS Red for destruction/exit */
+            background-color: #ff453a; 
             color: var(--color-text-primary);
             border: none;
             padding: 10px;
@@ -159,7 +161,6 @@
         #logout-button:hover {
             background-color: #d1322b;
         }
-
 
         /* --- 右侧内容区 (Content) --- */
         #content-area {
