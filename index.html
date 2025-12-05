@@ -7,21 +7,22 @@
     <link rel="icon" href="https://dodo-wheels.github.io/DodoWheelsITD/images/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* 1. 统一颜色变量 (与whsop.html风格一致) */
+        /* 1. 颜色变量 (调整为 Mac 风格的蓝色辅助色) */
         :root {
-            --primary-color: #4CAF50; /* 主绿色 */
-            --secondary-color: #f0fdf4; /* 浅背景绿 */
-            --text-color: #333;
-            --light-text-color: #555;
-            --border-color: #e0e0e0;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --button-hover-color: #45a049;
+            --primary-color: #007AFF; /* Mac/iOS 风格的蓝色 */
+            --secondary-color: #f5f7fa; /* 极浅的灰色背景 */
+            --text-color: #1c1c1e; /* 深色文字 */
+            --light-text-color: #6a6a6a; /* 辅助文字 */
+            --border-color: #d1d1d6; /* 浅灰色边框 */
+            --shadow-color: rgba(0, 0, 0, 0.08); /* 极浅阴影，保持扁平 */
+            --button-hover-color: #005bb5; /* 蓝色加深 */
         }
 
-        /* 2. 全局样式 */
+        /* 2. 全局样式和字体调整 */
         body {
-            font-family: 'Roboto', sans-serif;
-            line-height: 1.6;
+            /* 尝试模拟 Mac/iOS 系统的字体链 */
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.5;
             margin: 0;
             padding: 0;
             background-color: var(--secondary-color);
@@ -29,7 +30,7 @@
             min-height: 100vh;
         }
 
-        /* 3. 访问认证容器样式 (默认居中显示) */
+        /* 3. 访问认证容器样式 */
         #auth-container {
             display: flex;
             justify-content: center;
@@ -44,61 +45,71 @@
             background-color: white;
             padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 8px 20px var(--shadow-color);
-            max-width: 450px;
+            /* 简洁的阴影 */
+            box-shadow: 0 4px 12px var(--shadow-color); 
+            max-width: 400px; /* 略微收窄，更精致 */
             width: 100%;
-            border-top: 5px solid var(--primary-color);
+            border-top: 4px solid var(--primary-color);
         }
 
         /* 4. 认证输入及按钮样式 */
         .auth-card h1 {
             color: var(--primary-color);
-            font-size: 2.2em;
-            margin-bottom: 25px;
+            font-size: 2em;
+            font-weight: 600; /* 更现代的字体粗细 */
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .auth-card img {
-            height: 40px;
-            margin-right: 15px;
+            height: 35px;
+            margin-right: 10px;
         }
 
         input[type="password"] {
             width: calc(100% - 24px);
             padding: 12px;
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1.1em;
+            border-radius: 8px; /* 较圆润的圆角 */
+            font-size: 1em;
             box-sizing: border-box;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input[type="password"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            /* Mac 风格的蓝色聚焦光环 */
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3); 
         }
 
         button {
             background-color: var(--primary-color);
             color: white;
-            padding: 14px 25px;
+            padding: 10px 20px; /* 略微缩小按钮高度 */
             border: none;
             border-radius: 8px;
-            font-size: 1.15em;
+            font-size: 1.05em;
             font-weight: 500;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: background-color 0.2s ease, opacity 0.2s ease;
             width: 100%;
             margin-top: 20px;
+            letter-spacing: 0.5px;
         }
 
         button:hover {
             background-color: var(--button-hover-color);
-            transform: translateY(-2px);
+            opacity: 0.9;
         }
 
         .error-message {
-            color: #d32f2f;
-            margin-top: 15px;
+            color: #ff3b30; /* iOS 红色 */
+            margin-top: 10px;
             font-weight: 500;
-            font-size: 0.95em;
+            font-size: 0.9em;
             opacity: 0;
             height: 0;
             overflow: hidden;
@@ -118,33 +129,33 @@
         header {
             background-color: var(--primary-color);
             color: white;
-            padding: 25px 20px;
+            padding: 25px 0;
             text-align: center;
-            box-shadow: 0 4px 10px var(--shadow-color);
+            box-shadow: 0 2px 8px var(--shadow-color);
         }
 
         header h1 {
-            font-size: 2.5em;
+            font-size: 2.2em;
             font-weight: 700;
+            margin: 0;
         }
         
         .main-content {
-            max-width: 900px;
-            margin: 40px auto;
+            max-width: 800px;
+            margin: 30px auto;
             background-color: white;
-            padding: 30px 40px;
+            padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 8px 20px var(--shadow-color);
-            border-top: 5px solid var(--primary-color);
+            box-shadow: 0 4px 12px var(--shadow-color);
         }
 
         .main-content h2 {
-            color: var(--primary-color);
-            font-size: 1.8em;
-            border-bottom: 2px solid var(--primary-color);
+            color: var(--text-color);
+            font-size: 1.6em;
+            border-bottom: 1px solid var(--border-color); /* 更细的分割线 */
             padding-bottom: 12px;
             margin-top: 0;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             font-weight: 500;
         }
 
@@ -154,25 +165,24 @@
         }
 
         .sop-list li {
-            margin-bottom: 20px;
-            padding-left: 20px;
-            border-left: 6px solid var(--primary-color);
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--primary-color);
+            transition: background-color 0.2s ease;
             border-radius: 4px;
         }
 
         .sop-list li:hover {
-            background-color: #f6fff6;
-            transform: translateX(5px);
+            background-color: #f0f7ff; /* 浅蓝色悬停效果 */
         }
 
         .sop-list a {
             text-decoration: none;
             color: var(--text-color);
-            font-size: 1.3em;
-            font-weight: 500;
+            font-size: 1.15em;
+            font-weight: 400;
             display: block;
-            padding: 15px 10px;
+            padding: 12px 10px;
         }
 
         .sop-list a:hover {
@@ -181,20 +191,20 @@
 
         .sop-list small {
             display: block;
-            font-size: 0.9em;
+            font-size: 0.85em;
             color: var(--light-text-color);
-            margin-top: 5px;
+            margin-top: 3px;
         }
 
         blockquote {
-            background-color: #e8f5e9;
-            border-left: 5px solid var(--primary-color);
-            padding: 15px 20px;
-            margin-top: 40px;
+            background-color: #eef4ff; /* 极浅蓝色背景 */
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin-top: 30px;
             border-radius: 8px;
             color: var(--light-text-color);
             font-style: italic;
-            font-size: 0.95em;
+            font-size: 0.9em;
         }
     </style>
 </head>
@@ -204,16 +214,15 @@
         <div class="auth-card">
             <h1>
                 <img src="https://dodo-wheels.github.io/DodoWheelsITD/images/logo_icon.png" alt="DodoWheels Logo">
-                DodoWheels SOP 认证
+                SOP 访问认证
             </h1>
-            <p>请输入您的访问码以查看DodoWheels的标准操作流程。</p>
+            <p style="font-size: 1em; color: var(--light-text-color);">请输入访问码以查看DodoWheels的标准操作流程。</p>
             
             <div class="input-group">
-                <label for="accessCode">访问码:</label>
                 <input type="password" id="accessCode" placeholder="输入访问码">
             </div>
             
-            <button onclick="checkAccessCode()">进入SOP</button>
+            <button onclick="checkAccessCode()">进入 SOP 目录</button>
             
             <p id="errorMessage" class="error-message"></p>
         </div>
@@ -223,12 +232,12 @@
         <header>
             <h1>
                 <img src="https://dodo-wheels.github.io/DodoWheelsITD/images/logo_icon.png" alt="DodoWheels Logo">
-                DodoWheels 标准操作流程 (SOP) 目录
+                DodoWheels 标准操作流程 (SOP)
             </h1>
         </header>
 
         <div class="main-content">
-            <h2>请选择需要查阅的SOP文件</h2>
+            <h2>目录</h2>
 
             <ul class="sop-list">
                 <li>
