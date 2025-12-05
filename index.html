@@ -7,8 +7,8 @@
     <style>
         /* Mac Dark Mode Base Styles */
         :root {
-            --color-bg-primary: #1e1e1e;
-            --color-bg-secondary: #2c2c2c;
+            --color-bg-primary: #1e1e1e; /* Main background */
+            --color-bg-secondary: #2c2c2c; /* Sidebar background */
             --color-text-primary: #ffffff;
             --color-text-secondary: #cccccc;
             --color-accent-blue: #0a84ff;
@@ -26,28 +26,51 @@
             padding: 0;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* 调整为靠顶部对齐，方便滚动 */
+            align-items: center;
             min-height: 100vh;
+            overflow-y: auto; /* 允许页面整体滚动 */
         }
 
-        .container {
-            padding: 30px;
-            max-width: 1200px; /* 扩大容器以容纳内容区 */
+        .main-wrapper {
             width: 90%;
+            max-width: 1400px; /* 更大的最大宽度 */
+            height: 95vh; /* 设置一个固定高度 */
             border-radius: 12px;
             box-shadow: 0 10px 30px var(--color-shadow);
             position: relative;
-            margin: 50px 0; /* 上下留白 */
+            background-color: var(--color-bg-primary);
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Language Switcher Styles */
+        /* 密码页容器 */
+        #password-page {
+            padding: 50px;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* 目录布局 */
+        #sop-directory {
+            display: none;
+            flex-grow: 1;
+            overflow: hidden;
+            border-radius: 12px;
+            display: flex; /* 使用 Flexbox 进行左右布局 */
+        }
+
+        /* 语言切换 */
         #language-switcher {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 20px;
+            right: 20px;
             display: flex;
             gap: 5px;
-            z-index: 10; /* 确保在最上层 */
+            z-index: 10;
         }
 
         .lang-button {
@@ -58,7 +81,6 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-            transition: background-color 0.2s, color 0.2s;
         }
 
         .lang-button.active {
@@ -66,17 +88,78 @@
             color: var(--color-text-primary);
             border-color: var(--color-accent-blue);
         }
-        
-        /* General Elements */
-        h1 {
-            color: var(--color-accent-blue);
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: 600;
+
+        /* --- 左侧菜单 (Sidebar) --- */
+        #sidebar {
+            width: 280px;
+            background-color: var(--color-bg-secondary);
+            padding: 20px 0;
+            flex-shrink: 0;
+            overflow-y: auto;
+            border-right: 1px solid var(--color-border);
         }
 
-        #password-input {
+        #sidebar h2 {
+            color: var(--color-accent-blue);
+            margin: 0 20px 20px;
+            font-weight: 600;
+            font-size: 20px;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 10px;
+        }
+
+        .menu-item {
+            display: block;
+            padding: 12px 20px;
+            margin: 4px 0;
+            color: var(--color-text-primary);
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .menu-item:hover {
+            background-color: #383838;
+        }
+
+        .menu-item.active {
+            background-color: rgba(10, 132, 255, 0.2); /* 蓝色半透明背景 */
+            border-left-color: var(--color-accent-blue);
+            color: var(--color-text-primary);
+            font-weight: 500;
+        }
+
+        /* --- 右侧内容区 (Content) --- */
+        #content-area {
+            flex-grow: 1;
+            padding: 0;
+            background-color: var(--color-bg-primary);
+            overflow: hidden;
+        }
+
+        #sop-iframe {
             width: 100%;
+            height: 100%;
+            border: none;
+            background-color: var(--color-bg-primary);
+        }
+        
+        /* 初始加载时的占位符/提示 */
+        #initial-message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            color: var(--color-text-secondary);
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        /* 其他通用元素样式 (密码页) */
+        #password-input {
+            width: 300px;
             padding: 15px;
             margin-bottom: 20px;
             background-color: var(--color-bg-secondary);
@@ -85,10 +168,10 @@
             color: var(--color-text-primary);
             font-size: 16px;
             box-sizing: border-box;
-            transition: border-color 0.2s;
         }
 
         #submit-button {
+            width: 300px;
             background-color: var(--color-accent-blue);
             color: var(--color-text-primary);
             border: none;
@@ -96,61 +179,13 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
-            font-weight: 500;
-            transition: background-color 0.2s ease, transform 0.1s;
-            width: 100%;
-        }
-
-        /* SOP Directory Styles */
-        #sop-directory {
-            display: none;
-        }
-
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .sop-card {
-            background-color: var(--color-bg-secondary);
-            border-radius: 10px;
-            padding: 20px;
-            text-decoration: none;
-            color: var(--color-text-primary);
-            box-shadow: 0 4px 15px var(--color-shadow);
-            transition: transform 0.2s, box-shadow 0.2s, border 0.2s;
-            display: block;
-            border: 1px solid transparent;
-            cursor: pointer; /* 添加指针，强调可点击 */
-        }
-
-        .sop-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px var(--color-shadow);
-            border: 1px solid var(--color-accent-blue);
-        }
-
-        /* 新增内容显示区域样式 */
-        #content-display {
-            display: none; /* 初始隐藏 */
-            border-top: 2px solid var(--color-border);
-            padding-top: 30px;
-        }
-
-        #sop-iframe {
-            width: 100%;
-            height: 80vh; /* 设置一个较高的默认高度 */
-            border: 1px solid var(--color-border);
-            border-radius: 8px;
-            background-color: #f0f0f0; /* 外部页面加载前的背景，如果外部页面是白色，可能需要调整 */
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="main-wrapper">
+        
         <div id="language-switcher">
             <button class="lang-button active" data-lang="zh" onclick="setLanguage('zh')">中文</button>
             <button class="lang-button" data-lang="en" onclick="setLanguage('en')">EN</button>
@@ -165,22 +200,32 @@
             <p id="error-message" style="display: none;" data-key="error-pass">访问码错误，请重试。</p>
         </div>
 
-        <div id="sop-directory">
-            <h1 data-key="title-dir">📚 SOP 目录</h1>
-
-            <div class="card-grid">
-                <div class="sop-card" onclick="loadSOP('https://dodo-wheels.github.io/DodoWheelsITD/whsop.html')">
-                    <div class="card-icon">📄</div>
-                    <div class="card-title" data-key="card-title-inv">库存录入规范</div>
-                    <div class="card-subtitle" data-key="card-subtitle-inv">Warehouse Inventory Entry SOP</div>
-                </div>
+        <div id="sop-directory" style="display: none;">
+            
+            <div id="sidebar">
+                <h2 data-key="title-dir">📚 SOP 目录</h2>
                 
-                </div>
-
-            <div id="content-display">
-                <iframe id="sop-iframe" name="sop-frame" src="" frameborder="0" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+                <a class="menu-item" 
+                   data-key="card-title-inv" 
+                   data-url="https://dodo-wheels.github.io/DodoWheelsITD/whsop.html" 
+                   onclick="loadSOP(this)">
+                    库存录入规范
+                </a>
+                
+                <a class="menu-item" 
+                   data-key="dummy-sop-1" 
+                   data-url="#" 
+                   onclick="loadSOP(this)">
+                    (示例) 采购流程 SOP
+                </a>
             </div>
 
+            <div id="content-area">
+                <div id="initial-message">
+                    <span data-key="msg-initial">请从左侧菜单选择一个 SOP 查看内容。</span>
+                </div>
+                <iframe id="sop-iframe" name="sop-frame" src="" frameborder="0"></iframe>
+            </div>
         </div>
     </div>
 
@@ -190,10 +235,10 @@
         const passwordPage = document.getElementById('password-page');
         const sopDirectory = document.getElementById('sop-directory');
         const errorMessage = document.getElementById('error-message');
-        const contentDisplay = document.getElementById('content-display');
         const sopIframe = document.getElementById('sop-iframe');
-
-        // 语言数据字典 (与之前版本相同)
+        const initialMessage = document.getElementById('initial-message');
+        
+        // 语言数据字典 (新增了示例菜单项和初始提示)
         const translations = {
             'zh': {
                 'title-pass': '🔐 SOP 访问验证',
@@ -202,7 +247,8 @@
                 'error-pass': '访问码错误，请重试。',
                 'title-dir': '📚 SOP 目录',
                 'card-title-inv': '库存录入规范',
-                'card-subtitle-inv': 'Warehouse Inventory Entry SOP'
+                'dummy-sop-1': '(示例) 采购流程 SOP',
+                'msg-initial': '请从左侧菜单选择一个 SOP 查看内容。'
             },
             'en': {
                 'title-pass': '🔐 SOP Access Verification',
@@ -211,7 +257,8 @@
                 'error-pass': 'Incorrect access code, please try again.',
                 'title-dir': '📚 SOP Directory',
                 'card-title-inv': 'Inventory Entry SOP',
-                'card-subtitle-inv': 'Warehouse Inventory Entry SOP'
+                'dummy-sop-1': '(Example) Procurement Process SOP',
+                'msg-initial': 'Please select an SOP from the left menu to view the content.'
             },
             'fr': {
                 'title-pass': '🔐 Vérification d\'accès SOP',
@@ -220,7 +267,8 @@
                 'error-pass': 'Code d\'accès incorrect, veuillez réessayer.',
                 'title-dir': '📚 Répertoire SOP',
                 'card-title-inv': 'Procédure d\'Entrée d\'Inventaire',
-                'card-subtitle-inv': 'Procédure Opérationnelle Standard d\'Entrée d\'Inventaire d\'Entrepôt'
+                'dummy-sop-1': '(Exemple) Procédure d\'Achat',
+                'msg-initial': 'Veuillez sélectionner un SOP dans le menu de gauche pour afficher le contenu.'
             }
         };
 
@@ -256,13 +304,15 @@
 
         function checkPassword() {
             if (passwordInput.value === CORRECT_PASSWORD) {
-                // 密码正确，切换到目录页面
+                // 密码正确，切换到目录页面，并设置布局
                 passwordPage.style.display = 'none';
-                sopDirectory.style.display = 'block';
-                errorMessage.style.display = 'none';
+                sopDirectory.style.display = 'flex'; // 显示 Flex 布局
                 
-                // 自动加载第一个 SOP 内容（可选，可删除此行）
-                // loadSOP('https://dodo-wheels.github.io/DodoWheelsITD/whsop.html');
+                // 默认加载第一个菜单项 (可选)
+                const firstMenuItem = document.querySelector('.menu-item');
+                if (firstMenuItem) {
+                    loadSOP(firstMenuItem);
+                }
             } else {
                 errorMessage.style.display = 'block';
                 passwordInput.value = '';
@@ -277,15 +327,25 @@
         }
 
         /**
-         * 加载指定的 SOP 页面到 iframe 中
-         * @param {string} url 要加载的 SOP 链接
+         * 加载指定的 SOP 页面到 iframe 中，并更新菜单激活状态
+         * @param {HTMLElement} menuItem 被点击的菜单项元素
          */
-        function loadSOP(url) {
-            sopIframe.src = url;
-            contentDisplay.style.display = 'block';
+        function loadSOP(menuItem) {
+            const url = menuItem.getAttribute('data-url');
 
-            // 平滑滚动到内容区域
-            contentDisplay.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // 移除所有菜单项的激活状态
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 添加当前菜单项的激活状态
+            menuItem.classList.add('active');
+
+            // 隐藏初始提示信息
+            initialMessage.style.display = 'none';
+
+            // 设置 iframe 的 src 加载页面
+            sopIframe.src = url;
         }
     </script>
 
