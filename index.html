@@ -3,256 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>仓储库存升级方案报告</title>
-    <!-- 引入 Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 配置 Tailwind -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary': '#4f46e5',
-                        'secondary': '#10b981',
-                        'bg-light': '#f9fafb',
-                        'bg-dark': '#eef2ff',
-                        'card-bg': '#ffffff',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', '"Noto Sans"', 'sans-serif', '"Apple Color Emoji"', '"Segoe UI Emoji"', '"Segoe UI Symbol"', '"Noto Color Emoji"'],
-                    },
-                }
-            }
-        }
-    </script>
+    <title>DodoWheels 标准操作流程 (SOP)</title>
+    <link rel="icon" href="https://dodo-wheels.github.io/DodoWheelsITD/images/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* 自定义滚动条，使报告更美观 */
-        ::-webkit-scrollbar {
-            width: 8px;
+        /* 1. 统一颜色变量 (与whsop.html风格一致) */
+        :root {
+            --primary-color: #4CAF50; /* 主绿色 */
+            --secondary-color: #f0fdf4; /* 浅背景绿 */
+            --text-color: #333;
+            --light-text-color: #555;
+            --border-color: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --button-hover-color: #45a049;
         }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+
+        /* 2. 全局样式 */
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            min-height: 100vh;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
+
+        /* 3. 访问认证容器样式 (默认居中显示) */
+        #auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .auth-card {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px var(--shadow-color);
+            max-width: 450px;
+            width: 100%;
+            border-top: 5px solid var(--primary-color);
+        }
+
+        /* 4. 认证输入及按钮样式 */
+        .auth-card h1 {
+            color: var(--primary-color);
+            font-size: 2.2em;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-card img {
+            height: 40px;
+            margin-right: 15px;
+        }
+
+        input[type="password"] {
+            width: calc(100% - 24px);
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1.1em;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.15em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: var(--button-hover-color);
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: #d32f2f;
+            margin-top: 15px;
+            font-weight: 500;
+            font-size: 0.95em;
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            transition: opacity 0.3s ease, height 0.3s ease;
+        }
+
+        .error-message.show {
+            opacity: 1;
+            height: auto;
+        }
+
+        /* 5. SOP 目录部分样式 (隐藏 by default) */
+        #sop-directory-container {
+            display: none; /* 默认隐藏 */
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px var(--shadow-color);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        
+        .main-content {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px var(--shadow-color);
+            border-top: 5px solid var(--primary-color);
+        }
+
+        .main-content h2 {
+            color: var(--primary-color);
+            font-size: 1.8em;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 12px;
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .sop-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sop-list li {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            border-left: 6px solid var(--primary-color);
+            transition: background-color 0.3s ease, transform 0.2s ease;
             border-radius: 4px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+
+        .sop-list li:hover {
+            background-color: #f6fff6;
+            transform: translateX(5px);
         }
-        /* 关键指标动画效果 */
-        .stat-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        .sop-list a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 1.3em;
+            font-weight: 500;
+            display: block;
+            padding: 15px 10px;
         }
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.1);
+
+        .sop-list a:hover {
+            color: var(--primary-color);
         }
-        /* 背景渐变效果 */
-        #report-container {
-            background: linear-gradient(to bottom right, #eef2ff, #f9fafb);
+
+        .sop-list small {
+            display: block;
+            font-size: 0.9em;
+            color: var(--light-text-color);
+            margin-top: 5px;
+        }
+
+        blockquote {
+            background-color: #e8f5e9;
+            border-left: 5px solid var(--primary-color);
+            padding: 15px 20px;
+            margin-top: 40px;
+            border-radius: 8px;
+            color: var(--light-text-color);
+            font-style: italic;
+            font-size: 0.95em;
         }
     </style>
 </head>
-<body id="report-container" class="font-sans min-h-screen py-8 sm:py-12">
+<body>
 
-    <!-- 报告主体容器 -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <!-- 头部标题区 -->
-        <header class="text-center mb-12 lg:mb-16">
-            <span class="text-primary text-sm font-semibold uppercase tracking-wider bg-primary/10 py-1 px-3 rounded-full">运营优化</span>
-            <h1 class="mt-4 text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight">
-                仓储库存管理系统（WMS）升级方案
+    <div id="auth-container">
+        <div class="auth-card">
+            <h1>
+                <img src="https://dodo-wheels.github.io/DodoWheelsITD/images/logo_icon.png" alt="DodoWheels Logo">
+                DodoWheels SOP 认证
             </h1>
-            <p class="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
-                本次升级的首要目标是<strong class="text-secondary font-bold">解决产品库位和数量的实时准确性问题</strong>，需全新开发一套WMS系统，以取代QBO系统使用描述显示库位和数量，实现精细化库存控制与流程优化。
-            </p>
-        </header>
-
-        <!-- 关键指标卡片区 -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <!-- 指标 1 -->
-            <div class="stat-card bg-card-bg p-6 rounded-xl shadow-lg border-l-4 border-primary">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 bg-primary/20 p-3 rounded-full">
-                        <!-- Icon: 准确率 -->
-                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.21a2 2 0 00-2.83-2.828L5.91 16.155A4 4 0 005 18.948V20h1.052a4 4 0 002.793-.89L19.82 5.632z"></path></svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">目标库存准确率</p>
-                        <p class="text-2xl font-bold text-gray-900">≥ 99.5%</p>
-                    </div>
-                </div>
-            </div>
-            <!-- 指标 2 -->
-            <div class="stat-card bg-card-bg p-6 rounded-xl shadow-lg border-l-4 border-secondary">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 bg-secondary/20 p-3 rounded-full">
-                        <!-- Icon: 效率 -->
-                        <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">目标拣货效率提升</p>
-                        <p class="text-2xl font-bold text-gray-900">20%</p>
-                    </div>
-                </div>
-            </div>
-            <!-- 指标 3 -->
-            <div class="stat-card bg-card-bg p-6 rounded-xl shadow-lg border-l-4 border-yellow-500">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 bg-yellow-500/20 p-3 rounded-full">
-                        <!-- Icon: 风险 -->
-                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.398 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">库位错误率控制</p>
-                        <p class="text-2xl font-bold text-gray-900">降至 0.1%</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 核心内容区：方案对比 -->
-        <section class="mb-12">
-            <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-2">二、核心流程变更方案对比（请决策）</h2>
+            <p>请输入您的访问码以查看DodoWheels的标准操作流程。</p>
             
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                
-                <!-- 方案一：客服中心驱动 -->
-                <div id="plan-1" class="bg-card-bg p-6 rounded-xl shadow-xl transition duration-500 hover:shadow-2xl hover:border-primary border-t-8 border-indigo-200">
-                    <div class="flex items-center mb-4">
-                        <span class="text-2xl font-bold text-primary mr-3">1</span>
-                        <h3 class="text-2xl font-semibold text-gray-800">方案一：客服中心驱动（前端控制）</h3>
-                    </div>
-                    
-                    <div class="space-y-4 text-gray-600 mb-6">
-                        <p><strong class="font-medium text-gray-900">操作流程：</strong> 客服在QBO下单时，**同步在WMS系统进行产品数量扣减**，并复制相关仓位信息到QBO描述（系统提供快捷键）。</p>
-                        
-                        <p class="text-sm text-red-700 p-2 border border-red-300 bg-red-50 rounded-lg">
-                            <strong class="font-bold">方案一的库内操作要求：</strong> 库内人员拣货时需**优先按照系统显示的第一个仓位拣货**；如实际拣货仓位不同，**必须确保单据上的实际拣货仓位勾选准确无误**。
-                        </p>
-
-                        <p><strong class="font-medium text-primary">扣减逻辑：</strong> 默认从WMS系统识别的**第一个可用仓位**进行扣减。</p>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="p-3 bg-green-50 rounded-lg border border-green-200">
-                            <h4 class="font-semibold text-green-700 flex items-center mb-1">
-                                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                优点 (Advantage)
-                            </h4>
-                            <ul class="list-disc list-inside text-sm text-green-600 space-y-0.5">
-                                <li>客服操作可控性和准确度高。</li>
-                                <li>涉及人员少，流程不易出错。</li>
-                                <li>前端数据一致性好。</li>
-                            </ul>
-                        </div>
-                        <div class="p-3 bg-red-50 rounded-lg border border-red-200">
-                            <h4 class="font-semibold text-red-700 flex items-center mb-1">
-                                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                缺点 (Drawback)
-                            </h4>
-                            <ul class="list-disc list-inside text-sm text-red-600 space-y-0.5">
-                                <li>QBO下单时需同步操作WMS，增加客服操作。</li>
-                                <li>**核心缺陷：** 库位信息仍依赖库内人员手动勾选或遵循，存在人为错误风险。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 方案二：库内拣货驱动 -->
-                <div id="plan-2" class="bg-card-bg p-6 rounded-xl shadow-xl transition duration-500 hover:shadow-2xl hover:border-secondary border-t-8 border-green-200">
-                    <div class="flex items-center mb-4">
-                        <span class="text-2xl font-bold text-secondary mr-3">2</span>
-                        <h3 class="text-2xl font-semibold text-gray-800">方案二：库内拣货驱动（后端控制）</h3>
-                    </div>
-                    
-                    <div class="space-y-4 text-gray-600 mb-6">
-                        <p><strong class="font-medium text-gray-900">系统要求：</strong> 需开发定制化的**移动操作终端 (PDA/手持设备)** 应用程序，并具备与前端销售/ERP系统（如QBO）的**API集成能力**。</p>
-                        <p><strong class="font-medium text-gray-900">操作流程：</strong> 仓储操作员（Picker/Packer）通过移动终端扫描作业单据，并执行拣货任务。系统将**强制扫描**实际拣货库位和商品条码，进行数量校验并确认出库。</p>
-                        <p><strong class="font-medium text-secondary">扣减逻辑：</strong> 基于**实际物理作业**的库位和数量进行实时精确扣减（<strong class='text-secondary'>What-You-Scan-Is-What-You-Get原则</strong>）。</p>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="p-3 bg-green-50 rounded-lg border border-green-200">
-                            <h4 class="font-semibold text-green-700 flex items-center mb-1">
-                                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                优点 (Advantage)
-                            </h4>
-                            <ul class="list-disc list-inside text-sm text-green-600 space-y-0.5">
-                                <li>**核心优势：** 实现**基于物理位置的库存可视化与实时精确管理**。</li>
-                                <li>库存数据最真实反映物理位置，支持精细化管理和**先进先出（FIFO）**等复杂策略。</li>
-                                <li>客服下单流程得以简化，实现业务流程优化。</li>
-                            </ul>
-                        </div>
-                        <div class="p-3 bg-red-50 rounded-lg border border-red-200">
-                            <h4 class="font-semibold text-red-700 flex items-center mb-1">
-                                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                缺点 (Drawback)
-                            </h4>
-                            <ul class="list-disc list-inside text-sm text-red-600 space-y-0.5">
-                                <li>涉及定制化移动应用开发，**项目实施周期和初期投入成本显著高于方案一**。</li>
-                                <li>对库内操作人员的培训和流程合规性要求极高，初期数据采集和操作失误风险较大。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+            <div class="input-group">
+                <label for="accessCode">访问码:</label>
+                <input type="password" id="accessCode" placeholder="输入访问码">
             </div>
-        </section>
-
-        <!-- 决策与总结 (已修改) -->
-        <section class="bg-card-bg p-8 rounded-xl shadow-xl border-t-8 border-gray-400">
-            <h2 class="text-3xl font-bold text-gray-800 mb-6">三、结论与决策建议</h2>
-            <div class="text-lg text-gray-700 space-y-4">
-                
-                <p class="text-xl font-bold text-gray-800 flex items-center mb-4 p-3 bg-gray-100 rounded-lg">
-                    <svg class="w-8 h-8 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2v5m0 5v2m0-8a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2a2 2 0 012-2h2z"></path></svg>
-                    核心权衡：在“低风险/低成本”与“高精度”之间做出战略选择。
-                </p>
-
-                <!-- 前提条件 -->
-                <div class="flex items-start border-l-4 border-primary pl-3 py-2 bg-indigo-50">
-                    <svg class="w-6 h-6 text-primary mt-1 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.908l4.475 4.475M3 15.71v3.468a1.8 1.8 0 001.8 1.8h1.49l-.027-.001a1.8 1.8 0 001.272-.527l2.828-2.828a1.8 1.8 0 00.527-1.272l.001-.027V3.5h-.001a1.8 1.8 0 00-1.8-1.8h-7.39a1.8 1.8 0 00-1.8 1.8v10.428"></path></svg>
-                    <p class="text-primary-800">
-                        <strong class="font-bold text-primary-900">【上线前提条件：数据同步】</strong>
-                        无论采用哪个方案，系统上线前必须先完成**精确盘点**，并在QBO中调整至最新库存数据。随后，将这份最新、最准确的库存数据导出并**一次性导入WMS系统**，作为新系统的初始库存基准。
-                    </p>
-                </div>
-
-                <!-- 业务连续性保障 -->
-                <div class="flex items-start border-l-4 border-yellow-500 pl-3 py-2 bg-yellow-50">
-                    <svg class="w-6 h-6 text-yellow-600 mt-1 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <p class="text-yellow-800">
-                        <strong class="font-bold text-yellow-900">【部署保障：业务连续性】</strong>
-                        WMS系统上线初期将采用与QBO系统**并行运行**的方式（即QBO维护会继续）。在试运行期间，业务运转不会因新系统的启用而中断或受到影响，直至WMS系统被证明稳定可靠，并完全替代QBO库位管理功能。
-                    </p>
-                </div>
-                
-                <p class="text-base text-gray-700">
-                    本次升级致力于提升准确性，但最终决策需要权衡**实现最高精度的额外投入和操作风险**（方案二）与**保障流程稳定性和快速部署的低风险**（方案一）。
-                </p>
-                
-                <!-- 倾向性建议：方案一 -->
-                <p class="flex items-start border-l-4 border-primary pl-3 py-2 bg-indigo-50">
-                    <svg class="w-6 h-6 text-primary mt-1 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    **方案一（流程可控）：** 考虑到库内人员操作规范性风险和手机端系统开发的额外成本，**初期采用方案一可确保流程的稳定性和可控性**，风险较低，且能快速部署。WMS可先通过默认库位管理实现数据隔离，满足基本需求，并在后续迭代中再考虑精细化库位。
-                </p>
-
-                <!-- 高精度目标：方案二 -->
-                <p class="flex items-start border-l-4 border-secondary pl-3 py-2 bg-green-50">
-                    <svg class="w-6 h-6 text-secondary mt-1 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.21A2 2 0 0117.61 5.895L19 7.857m-4.618 4.21a2 2 0 00-2.83 2.828l2.83 2.828a2 2 0 002.828 0l-2.83-2.828z"></path></svg>
-                    **方案二（精度优先）：** 如果公司最高优先级是实现**绝对实时的库位准确性**（即精确到货架/储位），则必须接受方案二带来的**手机端开发成本和库内人员培训投入**，并建立高标准的监管机制。
-                </p>
-            </div>
-        </section>
-
+            
+            <button onclick="checkAccessCode()">进入SOP</button>
+            
+            <p id="errorMessage" class="error-message"></p>
+        </div>
     </div>
 
-    <!-- 底部脚注 -->
-    <footer class="mt-16 text-center text-gray-500 text-sm">
-        &copy; 2025 [DodoWheels/ITD]
-    </footer>
+    <div id="sop-directory-container">
+        <header>
+            <h1>
+                <img src="https://dodo-wheels.github.io/DodoWheelsITD/images/logo_icon.png" alt="DodoWheels Logo">
+                DodoWheels 标准操作流程 (SOP) 目录
+            </h1>
+        </header>
+
+        <div class="main-content">
+            <h2>请选择需要查阅的SOP文件</h2>
+
+            <ul class="sop-list">
+                <li>
+                    <a href="https://dodo-wheels.github.io/DodoWheelsITD/whsop.html" target="_blank"> 
+                        SOP-01: 库存录入规范
+                        <br><small>（WH-SOP-001：指导仓库人员准确、高效地进行库存数据录入）</small>
+                    </a>
+                </li>
+            </ul>
+            
+            <blockquote>
+                <strong>注意：</strong> 本目录文件为DodoWheels内部文件。点击链接将跳转至对应的详细 SOP 内容页面。
+            </blockquote>
+        </div>
+    </div>
+
+    <script>
+        function checkAccessCode() {
+            const correctCode = "dodo"; // 设置正确的访问码
+            const enteredCode = document.getElementById("accessCode").value;
+            const errorMessageElement = document.getElementById("errorMessage");
+            const authContainer = document.getElementById("auth-container");
+            const sopContainer = document.getElementById("sop-directory-container");
+
+            if (enteredCode === correctCode) {
+                // 验证成功：隐藏认证界面，显示 SOP 目录界面
+                authContainer.style.display = 'none';
+                sopContainer.style.display = 'block';
+                // 清除 URL 中的可能的错误提示
+                history.pushState(null, '', location.pathname); 
+            } else {
+                // 验证失败：显示错误信息
+                errorMessageElement.textContent = "访问码错误，请重新输入。";
+                errorMessageElement.classList.add("show");
+            }
+        }
+
+        // 允许按回车键提交
+        document.getElementById("accessCode").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkAccessCode();
+            }
+        });
+    </script>
 
 </body>
 </html>
