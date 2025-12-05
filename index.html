@@ -8,7 +8,7 @@
         /* Mac Dark Mode Base Styles */
         :root {
             --color-bg-primary: #1e1e1e; 
-            --color-bg-secondary: #2c2c2c; 
+            --color-bg-secondary: #2c2c2c; /* Sidebar background */
             --color-text-primary: #ffffff;
             --color-text-secondary: #cccccc;
             --color-accent-blue: #0a84ff;
@@ -29,20 +29,20 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow: hidden; /* 防止出现双滚动条 */
+            overflow: hidden; 
         }
         
-        /* 登录页容器：居中显示，设置最大宽度 */
+        /* 登录页容器：居中显示 */
         #password-page {
             padding: 50px;
             text-align: center;
             width: 90%;
-            max-width: 400px; /* 居中框体限制宽度 */
+            max-width: 400px;
             border-radius: 12px;
             box-shadow: 0 10px 30px var(--color-shadow);
-            background-color: var(--color-bg-primary); /* 与body背景保持一致 */
+            background-color: var(--color-bg-primary); 
             position: relative;
-            z-index: 2; /* 确保在登录后的全屏容器之上 */
+            z-index: 2;
         }
         
         /* 全屏容器：用于登录后 */
@@ -52,36 +52,10 @@
             left: 0;
             width: 100vw; 
             height: 100vh;
-            display: none; /* 初始隐藏 */
+            display: none; 
             background-color: var(--color-bg-primary); 
-            z-index: 1; /* 在密码页之后 */
+            z-index: 1; 
             flex-direction: column;
-        }
-
-        /* 语言切换 */
-        #language-switcher {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 5px;
-            z-index: 100; /* 确保始终可见 */
-        }
-
-        .lang-button {
-            background-color: var(--color-bg-secondary);
-            color: var(--color-text-secondary);
-            border: 1px solid var(--color-border);
-            padding: 5px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .lang-button.active {
-            background-color: var(--color-accent-blue);
-            color: var(--color-text-primary);
-            border-color: var(--color-accent-blue);
         }
 
         /* 目录布局 */
@@ -97,8 +71,17 @@
             background-color: var(--color-bg-secondary);
             padding: 20px 0;
             flex-shrink: 0;
-            overflow-y: auto;
             border-right: 1px solid var(--color-border);
+            /* 使用 flex column 布局来将语言和退出按钮推到底部 */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        #menu-top {
+            overflow-y: auto; /* 仅菜单项可滚动 */
         }
 
         #sidebar h2 {
@@ -121,11 +104,62 @@
             border-left: 3px solid transparent;
         }
 
+        .menu-item:hover {
+            background-color: #383838;
+        }
+
         .menu-item.active {
             background-color: rgba(10, 132, 255, 0.2); 
             border-left-color: var(--color-accent-blue);
             font-weight: 500;
         }
+        
+        /* --- 底部控制区 (语言切换/退出) --- */
+        #sidebar-footer {
+            border-top: 1px solid var(--color-border);
+            padding: 20px;
+            flex-shrink: 0;
+        }
+        
+        #language-switcher {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+        }
+
+        .lang-button {
+            background-color: var(--color-bg-primary); /* 调整背景色与侧边栏区分 */
+            color: var(--color-text-secondary);
+            border: 1px solid var(--color-border);
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .lang-button.active {
+            background-color: var(--color-accent-blue);
+            color: var(--color-text-primary);
+            border-color: var(--color-accent-blue);
+        }
+
+        #logout-button {
+            width: 100%;
+            background-color: #ff453a; /* macOS Red for destruction/exit */
+            color: var(--color-text-primary);
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        #logout-button:hover {
+            background-color: #d1322b;
+        }
+
 
         /* --- 右侧内容区 (Content) --- */
         #content-area {
@@ -183,12 +217,6 @@
     </style>
 </head>
 <body>
-
-    <div id="language-switcher">
-        <button class="lang-button active" data-lang="zh" onclick="setLanguage('zh')">中文</button>
-        <button class="lang-button" data-lang="en" onclick="setLanguage('en')">EN</button>
-        <button class="lang-button" data-lang="fr" onclick="setLanguage('fr')">FR</button>
-    </div>
     
     <div id="password-page">
         <h1 data-key="title-pass">🔐 SOP 访问验证</h1>
@@ -203,21 +231,34 @@
         <div id="sop-directory">
             
             <div id="sidebar">
-                <h2 data-key="title-dir">📚 SOP 目录</h2>
                 
-                <a class="menu-item" 
-                   data-key="card-title-inv" 
-                   data-url="https://dodo-wheels.github.io/DodoWheelsITD/whsop.html" 
-                   onclick="loadSOP(this)">
-                    库存录入规范
-                </a>
+                <div id="menu-top">
+                    <h2 data-key="title-dir">📚 SOP 目录</h2>
+                    
+                    <a id="sop-item-inv" class="menu-item" 
+                       data-key="card-title-inv" 
+                       data-url="https://dodo-wheels.github.io/DodoWheelsITD/whsop.html" 
+                       onclick="loadSOP(this)">
+                        库存录入规范
+                    </a>
+                </div>
+
+                <div id="sidebar-footer">
+                    <div id="language-switcher">
+                        <button class="lang-button active" data-lang="zh" onclick="setLanguage('zh')">中文</button>
+                        <button class="lang-button" data-lang="en" onclick="setLanguage('en')">EN</button>
+                        <button class="lang-button" data-lang="fr" onclick="setLanguage('fr')">FR</button>
+                    </div>
+                    
+                    <button id="logout-button" onclick="logout()" data-key="btn-logout">退出</button>
+                </div>
             </div>
 
             <div id="content-area">
                 <div id="initial-message">
                     <span data-key="msg-initial">请从左侧菜单选择一个 SOP 查看内容。</span>
                 </div>
-                <iframe id="sop-iframe" name="sop-frame" src="" frameborder="0"></iframe>
+                <iframe id="sop-iframe" name="sop-frame" src="" frameborder="0" style="display: none;"></iframe>
             </div>
         </div>
     </div>
@@ -226,10 +267,11 @@
         const CORRECT_PASSWORD = 'dodo';
         const passwordInput = document.getElementById('password-input');
         const passwordPage = document.getElementById('password-page');
-        const mainWrapper = document.getElementById('main-wrapper'); // 新增全屏容器引用
+        const mainWrapper = document.getElementById('main-wrapper');
         const errorMessage = document.getElementById('error-message');
         const sopIframe = document.getElementById('sop-iframe');
         const initialMessage = document.getElementById('initial-message');
+        const logoutButton = document.getElementById('logout-button');
         
         const translations = {
             'zh': {
@@ -239,7 +281,8 @@
                 'error-pass': '访问码错误，请重试。',
                 'title-dir': '📚 SOP 目录',
                 'card-title-inv': '库存录入规范',
-                'msg-initial': '请从左侧菜单选择一个 SOP 查看内容。'
+                'msg-initial': '请从左侧菜单选择一个 SOP 查看内容。',
+                'btn-logout': '退出'
             },
             'en': {
                 'title-pass': '🔐 SOP Access Verification',
@@ -248,7 +291,8 @@
                 'error-pass': 'Incorrect access code, please try again.',
                 'title-dir': '📚 SOP Directory',
                 'card-title-inv': 'Inventory Entry SOP',
-                'msg-initial': 'Please select an SOP from the left menu to view the content.'
+                'msg-initial': 'Please select an SOP from the left menu to view the content.',
+                'btn-logout': 'Logout'
             },
             'fr': {
                 'title-pass': '🔐 Vérification d\'accès SOP',
@@ -257,7 +301,8 @@
                 'error-pass': 'Code d\'accès incorrect, veuillez réessayer.',
                 'title-dir': '📚 Répertoire SOP',
                 'card-title-inv': 'Procédure d\'Entrée d\'Inventaire',
-                'msg-initial': 'Veuillez sélectionner un SOP dans le menu de gauche pour afficher le contenu.'
+                'msg-initial': 'Veuillez sélectionner un SOP dans le menu de gauche pour afficher le contenu.',
+                'btn-logout': 'Déconnexion'
             }
         };
 
@@ -289,6 +334,7 @@
             document.documentElement.lang = lang;
         }
 
+        // 初始化语言
         setLanguage(currentLang);
 
         function checkPassword() {
@@ -297,8 +343,8 @@
                 passwordPage.style.display = 'none'; // 隐藏密码页
                 mainWrapper.style.display = 'flex'; // 显示全屏内容
 
-                // 默认加载第一个菜单项
-                const firstMenuItem = document.querySelector('.menu-item');
+                // 自动加载第一个菜单项 (库存录入规范)
+                const firstMenuItem = document.getElementById('sop-item-inv');
                 if (firstMenuItem) {
                     loadSOP(firstMenuItem);
                 }
@@ -326,12 +372,24 @@
             // 添加当前菜单项的激活状态
             menuItem.classList.add('active');
 
-            // 隐藏初始提示信息
+            // 隐藏初始提示信息并显示 iframe
             initialMessage.style.display = 'none';
+            sopIframe.style.display = 'block';
             
             // 设置 iframe 的 src 加载页面
             sopIframe.src = url;
-            sopIframe.style.display = 'block';
+        }
+        
+        function logout() {
+            // 清空密码输入，显示密码页，隐藏全屏目录
+            passwordInput.value = '';
+            passwordPage.style.display = 'flex'; // 重新居中显示
+            mainWrapper.style.display = 'none';
+            
+            // 重置 iframe
+            sopIframe.src = '';
+            sopIframe.style.display = 'none';
+            initialMessage.style.display = 'flex';
         }
     </script>
 
