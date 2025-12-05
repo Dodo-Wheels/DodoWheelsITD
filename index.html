@@ -7,8 +7,8 @@
     <style>
         /* Mac Dark Mode Base Styles */
         :root {
-            --color-bg-primary: #1e1e1e; /* Main background */
-            --color-bg-secondary: #2c2c2c; /* Sidebar background */
+            --color-bg-primary: #1e1e1e; 
+            --color-bg-secondary: #2c2c2c; 
             --color-text-primary: #ffffff;
             --color-text-secondary: #cccccc;
             --color-accent-blue: #0a84ff;
@@ -18,6 +18,7 @@
             --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
         }
 
+        /* 基础样式：居中、全屏 */
         body {
             font-family: var(--font-family-sans);
             background-color: var(--color-bg-primary);
@@ -28,39 +29,33 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow-y: auto; /* 允许页面整体滚动 */
+            overflow: hidden; /* 防止出现双滚动条 */
         }
-
-        .main-wrapper {
-            width: 90%;
-            max-width: 1400px; /* 更大的最大宽度 */
-            height: 95vh; /* 设置一个固定高度 */
-            border-radius: 12px;
-            box-shadow: 0 10px 30px var(--color-shadow);
-            position: relative;
-            background-color: var(--color-bg-primary);
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* 密码页容器 */
+        
+        /* 登录页容器：居中显示，设置最大宽度 */
         #password-page {
             padding: 50px;
             text-align: center;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            width: 90%;
+            max-width: 400px; /* 居中框体限制宽度 */
+            border-radius: 12px;
+            box-shadow: 0 10px 30px var(--color-shadow);
+            background-color: var(--color-bg-primary); /* 与body背景保持一致 */
+            position: relative;
+            z-index: 2; /* 确保在登录后的全屏容器之上 */
         }
         
-        /* 目录布局 */
-        #sop-directory {
-            display: none;
-            flex-grow: 1;
-            overflow: hidden;
-            border-radius: 12px;
-            display: flex; /* 使用 Flexbox 进行左右布局 */
+        /* 全屏容器：用于登录后 */
+        .main-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw; 
+            height: 100vh;
+            display: none; /* 初始隐藏 */
+            background-color: var(--color-bg-primary); 
+            z-index: 1; /* 在密码页之后 */
+            flex-direction: column;
         }
 
         /* 语言切换 */
@@ -70,7 +65,7 @@
             right: 20px;
             display: flex;
             gap: 5px;
-            z-index: 10;
+            z-index: 100; /* 确保始终可见 */
         }
 
         .lang-button {
@@ -87,6 +82,13 @@
             background-color: var(--color-accent-blue);
             color: var(--color-text-primary);
             border-color: var(--color-accent-blue);
+        }
+
+        /* 目录布局 */
+        #sop-directory {
+            flex-grow: 1;
+            overflow: hidden;
+            display: flex; 
         }
 
         /* --- 左侧菜单 (Sidebar) --- */
@@ -119,14 +121,9 @@
             border-left: 3px solid transparent;
         }
 
-        .menu-item:hover {
-            background-color: #383838;
-        }
-
         .menu-item.active {
-            background-color: rgba(10, 132, 255, 0.2); /* 蓝色半透明背景 */
+            background-color: rgba(10, 132, 255, 0.2); 
             border-left-color: var(--color-accent-blue);
-            color: var(--color-text-primary);
             font-weight: 500;
         }
 
@@ -145,7 +142,6 @@
             background-color: var(--color-bg-primary);
         }
         
-        /* 初始加载时的占位符/提示 */
         #initial-message {
             display: flex;
             justify-content: center;
@@ -156,10 +152,14 @@
             font-size: 18px;
             text-align: center;
         }
-        
-        /* 其他通用元素样式 (密码页) */
+
+        /* 密码页元素样式 */
+        #password-page h1 {
+            color: var(--color-accent-blue);
+            margin-bottom: 30px;
+        }
         #password-input {
-            width: 300px;
+            width: 100%;
             padding: 15px;
             margin-bottom: 20px;
             background-color: var(--color-bg-secondary);
@@ -171,7 +171,7 @@
         }
 
         #submit-button {
-            width: 300px;
+            width: 100%;
             background-color: var(--color-accent-blue);
             color: var(--color-text-primary);
             border: none;
@@ -184,23 +184,23 @@
 </head>
 <body>
 
-    <div class="main-wrapper">
+    <div id="language-switcher">
+        <button class="lang-button active" data-lang="zh" onclick="setLanguage('zh')">中文</button>
+        <button class="lang-button" data-lang="en" onclick="setLanguage('en')">EN</button>
+        <button class="lang-button" data-lang="fr" onclick="setLanguage('fr')">FR</button>
+    </div>
+    
+    <div id="password-page">
+        <h1 data-key="title-pass">🔐 SOP 访问验证</h1>
+        <p data-key="prompt-pass">请输入访问码查看目录：</p>
+        <input type="password" id="password-input" placeholder="访问码" onkeypress="handleKeyPress(event)">
+        <button id="submit-button" onclick="checkPassword()" data-key="btn-enter">进入目录</button>
+        <p id="error-message" style="display: none;" data-key="error-pass">访问码错误，请重试。</p>
+    </div>
+
+    <div class="main-wrapper" id="main-wrapper">
         
-        <div id="language-switcher">
-            <button class="lang-button active" data-lang="zh" onclick="setLanguage('zh')">中文</button>
-            <button class="lang-button" data-lang="en" onclick="setLanguage('en')">EN</button>
-            <button class="lang-button" data-lang="fr" onclick="setLanguage('fr')">FR</button>
-        </div>
-
-        <div id="password-page">
-            <h1 data-key="title-pass">🔐 SOP 访问验证</h1>
-            <p data-key="prompt-pass">请输入访问码查看目录：</p>
-            <input type="password" id="password-input" placeholder="访问码" onkeypress="handleKeyPress(event)">
-            <button id="submit-button" onclick="checkPassword()" data-key="btn-enter">进入目录</button>
-            <p id="error-message" style="display: none;" data-key="error-pass">访问码错误，请重试。</p>
-        </div>
-
-        <div id="sop-directory" style="display: none;">
+        <div id="sop-directory">
             
             <div id="sidebar">
                 <h2 data-key="title-dir">📚 SOP 目录</h2>
@@ -210,13 +210,6 @@
                    data-url="https://dodo-wheels.github.io/DodoWheelsITD/whsop.html" 
                    onclick="loadSOP(this)">
                     库存录入规范
-                </a>
-                
-                <a class="menu-item" 
-                   data-key="dummy-sop-1" 
-                   data-url="#" 
-                   onclick="loadSOP(this)">
-                    (示例) 采购流程 SOP
                 </a>
             </div>
 
@@ -233,12 +226,11 @@
         const CORRECT_PASSWORD = 'dodo';
         const passwordInput = document.getElementById('password-input');
         const passwordPage = document.getElementById('password-page');
-        const sopDirectory = document.getElementById('sop-directory');
+        const mainWrapper = document.getElementById('main-wrapper'); // 新增全屏容器引用
         const errorMessage = document.getElementById('error-message');
         const sopIframe = document.getElementById('sop-iframe');
         const initialMessage = document.getElementById('initial-message');
         
-        // 语言数据字典 (新增了示例菜单项和初始提示)
         const translations = {
             'zh': {
                 'title-pass': '🔐 SOP 访问验证',
@@ -247,7 +239,6 @@
                 'error-pass': '访问码错误，请重试。',
                 'title-dir': '📚 SOP 目录',
                 'card-title-inv': '库存录入规范',
-                'dummy-sop-1': '(示例) 采购流程 SOP',
                 'msg-initial': '请从左侧菜单选择一个 SOP 查看内容。'
             },
             'en': {
@@ -257,7 +248,6 @@
                 'error-pass': 'Incorrect access code, please try again.',
                 'title-dir': '📚 SOP Directory',
                 'card-title-inv': 'Inventory Entry SOP',
-                'dummy-sop-1': '(Example) Procurement Process SOP',
                 'msg-initial': 'Please select an SOP from the left menu to view the content.'
             },
             'fr': {
@@ -267,7 +257,6 @@
                 'error-pass': 'Code d\'accès incorrect, veuillez réessayer.',
                 'title-dir': '📚 Répertoire SOP',
                 'card-title-inv': 'Procédure d\'Entrée d\'Inventaire',
-                'dummy-sop-1': '(Exemple) Procédure d\'Achat',
                 'msg-initial': 'Veuillez sélectionner un SOP dans le menu de gauche pour afficher le contenu.'
             }
         };
@@ -304,11 +293,11 @@
 
         function checkPassword() {
             if (passwordInput.value === CORRECT_PASSWORD) {
-                // 密码正确，切换到目录页面，并设置布局
-                passwordPage.style.display = 'none';
-                sopDirectory.style.display = 'flex'; // 显示 Flex 布局
-                
-                // 默认加载第一个菜单项 (可选)
+                // 密码正确
+                passwordPage.style.display = 'none'; // 隐藏密码页
+                mainWrapper.style.display = 'flex'; // 显示全屏内容
+
+                // 默认加载第一个菜单项
                 const firstMenuItem = document.querySelector('.menu-item');
                 if (firstMenuItem) {
                     loadSOP(firstMenuItem);
@@ -326,10 +315,6 @@
             }
         }
 
-        /**
-         * 加载指定的 SOP 页面到 iframe 中，并更新菜单激活状态
-         * @param {HTMLElement} menuItem 被点击的菜单项元素
-         */
         function loadSOP(menuItem) {
             const url = menuItem.getAttribute('data-url');
 
@@ -343,9 +328,10 @@
 
             // 隐藏初始提示信息
             initialMessage.style.display = 'none';
-
+            
             // 设置 iframe 的 src 加载页面
             sopIframe.src = url;
+            sopIframe.style.display = 'block';
         }
     </script>
 
