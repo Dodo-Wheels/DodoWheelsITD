@@ -4,33 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DodoWheels 标准操作流程 (SOP)</title>
+    <!-- 假设这个路径在您的仓库中存在，用于图标 -->
     <link rel="icon" href="https://dodo-wheels.github.io/DodoWheelsITD/images/favicon.ico" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- 使用现代字体链，强调简洁 -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* 1. 颜色变量 (调整为 Mac 风格的蓝色辅助色) */
+        /* 1. 颜色变量 (更精致的蓝色和灰色调) */
         :root {
-            --primary-color: #007AFF; /* Mac/iOS 风格的蓝色 */
-            --secondary-color: #f5f7fa; /* 极浅的灰色背景 */
-            --text-color: #1c1c1e; /* 深色文字 */
-            --light-text-color: #6a6a6a; /* 辅助文字 */
-            --border-color: #d1d1d6; /* 浅灰色边框 */
-            --shadow-color: rgba(0, 0, 0, 0.08); /* 极浅阴影，保持扁平 */
-            --button-hover-color: #005bb5; /* 蓝色加深 */
+            --primary-blue: #007AFF; /* 鲜明的主蓝色 */
+            --light-blue: #f0f8ff; /* 极浅的蓝色背景，用于悬停/引用 */
+            --page-bg: #f8f8f8; /* 干净的页面背景 */
+            --card-bg: white;
+            --dark-text: #1c1c1e; /* 几乎黑色，用于强调 */
+            --medium-text: #666666; /* 中灰色，用于辅助文字 */
+            --border-light: #e6e6e6; /* 极浅边框 */
+            --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+            --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.05); /* 软阴影 */
         }
 
         /* 2. 全局样式和字体调整 */
         body {
-            /* 尝试模拟 Mac/iOS 系统的字体链 */
+            /* 尝试模拟 Mac/iOS 系统的字体链，并使用更轻的默认字重 */
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-            line-height: 1.5;
+            line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: var(--secondary-color);
-            color: var(--text-color);
+            background-color: var(--page-bg);
+            color: var(--dark-text);
             min-height: 100vh;
         }
 
-        /* 3. 访问认证容器样式 */
+        /* 3. 访问认证容器样式 (默认居中显示) */
         #auth-container {
             display: flex;
             justify-content: center;
@@ -42,73 +46,80 @@
         }
 
         .auth-card {
-            background-color: white;
-            padding: 40px;
-            border-radius: 12px;
-            /* 简洁的阴影 */
-            box-shadow: 0 4px 12px var(--shadow-color); 
-            max-width: 400px; /* 略微收窄，更精致 */
+            background-color: var(--card-bg);
+            padding: 50px 40px; /* 增加上下留白 */
+            border-radius: 16px; /* 更圆润的圆角 */
+            box-shadow: var(--shadow-card);
+            max-width: 380px; /* 进一步收窄，更精致 */
             width: 100%;
-            border-top: 4px solid var(--primary-color);
+            border: 1px solid var(--border-light); /* 增加微妙的边框 */
         }
 
         /* 4. 认证输入及按钮样式 */
         .auth-card h1 {
-            color: var(--primary-color);
-            font-size: 2em;
-            font-weight: 600; /* 更现代的字体粗细 */
-            margin-bottom: 20px;
+            color: var(--primary-blue);
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
+            letter-spacing: -0.5px;
         }
 
         .auth-card img {
-            height: 35px;
+            height: 32px;
             margin-right: 10px;
+        }
+
+        .auth-card p {
+            color: var(--medium-text);
+            margin-bottom: 30px;
         }
 
         input[type="password"] {
             width: calc(100% - 24px);
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px; /* 较圆润的圆角 */
+            padding: 14px 12px; /* 增加输入框高度 */
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
             font-size: 1em;
             box-sizing: border-box;
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         input[type="password"]:focus {
-            border-color: var(--primary-color);
+            border-color: var(--primary-blue);
             outline: none;
-            /* Mac 风格的蓝色聚焦光环 */
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3); 
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.15); /* 更柔和的聚焦光环 */
         }
 
         button {
-            background-color: var(--primary-color);
+            background-color: var(--primary-blue);
             color: white;
-            padding: 10px 20px; /* 略微缩小按钮高度 */
+            padding: 12px 20px;
             border: none;
-            border-radius: 8px;
-            font-size: 1.05em;
+            border-radius: 10px;
+            font-size: 1.1em;
             font-weight: 500;
             cursor: pointer;
-            transition: background-color 0.2s ease, opacity 0.2s ease;
+            transition: background-color 0.2s ease, transform 0.1s ease;
             width: 100%;
-            margin-top: 20px;
-            letter-spacing: 0.5px;
+            margin-top: 25px;
+            box-shadow: var(--shadow-subtle);
         }
 
         button:hover {
-            background-color: var(--button-hover-color);
-            opacity: 0.9;
+            background-color: #0060e6;
+            transform: translateY(-1px);
+        }
+        button:active {
+            transform: translateY(0);
         }
 
         .error-message {
-            color: #ff3b30; /* iOS 红色 */
+            color: #ff3b30;
             margin-top: 10px;
-            font-weight: 500;
+            font-weight: 400;
             font-size: 0.9em;
             opacity: 0;
             height: 0;
@@ -121,42 +132,46 @@
             height: auto;
         }
 
-        /* 5. SOP 目录部分样式 (隐藏 by default) */
+        /* 5. SOP 目录部分样式 */
         #sop-directory-container {
             display: none; /* 默认隐藏 */
         }
 
         header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 25px 0;
+            background-color: var(--card-bg);
+            color: var(--dark-text);
+            padding: 20px 0;
             text-align: center;
-            box-shadow: 0 2px 8px var(--shadow-color);
+            box-shadow: var(--shadow-subtle);
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 40px;
         }
 
         header h1 {
-            font-size: 2.2em;
-            font-weight: 700;
+            font-size: 1.8em;
+            font-weight: 600;
             margin: 0;
+            color: var(--dark-text);
         }
         
         .main-content {
-            max-width: 800px;
-            margin: 30px auto;
-            background-color: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px var(--shadow-color);
+            max-width: 750px; /* 略微收窄，更聚焦 */
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-light);
         }
 
         .main-content h2 {
-            color: var(--text-color);
-            font-size: 1.6em;
-            border-bottom: 1px solid var(--border-color); /* 更细的分割线 */
-            padding-bottom: 12px;
-            margin-top: 0;
-            margin-bottom: 25px;
+            color: var(--dark-text);
+            font-size: 1.4em;
             font-weight: 500;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 30px;
         }
 
         .sop-list {
@@ -165,44 +180,46 @@
         }
 
         .sop-list li {
-            margin-bottom: 15px;
-            padding-left: 15px;
-            border-left: 4px solid var(--primary-color);
-            transition: background-color 0.2s ease;
+            margin-bottom: 12px;
+            padding-left: 20px;
+            /* 细且柔和的左侧装饰线 */
+            border-left: 3px solid var(--primary-blue); 
+            transition: background-color 0.2s ease, transform 0.1s ease;
             border-radius: 4px;
         }
 
         .sop-list li:hover {
-            background-color: #f0f7ff; /* 浅蓝色悬停效果 */
+            background-color: var(--light-blue);
+            transform: translateX(3px); /* 略微位移，提供交互反馈 */
         }
 
         .sop-list a {
             text-decoration: none;
-            color: var(--text-color);
-            font-size: 1.15em;
+            color: var(--dark-text);
+            font-size: 1.1em;
             font-weight: 400;
             display: block;
-            padding: 12px 10px;
+            padding: 15px 10px; /* 增加点击区域和留白 */
         }
 
         .sop-list a:hover {
-            color: var(--primary-color);
+            color: var(--primary-blue);
         }
 
         .sop-list small {
             display: block;
             font-size: 0.85em;
-            color: var(--light-text-color);
+            color: var(--medium-text);
             margin-top: 3px;
         }
 
         blockquote {
-            background-color: #eef4ff; /* 极浅蓝色背景 */
-            border-left: 4px solid var(--primary-color);
+            background-color: var(--light-blue);
+            border-left: 4px solid var(--primary-blue);
             padding: 15px;
-            margin-top: 30px;
+            margin-top: 40px;
             border-radius: 8px;
-            color: var(--light-text-color);
+            color: var(--medium-text);
             font-style: italic;
             font-size: 0.9em;
         }
@@ -210,13 +227,16 @@
 </head>
 <body>
 
+    <!-- 访问认证界面 -->
     <div id="auth-container">
         <div class="auth-card">
             <h1>
                 <img src="https://dodo-wheels.github.io/DodoWheelsITD/images/logo_icon.png" alt="DodoWheels Logo">
-                SOP 访问认证
+                DodoWheels 认证
             </h1>
-            <p style="font-size: 1em; color: var(--light-text-color);">请输入访问码以查看DodoWheels的标准操作流程。</p>
+            <p style="font-size: 0.95em; color: var(--medium-text);">
+                请输入您的员工访问码以查阅标准操作流程。
+            </p>
             
             <div class="input-group">
                 <input type="password" id="accessCode" placeholder="输入访问码">
@@ -228,6 +248,7 @@
         </div>
     </div>
 
+    <!-- SOP 目录界面 -->
     <div id="sop-directory-container">
         <header>
             <h1>
@@ -237,19 +258,19 @@
         </header>
 
         <div class="main-content">
-            <h2>目录</h2>
+            <h2>流程目录</h2>
 
             <ul class="sop-list">
                 <li>
                     <a href="https://dodo-wheels.github.io/DodoWheelsITD/whsop.html" target="_blank"> 
                         SOP-01: 库存录入规范
-                        <br><small>（WH-SOP-001：指导仓库人员准确、高效地进行库存数据录入）</small>
+                        <br><small>（文件编号：WH-SOP-001。指导仓库人员准确、高效地进行库存数据录入。）</small>
                     </a>
                 </li>
             </ul>
             
             <blockquote>
-                <strong>注意：</strong> 本目录文件为DodoWheels内部文件。点击链接将跳转至对应的详细 SOP 内容页面。
+                <strong>信息提示：</strong> 本目录文件为DodoWheels内部文件。所有流程请务必严格遵守并实时更新。
             </blockquote>
         </div>
     </div>
