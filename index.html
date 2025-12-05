@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOP 访问</title>
+    <title>SOP 访问 / SOP Access / Accès SOP</title>
     <style>
         /* Mac Dark Mode Base Styles */
         :root {
-            --color-bg-primary: #1e1e1e; /* Dark background */
-            --color-bg-secondary: #2c2c2c; /* Card/Input background */
-            --color-text-primary: #ffffff; /* Primary text color */
-            --color-text-secondary: #cccccc; /* Secondary text color */
-            --color-accent-blue: #0a84ff; /* macOS/iOS accent blue */
-            --color-accent-hover: #3895ff; /* Lighter blue for hover */
+            --color-bg-primary: #1e1e1e;
+            --color-bg-secondary: #2c2c2c;
+            --color-text-primary: #ffffff;
+            --color-text-secondary: #cccccc;
+            --color-accent-blue: #0a84ff;
+            --color-accent-hover: #3895ff;
             --color-border: #444444;
             --color-shadow: rgba(0, 0, 0, 0.5);
             --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -30,25 +30,51 @@
             min-height: 100vh;
         }
 
-        /* General Container and Card Styling */
         .container {
             padding: 30px;
             max-width: 800px;
             width: 90%;
             border-radius: 12px;
             box-shadow: 0 10px 30px var(--color-shadow);
+            position: relative; /* For language switcher positioning */
         }
 
+        /* Language Switcher Styles */
+        #language-switcher {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .lang-button {
+            background-color: var(--color-bg-secondary);
+            color: var(--color-text-secondary);
+            border: 1px solid var(--color-border);
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .lang-button:hover {
+            background-color: #383838;
+        }
+
+        .lang-button.active {
+            background-color: var(--color-accent-blue);
+            color: var(--color-text-primary);
+            border-color: var(--color-accent-blue);
+        }
+        
+        /* General Elements */
         h1 {
             color: var(--color-accent-blue);
             text-align: center;
             margin-bottom: 30px;
             font-weight: 600;
-        }
-
-        /* --- Password Page Styles --- */
-        #password-page {
-            text-align: center;
         }
 
         #password-input {
@@ -79,6 +105,7 @@
             font-size: 16px;
             font-weight: 500;
             transition: background-color 0.2s ease, transform 0.1s;
+            width: 100%;
         }
 
         #submit-button:hover {
@@ -90,14 +117,14 @@
         }
 
         #error-message {
-            color: #ff453a; /* macOS Red for error */
+            color: #ff453a;
             margin-top: 15px;
             font-size: 14px;
         }
 
-        /* --- SOP Directory Styles --- */
+        /* SOP Directory Styles */
         #sop-directory {
-            display: none; /* Initially hidden */
+            display: none;
         }
 
         .card-grid {
@@ -115,7 +142,7 @@
             box-shadow: 0 4px 15px var(--color-shadow);
             transition: transform 0.2s, box-shadow 0.2s, border 0.2s;
             display: block;
-            border: 1px solid transparent; /* Subtle border for hover effect */
+            border: 1px solid transparent;
         }
 
         .sop-card:hover {
@@ -144,25 +171,32 @@
 </head>
 <body>
 
-    <div id="password-page" class="container">
-        <h1>🔐 DodoWheels SOP 访问验证</h1>
-        <p>请输入访问码查看目录：</p>
-        <input type="password" id="password-input" placeholder="访问码" onkeypress="handleKeyPress(event)">
-        <button id="submit-button" onclick="checkPassword()">进入目录</button>
-        <p id="error-message" style="display: none;">访问码错误，请重试。</p>
-    </div>
+    <div class="container">
+        <div id="language-switcher">
+            <button class="lang-button active" data-lang="zh" onclick="setLanguage('zh')">中文</button>
+            <button class="lang-button" data-lang="en" onclick="setLanguage('en')">EN</button>
+            <button class="lang-button" data-lang="fr" onclick="setLanguage('fr')">FR</button>
+        </div>
 
-    <div id="sop-directory" class="container">
-        <h1>📚 SOP 目录</h1>
+        <div id="password-page">
+            <h1 data-key="title-pass">🔐 DodoWheels SOP 访问验证</h1>
+            <p data-key="prompt-pass">请输入访问码查看目录：</p>
+            <input type="password" id="password-input" placeholder="访问码" onkeypress="handleKeyPress(event)">
+            <button id="submit-button" onclick="checkPassword()" data-key="btn-enter">进入目录</button>
+            <p id="error-message" style="display: none;" data-key="error-pass">访问码错误，请重试。</p>
+        </div>
 
-        <div class="card-grid">
-            <a href="https://dodo-wheels.github.io/DodoWheelsITD/whsop.html" target="_blank" class="sop-card">
-                <div class="card-icon">📄</div>
-                <div class="card-title">库存录入规范</div>
-                <div class="card-subtitle">Warehouse Inventory Entry SOP</div>
-            </a>
-            
+        <div id="sop-directory">
+            <h1 data-key="title-dir">📚 SOP 目录</h1>
+
+            <div class="card-grid">
+                <a href="https://dodo-wheels.github.io/DodoWheelsITD/whsop.html" target="_blank" class="sop-card">
+                    <div class="card-icon">📄</div>
+                    <div class="card-title" data-key="card-title-inv">库存录入规范</div>
+                    <div class="card-subtitle" data-key="card-subtitle-inv">Warehouse Inventory Entry SOP</div>
+                </a>
             </div>
+        </div>
     </div>
 
     <script>
@@ -171,6 +205,74 @@
         const passwordPage = document.getElementById('password-page');
         const sopDirectory = document.getElementById('sop-directory');
         const errorMessage = document.getElementById('error-message');
+        const submitButton = document.getElementById('submit-button');
+
+        // 语言数据字典
+        const translations = {
+            'zh': {
+                'title-pass': '🔐 SOP 访问验证',
+                'prompt-pass': '请输入访问码查看目录：',
+                'btn-enter': '进入目录',
+                'error-pass': '访问码错误，请重试。',
+                'title-dir': '📚 SOP 目录',
+                'card-title-inv': '库存录入规范',
+                'card-subtitle-inv': 'Warehouse Inventory Entry SOP'
+            },
+            'en': {
+                'title-pass': '🔐 SOP Access Verification',
+                'prompt-pass': 'Please enter the access code to view the directory:',
+                'btn-enter': 'Enter Directory',
+                'error-pass': 'Incorrect access code, please try again.',
+                'title-dir': '📚 SOP Directory',
+                'card-title-inv': 'Inventory Entry SOP',
+                'card-subtitle-inv': 'Warehouse Inventory Entry SOP'
+            },
+            'fr': {
+                'title-pass': '🔐 Vérification d\'accès SOP',
+                'prompt-pass': 'Veuillez entrer le code d\'accès pour consulter le répertoire :',
+                'btn-enter': 'Entrer dans le répertoire',
+                'error-pass': 'Code d\'accès incorrect, veuillez réessayer.',
+                'title-dir': '📚 Répertoire SOP',
+                'card-title-inv': 'Procédure d\'Entrée d\'Inventaire',
+                'card-subtitle-inv': 'Procédure Opérationnelle Standard d\'Entrée d\'Inventaire d\'Entrepôt'
+            }
+        };
+
+        let currentLang = 'zh';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const elements = document.querySelectorAll('[data-key]');
+            
+            // 更新所有带有 data-key 属性的元素内容
+            elements.forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            // 更新输入框的 placeholder
+            if (lang === 'zh') {
+                passwordInput.placeholder = '访问码';
+            } else if (lang === 'en') {
+                passwordInput.placeholder = 'Access Code';
+            } else if (lang === 'fr') {
+                passwordInput.placeholder = 'Code d\'accès';
+            }
+
+            // 更新语言按钮的激活状态
+            document.querySelectorAll('.lang-button').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+            
+            // 更新 HTML lang 属性
+            document.documentElement.lang = lang;
+        }
+
+        // 初始化语言
+        setLanguage(currentLang);
+
 
         function checkPassword() {
             if (passwordInput.value === CORRECT_PASSWORD) {
@@ -178,6 +280,7 @@
                 passwordPage.style.display = 'none';
                 sopDirectory.style.display = 'block';
                 errorMessage.style.display = 'none';
+                document.querySelector('.container').style.maxWidth = '1000px'; // 扩大目录页容器
             } else {
                 // 密码错误，显示错误信息
                 errorMessage.style.display = 'block';
@@ -187,7 +290,6 @@
         }
 
         function handleKeyPress(event) {
-            // 允许用户按 Enter 键提交
             if (event.key === 'Enter') {
                 checkPassword();
             }
