@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【DodoWheels】库存信息录入规范通知</title>
+    <!-- 引入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 引入Inter字体 */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+        .header-bg {
+            background-image: linear-gradient(135deg, #004d99 0%, #007bff 100%); /* Deep blue gradient */
+        }
+        .rule-item {
+            border-left: 4px solid #007bff; /* Blue border for data entry emphasis */
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+            background-color: #f8fbff; /* Very light blue background */
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+        .rule-item.picking {
+            border-left: 4px solid #8b5cf6; /* Purple border for picking rules */
+            background-color: #fcf9ff; /* Very light purple background */
+        }
+        .rule-item.audit {
+            border-left: 4px solid #f97316; /* Orange border for audit rules */
+            background-color: #fffbeb; /* Light yellow background */
+        }
+        .format-example {
+            background-color: #e2e8f0;
+            color: #333;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8 min-h-screen flex justify-center items-start">
+
+    <!-- 主通知卡片容器 -->
+    <div class="w-full max-w-4xl bg-white shadow-2xl rounded-xl overflow-hidden mt-8">
+
+        <!-- 头部 - 标题与日期 -->
+        <header class="header-bg text-white p-6 sm:p-8">
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">【DodoWheels】库存录入规范通知</h1>
+            <p class="text-sm sm:text-base opacity-90 mt-2">Inventory Data Entry Standard Operating Procedure (SOP)</p>
+            <div class="text-right text-xs mt-4">本规范自发布之日起立即生效</div>
+        </header>
+
+        <!-- 内容主体 -->
+        <main class="p-6 sm:p-8">
+            <p class="text-lg text-gray-700 mb-6 border-b pb-4">
+                为确保 Quickbooks Online (QBO) 系统中库存数据的准确性、一致性及可追溯性，现对所有库存相关业务的 **Description (描述)** 字段录入规范进行统一，请各部门及相关人员严格执行。
+            </p>
+
+            <!-- 1. 涉及仓库 -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-indigo-500 pb-2 mb-4">1. 涉及仓库范围</h2>
+                <div class="flex flex-wrap gap-4">
+                    <span class="bg-indigo-100 text-indigo-800 text-sm font-medium px-4 py-2 rounded-full shadow-md">MT 仓</span>
+                    <span class="bg-indigo-100 text-indigo-800 text-sm font-medium px-4 py-2 rounded-full shadow-md">GT 仓</span>
+                    <span class="bg-indigo-100 text-indigo-800 text-sm font-medium px-4 py-2 rounded-full shadow-md">QC 仓</span>
+                </div>
+                <p class="text-sm text-gray-500 mt-2 border-t pt-2 mt-4">
+                    <strong class="font-bold">澄清：</strong>本规范重点涉及以上三个主要仓库。但在<strong class="text-red-600">规则三</strong>中列出的所有仓库代码（LS, LC, LGTN 等）均须遵循其录入顺序要求。
+                </p>
+            </section>
+
+            <!-- 2. 核心操作与数据规范 -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-indigo-500 pb-2 mb-4">2. 核心操作与数据规范 (Core Operations & Data Standards)</h2>
+
+                <!-- 2.1. 拣货人员操作要求 -->
+                <h3 class="text-xl font-semibold text-purple-700 border-b border-purple-300 pb-1 mb-4 mt-6">2.1. 拣货人员操作要求 (前端作业 - Picking Operations)</h3>
+                <div class="space-y-4">
+                    <div class="rule-item picking">
+                        <p class="font-semibold text-gray-700">要求一：拣货准确性、圈选与签字 <strong class="text-red-600">(MANDATORY)</strong></p>
+                        <ul class="list-disc ml-6 text-gray-600 space-y-1">
+                            <li>**【至关重要】** 拣货时，必须在对应的纸质单据上<strong class="font-extrabold text-purple-700">准确圈选/标记</strong>实际取货的<strong class="text-red-600">库位（仓位）位置及数量</strong>，确保信息一致性。</li>
+                            <li>完成拣货后，<strong class="font-extrabold text-purple-700">相关单据（如出库单）必须由拣货人员亲自签字确认</strong>，以建立明确的责任制。</li>
+                        </ul>
+                    </div>
+                    <div class="rule-item picking">
+                        <p class="font-semibold text-gray-700">要求二：优化拣货路径与原则</p>
+                        <ul class="list-disc ml-6 text-gray-600 space-y-1">
+                            <li>执行拣货任务时，必须遵循<strong class="font-extrabold text-purple-700">“优先小量”原则</strong>，即：首先从持有目标物料数量<strong class="text-red-600">较少</strong>的库位取货。</li>
+                            <li>目标是<strong class="text-red-600">最大限度地避免</strong>同一物料分散存储在多个仓位，提高后续库存盘点和拣货效率。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 2.2. QBO系统信息录入规范 -->
+                <h3 class="text-xl font-semibold text-blue-700 border-b border-blue-300 pb-1 mb-4 mt-8">2.2. QBO系统信息录入规范 (后端确认 - Data Entry Rules)</h3>
+                <div class="space-y-4">
+                    <!-- Rule 3 & 2 -->
+                    <div class="rule-item">
+                        <p class="font-semibold text-gray-700">规则一：特殊描述与库存信息分离</p>
+                        <ul class="list-disc ml-6 text-gray-600 space-y-1">
+                            <li>如有任何<strong class="text-red-600">特殊描述或备注</strong>，请务必将其添加在 `@` 符号<strong class="text-red-600">前面</strong>。</li>
+                            <li>`@` 符号<strong class="text-red-600">后面</strong>的内容，<strong class="font-extrabold text-blue-700">只允许填写库位及数量信息</strong>，禁止填写任何其他无关文字或符号。</li>
+                        </ul>
+                    </div>
+
+                    <!-- Rule 4 & 5 -->
+                    <div class="rule-item">
+                        <p class="font-semibold text-gray-700">规则二：库位数量信息格式统一</p>
+                        <ul class="list-disc ml-6 text-gray-600 space-y-1">
+                            <li>库位数量部分的格式必须严格遵守：<br class="sm:hidden">
+                                <span class="font-mono text-base font-bold text-green-700">仓库简写 / 库位 (完整描述) * 数量</span>
+                            </li>
+                            <li>如果涉及多个库位或数量，每个信息块之间必须使用<strong class="text-red-600">英文逗号 (,)</strong> 进行分隔。</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Warehouse Order -->
+                    <div class="rule-item">
+                        <p class="font-semibold text-gray-700">规则三：多仓库信息录入顺序</p>
+                        <ul class="list-disc ml-6 text-gray-600 space-y-1">
+                            <li>在 `@` 符号后的库位及数量信息中，若涉及多个仓库物料，请严格按照以下优先级顺序进行录入，以确保数据的一致性：</li>
+                            <li class="font-mono text-sm mt-1 p-2 bg-blue-50 rounded text-blue-800 break-all">
+                                <strong class="text-blue-600">LS</strong>, <strong class="text-blue-600">LC</strong>, <strong class="text-blue-600">LLS04</strong>, <strong class="text-blue-600">L4875</strong>, <strong class="text-blue-600">L2184</strong>,
+                                <strong class="text-blue-600">LNAN</strong>, <strong class="text-blue-600">LDMCC</strong>, <strong class="text-blue-600">GT</strong>, <strong class="text-blue-600">LGTN</strong>, <strong class="text-blue-600">LOTA</strong>, <strong class="text-blue-600">QC</strong>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 格式总览 -->
+                <div class="mt-6 p-4 border rounded-lg bg-gray-100 shadow-md">
+                    <p class="font-bold text-blue-700 mb-2 text-lg">【完整格式示例】</p>
+                    <div class="format-example">
+                        [特殊描述] @ [仓库简写]/[完整库位]*[数量], [仓库简写]/[完整库位]*[数量]
+                    </div>
+                    <p class="font-bold text-blue-700 mt-4 mb-2">示例 (遵循顺序 LS > GT > QC):</p>
+                    <div class="format-example mb-3">
+                         @ LS/A10*50, GT/B20*120
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. 审计与合规要求 (新增) -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-indigo-500 pb-2 mb-4">3. 审计与合规要求 (Audit and Compliance)</h2>
+                <div class="space-y-4">
+                    <div class="rule-item audit">
+                        <p class="font-semibold text-gray-700">要求一：单据留存与核验</p>
+                        <ul class="list-disc ml-6 text-gray-600 space-y-1">
+                            <li>所有经签字确认的拣货单据，必须<strong class="font-extrabold text-orange-700">妥善留存</strong>，作为QBO系统录入数据的<strong class="text-red-600">原始凭证</strong>。</li>
+                            <li>仓库主管或指定人员需定期对已签字单据与QBO系统Description字段的录入信息进行<strong class="font-extrabold text-orange-700">抽查核验</strong>。</li>
+                        </ul>
+                    </div>
+                    <div class="rule-item audit">
+                        <p class="font-semibold text-gray-700">要求二：违规处理机制</p>
+                        <ul class="list-disc ml-6 text-gray-600 space-y-1">
+                            <li>对于录入格式不规范、圈选/签字缺失或拣货原则违反等行为，将根据公司规定进行记录和<strong class="font-extrabold text-orange-700">问责处理</strong>，以确保SOP的严肃性。</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- 4. 责任与流程时效 (原3) -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-indigo-500 pb-2 mb-4">4. 执行责任与流程时效 (Accountability and Timeliness)</h2>
+
+                <div class="p-4 bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800 rounded-lg">
+                    <p class="font-semibold text-lg mb-1">主要责任人：</p>
+                    <p class="text-sm">
+                        <strong class="font-extrabold text-blue-900">1. 拣货人员：</strong> 对拣货的<strong class="text-red-600">准确性、圈选标记及单据签字</strong>负首要责任。
+                    </p>
+                    <p class="text-sm mt-1">
+                        <strong class="font-extrabold text-blue-900">2. 信息录入人员 (库内人员)：</strong> 对信息录入的<strong class="text-red-600">格式、顺序和时效性</strong>负主要责任。
+                    </p>
+                    <p class="font-semibold mt-3 text-lg mb-1">流程时效要求：</p>
+                    <p class="text-sm">
+                        <strong class="font-extrabold text-blue-900">1. 拣货人员时效：</strong> 必须在<strong class="text-red-600">完成拣货并签字后立即</strong>将单据移交至信息录入人员，不得滞留。
+                    </p>
+                    <p class="text-sm mt-1">
+                        <strong class="font-extrabold text-blue-900">2. 信息录入时效：</strong> 在收到已签字和圈选的单据后，<strong class="text-red-600">及时进行QBO系统的录入工作</strong>，确保库存数据的实时准确性。
+                    </p>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- 底部 -->
+        <footer class="header-bg p-4 text-center text-sm opacity-90">
+            <p>&copy; [DodoWheels] </p>
+        </footer>
+    </div>
+</body>
+</html>
