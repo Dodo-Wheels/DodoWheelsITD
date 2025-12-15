@@ -3,54 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOP 执行手册 | 暗黑模式</title>
+    <title>供应链执行 SOP | 暗黑模式</title>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>
         mermaid.initialize({
             startOnLoad: true,
             theme: 'dark',
-            securityLevel: 'loose',
             flowchart: { useMaxWidth: true, htmlLabels: true }
         });
     </script>
     <style>
         :root {
-            --bg-color: #1e1e1e;
-            --card-bg: #2d2d2d;
-            --sidebar-bg: #161616;
-            --accent-blue: #0A84FF;
-            --text-main: #f5f5f7;
+            --bg: #1e1e1e;
+            --sidebar: #161616;
+            --card: #2c2c2e;
+            --accent: #0A84FF;
+            --text: #f5f5f7;
             --text-dim: #a1a1a6;
-            --border-color: #3d3d3d;
-            --success-green: #32D74B;
+            --border: #3a3a3c;
+            --danger: #FF453A;
+            --success: #32D74B;
         }
 
         body {
-            font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+            font-family: -apple-system, "SF Pro Display", "PingFang SC", sans-serif;
             margin: 0;
             display: flex;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background-color: var(--bg);
+            color: var(--text);
             -webkit-font-smoothing: antialiased;
         }
 
-        /* 左侧边栏 - Mac 风格 */
+        /* 左侧菜单 */
         nav {
-            width: 260px;
+            width: 240px;
             height: 100vh;
-            background-color: var(--sidebar-bg);
-            border-right: 1px solid var(--border-color);
+            background-color: var(--sidebar);
+            border-right: 1px solid var(--border);
             position: fixed;
             display: flex;
             flex-direction: column;
         }
 
         .nav-header {
-            padding: 40px 25px 20px;
+            padding: 30px 20px;
             font-size: 1.1rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            color: var(--text-main);
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: -0.5px;
         }
 
         nav ul {
@@ -59,233 +59,192 @@
             margin: 0;
         }
 
+        nav ul li {
+            margin-bottom: 8px;
+        }
+
         nav ul li a {
             display: flex;
             align-items: center;
-            padding: 12px 15px;
+            padding: 12px 16px;
             color: var(--text-dim);
             text-decoration: none;
-            border-radius: 8px;
-            margin-bottom: 5px;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
         }
 
         nav ul li a:hover {
             background-color: rgba(255, 255, 255, 0.05);
-            color: var(--text-main);
+            color: var(--text);
         }
 
         nav ul li a.active {
-            background-color: var(--accent-blue);
+            background-color: var(--accent);
             color: white;
+            font-weight: 500;
         }
 
-        /* 主内容区 */
+        /* 主体内容 */
         main {
-            margin-left: 260px;
+            margin-left: 240px;
             padding: 40px 60px;
             flex: 1;
-            max-width: 1000px;
+            max-width: 1100px;
         }
 
-        .header-title {
-            margin-bottom: 40px;
-        }
-
-        .header-title h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin: 0;
-            background: linear-gradient(135deg, #fff 0%, #0A84FF 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* 卡片设计 */
         .glass-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
             padding: 30px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
         }
 
-        h2 {
-            font-size: 1.4rem;
-            color: var(--accent-blue);
-            margin-top: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        h3 {
-            font-size: 1.1rem;
-            color: var(--text-main);
-            margin-top: 25px;
-        }
-
-        /* 细化内容样式 */
-        .step-list {
-            padding-left: 0;
-            list-style: none;
-        }
-
-        .step-item {
-            padding: 15px;
-            border-bottom: 1px solid var(--border-color);
-            line-height: 1.6;
-        }
-
-        .step-item:last-child { border-bottom: none; }
-
-        .badge {
-            background: rgba(10, 132, 255, 0.1);
-            color: var(--accent-blue);
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.8rem;
+        h1 { font-size: 2rem; font-weight: 700; margin-bottom: 40px; }
+        h2 { font-size: 1.4rem; margin-top: 0; color: var(--accent); display: flex; align-items: center; gap: 10px; }
+        
+        .role-tag {
+            font-size: 0.75rem;
+            background: rgba(10, 132, 255, 0.15);
+            color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 5px;
             font-weight: 600;
         }
 
-        /* 重点提示 */
-        .sync-note {
-            background: rgba(50, 215, 75, 0.1);
-            border-left: 4px solid var(--success-green);
-            padding: 15px;
-            border-radius: 4px;
+        .step-box {
+            border-left: 2px solid var(--border);
+            padding-left: 20px;
             margin: 20px 0;
-            font-size: 0.95rem;
         }
 
-        code {
-            background: #444;
-            padding: 2px 6px;
-            border-radius: 4px;
-            color: #ff7b72;
-            font-family: "SF Mono", Menlo, monospace;
+        .sync-point {
+            background: rgba(50, 215, 75, 0.1);
+            border: 1px dashed var(--success);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 0.9rem;
         }
 
-        @media print {
-            nav { display: none; }
-            main { margin-left: 0; width: 100%; color: black; background: white; }
-            .glass-card { box-shadow: none; border: 1px solid #ccc; color: black; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
+
+        th, td {
+            text-align: left;
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        th { color: var(--text-dim); font-weight: 500; }
+
+        .warning-zone {
+            border: 1px solid rgba(255, 69, 58, 0.3);
+            background: rgba(255, 69, 58, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        @media print { nav { display: none; } main { margin-left: 0; } }
     </style>
 </head>
 <body>
 
 <nav>
-    <div class="nav-header">Sales Operations</div>
+    <div class="nav-header">SOP 控制台</div>
     <ul>
-        <li><a href="#flow" class="active">整体业务流图</a></li>
-        <li><a href="#p2">数据链路细化 (WEB/QBO)</a></li>
-        <li><a href="#p4">到货核销与开售</a></li>
-        <li><a href="#rules">异常红线准则</a></li>
+        <li><a href="#sales" class="active">📦 产品销售</a></li>
+        <li><a href="#warehouse">🏢 库内管理</a></li>
+        <li><a href="#logistics">🚚 配送管理</a></li>
     </ul>
 </nav>
 
 <main>
-    <div class="header-title">
-        <h1>销售启动全流程细化指南</h1>
-        <p style="color: var(--text-dim)">WEB 平台与 QuickBooks Online 协同环境适用</p>
-    </div>
+    <h1>全流程细化作业程序 (WEB + QBO)</h1>
 
-    <section id="flow" class="glass-card">
-        <h2>📊 业务逻辑流转</h2>
-        <div class="mermaid">
-            graph TD
-            A[采购单确认] --> B{QBO & WEB 存在档案?}
-            B -- 否 --> C[手动建立 SKU / 预售页面]
-            B -- 是 --> D[开启 WEB 预售模式]
-            C --> D
-            D --> E[ETA -10D 监控进度]
-            E --> F[Day 0 仓库到货清点]
-            F --> G[QBO: PO 转 Bill]
-            G --> H[WEB: 转换现货库存]
-            H --> I[正式销售发布]
-            
-            style A fill:#161616,stroke:#0A84FF
-            style I fill:#0A84FF,stroke:#fff,color:#fff
+    <section id="sales" class="glass-card">
+        <h2>产品销售 <span class="role-badge role-tag">采购 / 网站组 / 财务</span></h2>
+        <div class="step-box">
+            <h3>阶段 A：预销售启动 (-21天)</h3>
+            <p>1. <b>QBO 档案：</b> 在 QBO 创建 Inventory Item，SKU 必须与网站完全对齐。</p>
+            <p>2. <b>WEB 价格发布：</b> 老板确认零售价，网站后台手动开启 <code>Pre-Order</code> 模式。</p>
+            <p>3. <b>库存锁定：</b> 在网站后台手动填入海运单载明的在途数量。</p>
+            <div class="sync-point">
+                🔄 <b>数据对齐：</b> 财务需核对 QBO 中的 Purchase Order 总额与 WEB 端的预售库存总值是否匹配。
+            </div>
         </div>
     </section>
 
-    <section id="p2" class="glass-card">
-        <h2>🛠 阶段二：双系统数据映射 <span class="badge">Mac 细化标准</span></h2>
+    <section id="warehouse" class="glass-card">
+        <h2>库内管理 <span class="role-badge role-tag">仓库组 / 进口组</span></h2>
+        <div class="step-box">
+            <h3>阶段 B：入库核销 (Day 0)</h3>
+            <p>1. <b>物理清点：</b> 卸货过程中记录《卸货清单》，需精确到型号与花纹。</p>
+            <p>2. <b>QBO 结转：</b> 仓库反馈清点无误后，财务在 QBO 将 PO 转换为 <code>Bill</code>。</p>
+            <p>3. <b>成本分摊：</b> 在 QBO 录入海运费账单，手动分摊至该批次货物的 Landed Cost。</p>
+        </div>
         
-        <div class="step-list">
-            <div class="step-item">
-                <h3>1. QBO (QuickBooks Online) 财务档</h3>
-                - 创建 <code>Inventory Item</code>。SKU 必须为 **Unique Key**。<br>
-                - 录入初始成本（Initial Cost），关联到 <code>Inventory Asset</code> 账户。<br>
-                - **关键动作**：创建 Purchase Order，锁定汇率与货值。
-            </div>
-            <div class="step-item">
-                <h3>2. WEB 后台产品页</h3>
-                - 映射 QBO SKU。设置产品状态为 <code>Pre-Order</code>。<br>
-                - <b>库存逻辑</b>：在后台手动输入本次海运的数量，确保用户可提前下单。<br>
-                - <b>运费模版</b>：检查产品重量与尺寸，确保 Checkout 时运费计算正确。
-            </div>
-        </div>
-
-        <div class="sync-note">
-            💡 <b>数据一致性审计 (Audit)：</b> 每周核对一次 QBO 的 <code>Open PO</code> 与 WEB 后台的 <code>On-Order</code> 数量，确保两端数据逻辑统一。
+        <div class="mermaid">
+            graph LR
+            A[实物理货] --> B[核对清单]
+            B --> C{数量匹配?}
+            C -- 是 --> D[QBO 生成 Bill]
+            C -- 否 --> E[记录异常/调整PO]
+            D --> F[WEB 释放现货库存]
         </div>
     </section>
 
-    <section id="p4" class="glass-card">
-        <h2>🚚 阶段四：到货核销与库存释放</h2>
-        <p>此环节需解决“货款确认”与“库存上线”的手动衔接问题。</p>
-
-        <div class="step-list">
-            <div class="step-item">
-                <h3>仓库侧：Packing List 物理对齐</h3>
-                - 卸货后 2 小时内出具《理货报告》。<br>
-                - 标记出任何损坏（Damage）或短缺（Shortage）。
-            </div>
-            <div class="step-item">
-                <h3>QBO 侧：落地成本 (Landed Cost)</h3>
-                - 将 PO 转换为 <code>Bill</code>。<br>
-                - <b>费用分摊</b>：手动录入海运费、报关费。QBO 需将这些费用归入该批次库存成本。<br>
-                
-            </div>
-            <div class="step-item">
-                <h3>WEB 侧：现货状态释放</h3>
-                - 修改产品标签从 <code>Pre-Order</code> 变更为 <code>In-Stock</code>。<br>
-                - **清空预售积压订单**：打印订单，通知仓库开始拣货发货。
-            </div>
+    <section id="logistics" class="glass-card">
+        <h2>配送管理 <span class="role-badge role-tag">进口组 / 仓库发货组</span></h2>
+        <div class="step-box">
+            <h3>阶段 C：转运与订单履行</h3>
+            <p>1. <b>到货通知：</b> 集装箱抵达蒙特利尔站后，由进口组分发 <code>Arrival Notice</code>。</p>
+            <p>2. <b>预售订单转化：</b> 库内 Validate 后，网站组导出所有“预售单”，交由仓库优先配送。</p>
+            <p>3. <b>物流更新：</b> 配送完成后，在 WEB 手动上传追踪号，QBO 生成销售收据 (Sales Receipt)。</p>
         </div>
-    </section>
 
-    <section id="rules" class="glass-card" style="border-color: rgba(255, 69, 58, 0.4);">
-        <h2 style="color: #FF453A;">🚨 异常处理红线</h2>
-        <ul style="line-height: 2;">
-            <li><b style="color: #FF453A;">禁止：</b> 严禁在仓库未完成物理清点前点击 QBO 的收货确认。</li>
-            <li><b style="color: #FF453A;">要求：</b> 网站 SKU 必须与 QBO SKU 字符级一致，严禁使用“类似”名称。</li>
-            <li><b style="color: #FF453A;">规则：</b> 若实收数量少于 PO，必须先在 QBO 修改数量，再生成 Bill。</li>
-        </ul>
+        <div class="warning-zone">
+            <h3 style="color: var(--danger); margin-top:0;">🚨 异常红线</h3>
+            <table>
+                <tr>
+                    <th width="30%">场景</th>
+                    <th>处理标准</th>
+                </tr>
+                <tr>
+                    <td style="color:var(--danger)">海运延迟</td>
+                    <td>网站同步修改 ETA，禁止虚假承诺到货时间。</td>
+                </tr>
+                <tr>
+                    <td style="color:var(--danger)">QBO SKU 错误</td>
+                    <td>必须作废错误条目并重建，严禁直接在错误 SKU 下入库。</td>
+                </tr>
+            </table>
+        </div>
     </section>
 </main>
 
 <script>
-    // 监听滚动高亮侧边栏
-    const sections = document.querySelectorAll("section");
-    const navLinks = document.querySelectorAll("nav ul li a");
+    // 侧边栏高亮逻辑
+    const navLinks = document.querySelectorAll('nav ul li a');
+    const sections = document.querySelectorAll('section');
 
-    window.addEventListener("scroll", () => {
+    window.addEventListener('scroll', () => {
         let current = "";
         sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            if (pageYOffset >= sectionTop - 150) {
-                current = section.getAttribute("id");
+            if (pageYOffset >= section.offsetTop - 100) {
+                current = section.getAttribute('id');
             }
         });
-
         navLinks.forEach(a => {
-            a.classList.remove("active");
-            if (a.getAttribute("href") === "#" + current) {
-                a.classList.add("active");
+            a.classList.remove('active');
+            if (a.getAttribute('href') === "#" + current) {
+                a.classList.add('active');
             }
         });
     });
