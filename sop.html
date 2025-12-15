@@ -3,139 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WEB + QBO 采购销售协同 SOP</title>
+    <title>SOP 执行手册 | 暗黑模式</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            securityLevel: 'loose',
+            flowchart: { useMaxWidth: true, htmlLabels: true }
+        });
+    </script>
     <style>
         :root {
-            --primary: #2ca01c; /* QBO 经典绿 */
-            --dark: #232323;
-            --light-bg: #f4f5f8;
-            --accent: #0077c5;
+            --bg-color: #1e1e1e;
+            --card-bg: #2d2d2d;
+            --sidebar-bg: #161616;
+            --accent-blue: #0A84FF;
+            --text-main: #f5f5f7;
+            --text-dim: #a1a1a6;
+            --border-color: #3d3d3d;
+            --success-green: #32D74B;
         }
 
-        body { font-family: 'Segoe UI', system-ui; margin: 0; display: flex; background: var(--light-bg); color: var(--dark); }
+        body {
+            font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+        }
 
-        /* 侧边栏 */
-        nav { width: 260px; height: 100vh; background: var(--dark); color: white; position: fixed; }
-        .nav-header { padding: 25px; background: #1a1a1a; font-weight: bold; border-bottom: 2px solid var(--primary); }
-        nav ul { list-style: none; padding: 0; }
-        nav ul li a { display: block; padding: 15px 25px; color: #bbb; text-decoration: none; transition: 0.3s; font-size: 0.9rem; }
-        nav ul li a:hover { color: white; background: #333; border-left: 4px solid var(--primary); }
+        /* 左侧边栏 - Mac 风格 */
+        nav {
+            width: 260px;
+            height: 100vh;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+        }
 
-        /* 主内容 */
-        main { margin-left: 260px; padding: 40px; flex: 1; }
-        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); margin-bottom: 30px; }
-        
-        h2 { color: var(--primary); margin-top: 0; display: flex; align-items: center; gap: 10px; }
-        .tag { font-size: 0.75rem; padding: 3px 8px; border-radius: 3px; background: #eee; color: #666; font-weight: normal; }
+        .nav-header {
+            padding: 40px 25px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: var(--text-main);
+        }
 
-        /* 细化步骤样式 */
-        .step-group { margin-top: 20px; border-left: 3px solid #eee; padding-left: 20px; }
-        .action-point { margin-bottom: 20px; }
-        .action-point strong { display: block; color: var(--accent); margin-bottom: 5px; }
-        
-        .sync-box { background: #eef9ee; border: 1px solid #c8e6c9; padding: 15px; border-radius: 6px; font-size: 0.9rem; margin-top: 10px; }
-        .warning { color: #d32f2f; font-weight: bold; font-size: 0.85rem; }
+        nav ul {
+            list-style: none;
+            padding: 10px;
+            margin: 0;
+        }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { padding: 12px; border: 1px solid #eee; text-align: left; }
-        th { background: #fafafa; font-size: 0.85rem; }
+        nav ul li a {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-        @media print { nav { display: none; } main { margin-left: 0; } }
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+        }
+
+        nav ul li a.active {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+
+        /* 主内容区 */
+        main {
+            margin-left: 260px;
+            padding: 40px 60px;
+            flex: 1;
+            max-width: 1000px;
+        }
+
+        .header-title {
+            margin-bottom: 40px;
+        }
+
+        .header-title h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(135deg, #fff 0%, #0A84FF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 卡片设计 */
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            color: var(--accent-blue);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-top: 25px;
+        }
+
+        /* 细化内容样式 */
+        .step-list {
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .step-item {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            line-height: 1.6;
+        }
+
+        .step-item:last-child { border-bottom: none; }
+
+        .badge {
+            background: rgba(10, 132, 255, 0.1);
+            color: var(--accent-blue);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* 重点提示 */
+        .sync-note {
+            background: rgba(50, 215, 75, 0.1);
+            border-left: 4px solid var(--success-green);
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            font-size: 0.95rem;
+        }
+
+        code {
+            background: #444;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #ff7b72;
+            font-family: "SF Mono", Menlo, monospace;
+        }
+
+        @media print {
+            nav { display: none; }
+            main { margin-left: 0; width: 100%; color: black; background: white; }
+            .glass-card { box-shadow: none; border: 1px solid #ccc; color: black; }
+        }
     </style>
 </head>
 <body>
 
 <nav>
-    <div class="nav-header">WEB + QBO 执行手册</div>
+    <div class="nav-header">Sales Operations</div>
     <ul>
-        <li><a href="#p2-detail">阶段二：双系统数据建立</a></li>
-        <li><a href="#p3-detail">阶段三：物流单据准备</a></li>
-        <li><a href="#p4-detail">阶段四：到货核销与开售</a></li>
-        <li><a href="#audit">库存审计与纠错</a></li>
+        <li><a href="#flow" class="active">整体业务流图</a></li>
+        <li><a href="#p2">数据链路细化 (WEB/QBO)</a></li>
+        <li><a href="#p4">到货核销与开售</a></li>
+        <li><a href="#rules">异常红线准则</a></li>
     </ul>
 </nav>
 
 <main>
-    <h1>产品采购至销售全流程细化</h1>
+    <div class="header-title">
+        <h1>销售启动全流程细化指南</h1>
+        <p style="color: var(--text-dim)">WEB 平台与 QuickBooks Online 协同环境适用</p>
+    </div>
 
-    <div id="p2-detail" class="card">
-        <h2>建立产品档案 <span class="tag">负责人：采购+财务</span></h2>
-        <p>当确认订单后，必须在 WEB 和 QBO 同步创建信息，确保数据对齐。</p>
-        
-        <div class="step-group">
-            <div class="action-point">
-                <strong>1. QBO (QuickBooks Online) 录入</strong>
-                - 创建 <b>New Item</b>，类型选 <i>Inventory</i>。<br>
-                - <b>SKU 规范：</b> 必须与 WEB 后台 SKU 字符完全一致（区分大小写）。<br>
-                - <b>Initial Quantity on Hand：</b> 设为 0。
-            </div>
+    <section id="flow" class="glass-card">
+        <h2>📊 业务逻辑流转</h2>
+        <div class="mermaid">
+            graph TD
+            A[采购单确认] --> B{QBO & WEB 存在档案?}
+            B -- 否 --> C[手动建立 SKU / 预售页面]
+            B -- 是 --> D[开启 WEB 预售模式]
+            C --> D
+            D --> E[ETA -10D 监控进度]
+            E --> F[Day 0 仓库到货清点]
+            F --> G[QBO: PO 转 Bill]
+            G --> H[WEB: 转换现货库存]
+            H --> I[正式销售发布]
             
-            <div class="action-point">
-                <strong>2. WEB (网站后台) 录入</strong>
-                - 创建产品页面，设置 <b>Inventory Policy</b> 为“允许预售订单”。<br>
-                - 录入重量、规格（用于计算网站运费）。<br>
-                - **启动预售**：库存数手动填入海运在途数量。
-            </div>
-
-            <div class="sync-box">
-                🔄 <b>数据同步校验：</b> 在 Excel 中建立《新产品核对表》，核对：<br>
-                [ ] QBO 售价 == WEB 售价<br>
-                [ ] QBO SKU == WEB SKU
-            </div>
+            style A fill:#161616,stroke:#0A84FF
+            style I fill:#0A84FF,stroke:#fff,color:#fff
         </div>
-    </div>
+    </section>
 
-    <div id="p4-detail" class="card">
-        <h2>到货核销与正式开售 <span class="tag">负责人：进口组+仓库+财务</span></h2>
-        <p>这是资金流（QBO）和实物流（仓库）汇合的关键节点。</p>
-
-        <div class="step-group">
-            <div class="action-point">
-                <strong>1. QBO 入库操作 (Convert PO to Bill)</strong>
-                - 收到仓库卸货报告后，在 QBO 中找到对应的 Purchase Order。<br>
-                - 点击 <b>Copy to Bill</b>，将实收数量更新至 Bill。<br>
-                - <span class="warning">关键点：</span> 录入海运费、关税，分摊至 <i>Landed Cost</i>，确保毛利计算准确。
-            </div>
-
-            <div class="action-point">
-                <strong>2. WEB 库存转正</strong>
-                - 进入网站后台，将产品状态从“预售/Pre-order”改为“现货/In-stock”。<br>
-                - <b>手动校准库存：</b> 根据仓库清点单（Physical Count），修正网站库存数字。
-            </div>
-        </div>
+    <section id="p2" class="glass-card">
+        <h2>🛠 阶段二：双系统数据映射 <span class="badge">Mac 细化标准</span></h2>
         
-    </div>
+        <div class="step-list">
+            <div class="step-item">
+                <h3>1. QBO (QuickBooks Online) 财务档</h3>
+                - 创建 <code>Inventory Item</code>。SKU 必须为 **Unique Key**。<br>
+                - 录入初始成本（Initial Cost），关联到 <code>Inventory Asset</code> 账户。<br>
+                - **关键动作**：创建 Purchase Order，锁定汇率与货值。
+            </div>
+            <div class="step-item">
+                <h3>2. WEB 后台产品页</h3>
+                - 映射 QBO SKU。设置产品状态为 <code>Pre-Order</code>。<br>
+                - <b>库存逻辑</b>：在后台手动输入本次海运的数量，确保用户可提前下单。<br>
+                - <b>运费模版</b>：检查产品重量与尺寸，确保 Checkout 时运费计算正确。
+            </div>
+        </div>
 
-    <div id="audit" class="card">
-        <h2>🚨 常见异常处理机制</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>问题场景</th>
-                    <th>QBO 处理动作</th>
-                    <th>WEB 处理动作</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><b>实收短缺 (Shortage)</b></td>
-                    <td>在 Bill 中按实收数量入库，余数留存或删除。</td>
-                    <td>立即扣减网站可售库存，防止超卖。</td>
-                </tr>
-                <tr>
-                    <td><b>价格临时变动</b></td>
-                    <td>更新 QBO 售价，重新导出 Price List。</td>
-                    <td>同步修改 WEB 价格，检查是否有未付款预售单需调整。</td>
-                </tr>
-                <tr>
-                    <td><b>海运滞期</b></td>
-                    <td>无需动作，保持 PO 开启状态。</td>
-                    <td>更新产品页 ETA 日期，群发通知邮件。</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+        <div class="sync-note">
+            💡 <b>数据一致性审计 (Audit)：</b> 每周核对一次 QBO 的 <code>Open PO</code> 与 WEB 后台的 <code>On-Order</code> 数量，确保两端数据逻辑统一。
+        </div>
+    </section>
+
+    <section id="p4" class="glass-card">
+        <h2>🚚 阶段四：到货核销与库存释放</h2>
+        <p>此环节需解决“货款确认”与“库存上线”的手动衔接问题。</p>
+
+        <div class="step-list">
+            <div class="step-item">
+                <h3>仓库侧：Packing List 物理对齐</h3>
+                - 卸货后 2 小时内出具《理货报告》。<br>
+                - 标记出任何损坏（Damage）或短缺（Shortage）。
+            </div>
+            <div class="step-item">
+                <h3>QBO 侧：落地成本 (Landed Cost)</h3>
+                - 将 PO 转换为 <code>Bill</code>。<br>
+                - <b>费用分摊</b>：手动录入海运费、报关费。QBO 需将这些费用归入该批次库存成本。<br>
+                
+            </div>
+            <div class="step-item">
+                <h3>WEB 侧：现货状态释放</h3>
+                - 修改产品标签从 <code>Pre-Order</code> 变更为 <code>In-Stock</code>。<br>
+                - **清空预售积压订单**：打印订单，通知仓库开始拣货发货。
+            </div>
+        </div>
+    </section>
+
+    <section id="rules" class="glass-card" style="border-color: rgba(255, 69, 58, 0.4);">
+        <h2 style="color: #FF453A;">🚨 异常处理红线</h2>
+        <ul style="line-height: 2;">
+            <li><b style="color: #FF453A;">禁止：</b> 严禁在仓库未完成物理清点前点击 QBO 的收货确认。</li>
+            <li><b style="color: #FF453A;">要求：</b> 网站 SKU 必须与 QBO SKU 字符级一致，严禁使用“类似”名称。</li>
+            <li><b style="color: #FF453A;">规则：</b> 若实收数量少于 PO，必须先在 QBO 修改数量，再生成 Bill。</li>
+        </ul>
+    </section>
 </main>
+
+<script>
+    // 监听滚动高亮侧边栏
+    const sections = document.querySelectorAll("section");
+    const navLinks = document.querySelectorAll("nav ul li a");
+
+    window.addEventListener("scroll", () => {
+        let current = "";
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 150) {
+                current = section.getAttribute("id");
+            }
+        });
+
+        navLinks.forEach(a => {
+            a.classList.remove("active");
+            if (a.getAttribute("href") === "#" + current) {
+                a.classList.add("active");
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
