@@ -3,102 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels 仓库运营管理规范 (菜单式)</title>
+    <title>DodoWheels 仓库运营管理规范 (Mac 暗黑蓝)</title>
     <style>
+        /* 1. 基础暗黑配色 */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'SF Pro Text', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f4f7;
-            color: #333;
+            background-color: #1e1e1e; /* 深灰色背景 (Mac Dark Mode) */
+            color: #f0f0f0; /* 浅色文字 */
         }
+        .container {
+            /* 移除容器，使用全屏布局 */
+            display: flex;
+            min-height: 100vh;
+        }
+        /* 2. 蓝色强调色 */
+        :root {
+            --accent-color: #007aff; /* 鲜艳的 Mac 蓝色 */
+            --highlight-color: #4a90e2; /* 活跃菜单背景色 */
+            --sidebar-bg: #2d3436; /* 侧边栏稍亮背景 */
+            --content-bg: #282c34; /* 内容区背景 */
+            --table-header-bg: #404040;
+            --note-bg: #2c2c2c;
+            --note-border: #f5a623;
+            --text-color: #f0f0f0;
+        }
+
+        /* 头部样式 */
         .header {
-            background-color: #0056b3;
+            background-color: var(--accent-color);
             color: white;
             padding: 20px;
             text-align: center;
             font-size: 1.8em;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
         }
-        .content-wrapper {
-            display: flex;
-            min-height: calc(100vh - 60px); /* 减去头部高度 */
-        }
+
+        /* 侧边菜单栏 */
         .sidebar {
             width: 250px;
-            background-color: #34495e;
+            background-color: var(--sidebar-bg);
             padding: 15px 0;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.5);
+            flex-shrink: 0;
         }
         .sidebar a {
             display: block;
             padding: 15px 20px;
             text-decoration: none;
-            color: #ecf0f1;
+            color: var(--text-color);
             border-left: 5px solid transparent;
-            transition: background-color 0.3s, border-left 0.3s;
+            transition: background-color 0.2s, color 0.2s, border-left 0.2s;
+            font-size: 0.95em;
         }
         .sidebar a:hover {
-            background-color: #4e6a81;
-            border-left: 5px solid #ffc107;
+            background-color: #444444;
+            color: var(--accent-color);
         }
         .sidebar a.active {
-            background-color: #1abc9c;
+            background-color: var(--highlight-color);
             color: white;
-            border-left: 5px solid #ffc107;
+            border-left: 5px solid var(--accent-color);
             font-weight: bold;
         }
+
+        /* 主内容区域 */
         .main-content {
             flex-grow: 1;
-            padding: 30px;
-            background-color: white;
+            padding: 30px 40px;
+            background-color: var(--content-bg);
+            border-left: 1px solid #444;
         }
-        /* 内容样式 */
+
+        /* 标题和文字样式 */
         h2 {
-            color: #d9534f;
-            border-bottom: 3px solid #d9534f;
+            color: var(--accent-color); /* 主标题使用蓝色 */
+            border-bottom: 3px solid var(--accent-color);
             padding-bottom: 10px;
             margin-top: 0;
         }
         h3 {
-            color: #337ab7;
-            margin-top: 20px;
-            border-left: 5px solid #337ab7;
+            color: #e0e0e0; /* 子标题使用亮白色 */
+            margin-top: 25px;
+            border-left: 5px solid #1abc9c; /* 流程步骤使用绿色点缀 */
             padding-left: 10px;
             font-size: 1.3em;
         }
+        .responsibility {
+            font-weight: bold;
+            color: #4cd964; /* 责任人使用绿色 */
+        }
+
+        /* 表格样式 */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         th, td {
-            border: 1px solid #dee2e6;
-            padding: 10px;
+            border: 1px solid #444444;
+            padding: 12px;
             text-align: left;
             font-size: 0.9em;
         }
         th {
-            background-color: #007bff;
-            color: white;
+            background-color: var(--table-header-bg);
+            color: var(--text-color);
             text-align: center;
         }
-        .responsibility {
-            font-weight: bold;
-            color: #28a745;
-        }
-        .note {
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 10px;
-            border-left: 5px solid #ffc107;
-            margin-top: 10px;
+        tr:nth-child(even) {
+            background-color: #383838;
         }
         .area-header {
-            background-color: #ffc107;
+            background-color: #555555;
             font-weight: bold;
-            color: #333;
+            color: #ffcc00; /* 黄色高亮区域 */
             text-align: center !important;
+        }
+
+        /* 提示框/备注样式 */
+        .note {
+            background-color: var(--note-bg);
+            color: var(--text-color);
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 5px solid var(--note-border); /* 警告/重要提示使用黄色 */
+            margin: 20px 0;
+        }
+        .process-step {
+            font-weight: bold;
+            color: var(--accent-color);
         }
     </style>
 </head>
@@ -108,14 +143,14 @@
         DodoWheels 仓库运营管理规范
     </div>
 
-    <div class="content-wrapper">
+    <div class="container content-wrapper">
         <div class="sidebar">
             <a href="#section-overview" class="menu-item active" data-target="overview">🏠 概览与组织架构</a>
             <a href="#section-procurement" class="menu-item" data-target="procurement">🛒 采购与信息建立</a>
             <a href="#section-receiving" class="menu-item" data-target="receiving">📦 入库、验收与上架</a>
             <a href="#section-sales" class="menu-item" data-target="sales">🧾 销售订单处理</a>
             <a href="#section-transfer" class="menu-item" data-target="transfer">🚚 调拨与备货规范</a>
-            <a href="#section-picking" class="menu-item" data-target="picking">⛏️ 拣货与出库物流</a>
+            <a href="#section-picking" class="menu-item" data-target="picking">⛏️ 拣货、出库与物流</a>
         </div>
 
         <div class="main-content">
@@ -135,6 +170,9 @@
                 </ul>
                 
                 <h3>1.2 库区责任划分表 (共16排：A-P排)</h3>
+                <div style="margin-top: 15px;">
+                    
+                </div>
                 <table>
                     <thead>
                         <tr>
@@ -150,6 +188,18 @@
                             <td>A排 - D排 (1-4排)</td>
                             <td><span class="responsibility">涂师傅</span></td>
                             <td>负责A区四排货物的日常管理与执行。</td>
+                        </tr>
+                        <tr>
+                            <td class="area-header">B区</td>
+                            <td>E排 - H排 (5-8排)</td>
+                            <td><span class="responsibility">孙师傅</span></td>
+                            <td>负责B区四排货物的日常管理与执行。</td>
+                        </tr>
+                        <tr>
+                            <td class="area-header">C区</td>
+                            <td>I排 - L排 (9-12排)</td>
+                            <td><span class="responsibility">丁师傅</span></td>
+                            <td>负责C区四排货物的日常管理与执行。</td>
                         </tr>
                         <tr>
                             <td class="area-header">D区</td>
@@ -177,13 +227,13 @@
                     <tbody>
                         <tr>
                             <td>2.1.1</td>
-                            <td>采购订单下达 (PO)</td>
+                            <td class="process-step">采购订单下达 (PO)</td>
                             <td>采购（@Pan）</td>
                             <td>根据系统库存和需求，正式下达采购订单。</td>
                         </tr>
                         <tr>
                             <td>2.1.2</td>
-                            <td><span class="process-step">产品信息建立</span></td>
+                            <td class="process-step">产品信息建立</td>
                             <td><span class="responsibility">信息管理（TIM 或 主管）</span></td>
                             <td>**采购订单下达后，必须立即**将产品型号、规格信息告知TIM，安排**系统产品建立**，确保入库前信息完备。</td>
                         </tr>
@@ -208,7 +258,7 @@
                         <tr>
                             <td><span class="process-step">到货签收与验收</span></td>
                             <td>所有仓库</td>
-                            <td>核对实物数量、型号与PO单信息，确认无误后方可签收。</td>
+                            <td>仓库人员需核对数量、型号与PO单信息无误后方可签收。</td>
                             <td>签收单</td>
                         </tr>
                         <tr>
@@ -365,7 +415,7 @@
                     e.preventDefault();
                     const targetId = this.getAttribute('data-target');
                     showSection(targetId);
-                    history.pushState(null, null, this.getAttribute('href')); // 更新URL
+                    // 简化 URL 更新，避免在本地文件系统运行时的错误
                 });
             });
 
