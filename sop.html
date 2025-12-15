@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DodoWheels 运营管理总规范</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f0f4f7;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 4px solid #0056b3;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: #0056b3;
+            font-size: 2.2em;
+            margin: 0;
+        }
+        h2 {
+            color: #d9534f;
+            border-left: 5px solid #d9534f;
+            padding-left: 10px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.6em;
+        }
+        h3 {
+            color: #337ab7;
+            margin-top: 20px;
+            border-bottom: 1px dashed #337ab7;
+            padding-bottom: 5px;
+            font-size: 1.2em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+            font-size: 0.9em;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .note {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 5px solid #ffc107;
+            margin-top: 20px;
+        }
+        .responsibility {
+            font-weight: bold;
+            color: #28a745;
+        }
+        .area-header {
+            background-color: #ffc107;
+            font-weight: bold;
+            color: #333;
+            text-align: center !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>DodoWheels 运营管理总规范</h1>
+            <p>版本：V1.0 | 生效日期：2025年12月</p>
+        </header>
+
+        <h2>一、 采购与入库流程管理规范</h2>
+
+        <h3>1.1 采购与产品信息建立</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 10%;">编号</th>
+                    <th style="width: 30%;">流程步骤</th>
+                    <th style="width: 20%;">责任人/部门</th>
+                    <th style="width: 40%;">操作细则</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1.1.1</td>
+                    <td>采购订单下达</td>
+                    <td>采购（如：@Pan）</td>
+                    <td>下达采购订单（PO）。</td>
+                </tr>
+                <tr>
+                    <td>1.1.2</td>
+                    <td>产品信息建立</td>
+                    <td><span class="responsibility">采购/信息管理（TIM 或 部门主管）</span></td>
+                    <td>采购订单下达后，需及时将**产品信息**告知TIM（或相关负责人），安排**建立产品SKU**。</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>1.2 入库与财务结算流程</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 10%;">仓库类型</th>
+                    <th style="width: 30%;">入库动作</th>
+                    <th style="width: 30%;">财务结算</th>
+                    <th style="width: 30%;">关键责任人</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>DodoWheels主仓</td>
+                    <td>到货签收后，货物入库至**备货区**。</td>
+                    <td>将**签收单**交予财务部门（@zhiyou, @Pan, @Susan）进行**采购发票录入**。</td>
+                    <td>仓库人员（@zhiyou, @Pan, @Susan）</td>
+                </tr>
+                <tr>
+                    <td>Publico仓库</td>
+                    <td>到货签收后，货物入库至**T0位置**。</td>
+                    <td>将**入库单**交予财务部门，财务需录入**采购发票**。</td>
+                    <td>Publico仓库</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>二、 销售与库存调拨规范</h2>
+
+        <h3>2.1 销售订单处理</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 15%;">步骤</th>
+                    <th style="width: 30%;">操作人</th>
+                    <th style="width: 55%;">内容</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>客户下单</td>
+                    <td><span class="responsibility">销售/客服（@小林）</span></td>
+                    <td>@小林 在群内下单给客户。</td>
+                </tr>
+                <tr>
+                    <td>内部销售单</td>
+                    <td><span class="responsibility">操作（如：@小予, @奕萱sylvie 等）</span></td>
+                    <td>创建**DodoWheels 至 Publico 的内部销售单（dodo---publico）**。</td>
+                </tr>
+                <tr>
+                    <td>销售出库</td>
+                    <td><span class="responsibility">Publico仓库</span></td>
+                    <td>Publico 收到 "dodo---publico" 单据后，安排**销售出单**。</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>2.2 仓库间调货与备货流程</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 20%;">流程环节</th>
+                    <th style="width: 20%;">单据类型</th>
+                    <th style="width: 60%;">执行细则</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>**取货/调货凭证**</td>
+                    <td><span class="responsibility">ESTIMATE单</span></td>
+                    <td>所有仓库间的取货、调货，必须使用ESTIMATE单。每个仓库需对每次取货的单据进行**留底**并用于位置登记。</td>
+                </tr>
+                <tr>
+                    <td>**调货单备注**</td>
+                    <td>ESTIMATE单</td>
+                    <td>调货单上可**备注销售单号**。</td>
+                </tr>
+                <tr>
+                    <td>**调货入库归位**</td>
+                    <td>N/A</td>
+                    <td>**有销售单号备注的调货：** 收到货后直接入**备货区**。<br> **无销售单号备注的调货：** 收到货后进行**入库归位**。</td>
+                </tr>
+                <tr>
+                    <td>**出库处理**</td>
+                    <td>ESTIMATE单</td>
+                    <td>@Mention All 对应仓库收到调货单后，需**打印并安排备货**，将其视为**出库的销售订单处理**，以防被后续订单抢占。</td>
+                </tr>
+                <tr>
+                    <td>**销售单用途**</td>
+                    <td><span class="responsibility">销售单</span></td>
+                    <td>**销售单仅供司机与客户提货使用**，**严禁**用销售单进行仓库间的调货操作。</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>三、 仓库区域划分及责任人</h2>
+
+        <div class="note">
+            **仓库主管：潘师傅** (负责整体运营管理、监督及协调)
+        </div>
+        
+        <h3>3.1 库区责任划分表 (共16排：A-P排)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 25%;">库区</th>
+                    <th style="width: 25%;">排位范围</th>
+                    <th style="width: 30%;">区域负责人</th>
+                    <th style="width: 20%;">职责范围</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="area-header">A区</td>
+                    <td>A排 - D排 (1-4排)</td>
+                    <td><span class="responsibility">涂师傅</span></td>
+                    <td>四排货物的日常管理、盘点及整洁</td>
+                </tr>
+                <tr>
+                    <td class="area-header">B区</td>
+                    <td>E排 - H排 (5-8排)</td>
+                    <td><span class="responsibility">孙师傅</span></td>
+                    <td>四排货物的日常管理、盘点及整洁</td>
+                </tr>
+                <tr>
+                    <td class="area-header">C区</td>
+                    <td>I排 - L排 (9-12排)</td>
+                    <td><span class="responsibility">丁师傅</span></td>
+                    <td>四排货物的日常管理、盘点及整洁</td>
+                </tr>
+                <tr>
+                    <td class="area-header">D区</td>
+                    <td>M排 - P排 (13-16排)</td>
+                    <td><span class="responsibility">许师傅</span></td>
+                    <td>四排货物的日常管理、盘点及整洁</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</body>
+</html>
