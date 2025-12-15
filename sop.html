@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Hub | 全流程管理门户</title>
+    <title>DodoWheels SOP Hub | 全流程管理门户</title>
     <style>
         :root {
             --bg: #1c1c1e;
@@ -22,7 +22,6 @@
             margin: 0; padding: 0; height: 100%;
             font-family: -apple-system, "SF Pro Display", "PingFang SC", sans-serif;
             background-color: var(--bg); color: var(--text-main);
-            /* 保持居中布局 */
             display: flex; align-items: center; justify-content: center; overflow: hidden;
         }
 
@@ -42,52 +41,14 @@
         .home-btn { font-weight: 700; display: flex; align-items: center; gap: 10px; color: var(--text-main); cursor: pointer; }
         .time-info { color: var(--text-dim); font-size: 0.8rem; font-variant-numeric: tabular-nums; }
 
-        /* 主中心容器 - 居中 */
+        /* 主中心容器 */
         .main-container {
-            width: 1000px;
-            display: flex;
-            flex-direction: column;
-            gap: 50px;
-            padding: 40px;
-            transition: 0.5s;
-            animation: fadeIn 0.8s ease-out;
-            text-align: center; /* 确保标题和 p 居中 */
+            width: 1000px; display: flex; flex-direction: column; gap: 50px; padding: 40px;
+            transition: 0.5s; animation: fadeIn 0.8s ease-out; text-align: center;
         }
-
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-        /* 看板区 */
-        .dashboard-row { display: flex; gap: 24px; justify-content: center; }
-        .stat-card {
-            flex: 1; max-width: 300px; background: var(--card-bg); border: 1px solid var(--border);
-            padding: 20px; border-radius: 20px; backdrop-filter: blur(20px);
-            text-align: left;
-        }
-        .stat-card .label { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px; text-transform: uppercase; }
-        .stat-card .value { font-size: 2rem; font-weight: 700; }
-        .stat-card .trend { font-size: 0.75rem; color: var(--accent-blue); margin-top: 5px; }
-
-        /* 图标区 */
-        .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; justify-items: center; }
-        .app-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .app-item:hover { transform: scale(1.15); }
-        .app-icon { width: 90px; height: 90px; border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 12px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
-        .icon-prod { background: linear-gradient(135deg, #BF5AF2, #5E5CE6); }
-        .icon-sales { background: linear-gradient(135deg, #0A84FF, #007AFF); }
-        .icon-wh { background: linear-gradient(135deg, #FF9500, #FF5E00); }
-        .icon-logi { background: linear-gradient(135deg, #32D74B, #1DB954); }
-        .app-label { font-size: 0.95rem; font-weight: 600; }
-
-        /* 底部功能区 */
-        .bottom-row { display: flex; gap: 24px; justify-content: center; }
-        .widget { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 20px; backdrop-filter: blur(20px); text-align: left;}
-        .news-widget { flex: 2; max-width: 500px;}
-        .links-widget { flex: 1; max-width: 250px;}
-        .widget-h { font-size: 0.75rem; font-weight: 800; color: var(--text-dim); margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; text-transform: uppercase; }
-        .news-item { font-size: 0.85rem; margin-bottom: 10px; color: #d1d1d6; line-height: 1.5; }
-        .news-tag { color: var(--accent-orange); font-weight: bold; margin-right: 5px; }
-        .q-link { display: block; color: var(--accent-blue); text-decoration: none; font-size: 0.85rem; margin-bottom: 10px; transition: 0.2s; }
-        .q-link:hover { text-decoration: underline; }
+        /* 看板、图标等样式... (略) */
 
         /* 详情页视图 (公共样式) */
         .content-view {
@@ -96,22 +57,45 @@
             transform: translateY(100%); transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1);
         }
         .content-view.active { transform: translateY(0); }
+        .back-btn-details { position: sticky; top: 20px; color: var(--accent-blue); cursor: pointer; z-index: 10; font-weight: 600; background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 30px; backdrop-filter: blur(10px); display: inline-block; margin-left: 40px;}
 
-        /* 销售时间轴样式 (view-sales) */
-        .timeline-container { max-width: 850px; margin: 80px auto; padding: 20px; }
-        .back-btn-timeline { color: var(--accent-blue); cursor: pointer; margin-bottom: 30px; display: inline-block; }
-        /* (时间轴、圆点、内容等样式，此处为简化) */
+        /* SOP 详情页专属样式 */
+        .sop-container { max-width: 1100px; margin: 0 auto; padding: 40px; background: #1c1c1e; line-height: 1.8; }
+        .sop-container h1 { color: var(--accent-orange); font-size: 2.5rem; text-align: center; margin-bottom: 5px;}
+        .sop-container h2 { color: var(--accent-blue); font-size: 1.5rem; margin-top: 30px; padding-bottom: 5px; border-bottom: 1px solid var(--border);}
+        .sop-container h3 { color: var(--accent-orange); font-size: 1.1rem; margin-top: 20px; font-weight: 600;}
+        .sop-container p, .sop-container ul, .sop-container li { font-size: 0.95rem; color: #d1d1d6; }
+        .sop-container ul { padding-left: 25px; }
 
-        /* 库内 SOP 样式 (view-wh) */
-        .sop-container { max-width: 1000px; margin: 0 auto; padding: 40px; background: #1c1c1e; line-height: 1.6; }
-        .sop-container h1, .sop-container h2 { color: var(--accent-orange); }
-        .sop-container h3 { color: var(--accent-blue); }
-        .sop-meta-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.85rem; color: var(--text-dim); }
-        .sop-meta-table td { border: 1px solid var(--border); padding: 10px; }
-        .warning-box { background: rgba(255, 69, 58, 0.1); border-radius: 12px; padding: 20px; border-left: 4px solid #FF453A; margin: 20px 0; }
-        .data-table th { background: rgba(255,255,255,0.1); }
-        .data-table td { border: 1px solid var(--border); padding: 12px; }
-        .back-btn-sop { position: sticky; top: 20px; color: var(--accent-blue); cursor: pointer; z-index: 10; font-weight: 600; background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 30px; backdrop-filter: blur(10px); }
+        /* 表格样式 */
+        .data-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.9rem; }
+        .data-table th, .data-table td { border: 1px solid var(--border); padding: 12px; text-align: left; vertical-align: top;}
+        .data-table th { background: rgba(255,255,255,0.1); color: var(--text-main); font-weight: 600;}
+        .data-table td:first-child { font-weight: bold; width: 150px; }
+
+        /* 注意事项/警示框 */
+        .warning-box { 
+            background: rgba(255, 69, 58, 0.1); border-radius: 12px; padding: 20px; 
+            border-left: 4px solid #FF453A; margin: 20px 0; 
+            color: #FF453A; font-weight: 600;
+        }
+        .meta-table { font-size: 0.85rem; color: var(--text-dim); }
+        .meta-table td { width: 50%; }
+
+        /* Collapsible Section (for SOP chapters) */
+        details { background: rgba(255, 255, 255, 0.03); border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--border); }
+        summary { 
+            padding: 20px; font-size: 1.2rem; font-weight: 700; cursor: pointer; 
+            outline: none; list-style: none; color: var(--accent-blue);
+        }
+        summary::-webkit-details-marker { display: none; }
+        .details-content { padding: 0 20px 20px 20px; }
+        .sop-section-title { color: var(--accent-blue); display: inline-block; margin-right: 15px; }
+        
+        /* 流程图样式 */
+        .flowchart-img { max-width: 100%; height: auto; border: 1px solid var(--border); border-radius: 8px; margin: 20px 0; }
+        .appendix-section { margin-top: 40px; padding-top: 20px; border-top: 2px solid var(--accent-orange); }
+        .appendix-section h2 { color: var(--accent-orange); }
 
     </style>
 </head>
@@ -121,14 +105,14 @@
 
 <nav class="navbar">
     <div class="home-btn" onclick="closeAll()">
-        <span></span> D-OPERATIONS HUB
+        <span></span> DodoWheels OPERATIONS HUB
     </div>
     <div class="time-info" id="clock">...</div>
 </nav>
 
 <div class="main-container" id="launcher">
-    <h1 style="font-weight: 800; letter-spacing: -1px; margin-bottom: 0;">D-OPERATIONS</h1>
-    <p style="color: var(--text-dim); margin-bottom: 40px;">WEB & QBO 数字化管理门户</p>
+    <h1 style="font-weight: 800; letter-spacing: -1px; margin-bottom: 0;">DodoWheels OPERATIONS</h1>
+    <p style="color: var(--text-dim); margin-bottom: 40px;">业务流程与系统集成门户</p>
 
     <div class="dashboard-row">
         <div class="stat-card">
@@ -166,7 +150,7 @@
         <div class="widget news-widget">
             <div class="widget-h">系统通告 / System News</div>
             <div class="news-item"><span class="news-tag">[预警]</span> BC 码头监控显示集装箱延误风险，建议更新 ETA。</div>
-            <div class="news-item"><span class="news-tag">[更新]</span> Odoo 系统正式启用后，QBO 录入手动步骤将简化。</div>
+            <div class="news-item"><span class="news-tag">[更新]</span> QBO 录入手动步骤简化通知。</div>
         </div>
         <div class="widget links-widget">
             <div class="widget-h">系统入口 / Links</div>
@@ -179,52 +163,212 @@
 
 <div id="view-sales" class="content-view">
     <div class="timeline-container">
-        <div class="back-btn-timeline" onclick="closeAll()">← 返回主桌面</div>
-        <h2 style="font-size: 1.8rem; border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 40px;">📈 销售管理：全流程时间轴</h2>
-        <p style="color:var(--text-dim)">此处为销售全流程时间轴内容...</p>
+        <div class="back-btn-details" onclick="closeAll()">← 返回主桌面</div>
+        <h2 style="font-size: 1.8rem; border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 40px;">📈 DodoWheels 销售：从采购到开售时间轴</h2>
         </div>
 </div>
 
 <div id="view-wh" class="content-view">
     <div class="sop-container">
-        <div class="back-btn-sop" onclick="closeAll()">← 返回主桌面</div>
+        <div class="back-btn-details" onclick="closeAll()">← 返回主桌面</div>
         
-        <div class="sop-header">
-            <h1>仓储操作标准作业流程 (SOP)</h1>
-            <p style="color:var(--text-dim)">Standard Operating Procedure - Warehouse Operations</p>
-            <table class="sop-meta-table">
-                <tr><td>文件编号: SOP-WH-001</td><td>版本号: V1.0</td></tr>
+        <div class="sop-header" style="margin-top: 40px;">
+            <h1>DodoWheels 仓储操作标准作业流程 (SOP)</h1>
+            <p style="color:var(--text-dim); text-align: center; margin-bottom: 30px;">Standard Operating Procedure - Warehouse Operations</p>
+            
+            <table class="data-table meta-table">
+                <tr><th>文件编号</th><td>SOP-WH-001</td><th>版本号</th><td>V1.0</td></tr>
+                <tr><th>所属部门</th><td>仓储部</td><th>编写日期</th><td>2025年7月18日</td></tr>
+                <tr><th>编写人员</th><td>Lei Lin</td><th>审核人员</th><td>XXX（仓库主管）</td></tr>
+                <tr><th>批准人员</th><td>XXX（总经理）</td><th>保密等级</th><td>内部文件（仅限公司内部使用）</td></tr>
             </table>
-        </div>
 
-        <div class="warning-box">
-            <strong>⚠️ 注意事项：</strong>本文件为 DODO Wheels 内部文件，未经许可不得外传。
-        </div>
-
-        <div class="sop-section">
-            <h2>第三章 入库管理流程</h2>
-            <h3>3.2 入库流程详解 (集装箱卸货规范)</h3>
-            <div style="background: rgba(255,149,0,0.1); padding: 15px; border-left: 4px solid var(--accent-orange); border-radius: 8px;">
-                <b>核心时效要求：</b> 卸完一个 40’ 集装箱的时间应控制在 <b>2小时30分钟</b> 以内。
+            <div class="warning-box">
+                🔒 <strong>注意事项：</strong>本文件为DODO Wheels运营与物流部内部文件，未经许可不得外传。所有版本如需修改，须经“编写-审核-批准”三层流程后正式生效。
             </div>
-            <p>（详细的卸货、堆码、验收步骤...）</p>
         </div>
+
+        <h2 style="margin-bottom: 20px;">📜 SOP 目录与快速导航</h2>
+
+        <details open>
+            <summary><span class="sop-section-title">第一章</span> 总则</summary>
+            <div class="details-content">
+                <h3>1.1 目的与适用范围</h3>
+                <p>为规范 DODO Wheels 的仓储操作流程，提升仓储管理效率与服务质量，确保库存准确、物资流转顺畅、安全可控，特制定本 SOP。适用于公司所有仓库（含总部仓与分仓）、涉及仓储作业的各类人员。</p>
+                <p>本 SOP 覆盖的操作范围包括：海外进口、本地采购货物的接收、入库、出库管理，仓间调拨、库存盘点、调整流程，退货与异常处理，以及系统与记录操作要求。</p>
+                <h3>1.2 术语定义</h3>
+                <table class="data-table">
+                    <tr><th>术语</th><th>定义</th></tr>
+                    <tr><td>SKU</td><td>Stock Keeping Unit，库存单位，表示每种商品的唯一识别编号。</td></tr>
+                    <tr><td>库位</td><td>仓库内物理或虚拟的储位编号，用于定位商品存放的位置，便于查找与管理。</td></tr>
+                    <tr><td>入库单</td><td>用于记录每批次货物入库信息的标准单据，包括商品、数量、来源、到货时间等信息。</td></tr>
+                    <tr><td>出库单</td><td>用于指令和记录货物出库的信息，包括订单编号、出库时间、出库人员、去向等。</td></tr>
+                    <tr><td>盘点差异</td><td>库存盘点中系统数量与实物数量不一致的情况。</td></tr>
+                </table>
+                <h3>1.3 仓储岗位职责简述</h3>
+                <table class="data-table">
+                    <tr><th>岗位名称</th><th>核心职责说明</th></tr>
+                    <tr><td>仓库主管</td><td>统筹仓库日常运作，提前规划并实施每日工作，人员管理，流程监督，异常处理，协调跨部门合作。</td></tr>
+                    <tr><td>仓库管理员</td><td>管理商品入库、出库、移库、盘点等操作，确保数据准确，保管库存记录与单据。</td></tr>
+                </table>
+            </div>
+        </details>
+
+        <details>
+            <summary><span class="sop-section-title">第二章</span> 仓库布局与作业环境</summary>
+            <div class="details-content">
+                <h3>2.1 仓库区域划分与标识规范</h3>
+                <table class="data-table">
+                    <tr><th>区域名称</th><th>功能说明</th></tr>
+                    <tr><td>装卸区</td><td>用于货物装车与卸货作业，应紧邻出入口，禁止堆放长期库存物料，保持通道畅通。</td></tr>
+                    <tr><td>客户自提区</td><td>专用于客户上门自提货物的临时存放，须保持货品完好、便于识别。</td></tr>
+                    <tr><td>异常/退货区</td><td>用于存放有缺陷、待退货、标签错误等需处理的货物，不得混入正式库存。</td></tr>
+                </table>
+                <h3>2.2 库位编号与货架管理规则</h3>
+                <p>库位编号格式示例：**LS/Stock/E01-A10A** (LS仓库A列—货架10—层位A)。</p>
+                <ul>
+                    <li>重货放低层，轻货放高层。</li>
+                    <li>出库频次高的 SKU 应靠近出货路径。</li>
+                    <li>所有上架货品标签或型号说明必须朝向外面，方便提货、盘点时快速查看。</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary><span class="sop-section-title">第三章</span> 入库管理流程</summary>
+            <div class="details-content">
+                <h3>3.1 入库类型分类</h3>
+                <ul>
+                    <li>海运采购入库</li>
+                    <li>本地采购入库（供应商送货或物流自提）</li>
+                    <li>移库入库（内部仓库调拨）</li>
+                </ul>
+                <h3>3.2 入库流程详解</h3>
+                <p><strong>【步骤三】卸货，同步货物检验与初步验收</strong></p>
+                <div class="warning-box" style="color: var(--text-main); background: rgba(10, 132, 255, 0.1); border-left: 4px solid var(--accent-blue);">
+                    <b>集装箱卸货时效：</b> 卸完一个 40’ 集装箱的时间应控制在 <b>2小时30分钟</b> 以内。
+                </div>
+                <ul>
+                    <li>一人负责卸货滚出集装箱，一人负责将同一 SKU 轮胎整齐码放在货物托盘上。</li>
+                    <li>小直径轮胎每托盘堆放 **30** 条；大直径轮胎每托盘堆放 **15** 条。</li>
+                    <li>卸货同时检查质量，发现严重不符送至“待处理区”。</li>
+                </ul>
+                <p><strong>【步骤五】入库登记</strong>：在系统中录入入库记录，复核 SKU 对应库位。</p>
+                <h3>3.3 异常入库处理</h3>
+                <table class="data-table">
+                    <tr><th>异常类型</th><th>处理措施</th></tr>
+                    <tr><td>质量问题（破损、变形）</td><td>暂不入库，拍照记录，通知采购确认。</td></tr>
+                    <tr><td>型号或 SKU 错误</td><td>拒收或设为“待处理区”，通知上级部门复核。</td></tr>
+                </table>
+            </div>
+        </details>
         
-        <div class="sop-section">
-            <h2>第六章 库存管理与盘点</h2>
-            <h3>6.2 盘点机制</h3>
-            <ul style="color: var(--text-dim); list-style: disc; margin-left: 20px;">
-                <li><b>实时盘点：</b> 针对数量少于10 pic 的 SKU，在备货时同步确认。</li>
-                <li><b>差异处理：</b> 差异 > 5% 必须追责并由高层管理层或财务审批。</li>
-            </ul>
-        </div>
+        <details>
+            <summary><span class="sop-section-title">第四章</span> 库内作业与管理</summary>
+            <div class="details-content">
+                <h3>4.1 上架流程</h3>
+                <ul>
+                    <li>高频 SKU 优先靠近出库通道。</li>
+                    <li>货物标签须全部朝外。</li>
+                    <li>完成上架后立即在系统中更新库位与数量。</li>
+                </ul>
+                <h3>4.4 货品存储要求（轮胎类）</h3>
+                <ul>
+                    <li>一般乘用车轮胎：建议采用立垛或交叉方式存储，每摞不超过 2 米高。</li>
+                    <li>大型卡客车轮胎：允许平放，3 层以内，须定期旋转位置防止变形。</li>
+                    <li>花纹型号易混轮胎：应避免堆放在同一个或相邻库位内，并尽可能做颜色或标签标识，防错发。</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary><span class="sop-section-title">第五章</span> 出库与配送准备</summary>
+            <div class="details-content">
+                <h3>5.2 备货流程与准确性控制</h3>
+                <ul>
+                    <li>按库位顺序行进备货，从最深处开始，逐项拣取。</li>
+                    <li>**编码确认**：即便货品上贴有标签，仍然需要对压制在轮胎上的型号编码进行二次确认。</li>
+                    <li>临时集货：拣好的货品集中放置于指定待配送区或自提区，同时将备货单签字并夹在对应的货品中间。</li>
+                    <li>控制要点：尽可能执行“先入先出”原则 (如适用)。</li>
+                </ul>
+                <h3>5.3 出库复核流程</h3>
+                <p>由配送司机负责，仓管员配合核对配送清单与实物：逐项复核 SKU、数量、规格。</p>
+                <p>装车发车后，收集所有备货单，交送到办公室，集中在系统内确认出货。</p>
+            </div>
+        </details>
+
+        <details>
+            <summary><span class="sop-section-title">第六章</span> 库存管理与盘点</summary>
+            <div class="details-content">
+                <h3>6.2 盘点计划与频率</h3>
+                <ul>
+                    <li>**实时盘点**：适用数量少于 10 pic 的 SKU，在备货时进行。</li>
+                    <li>**周期盘点**：适用 A 类高价值、高周转 SKU，每月或每季度进行。</li>
+                </ul>
+                <h3>6.3 差异处理与复盘流程</h3>
+                <table class="data-table">
+                    <tr><th>差异幅度</th><th>审批层级</th><th>是否追责</th></tr>
+                    <tr><td>≤ 3%</td><td>仓库主管</td><td>否，记录警示</td></tr>
+                    <tr><td>3% - 5%</td><td>部门经理</td><td>可能追责</td></tr>
+                    <tr><td>> 5%</td><td>高层管理或财务</td><td>必须追责</td></tr>
+                </table>
+            </div>
+        </details>
         
-        <div class="sop-section">
-            <h2>附录 G：每日必查清单</h2>
+        <details>
+            <summary><span class="sop-section-title">第七章</span> 安全与异常处理</summary>
+            <div class="details-content">
+                <h3>7.1 仓库安全操作规范</h3>
+                <ul>
+                    <li>叉车操作权限须经由仓库主管确认，否则不能擅自驾驶。</li>
+                    <li>登高作业高度超过 2 米者必须配备安全带、安全帽等防护装备。</li>
+                </ul>
+                <h3>7.5 人员伤亡突发事件处理</h3>
+                <table class="data-table">
+                    <tr><th>等级</th><th>描述</th><th>处理优先级</th></tr>
+                    <tr><td>一级</td><td>轻微擦伤、扭伤等，无需就医</td><td>内部备案</td></tr>
+                    <tr><td>三级</td><td>重大伤残或人员死亡</td><td>报警、上报政府相关部门，启动重大事故调查流程</td></tr>
+                </table>
+                <p>**处理流程核心：** 第一发现人应立刻停止手头作业，呼救并通知主管；拨打 **911 紧急电话** 或安排专人送往就近医院。</p>
+            </div>
+        </details>
+
+        <details>
+            <summary><span class="sop-section-title">第八、九章</span> 文档、记录与职责要求</summary>
+            <div class="details-content">
+                <h3>8.1 单据填写与记录规则</h3>
+                <p>所有纸质单据必须 **字迹清晰、涂改处须额外签名**。单据填写必须与实际操作数量一致，并及时归档。</p>
+                <h3>9.2 仓管员职责</h3>
+                <p>核心职责：按照入库单据和工作流程进行货物接收、上架，维护库位整洁，日常更新系统库存数据，确保账、物一致。</p>
+                <h3>9.3 新员工入岗培训与考核机制</h3>
+                <table class="data-table">
+                    <tr><th>考核项目</th><th>评分方式</th><th>权重</th></tr>
+                    <tr><td>实操技能</td><td>实地考核打分</td><td>50%</td></tr>
+                    <tr><td>工作态度与纪律</td><td>主管观察与反馈</td><td>50%</td></tr>
+                </table>
+                <p>总分达 80 分以上者视为合格。工作态度与纪律分不足 5 分者不予安排补训。</p>
+            </div>
+        </details>
+
+        <div class="appendix-section">
+            <h2>附录部分</h2>
+            
+            <h3>附录 A：入库流程图</h3>
+            
+            
+            <h3>附录 B：出库流程图</h3>
+            
+            
+            <h3>附录 C：各仓库平面图和仓储能力概算</h3>
+            
+            
+            <h3>附录 G：每日必查清单</h3>
             <table class="data-table">
                 <tr><th>序号</th><th>工作事项</th><th>要求说明</th></tr>
-                <tr><td>1</td><td><b>Odoo 工单查收</b></td><td>主管一早到岗先查 Odoo，看是否有待处理工单</td></tr>
-                <tr><td>8</td><td><b>Odoo 看板保持清零</b></td><td>除了未到期收货单，其他任务都要清空</td></tr>
+                <tr><td>1</td><td>查看是否有新的备货单</td><td>主管一早到岗先查系统，看是否有待处理工单</td></tr>
+                <tr><td>5</td><td>主动争取备货单</td><td>早上 9:30 前 & 午饭后 1:30 前去办公室询问是否有新任务</td></tr>
+                <tr><td>7</td><td>优先处理备货工单</td><td>收到备货单立即处理，避免堆单</td></tr>
+                <tr><td>8</td><td>系统库存状态清零</td><td>除了未到期收货单，其他任务都要清空</td></tr>
             </table>
         </div>
         
@@ -233,24 +377,22 @@
 
 <script>
     function openModule(mod) {
-        // 缩放主页面并降低透明度
         document.getElementById('launcher').style.transform = 'scale(0.9)';
         document.getElementById('launcher').style.opacity = '0.3';
         
-        // 显示对应的模块内容页
         if(mod === 'sales') {
             document.getElementById('view-sales').classList.add('active');
+            document.getElementById('view-wh').classList.remove('active');
         } else if (mod === 'wh') {
             document.getElementById('view-wh').classList.add('active');
+            document.getElementById('view-sales').classList.remove('active');
         }
     }
 
     function closeAll() {
-        // 恢复主页面
         document.getElementById('launcher').style.transform = 'scale(1)';
         document.getElementById('launcher').style.opacity = '1';
 
-        // 隐藏所有详情页
         const views = document.querySelectorAll('.content-view');
         views.forEach(v => v.classList.remove('active'));
     }
