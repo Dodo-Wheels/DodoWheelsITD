@@ -3,229 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>供应链操作手册 | WEB + QBO</title>
+    <title>Operations Portal | WEB & QBO</title>
     <style>
         :root {
             --bg: #1c1c1e;
-            --sidebar: #2c2c2e;
-            --accent: #0A84FF;
+            --app-hover: rgba(255, 255, 255, 0.1);
+            --accent-blue: #0A84FF;
+            --accent-green: #32D74B;
+            --accent-orange: #FF9500;
             --text-main: #ffffff;
-            --text-secondary: #a1a1a6;
-            --border: #3a3a3c;
-            --card: #2c2c2e;
-            --highlight: rgba(10, 132, 255, 0.15);
+            --text-dim: #a1a1a6;
+            --card-bg: #2c2c2e;
         }
 
-        body {
-            font-family: -apple-system, "SF Pro Display", "SF Pro Text", sans-serif;
+        body, html {
             margin: 0;
-            display: flex;
+            padding: 0;
+            height: 100%;
+            font-family: -apple-system, "SF Pro Display", sans-serif;
             background-color: var(--bg);
             color: var(--text-main);
+            overflow: hidden;
         }
 
-        /* 左侧手册目录 */
-        nav {
-            width: 280px;
-            height: 100vh;
-            background-color: var(--sidebar);
-            border-right: 1px solid var(--border);
+        /* 背景装饰：类似 Odoo/Mac 桌面 */
+        .desktop-bg {
             position: fixed;
-            overflow-y: auto;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, #2c3e50 0%, #1c1c1e 100%);
+            z-index: -1;
         }
 
-        .manual-title {
-            padding: 40px 25px 10px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        /* 顶部导航栏 */
+        .navbar {
+            height: 44px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 0.5px solid #3a3a3c;
         }
 
-        .manual-version {
-            padding: 0 25px 30px;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
+        .home-btn {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        nav ul { list-style: none; padding: 0 15px; margin: 0; }
-        nav ul li { margin-bottom: 4px; }
-        nav ul li a {
-            display: block;
-            padding: 12px 15px;
-            color: var(--text-secondary);
+        /* 主菜单容器 - 居中网格 */
+        .app-launcher {
+            display: grid;
+            grid-template-columns: repeat(3, 160px);
+            gap: 40px;
+            justify-content: center;
+            align-content: center;
+            height: calc(100vh - 44px);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+        }
+
+        .app-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-decoration: none;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            transition: 0.2s;
-        }
-
-        nav ul li a:hover { background: rgba(255,255,255,0.05); color: var(--text-main); }
-        nav ul li a.active { background: var(--accent); color: white; }
-
-        /* 右侧手册正文 */
-        main { margin-left: 280px; padding: 60px 80px; flex: 1; max-width: 900px; }
-
-        .manual-page {
-            background: #262626;
-            padding: 50px;
-            border-radius: 4px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-            line-height: 1.6;
-        }
-
-        h1 { font-size: 2.4rem; margin-top: 0; border-bottom: 2px solid var(--border); padding-bottom: 20px; }
-        h2 { font-size: 1.6rem; color: var(--accent); margin-top: 40px; }
-        h3 { font-size: 1.2rem; margin-top: 30px; display: flex; align-items: center; }
-
-        /* 操作步骤指示器 */
-        .step-tag {
-            background: var(--accent);
             color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .app-item:hover { transform: scale(1.05); }
+
+        .app-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        /* 模块配色 */
+        .icon-sales { background: linear-gradient(135deg, #007AFF, #00C6FF); }
+        .icon-warehouse { background: linear-gradient(135deg, #FF9500, #FFCC00); }
+        .icon-logistics { background: linear-gradient(135deg, #32D74B, #00FFAB); }
+
+        .app-label { font-size: 0.95rem; font-weight: 500; }
+
+        /* 内容详情页 - 默认隐藏 */
+        .content-view {
+            position: absolute;
+            top: 44px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 44px);
+            background: var(--bg);
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        .content-view.active { transform: translateY(0); }
+
+        .container {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .manual-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            line-height: 1.8;
+            border: 1px solid #3a3a3c;
+        }
+
+        .back-link {
+            color: var(--accent-blue);
+            cursor: pointer;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .step-num {
+            background: var(--accent-blue);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 5px;
             font-size: 0.8rem;
-            margin-right: 12px;
+            margin-right: 10px;
         }
 
-        /* 职责描述卡片 */
-        .responsibility-card {
-            background: var(--highlight);
-            border: 1px solid var(--accent);
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-        }
-
-        .responsibility-card strong { color: var(--accent); }
-
-        /* 操作指南列表 */
-        .instruction-list { padding-left: 20px; }
-        .instruction-list li { margin-bottom: 15px; color: #d1d1d6; }
-        .instruction-list b { color: white; }
-
-        /* 警告/注意 */
-        .alert {
-            background: rgba(255, 69, 58, 0.1);
-            border-left: 4px solid #FF453A;
-            padding: 15px;
-            margin: 20px 0;
+        h2 { border-bottom: 1px solid #3a3a3c; padding-bottom: 15px; }
+        
+        /* 实用标注 */
+        .sys-badge {
+            font-size: 0.7rem;
+            padding: 2px 6px;
             border-radius: 4px;
+            border: 1px solid currentColor;
+            margin-left: 10px;
+            vertical-align: middle;
         }
-
-        @media print {
-            nav { display: none; }
-            main { margin: 0; padding: 0; }
-            .manual-page { box-shadow: none; background: white; color: black; }
-        }
+        .qbo { color: #2ca01c; }
+        .web { color: #0077c5; }
     </style>
 </head>
 <body>
 
-<nav>
-    <div class="manual-title">OPERATIONS MANUAL</div>
-    <div class="manual-version">v2025.01 | WEB & QBO Edition</div>
-    <ul>
-        <li><a href="#sales" class="active">01 产品销售规范</a></li>
-        <li><a href="#warehouse">02 库内作业规范</a></li>
-        <li><a href="#logistics">03 配送与履行规范</a></li>
-        <li><a href="#exception">04 异常处理预案</a></li>
-    </ul>
+<div class="desktop-bg"></div>
+
+<nav class="navbar">
+    <div class="home-btn" onclick="closeAll()">
+        <span>⠿</span> Operations Portal
+    </div>
 </nav>
 
-<main>
-    <div class="manual-page">
-        <h1>供应链协同操作手册</h1>
-
-        <section id="sales">
-            <h2>01 产品销售与系统初始化</h2>
-            <div class="responsibility-card">
-                <strong>核心目标：</strong> 确保 QBO 账务系统与 WEB 销售系统 SKU 100% 同步，启动预售。
-            </div>
-
-            <h3><span class="step-tag">Step 1</span> QBO 财务建档</h3>
-            <ul class="instruction-list">
-                <li>打开 QBO > <b>Sales</b> > <b>Products and Services</b>。</li>
-                <li>新建 <b>Inventory Item</b>。注意：SKU 必须为唯一索引字符。</li>
-                <li>创建 <b>Purchase Order (PO)</b>：记录供应商货值及预计 ETA 时间。</li>
-            </ul>
-
-            <h3><span class="step-tag">Step 2</span> WEB 预售配置</h3>
-            <ul class="instruction-list">
-                <li>进入网站后台，创建产品页。</li>
-                <li><b>库存策略：</b> 将状态设为 <code>Allow Pre-orders</code>。</li>
-                <li><b>同步在途量：</b> 手动输入 PO 载明的总数量作为网站库存。</li>
-            </ul>
-        </section>
-
-        <section id="warehouse">
-            <h2>02 库内收货与核销管理</h2>
-            <div class="responsibility-card">
-                <strong>核心目标：</strong> 物理实物入库与 QBO 财务单据结转。
-            </div>
-
-            <h3><span class="step-tag">Step 1</span> 到货物理核验</h3>
-            <ul class="instruction-list">
-                <li>仓库人员根据 <b>Packing List</b> 逐一核对箱数、花纹、规格。</li>
-                <li>在纸质清单上记录：实到、短缺、破损数量。</li>
-            </ul>
-
-            <h3><span class="step-tag">Step 2</span> QBO 账务结转 (Bill)</h3>
-            <ul class="instruction-list">
-                <li>财务找到对应 PO，点击 <b>Copy to Bill</b>。</li>
-                <li><b>关键：</b> 必须根据仓库反馈的实收数量修改单据数量。</li>
-                <li>在 <i>Category Details</i> 中录入分摊的<b>海运费</b>和<b>关税</b>。</li>
-            </ul>
-        </section>
-
-        <section id="logistics">
-            <h2>03 配送管理与订单履约</h2>
-            <div class="responsibility-card">
-                <strong>核心目标：</strong> 释放现货库存，快速清理预售积压订单。
-            </div>
-
-            <h3><span class="step-tag">Step 1</span> WEB 库存释放</h3>
-            <ul class="instruction-list">
-                <li>网站管理员将产品标签从 <code>Pre-Order</code> 修改为 <code>In-Stock</code>。</li>
-                <li>根据 QBO 最终入库数量，二次校验网站库存总额。</li>
-            </ul>
-
-            <h3><span class="step-tag">Step 2</span> 订单拣发货</h3>
-            <ul class="instruction-list">
-                <li>后台导出“待发货”订单，仓库优先处理最早支付的预售订单。</li>
-                <li><b>配送单：</b> 打印随货清单，确保客户收到正确的 SKU。</li>
-            </ul>
-        </section>
-
-        <section id="exception">
-            <div class="alert">
-                <strong>🚨 查阅须知：</strong>
-                <p>1. <b>SKU 冲突：</b> 若发现 WEB 与 QBO 的 SKU 不同，禁止执行入库，必须先更正后再继续。</p>
-                <p>2. <b>海运延迟：</b> 若 ETA 超过 5 个工作日变动，必须通知网站组更新前端显示的日期。</p>
-            </div>
-        </section>
+<div class="app-launcher" id="launcher">
+    <div class="app-item" onclick="openModule('sales')">
+        <div class="app-icon icon-sales">📦</div>
+        <span class="app-label">产品销售</span>
     </div>
-</main>
+    <div class="app-item" onclick="openModule('warehouse')">
+        <div class="app-icon icon-warehouse">🏢</div>
+        <span class="app-label">库内管理</span>
+    </div>
+    <div class="app-item" onclick="openModule('logistics')">
+        <div class="app-icon icon-logistics">🚚</div>
+        <span class="app-label">配送管理</span>
+    </div>
+</div>
+
+<div id="view-sales" class="content-view">
+    <div class="container">
+        <div class="back-link" onclick="closeAll()">← 返回主桌面</div>
+        <div class="manual-card">
+            <h2>📦 产品销售手册</h2>
+            <p>管理从采购确认到网站预售启动的全过程。</p>
+            
+            <p><span class="step-num">01</span> <b>QBO 档案初始化</b> <span class="sys-badge qbo">QuickBooks</span></p>
+            <ul>
+                <li>在 QBO 创建新 Inventory Item，核对 SKU。</li>
+                <li>建立 Purchase Order (PO)，锁定到货 ETA。</li>
+            </ul>
+
+            <p><span class="step-num">02</span> <b>WEB 预售上架</b> <span class="sys-badge web">Website</span></p>
+            <ul>
+                <li>在后台设置产品状态为 <code>Pre-Order</code>。</li>
+                <li>手动输入在途库存数量，同步发布售价。</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="view-warehouse" class="content-view">
+    <div class="container">
+        <div class="back-link" onclick="closeAll()">← 返回主桌面</div>
+        <div class="manual-card">
+            <h2>🏢 库内管理手册</h2>
+            <p>管理货物抵仓、清点与账务结转流程。</p>
+            
+            <p><span class="step-num">01</span> <b>物理收货清点</b></p>
+            <ul>
+                <li>依据 Packing List 核实货号、规格、数量。</li>
+                <li>记录损坏及差异，拍照存档备查。</li>
+            </ul>
+
+            <p><span class="step-num">02</span> <b>QBO 账务结转</b> <span class="sys-badge qbo">QuickBooks</span></p>
+            <ul>
+                <li>将对应的 PO 转换为 <b>Bill</b>。</li>
+                <li>按实收数入账，分摊海运费至 <i>Landed Cost</i>。</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="view-logistics" class="content-view">
+    <div class="container">
+        <div class="back-link" onclick="closeAll()">← 返回主桌面</div>
+        <div class="manual-card">
+            <h2>🚚 配送管理手册</h2>
+            <p>管理库存释放与订单终端履行。</p>
+            
+            <p><span class="step-num">01</span> <b>WEB 库存转换</b> <span class="sys-badge web">Website</span></p>
+            <ul>
+                <li>将产品标签从 <code>Pre-Order</code> 切换为 <code>In-Stock</code>。</li>
+                <li>释放已积压的预售订单。</li>
+            </ul>
+
+            <p><span class="step-num">02</span> <b>订单履行 (Fulfillment)</b></p>
+            <ul>
+                <li>仓库打印拣货单，扫描追踪号同步至 WEB 系统。</li>
+                <li>QBO 生成对应的 Sales Receipt 以结转销售额。</li>
+            </ul>
+        </div>
+    </div>
+</div>
 
 <script>
-    // 自动高亮菜单
-    const links = document.querySelectorAll('nav ul li a');
-    const sections = document.querySelectorAll('section');
+    function openModule(moduleId) {
+        // 隐藏桌面网格
+        document.getElementById('launcher').style.transform = 'scale(0.9)';
+        document.getElementById('launcher').style.opacity = '0';
+        
+        // 显示内容页
+        setTimeout(() => {
+            document.getElementById('view-' + moduleId).classList.add('active');
+        }, 100);
+    }
 
-    window.onscroll = () => {
-        let scrollPos = document.documentElement.scrollTop || document.body.scrollTop;
-        sections.forEach(s => {
-            if (scrollPos >= s.offsetTop - 100) {
-                links.forEach(l => {
-                    l.classList.remove('active');
-                    if (l.getAttribute('href').substring(1) === s.id) {
-                        l.classList.add('active');
-                    }
-                });
-            }
-        });
-    };
+    function closeAll() {
+        // 隐藏所有内容页
+        const views = document.querySelectorAll('.content-view');
+        views.forEach(v => v.classList.remove('active'));
+        
+        // 恢复桌面网格
+        setTimeout(() => {
+            document.getElementById('launcher').style.transform = 'scale(1)';
+            document.getElementById('launcher').style.opacity = '1';
+        }, 300);
+    }
 </script>
 
 </body>
