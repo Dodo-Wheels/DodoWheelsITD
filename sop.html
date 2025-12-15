@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels 运营管理总规范</title>
+    <title>DodoWheels 运营管理总规范 (增强版)</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -84,6 +84,10 @@
             color: #333;
             text-align: center !important;
         }
+        .process-step {
+            font-weight: bold;
+            color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -91,10 +95,10 @@
     <div class="container">
         <header>
             <h1>DodoWheels 运营管理总规范</h1>
-            <p>版本：V1.0 | 生效日期：2025年12月</p>
+            <p>版本：V1.1（增强版） | 生效日期：2025年12月</p>
         </header>
 
-        <h2>一、 采购与入库流程管理规范</h2>
+        <h2>一、 供应链前端流程规范：采购、入库与上架</h2>
 
         <h3>1.1 采购与产品信息建立</h3>
         <table>
@@ -109,109 +113,130 @@
             <tbody>
                 <tr>
                     <td>1.1.1</td>
-                    <td>采购订单下达</td>
+                    <td class="process-step">采购订单下达 (PO)</td>
                     <td>采购（如：@Pan）</td>
-                    <td>下达采购订单（PO）。</td>
+                    <td>根据库存需求和销售预测下达PO。</td>
                 </tr>
                 <tr>
                     <td>1.1.2</td>
-                    <td>产品信息建立</td>
-                    <td><span class="responsibility">采购/信息管理（TIM 或 部门主管）</span></td>
-                    <td>采购订单下达后，需及时将**产品信息**告知TIM（或相关负责人），安排**建立产品SKU**。</td>
+                    <td class="process-step">产品信息建立</td>
+                    <td><span class="responsibility">信息管理（TIM 或 部门主管）</span></td>
+                    <td>采购订单下达后，需及时将**产品信息（型号、SKU）**告知TIM，安排**建立或更新产品信息**。</td>
                 </tr>
             </tbody>
         </table>
 
-        <h3>1.2 入库与财务结算流程</h3>
+        <h3>1.2 入库、验收与上架规范</h3>
         <table>
             <thead>
                 <tr>
-                    <th style="width: 10%;">仓库类型</th>
-                    <th style="width: 30%;">入库动作</th>
-                    <th style="width: 30%;">财务结算</th>
-                    <th style="width: 30%;">关键责任人</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>DodoWheels主仓</td>
-                    <td>到货签收后，货物入库至**备货区**。</td>
-                    <td>将**签收单**交予财务部门（@zhiyou, @Pan, @Susan）进行**采购发票录入**。</td>
-                    <td>仓库人员（@zhiyou, @Pan, @Susan）</td>
-                </tr>
-                <tr>
-                    <td>Publico仓库</td>
-                    <td>到货签收后，货物入库至**T0位置**。</td>
-                    <td>将**入库单**交予财务部门，财务需录入**采购发票**。</td>
-                    <td>Publico仓库</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h2>二、 销售与库存调拨规范</h2>
-
-        <h3>2.1 销售订单处理</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 15%;">步骤</th>
-                    <th style="width: 30%;">操作人</th>
-                    <th style="width: 55%;">内容</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>客户下单</td>
-                    <td><span class="responsibility">销售/客服（@小林）</span></td>
-                    <td>@小林 在群内下单给客户。</td>
-                </tr>
-                <tr>
-                    <td>内部销售单</td>
-                    <td><span class="responsibility">操作（如：@小予, @奕萱sylvie 等）</span></td>
-                    <td>创建**DodoWheels 至 Publico 的内部销售单（dodo---publico）**。</td>
-                </tr>
-                <tr>
-                    <td>销售出库</td>
-                    <td><span class="responsibility">Publico仓库</span></td>
-                    <td>Publico 收到 "dodo---publico" 单据后，安排**销售出单**。</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h3>2.2 仓库间调货与备货流程</h3>
-        <table>
-            <thead>
-                <tr>
+                    <th style="width: 10%;">编号</th>
                     <th style="width: 20%;">流程环节</th>
-                    <th style="width: 20%;">单据类型</th>
-                    <th style="width: 60%;">执行细则</th>
+                    <th style="width: 30%;">执行细则</th>
+                    <th style="width: 40%;">责任人/单据</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>**取货/调货凭证**</td>
-                    <td><span class="responsibility">ESTIMATE单</span></td>
-                    <td>所有仓库间的取货、调货，必须使用ESTIMATE单。每个仓库需对每次取货的单据进行**留底**并用于位置登记。</td>
+                    <td>1.2.1</td>
+                    <td class="process-step">到货签收与验收</td>
+                    <td>货物到达，仓库人员需核对数量、型号与PO单/通知单是否一致。确认无误后方可签收。</td>
+                    <td>仓库人员 / 签收单</td>
                 </tr>
                 <tr>
-                    <td>**调货单备注**</td>
-                    <td>ESTIMATE单</td>
-                    <td>调货单上可**备注销售单号**。</td>
+                    <td>1.2.2</td>
+                    <td class="process-step">系统入库登记</td>
+                    <td>**DodoWheels主仓：** 货物入库至**备货区**。<br>**Publico仓库：** 货物入库至**T0位置**。系统同步登记库存数量。</td>
+                    <td>仓库人员 / WMS系统</td>
                 </tr>
                 <tr>
-                    <td>**调货入库归位**</td>
-                    <td>N/A</td>
-                    <td>**有销售单号备注的调货：** 收到货后直接入**备货区**。<br> **无销售单号备注的调货：** 收到货后进行**入库归位**。</td>
+                    <td>1.2.3</td>
+                    <td class="process-step">货物上架</td>
+                    <td>仓库人员应根据库存管理原则，将入库货物移动到指定的排位（A-P排）。**新入库无销售的货物，应优先上架归位。**</td>
+                    <td>区域负责人（涂/孙/丁/许师傅）</td>
                 </tr>
                 <tr>
-                    <td>**出库处理**</td>
-                    <td>ESTIMATE单</td>
-                    <td>@Mention All 对应仓库收到调货单后，需**打印并安排备货**，将其视为**出库的销售订单处理**，以防被后续订单抢占。</td>
+                    <td>1.2.4</td>
+                    <td class="process-step">财务结算单据</td>
+                    <td>将**已签收的单据**及时移交财务部门（@zhiyou, @Pan, @Susan），用于**采购发票录入**。</td>
+                    <td>仓库人员 / 财务部门</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>二、 履约后端流程规范：拣货、出库与物流</h2>
+
+        <h3>2.1 销售订单处理与拣货</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 10%;">编号</th>
+                    <th style="width: 20%;">流程环节</th>
+                    <th style="width: 30%;">执行细则</th>
+                    <th style="width: 40%;">责任人/单据</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2.1.1</td>
+                    <td class="process-step">订单下达</td>
+                    <td>@小林 在群内下单给客户，操作人员创建**dodo---publico**内部销售单。</td>
+                    <td>销售/操作人员</td>
                 </tr>
                 <tr>
-                    <td>**销售单用途**</td>
-                    <td><span class="responsibility">销售单</span></td>
-                    <td>**销售单仅供司机与客户提货使用**，**严禁**用销售单进行仓库间的调货操作。</td>
+                    <td>2.1.2</td>
+                    <td class="process-step">打印调拨/销售单</td>
+                    <td>仓库（调出仓）收到ESTIMATE调货单或内部销售单后，**必须打印**并作为拣货指令。</td>
+                    <td>仓库人员（@Mention All）</td>
+                </tr>
+                <tr>
+                    <td>2.1.3</td>
+                    <td class="process-step">拣货与备货</td>
+                    <td>区域负责人（涂/孙/丁/许师傅）根据指令，从对应的排位中准确拣取货物。针对调货单，必须先**安排备货**。</td>
+                    <td>区域负责人</td>
+                </tr>
+                <tr>
+                    <td>2.1.4</td>
+                    <td class="process-step">防抢占机制</td>
+                    <td colspan="2"><span class="note">**重要：** 收到调货单/销售单后，立即将货物移至备货区，避免因个别尺寸数量小，被后续其余订单抢占。</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>2.2 出库与物流规范</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 10%;">编号</th>
+                    <th style="width: 20%;">流程环节</th>
+                    <th style="width: 30%;">执行细则</th>
+                    <th style="width: 40%;">责任人/单据</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2.2.1</td>
+                    <td class="process-step">出库复核</td>
+                    <td>货物出库前，仓库人员必须与**销售单**（面向客户/司机）或**ESTIMATE调货单**进行**二次复核**，确保型号和数量准确。</td>
+                    <td>仓库人员</td>
+                </tr>
+                <tr>
+                    <td>2.2.2</td>
+                    <td class="process-step">单据用途分离</td>
+                    <td>**销售单**仅用于司机与客户提货，**严禁**拿销售单作为仓库间调货凭证。仓库调货一律使用**ESTIMATE单**。</td>
+                    <td>所有人员</td>
+                </tr>
+                <tr>
+                    <td>2.2.3</td>
+                    <td class="process-step">物流交接</td>
+                    <td>货物装车时，仓库人员需核对司机或物流承运方提供的凭证，确保货物准确交付给正确的承运方。</td>
+                    <td>仓库人员 / 物流承运方</td>
+                </tr>
+                <tr>
+                    <td>2.2.4</td>
+                    <td class="process-step">系统出库确认</td>
+                    <td>货物实际离开仓库后，必须及时在系统内进行**出库确认**，更新库存数据。</td>
+                    <td>仓库人员 / WMS系统</td>
                 </tr>
             </tbody>
         </table>
@@ -229,7 +254,7 @@
                     <th style="width: 25%;">库区</th>
                     <th style="width: 25%;">排位范围</th>
                     <th style="width: 30%;">区域负责人</th>
-                    <th style="width: 20%;">职责范围</th>
+                    <th style="width: 20%;">核心职责</th>
                 </tr>
             </thead>
             <tbody>
@@ -237,25 +262,25 @@
                     <td class="area-header">A区</td>
                     <td>A排 - D排 (1-4排)</td>
                     <td><span class="responsibility">涂师傅</span></td>
-                    <td>四排货物的日常管理、盘点及整洁</td>
+                    <td>负责A区**上架、盘点、拣货及区域整洁**。</td>
                 </tr>
                 <tr>
                     <td class="area-header">B区</td>
                     <td>E排 - H排 (5-8排)</td>
                     <td><span class="responsibility">孙师傅</span></td>
-                    <td>四排货物的日常管理、盘点及整洁</td>
+                    <td>负责B区**上架、盘点、拣货及区域整洁**。</td>
                 </tr>
                 <tr>
                     <td class="area-header">C区</td>
                     <td>I排 - L排 (9-12排)</td>
                     <td><span class="responsibility">丁师傅</span></td>
-                    <td>四排货物的日常管理、盘点及整洁</td>
+                    <td>负责C区**上架、盘点、拣货及区域整洁**。</td>
                 </tr>
                 <tr>
                     <td class="area-header">D区</td>
                     <td>M排 - P排 (13-16排)</td>
                     <td><span class="responsibility">许师傅</span></td>
-                    <td>四排货物的日常管理、盘点及整洁</td>
+                    <td>负责D区**上架、盘点、拣货及区域整洁**。</td>
                 </tr>
             </tbody>
         </table>
