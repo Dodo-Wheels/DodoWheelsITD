@@ -7,15 +7,15 @@
     <style>
         :root {
             --bg: #1c1c1e;
-            --navbar: rgba(28, 28, 30, 0.9);
+            --navbar: rgba(28, 28, 30, 0.8);
             --accent-blue: #0A84FF;
             --accent-purple: #BF5AF2;
             --accent-orange: #FF9500;
             --accent-green: #32D74B;
             --text-main: #ffffff;
             --text-dim: #a1a1a6;
-            --card-bg: rgba(44, 44, 46, 0.7);
-            --border: #3a3a3c;
+            --card-bg: rgba(255, 255, 255, 0.06);
+            --border: rgba(255, 255, 255, 0.1);
         }
 
         body, html {
@@ -23,124 +23,128 @@
             font-family: -apple-system, "SF Pro Display", sans-serif;
             background-color: var(--bg);
             color: var(--text-main);
-            overflow-x: hidden;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* 动态桌面背景 */
+        /* 动态背景 */
         .desktop-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 0% 0%, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
-            filter: blur(80px);
-            opacity: 0.4;
+            background: radial-gradient(circle at 50% 50%, #1a2a6c 0%, #000000 100%);
             z-index: -1;
         }
 
         /* 顶部导航 */
         .navbar {
-            height: 50px; background: var(--navbar); backdrop-filter: blur(25px);
-            display: flex; align-items: center; justify-content: space-between; padding: 0 30px;
-            border-bottom: 0.5px solid var(--border); position: fixed; width: 100%; z-index: 1000;
+            height: 50px; background: var(--navbar); backdrop-filter: blur(30px);
+            display: flex; align-items: center; justify-content: space-between; padding: 0 40px;
+            border-bottom: 0.5px solid var(--border); position: fixed; top: 0; width: 100%; z-index: 1000;
             box-sizing: border-box;
         }
 
-        .home-btn { cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-        .time-info { color: var(--text-dim); font-size: 0.85rem; }
+        .home-btn { font-weight: 700; display: flex; align-items: center; gap: 10px; letter-spacing: 0.5px; }
+        .time-info { color: var(--text-dim); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
 
-        /* 主桌面布局 */
-        .main-desktop {
+        /* 全局容器：垂直居中 */
+        .main-container {
+            width: 1000px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding-top: 100px;
-            height: 100vh;
-            box-sizing: border-box;
-            gap: 50px;
+            gap: 60px; /* 各组件间距 */
+            padding: 40px;
+            animation: fadeIn 0.8s ease-out;
         }
 
-        /* 1. 仪表盘区域 (新增) */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 1. 顶部数据看板 (2列居中) */
         .dashboard-row {
             display: flex;
-            gap: 20px;
-            width: 900px;
+            gap: 30px;
+            justify-content: center;
         }
 
         .stat-card {
-            flex: 1;
+            width: 320px;
             background: var(--card-bg);
             border: 1px solid var(--border);
-            padding: 20px;
-            border-radius: 18px;
-            backdrop-filter: blur(10px);
+            padding: 24px;
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            transition: 0.3s;
         }
+        .stat-card:hover { border-color: var(--accent-blue); background: rgba(255,255,255,0.08); }
+        .stat-card .label { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-card .value { font-size: 2.2rem; font-weight: 700; color: white; }
+        .stat-card .trend { font-size: 0.75rem; color: var(--accent-blue); margin-top: 8px; font-weight: 500; }
 
-        .stat-card .label { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px; }
-        .stat-card .value { font-size: 1.6rem; font-weight: 700; color: var(--accent-blue); }
-        .stat-card .trend { font-size: 0.7rem; color: var(--accent-green); margin-top: 5px; }
-
-        /* 2. 核心 App 区域 (保留并优化) */
+        /* 2. 核心 App 区域 (居中) */
         .app-grid {
             display: grid;
-            grid-template-columns: repeat(4, 140px);
-            gap: 40px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 50px;
+            justify-items: center;
         }
 
         .app-item {
             display: flex; flex-direction: column; align-items: center;
-            cursor: pointer; transition: 0.3s;
+            cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
         }
 
-        .app-item:hover { transform: scale(1.1); }
+        .app-item:hover { transform: scale(1.15); }
 
         .app-icon {
-            width: 85px; height: 85px; border-radius: 20px;
+            width: 95px; height: 95px; border-radius: 24px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 40px; margin-bottom: 12px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            font-size: 45px; margin-bottom: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
 
         .icon-prod { background: linear-gradient(135deg, #BF5AF2, #5E5CE6); }
-        .icon-sales { background: linear-gradient(135deg, #0A84FF, #00C6FF); }
-        .icon-wh { background: linear-gradient(135deg, #FF9500, #FFCC00); }
-        .icon-logi { background: linear-gradient(135deg, #32D74B, #00FFAB); }
+        .icon-sales { background: linear-gradient(135deg, #0A84FF, #007AFF); }
+        .icon-wh { background: linear-gradient(135deg, #FF9500, #FF5E00); }
+        .icon-logi { background: linear-gradient(135deg, #32D74B, #1DB954); }
 
-        .app-label { font-size: 0.85rem; font-weight: 500; }
+        .app-label { font-size: 1rem; font-weight: 600; color: white; }
 
-        /* 3. 公告与链接区域 (新增) */
+        /* 3. 底部组件 (居中) */
         .bottom-widgets {
             display: flex;
-            gap: 20px;
-            width: 900px;
-            margin-bottom: 50px;
+            gap: 30px;
+            justify-content: center;
         }
 
         .widget-box {
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 20px;
-            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 25px;
+            backdrop-filter: blur(20px);
         }
 
-        .news-widget { flex: 2; }
-        .links-widget { flex: 1; }
+        .news-widget { width: 500px; }
+        .links-widget { width: 200px; }
 
-        .widget-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 15px; color: var(--text-dim); border-bottom: 0.5px solid var(--border); padding-bottom: 8px; }
-        .news-item { font-size: 0.85rem; margin-bottom: 10px; display: flex; gap: 10px; }
-        .news-tag { color: var(--accent-orange); font-weight: bold; }
+        .widget-title { font-size: 0.8rem; font-weight: 700; margin-bottom: 15px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+        .news-item { font-size: 0.9rem; margin-bottom: 12px; display: flex; gap: 12px; line-height: 1.4; color: #d1d1d6; }
+        .news-tag { color: var(--accent-orange); font-weight: 800; }
 
-        .quick-link { display: block; color: var(--accent-blue); text-decoration: none; font-size: 0.85rem; margin-bottom: 8px; }
+        .quick-link { display: flex; align-items: center; color: var(--accent-blue); text-decoration: none; font-size: 0.9rem; margin-bottom: 12px; transition: 0.2s; }
+        .quick-link:hover { opacity: 0.8; padding-left: 5px; }
 
-        /* 详情内容视图 */
+        /* 内容视图容器 */
         .content-view {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             background: var(--bg); transform: translateY(100%);
-            transition: transform 0.4s ease; z-index: 2000; overflow-y: auto;
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); z-index: 2000; overflow-y: auto;
         }
         .content-view.active { transform: translateY(0); }
-        .container { max-width: 800px; margin: 60px auto; padding: 40px; background: #262626; border-radius: 20px; border: 1px solid var(--border); }
-        .back-btn { color: var(--accent-blue); cursor: pointer; margin-bottom: 20px; display: block; }
-
     </style>
 </head>
 <body>
@@ -149,27 +153,22 @@
 
 <nav class="navbar">
     <div class="home-btn" onclick="closeAll()">
-        <span></span> <b>Operations Hub</b>
+        <span></span> <b>D-OPERATIONS</b>
     </div>
-    <div class="time-info" id="clock">Monday, 16:20</div>
+    <div class="time-info" id="clock">Loading...</div>
 </nav>
 
-<div class="main-desktop" id="launcher">
+<div class="main-container">
     <div class="dashboard-row">
         <div class="stat-card">
-            <div class="label">在途集装箱 (In Transit)</div>
+            <div class="label">在途集装箱 / Containers</div>
             <div class="value">04</div>
-            <div class="trend">最近到港: 12月20日</div>
+            <div class="trend">最近到港: 12/20 (MTL)</div>
         </div>
         <div class="stat-card">
-            <div class="label">待处理预售订单</div>
+            <div class="label">待发订单 / Pending Orders</div>
             <div class="value">128</div>
-            <div class="trend">较昨日 +12%</div>
-        </div>
-        <div class="stat-card">
-            <div class="label">QBO 同步状态</div>
-            <div class="value" style="color: var(--accent-green);">正常</div>
-            <div class="trend">最后更新: 5分钟前</div>
+            <div class="trend">较昨日 +12% 预售激增</div>
         </div>
     </div>
 
@@ -194,43 +193,36 @@
 
     <div class="bottom-widgets">
         <div class="widget-box news-widget">
-            <div class="widget-title">最新公告 (Internal News)</div>
-            <div class="news-item"><span class="news-tag">[预警]</span> BC码头罢工风险监控中，ETA或受影响。</div>
-            <div class="news-item"><span class="news-tag">[更新]</span> QBO 落地成本核算规范已更新，请查阅手册。</div>
-            <div class="news-item"><span class="news-tag">[提示]</span> 年终盘点将于12月28日启动。</div>
+            <div class="widget-title">系统通告 / News</div>
+            <div class="news-item"><span class="news-tag">●</span> BC码头罢工风险监控中，ETA 存在 3-5 天延期可能。</div>
+            <div class="news-item"><span class="news-tag">●</span> QBO 结转 Bill 时的 Landed Cost 分摊细则已更新。</div>
         </div>
         <div class="widget-box links-widget">
-            <div class="widget-title">快速链路</div>
-            <a href="#" class="quick-link">🔗 QuickBooks Online 登录</a>
-            <a href="#" class="quick-link">🔗 网站管理后台</a>
-            <a href="#" class="quick-link">🔗 海运实时追踪查询</a>
+            <div class="widget-title">快捷入口</div>
+            <a href="#" class="quick-link">➜ QuickBooks</a>
+            <a href="#" class="quick-link">➜ Web Backend</a>
+            <a href="#" class="quick-link">➜ Tracking API</a>
         </div>
     </div>
 </div>
 
 <div id="view-prod" class="content-view">
-    <div class="container">
-        <div class="back-btn" onclick="closeAll()">← 返回主控台</div>
-        <h2>🏷️ 产品管理手册</h2>
-        <p>此处为详细的操作手册内容，包含 SKU 创建规范等...</p>
     </div>
-</div>
 
 <script>
     function openModule(mod) {
-        document.getElementById('view-' + mod).classList.add('active');
+        // 实际应用中此处可跳转或显示内容层
+        alert(mod + ' 手册详情加载中...');
     }
 
     function closeAll() {
-        const views = document.querySelectorAll('.content-view');
-        views.forEach(v => v.classList.remove('active'));
+        // 关闭逻辑
     }
 
-    // 简单时钟更新
     function updateClock() {
         const now = new Date();
-        const options = { weekday: 'long', hour: '2-digit', minute: '2-digit' };
-        document.getElementById('clock').innerText = now.toLocaleDateString('zh-CN', options);
+        const options = { weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+        document.getElementById('clock').innerText = now.toLocaleString('en-US', options).toUpperCase();
     }
     setInterval(updateClock, 1000);
     updateClock();
