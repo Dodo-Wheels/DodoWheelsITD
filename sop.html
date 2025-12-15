@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels 仓库运营管理规范 (流程图版)</title>
+    <title>DodoWheels 运营系统流程规范 (QBO/WEB集成)</title>
     <style>
         /* 1. 基础暗黑配色 */
         body {
@@ -30,6 +30,8 @@
             --text-color: #f0f0f0;
             --flow-box-bg: #3c3c3c; /* 流程图方框背景 */
             --flow-arrow-color: #00bfff; /* 流程箭头颜色 */
+            --system-web: #4cd964; /* WEB系统颜色 (绿色) */
+            --system-qbo: #ff9500; /* QBO系统颜色 (橙色) */
         }
 
         /* 头部样式 */
@@ -43,7 +45,7 @@
             font-weight: 500;
         }
 
-        /* 侧边菜单栏 (优化设计) */
+        /* 侧边菜单栏 */
         .sidebar {
             width: 260px;
             background-color: var(--sidebar-bg);
@@ -107,33 +109,33 @@
             font-weight: bold;
             color: #4cd964;
         }
-        .note {
-            background-color: var(--note-bg);
-            color: var(--text-color);
-            padding: 15px;
-            border-radius: 6px;
-            border-left: 5px solid var(--note-border);
-            margin: 20px 0;
-            font-size: 0.95em;
+        .process-step {
+            font-weight: bold;
+            color: var(--accent-color);
         }
-        .alert-danger {
-            border-left: 5px solid #ff3b30;
+        .system-tag {
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 5px;
         }
-
-        /* 表格样式 (保留) */
-        table { /* ... */ }
-        th, td { /* ... */ }
+        .web-tag { background-color: var(--system-web); color: #000; }
+        .qbo-tag { background-color: var(--system-qbo); color: #000; }
 
         /* 流程图样式 */
         .flowchart-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 30px;
+            margin: 30px 0;
+            padding: 10px;
+            border: 1px dashed #444;
+            border-radius: 8px;
         }
         .flow-step {
             width: 80%;
-            max-width: 400px;
+            max-width: 450px;
             background-color: var(--flow-box-bg);
             border: 2px solid var(--accent-color);
             border-radius: 8px;
@@ -159,183 +161,142 @@
             border-style: solid;
             border-color: var(--flow-arrow-color) transparent transparent transparent;
         }
+        .note { /* ... */ }
+        .alert-danger { border-left: 5px solid #ff3b30; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        DodoWheels 仓库运营管理规范 (WMS)
+        DodoWheels 运营系统流程规范 (WEB/QBO)
     </div>
 
     <div class="container content-wrapper">
         <div class="sidebar">
-            <div class="sidebar-title">核心流程</div>
-            <a href="#section-overview" class="menu-item active" data-target="overview">🏠 基础管理与组织</a>
-            <a href="#section-inbound" class="menu-item" data-target="inbound">📦 入库作业 (接收/上架)</a>
-            <a href="#section-internal" class="menu-item" data-target="internal">🗄️ 库内管理 (调拨/盘点)</a>
-            <a href="#section-outbound" class="menu-item" data-target="outbound">🚚 出库作业 (拣货/发货)</a>
-            <a href="#section-finance" class="menu-item" data-target="finance">💰 财务与单据规范</a>
+            <div class="sidebar-title">核心业务流程</div>
+            <a href="#section-overview" class="menu-item active" data-target="overview">🏠 概览与系统定义</a>
+            <a href="#section-procurement" class="menu-item" data-target="procurement">🛒 采购与入库</a>
+            <a href="#section-inbound" class="menu-item" data-target="inbound">📦 上架与库存</a>
+            <a href="#section-outbound" class="menu-item" data-target="outbound">🚚 下架与出库</a>
+            <a href="#section-delivery" class="menu-item" data-target="delivery">🚛 配送与结算</a>
         </div>
 
         <div class="main-content">
             <div id="overview" class="content-section">
-                <h2>I. 基础管理与组织架构 (General)</h2>
+                <h2>I. 概览与系统定义</h2>
 
                 <div class="note">
-                    **仓库主管：潘师傅** (负责整体运营管理、监督及流程协调。@Pan)
+                    **核心系统定义：**<br>
+                    1. <span style="color:var(--system-web);">**WEB系统/WMS：**</span> 运营指令、库存管理、流程驱动。<br>
+                    2. <span style="color:var(--system-qbo);">**QBO：**</span> 财务核算、发票管理、应付/应收账款。
                 </div>
 
-                <h3>1.1 核心职责与分工</h3>
+                <h3>1.1 关键角色与职责</h3>
                 <ul>
-                    <li>**潘师傅 (主管)：** 负责 WMS 系统维护、流程SOP制定、跨部门协调、绩效考核。</li>
-                    <li>**涂/孙/丁/许师傅 (区域负责人)：** 负责各自排位区**库存准确率、区域整洁度、安全操作**，以及所在区域的**上架和拣货任务**。</li>
-                    <li>**财务人员 (@zhiyou, @Susan)：** 负责采购发票录入。</li>
-                    <li>**采购/信息管理 (TIM)：** 负责产品SKU在系统中的及时建立和维护。</li>
+                    <li>**@Pan (主管)：** 流程审核、系统权限管理、QBO发票审核。</li>
+                    <li>**@TIM：** <span class="system-tag web-tag">WEB系统</span> 产品信息（SKU）建立与维护。</li>
+                    <li>**@zhiyou, @Susan (财务)：** <span class="system-tag qbo-tag">QBO</span> 采购发票录入及销售发票核对。</li>
+                    <li>**仓库人员 (涂/孙/丁/许师傅)：** <span class="system-tag web-tag">WEB系统</span> WMS操作、实物操作。</li>
                 </ul>
+
+                <h3>1.2 库区责任划分 (A-P排)</h3>
+                <p>每个区域负责人对 WEB 系统中其负责排位范围内的库存数据准确性负主要责任。</p>
+            </div>
+
+            <div id="procurement" class="content-section" style="display:none;">
+                <h2>II. 采购与入库 (Purchase & Receiving)</h2>
+
+                <h3>2.1 业务流程图</h3>
                 
-                <h3>1.2 库区责任划分表 (A-P排)</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 15%;">库区</th>
-                            <th style="width: 20%;">排位范围</th>
-                            <th style="width: 25%;">区域负责人</th>
-                            <th style="width: 40%;">库存负责比例</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="area-header">A区</td>
-                            <td>A排 - D排 (1-4排)</td>
-                            <td><span class="responsibility">涂师傅</span></td>
-                            <td>25%</td>
-                        </tr>
-                        <tr>
-                            <td class="area-header">D区</td>
-                            <td>M排 - P排 (13-16排)</td>
-                            <td><span class="responsibility">许师傅</span></td>
-                            <td>25%</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="flowchart-container">
+                    <div class="flow-step">1. <span class="responsibility">采购</span>在 <span class="system-tag web-tag">WEB系统</span>创建 PO</div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">2. <span class="responsibility">TIM</span>在 <span class="system-tag web-tag">WEB系统</span>建立/更新 SKU (入库前必须完成)</div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">3. 货物到港验收 → <span class="responsibility">仓库</span>在 <span class="system-tag web-tag">WEB系统</span><span class="process-step">执行收货 (GR)</span></div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">4. 签收单 + 采购发票交财务</div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">5. <span class="responsibility">财务</span>在 <span class="system-tag qbo-tag">QBO</span>录入<span class="process-step">采购发票</span> (创建应付账款)</div>
+                </div>
+
+                <h3>2.2 重点注意事项 (系统/实物)</h3>
+                <ul>
+                    <li><span class="responsibility">系统同步：</span> WEB 系统收货后，需确保系统库存立即更新。</li>
+                    <li><span class="responsibility">财务交接：</span> 仓库签收单必须与**供应商发票**同时交财务，以确保 QBO 录入的发票金额与收货数量匹配。</li>
+                    <li><span class="responsibility">入库位置：</span> 签收后，系统内标记入库位置：Dodo→备货区，Publico→T0。</li>
+                </ul>
             </div>
 
             <div id="inbound" class="content-section" style="display:none;">
-                <h2>II. 入库作业流程图 (Inbound Flow)</h2>
+                <h2>III. 上架与库存管理 (Putaway & Inventory)</h2>
 
-                <div class="flowchart-container">
-                    <div class="flow-step">1. <span class="responsibility">采购</span>下达 PO / <span class="responsibility">TIM</span>建立 SKU</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">2. 货物到港 → <span class="responsibility">仓库</span><span class="process-step">验收与签收</span> (核对 PO)</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">3. 系统<span class="process-step">入库登记</span> (WMS) → Dodo入**备货区** / Publico入**T0**</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">4. <span class="responsibility">仓库人员</span>将签收单交**财务** (@zhiyou/@Susan)</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">5. <span class="process-step">货物上架归位</span> (4小时内) → 区域负责人负责</div>
-                </div>
-
-                <h3>2.1 规范要求补充</h3>
-                <div class="note">
-                    **关键指标：** 货物上架准确率 $\mathbf{100\%}$。上架后需立即在 WMS 系统内更新准确位置。
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 20%;">项目</th>
-                            <th style="width: 80%;">规范要求</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="process-step">到货验收</td>
-                            <td>仓库人员核对实物与 PO 单信息一致无误后方可签收。</td>
-                        </tr>
-                        <tr>
-                            <td class="process-step">财务交接</td>
-                            <td>已签收的单据必须及时交接给财务部门，不得滞留。</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div id="internal" class="content-section" style="display:none;">
-                <h2>III. 库内管理流程图 (Internal Flow)</h2>
-
-                <div class="flowchart-container">
-                    <div class="flow-step">1. 仓库发起**调拨需求** (备注销售单号?)</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">2. 调拨单据生成：必须使用 <span class="responsibility">ESTIMATE单</span></div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">3. <span class="responsibility">调出仓</span>打印指令 → <span class="process-step">安排备货</span> (视为出库订单处理)</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">4. 货物出库 → <span class="process-step">调入仓</span>验收货物</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">5. 调入仓<span class="process-step">入库归位</span>：有销售单号入**备货区** / 无销售单号入**常规区**</div>
-                </div>
+                <h3>3.1 上架流程图</h3>
                 
-                <h3>3.1 盘点与安全管理</h3>
+                <div class="flowchart-container">
+                    <div class="flow-step">1. 货物停留在<span class="process-step">收货区/备货区</span> (临时位置)</div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">2. <span class="responsibility">系统</span>生成上架指令 (目标排位 A-P) <span class="system-tag web-tag">WEB系统</span></div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">3. <span class="responsibility">区域负责人</span>将货物搬运至指定排位</div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">4. <span class="responsibility">区域负责人</span>在 <span class="system-tag web-tag">WEB系统</span>执行<span class="process-step">上架确认</span> (更新排位库存)</div>
+                </div>
+
+                <h3>3.2 重点注意事项 (库存准确性)</h3>
                 <ul>
-                    <li>**盘点要求：** 区域负责人需每月对负责区域进行周期性盘点，目标库存准确率不低于 $\mathbf{99.8\%}$。差异需及时提报并处理。</li>
-                    <li>**安全规范：** 严禁非操作人员进入高货架区域。货物堆放必须稳固，通道保持畅通，符合 5S 标准。</li>
+                    <li><span class="responsibility">及时性：</span> 上架操作必须在**4小时内**完成，确保货物不占用收货区。</li>
+                    <li><span class="responsibility">准确性：</span> 上架确认时，系统位置必须与实物位置**100%一致**。错误的排位登记将导致拣货失败。</li>
+                    <li><span class="responsibility">盘点：</span> 区域负责人负责所在区域的<span class="system-tag web-tag">WEB系统</span>库存与实物一致，确保准确率 $\mathbf{>99.8\%}$。</li>
                 </ul>
             </div>
 
             <div id="outbound" class="content-section" style="display:none;">
-                <h2>IV. 出库作业流程图 (Outbound Flow)</h2>
+                <h2>IV. 下架与出库 (Picking & Shipping)</h2>
 
-                <div class="flowchart-container">
-                    <div class="flow-step">1. <span class="responsibility">销售/操作</span>创建 <span class="process-step">销售单</span> / 内部**dodo---publico**指令</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">2. <span class="responsibility">仓库</span>打印指令并<span class="process-step">锁定库存</span> → <span class="responsibility">区域负责人</span>开始拣货</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">3. 货物集中至发货区 → <span class="process-step">出库复核</span> (核对销售单)</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">4. <span class="process-step">打包与物流交接</span> (司机/客户在销售单上签字)</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">5. 系统<span class="process-step">出库确认</span> (WMS)</div>
-                </div>
+                <h3>4.1 业务流程图 (销售)</h3>
                 
-                <h3>4.1 异常与打包标准</h3>
-                <div class="note alert-danger">
-                    **异常处理：** 发现库存不足或货物损坏时，区域负责人须立即上报主管潘师傅，并在**15分钟内**给出替代方案或订单延迟通知。
+                <div class="flowchart-container">
+                    <div class="flow-step">1. <span class="responsibility">销售</span>创建<span class="process-step">销售订单 (SO)</span>/<span class="process-step">调拨单 (ESTIMATE)</span> <span class="system-tag web-tag">WEB系统</span></div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">2. <span class="system-tag web-tag">WEB系统</span>生成<span class="process-step">拣货任务</span> (锁定库存)</div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">3. <span class="responsibility">区域负责人</span>执行<span class="process-step">下架/拣货</span> (从A-P排) → 集中到发货区</div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">4. 货物复核 → <span class="responsibility">仓库</span>在 <span class="system-tag web-tag">WEB系统</span>执行<span class="process-step">出库确认</span> (Goods Issue)</div>
                 </div>
+
+                <h3>4.2 重点注意事项 (订单与系统)</h3>
                 <ul>
-                    <li>**打包要求：** 确保货物在运输过程中不受损。对于易损件，必须使用适当的填充物和加固材料。</li>
+                    <li><span class="responsibility">单据分离：</span> **销售单**是客户提货凭证。**ESTIMATE单**是内部库存转移凭证。严禁混用！</li>
+                    <li><span class="responsibility">备货机制：</span> 收到ESTIMATE单后，必须立即在 <span class="system-tag web-tag">WEB系统</span>执行**库存预留**并实物备货，防止库存被其他订单抢占。</li>
+                    <li><span class="responsibility">系统出库：</span> 货物实际离开仓库后，必须及时在 <span class="system-tag web-tag">WEB系统</span>完成出库操作，否则系统库存将虚高。</li>
                 </ul>
             </div>
 
-            <div id="finance" class="content-section" style="display:none;">
-                <h2>V. 财务与单据管理规范 (Documentation)</h2>
+            <div id="delivery" class="content-section" style="display:none;">
+                <h2>V. 配送与财务结算 (Delivery & Settlement)</h2>
 
-                <h3>5.1 采购单据流程 (无流程图)</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 30%;">单据类型</th>
-                            <th style="width: 70%;">处理规范</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="process-step">供应商签收单</td>
-                            <td>货物验收完成后，仓库人员须将**原件**立即交予财务部门（@zhiyou, @Susan），作为财务录入采购发票的凭证。</td>
-                        </tr>
-                        <tr>
-                            <td class="process-step">采购发票</td>
-                            <td>财务人员负责根据签收单据在系统内及时、准确地录入采购发票信息。</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <h3>5.1 业务流程图 (财务集成)</h3>
+                
+                <div class="flowchart-container">
+                    <div class="flow-step">1. 仓库将货物交由<span class="process-step">物流/司机</span> (客户在销售单签字)</div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">2. <span class="responsibility">WEB系统</span>的<span class="process-step">出库数据</span>推送给 <span class="system-tag qbo-tag">QBO</span> (生成待开票记录)</div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">3. <span class="responsibility">操作/销售</span>在 <span class="system-tag web-tag">WEB系统</span>开具<span class="process-step">销售发票</span> (或收据)</div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">4. <span class="responsibility">财务</span>在 <span class="system-tag qbo-tag">QBO</span>核对发票/收款，完成<span class="process-step">财务结算</span></div>
+                </div>
 
-                <h3>5.2 销售/调拨单据管理</h3>
+                <h3>5.2 重点注意事项 (单据与责任)</h3>
                 <ul>
-                    <li>**销售单：** 必须由客户或物流方签字确认后留底，用于财务结账和争议查询。</li>
-                    <li>**ESTIMATE调货单：** 调入仓和调出仓必须各自留底，作为库存变动的内部依据。</li>
-                    <li>**归档要求：** 所有纸质单据需按日期、类型进行分类归档，保存期不少于两年。</li>
+                    <li><span class="responsibility">交接凭证：</span> 司机/客户必须在**销售单**上签字，这份签收单是物流交付完成的最终凭证。</li>
+                    <li><span class="responsibility">财务核对：</span> 财务人员需要定期核对 <span class="system-tag web-tag">WEB系统</span>的出库记录和 <span class="system-tag qbo-tag">QBO</span>的销售发票，确保收入准确。</li>
+                    <li><span class="responsibility">Publico结算：</span> Publico 销售出单（dodo---publico）后，其销售单需交财务，作为内部结算依据。</li>
                 </ul>
             </div>
-
+            
         </div>
     </div>
 
