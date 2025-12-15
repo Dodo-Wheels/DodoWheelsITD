@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D-OPERATIONS | 仓储标准作业程序</title>
+    <title>Enterprise Hub | 全流程管理门户</title>
     <style>
         :root {
             --bg: #1c1c1e;
@@ -15,172 +15,253 @@
             --text-main: #ffffff;
             --text-dim: #a1a1a6;
             --card-bg: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.12);
         }
 
         body, html {
             margin: 0; padding: 0; height: 100%;
             font-family: -apple-system, "SF Pro Display", "PingFang SC", sans-serif;
             background-color: var(--bg); color: var(--text-main);
+            /* 保持居中布局 */
             display: flex; align-items: center; justify-content: center; overflow: hidden;
         }
 
-        /* 详情页遮罩层 */
+        .desktop-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1a2a6c 0%, #000000 100%);
+            z-index: -1;
+        }
+
+        /* 顶部导航 */
+        .navbar {
+            height: 48px; background: var(--navbar); backdrop-filter: blur(30px);
+            display: flex; align-items: center; justify-content: space-between; padding: 0 40px;
+            border-bottom: 0.5px solid var(--border); position: fixed; top: 0; width: 100%; z-index: 1000;
+            box-sizing: border-box;
+        }
+        .home-btn { font-weight: 700; display: flex; align-items: center; gap: 10px; color: var(--text-main); cursor: pointer; }
+        .time-info { color: var(--text-dim); font-size: 0.8rem; font-variant-numeric: tabular-nums; }
+
+        /* 主中心容器 - 居中 */
+        .main-container {
+            width: 1000px;
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+            padding: 40px;
+            transition: 0.5s;
+            animation: fadeIn 0.8s ease-out;
+            text-align: center; /* 确保标题和 p 居中 */
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        /* 看板区 */
+        .dashboard-row { display: flex; gap: 24px; justify-content: center; }
+        .stat-card {
+            flex: 1; max-width: 300px; background: var(--card-bg); border: 1px solid var(--border);
+            padding: 20px; border-radius: 20px; backdrop-filter: blur(20px);
+            text-align: left;
+        }
+        .stat-card .label { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px; text-transform: uppercase; }
+        .stat-card .value { font-size: 2rem; font-weight: 700; }
+        .stat-card .trend { font-size: 0.75rem; color: var(--accent-blue); margin-top: 5px; }
+
+        /* 图标区 */
+        .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; justify-items: center; }
+        .app-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .app-item:hover { transform: scale(1.15); }
+        .app-icon { width: 90px; height: 90px; border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 12px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+        .icon-prod { background: linear-gradient(135deg, #BF5AF2, #5E5CE6); }
+        .icon-sales { background: linear-gradient(135deg, #0A84FF, #007AFF); }
+        .icon-wh { background: linear-gradient(135deg, #FF9500, #FF5E00); }
+        .icon-logi { background: linear-gradient(135deg, #32D74B, #1DB954); }
+        .app-label { font-size: 0.95rem; font-weight: 600; }
+
+        /* 底部功能区 */
+        .bottom-row { display: flex; gap: 24px; justify-content: center; }
+        .widget { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 20px; backdrop-filter: blur(20px); text-align: left;}
+        .news-widget { flex: 2; max-width: 500px;}
+        .links-widget { flex: 1; max-width: 250px;}
+        .widget-h { font-size: 0.75rem; font-weight: 800; color: var(--text-dim); margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; text-transform: uppercase; }
+        .news-item { font-size: 0.85rem; margin-bottom: 10px; color: #d1d1d6; line-height: 1.5; }
+        .news-tag { color: var(--accent-orange); font-weight: bold; margin-right: 5px; }
+        .q-link { display: block; color: var(--accent-blue); text-decoration: none; font-size: 0.85rem; margin-bottom: 10px; transition: 0.2s; }
+        .q-link:hover { text-decoration: underline; }
+
+        /* 详情页视图 (公共样式) */
         .content-view {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: #000; z-index: 2000; overflow-y: auto;
-            transform: translateY(100%); transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            background: var(--bg); z-index: 2000; overflow-y: auto;
+            transform: translateY(100%); transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1);
         }
         .content-view.active { transform: translateY(0); }
 
-        /* 文档容器 */
-        .sop-container { max-width: 1000px; margin: 40px auto; padding: 60px; background: #1c1c1e; line-height: 1.6; }
-        .sop-header { border-left: 5px solid var(--accent-orange); padding-left: 20px; margin-bottom: 40px; }
-        .sop-header h1 { margin: 0; font-size: 2.2rem; }
-        .sop-meta-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.85rem; color: var(--text-dim); }
+        /* 销售时间轴样式 (view-sales) */
+        .timeline-container { max-width: 850px; margin: 80px auto; padding: 20px; }
+        .back-btn-timeline { color: var(--accent-blue); cursor: pointer; margin-bottom: 30px; display: inline-block; }
+        /* (时间轴、圆点、内容等样式，此处为简化) */
+
+        /* 库内 SOP 样式 (view-wh) */
+        .sop-container { max-width: 1000px; margin: 0 auto; padding: 40px; background: #1c1c1e; line-height: 1.6; }
+        .sop-container h1, .sop-container h2 { color: var(--accent-orange); }
+        .sop-container h3 { color: var(--accent-blue); }
+        .sop-meta-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.85rem; color: var(--text-dim); }
         .sop-meta-table td { border: 1px solid var(--border); padding: 10px; }
-
-        /* 章节样式 */
-        .sop-section { margin-top: 50px; }
-        .sop-section h2 { color: var(--accent-orange); border-bottom: 1px solid var(--border); padding-bottom: 10px; font-size: 1.5rem; }
-        .sop-section h3 { color: var(--accent-blue); margin-top: 30px; }
-        
-        /* 表格样式 */
-        table.data-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: rgba(255,255,255,0.02); }
-        table.data-table th { background: rgba(255,255,255,0.1); text-align: left; padding: 12px; font-size: 0.9rem; }
-        table.data-table td { border: 1px solid var(--border); padding: 12px; font-size: 0.9rem; vertical-align: top; }
-
-        /* 警告框 */
         .warning-box { background: rgba(255, 69, 58, 0.1); border-radius: 12px; padding: 20px; border-left: 4px solid #FF453A; margin: 20px 0; }
-        
-        /* 附录/表单卡片 */
-        .appendix-card { background: var(--card-bg); border-radius: 16px; padding: 25px; margin-bottom: 20px; border: 1px dashed var(--border); }
-        
-        /* 侧边导航 */
-        .sop-nav { position: fixed; right: 50px; top: 100px; width: 200px; font-size: 0.8rem; color: var(--text-dim); }
-        .sop-nav ul { list-style: none; padding: 0; }
-        .sop-nav li { margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
-        .sop-nav li:hover { color: var(--accent-orange); }
+        .data-table th { background: rgba(255,255,255,0.1); }
+        .data-table td { border: 1px solid var(--border); padding: 12px; }
+        .back-btn-sop { position: sticky; top: 20px; color: var(--accent-blue); cursor: pointer; z-index: 10; font-weight: 600; background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 30px; backdrop-filter: blur(10px); }
 
-        .back-btn { position: sticky; top: 20px; color: var(--accent-blue); cursor: pointer; z-index: 10; font-weight: 600; background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 30px; backdrop-filter: blur(10px); }
     </style>
 </head>
 <body>
 
-<div id="view-wh" class="content-view active">
+<div class="desktop-bg"></div>
+
+<nav class="navbar">
+    <div class="home-btn" onclick="closeAll()">
+        <span></span> D-OPERATIONS HUB
+    </div>
+    <div class="time-info" id="clock">...</div>
+</nav>
+
+<div class="main-container" id="launcher">
+    <h1 style="font-weight: 800; letter-spacing: -1px; margin-bottom: 0;">D-OPERATIONS</h1>
+    <p style="color: var(--text-dim); margin-bottom: 40px;">WEB & QBO 数字化管理门户</p>
+
+    <div class="dashboard-row">
+        <div class="stat-card">
+            <div class="label">在途集装箱</div>
+            <div class="value">04</div>
+            <div class="trend">最近到港: 12/20 MTL</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">待处理订单</div>
+            <div class="value">128</div>
+            <div class="trend">昨日预售单增幅 +12%</div>
+        </div>
+    </div>
+
+    <div class="app-grid">
+        <div class="app-item" onclick="alert('产品基础档案模块加载中...')">
+            <div class="app-icon icon-prod">🏷️</div>
+            <span class="app-label">产品管理</span>
+        </div>
+        <div class="app-item" onclick="openModule('sales')">
+            <div class="app-icon icon-sales">📈</div>
+            <span class="app-label">销售管理</span>
+        </div>
+        <div class="app-item" onclick="openModule('wh')">
+            <div class="app-icon icon-wh">🏢</div>
+            <span class="app-label">库内管理</span>
+        </div>
+        <div class="app-item" onclick="alert('终端配送履行模块加载中...')">
+            <div class="app-icon icon-logi">🚚</div>
+            <span class="app-label">配送管理</span>
+        </div>
+    </div>
+
+    <div class="bottom-row">
+        <div class="widget news-widget">
+            <div class="widget-h">系统通告 / System News</div>
+            <div class="news-item"><span class="news-tag">[预警]</span> BC 码头监控显示集装箱延误风险，建议更新 ETA。</div>
+            <div class="news-item"><span class="news-tag">[更新]</span> Odoo 系统正式启用后，QBO 录入手动步骤将简化。</div>
+        </div>
+        <div class="widget links-widget">
+            <div class="widget-h">系统入口 / Links</div>
+            <a href="#" class="q-link">➜ QuickBooks Online</a>
+            <a href="#" class="q-link">➜ Web Backend</a>
+            <a href="#" class="q-link">➜ Ocean Tracking</a>
+        </div>
+    </div>
+</div>
+
+<div id="view-sales" class="content-view">
+    <div class="timeline-container">
+        <div class="back-btn-timeline" onclick="closeAll()">← 返回主桌面</div>
+        <h2 style="font-size: 1.8rem; border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 40px;">📈 销售管理：全流程时间轴</h2>
+        <p style="color:var(--text-dim)">此处为销售全流程时间轴内容...</p>
+        </div>
+</div>
+
+<div id="view-wh" class="content-view">
     <div class="sop-container">
-        <div class="back-btn" onclick="location.reload()">← 返回主控制台</div>
+        <div class="back-btn-sop" onclick="closeAll()">← 返回主桌面</div>
         
         <div class="sop-header">
             <h1>仓储操作标准作业流程 (SOP)</h1>
-            <p>Standard Operating Procedure - Warehouse Operations</p>
+            <p style="color:var(--text-dim)">Standard Operating Procedure - Warehouse Operations</p>
             <table class="sop-meta-table">
-                <tr>
-                    <td>文件编号: SOP-WH-001</td>
-                    <td>所属部门: 仓储部</td>
-                    <td>版本号: V1.0</td>
-                    <td>保密等级: 内部文件</td>
-                </tr>
-                <tr>
-                    <td>编写日期: 2025-07-18</td>
-                    <td>编写人: Lei Lin</td>
-                    <td>审核人: 仓库主管</td>
-                    <td>批准人: 总经理</td>
-                </tr>
+                <tr><td>文件编号: SOP-WH-001</td><td>版本号: V1.0</td></tr>
             </table>
         </div>
 
         <div class="warning-box">
-            <strong>⚠️ 注意事项：</strong><br>
-            ● 本文件为 DODO Wheels 内部文件，未经许可不得外传。<br>
-            ● 变更须经“编写-审核-批准”三层流程。
-        </div>
-
-        <div class="sop-section">
-            <h2>第一章 总则</h2>
-            <h3>1.1 目的与适用范围</h3>
-            <p>规范仓储流程，提升效率，确保库存准确、安全。适用于总部仓与分仓所有相关人员。</p>
-            <h3>1.2 术语定义</h3>
-            <table class="data-table">
-                <tr><th>术语</th><th>定义</th></tr>
-                <tr><td><b>SKU</b></td><td>库存单位，唯一识别编号。</td></tr>
-                <tr><td><b>库位</b></td><td>LS/Stock/E01-A10A 等物理定位。</td></tr>
-                <tr><td><b>虚拟入库</b></td><td>非实物接收但需系统确认库存记录，用于平衡财务或直发。</td></tr>
-            </table>
-        </div>
-
-        <div class="sop-section">
-            <h2>第二章 仓库布局与作业环境</h2>
-            <h3>2.1 区域划分</h3>
-            <table class="data-table">
-                <tr><td><b>装卸区</b></td><td>紧邻入口，禁止长期堆放。</td></tr>
-                <tr><td><b>待处理区</b></td><td>临时存放异常货品，需清晰标记。</td></tr>
-                <tr><td><b>异常/退货区</b></td><td>存放缺陷品，严禁混入正式库存。</td></tr>
-            </table>
-            <h3>2.2 库位规则</h3>
-            <p><b>重货放低层，轻货放高层；</b> 标签/型号朝向外面，方便盘点。</p>
-            
+            <strong>⚠️ 注意事项：</strong>本文件为 DODO Wheels 内部文件，未经许可不得外传。
         </div>
 
         <div class="sop-section">
             <h2>第三章 入库管理流程</h2>
-            <h3>3.3 卸货与验收规范（核心）</h3>
-            <div class="appendix-card" style="border-left: 4px solid var(--accent-green);">
-                <b>集装箱卸货效率要求：</b><br>
-                ● <b>小胎：</b> 30条/托 (7层x4 + 2压顶)<br>
-                ● <b>大胎：</b> 15条/托 (7层x2 + 1压顶)<br>
-                ● <b>时效：</b> 40尺柜控制在 <b>2小时30分钟</b> 内完成。
+            <h3>3.2 入库流程详解 (集装箱卸货规范)</h3>
+            <div style="background: rgba(255,149,0,0.1); padding: 15px; border-left: 4px solid var(--accent-orange); border-radius: 8px;">
+                <b>核心时效要求：</b> 卸完一个 40’ 集装箱的时间应控制在 <b>2小时30分钟</b> 以内。
             </div>
-            
+            <p>（详细的卸货、堆码、验收步骤...）</p>
         </div>
-
+        
         <div class="sop-section">
             <h2>第六章 库存管理与盘点</h2>
             <h3>6.2 盘点机制</h3>
-            <ul style="color: var(--text-dim)">
-                <li><b>实时盘点：</b> SKU < 10件时，备货同步盘点。</li>
-                <li><b>周期盘点：</b> A类高价值货品每月盘点。</li>
-                <li><b>差异处理：</b> 差异 > 5% 必须追责并由高层审批。</li>
+            <ul style="color: var(--text-dim); list-style: disc; margin-left: 20px;">
+                <li><b>实时盘点：</b> 针对数量少于10 pic 的 SKU，在备货时同步确认。</li>
+                <li><b>差异处理：</b> 差异 > 5% 必须追责并由高层管理层或财务审批。</li>
             </ul>
         </div>
-
+        
         <div class="sop-section">
-            <h2>第七章 安全与异常处理</h2>
-            <div class="warning-box" style="border-color: var(--accent-orange); background: rgba(255,149,0,0.1);">
-                <b>7.5 人员伤亡处理：</b> 第一发现人呼救并拨打 911，主管封锁现场拍照取证，72小时内提交报告。
-            </div>
-        </div>
-
-        <div class="sop-section">
-            <h2>附录 G：每日必查清单 (Daily Checklist)</h2>
-            <table class="data-table" style="background: rgba(50, 215, 75, 0.05);">
+            <h2>附录 G：每日必查清单</h2>
+            <table class="data-table">
                 <tr><th>序号</th><th>工作事项</th><th>要求说明</th></tr>
-                <tr><td>1</td><td><b>Odoo 工单查收</b></td><td>主管 08:30 到岗查收新备货单</td></tr>
-                <tr><td>3</td><td><b>动态盘点</b></td><td>有空就盘点，账实核对</td></tr>
-                <tr><td>5</td><td><b>主动询问</b></td><td>09:30 & 13:30 去办公室争取新任务</td></tr>
-                <tr><td>8</td><td><b>看板清零</b></td><td>除未到期单据外，其余任务必须清空</td></tr>
+                <tr><td>1</td><td><b>Odoo 工单查收</b></td><td>主管一早到岗先查 Odoo，看是否有待处理工单</td></tr>
+                <tr><td>8</td><td><b>Odoo 看板保持清零</b></td><td>除了未到期收货单，其他任务都要清空</td></tr>
             </table>
         </div>
-
-        <div class="sop-section">
-            <h2>附录 E/F：考核管理</h2>
-            <div class="appendix-card">
-                <b>实操评分 (50%) + 纪律评分 (50%)</b><br>
-                ● <b>体能要求：</b> 须具备高强度装卸体能 (2分)<br>
-                ● <b>通过线：</b> 80分合格。低于5分者不予补训。
-            </div>
-        </div>
-
+        
     </div>
 </div>
 
 <script>
-    // 页面内部平滑滚动与导航逻辑
-    document.querySelectorAll('.sop-nav li').forEach(item => {
-        item.addEventListener('click', () => {
-            // 实现逻辑跳转
-        });
-    });
+    function openModule(mod) {
+        // 缩放主页面并降低透明度
+        document.getElementById('launcher').style.transform = 'scale(0.9)';
+        document.getElementById('launcher').style.opacity = '0.3';
+        
+        // 显示对应的模块内容页
+        if(mod === 'sales') {
+            document.getElementById('view-sales').classList.add('active');
+        } else if (mod === 'wh') {
+            document.getElementById('view-wh').classList.add('active');
+        }
+    }
+
+    function closeAll() {
+        // 恢复主页面
+        document.getElementById('launcher').style.transform = 'scale(1)';
+        document.getElementById('launcher').style.opacity = '1';
+
+        // 隐藏所有详情页
+        const views = document.querySelectorAll('.content-view');
+        views.forEach(v => v.classList.remove('active'));
+    }
+
+    function updateClock() {
+        const now = new Date();
+        const opts = { weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
+        document.getElementById('clock').innerText = now.toLocaleString('en-US', opts).toUpperCase();
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
 </script>
 
 </body>
