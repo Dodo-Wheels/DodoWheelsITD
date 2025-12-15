@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels 运营系统流程规范 (QBO/WEB集成)</title>
+    <title>DodoWheels 运营系统集成管理规范 (Odoo/QBO)</title>
     <style>
         /* 1. 基础暗黑配色 */
         body {
@@ -30,8 +30,9 @@
             --text-color: #f0f0f0;
             --flow-box-bg: #3c3c3c; /* 流程图方框背景 */
             --flow-arrow-color: #00bfff; /* 流程箭头颜色 */
-            --system-web: #4cd964; /* WEB系统颜色 (绿色) */
+            --system-odoo: #4cd964; /* Odoo/WEB系统颜色 (绿色) */
             --system-qbo: #ff9500; /* QBO系统颜色 (橙色) */
+            --system-web: #ffcc00; /* Website/电商系统 (黄色) */
         }
 
         /* 头部样式 */
@@ -47,7 +48,7 @@
 
         /* 侧边菜单栏 */
         .sidebar {
-            width: 260px;
+            width: 280px;
             background-color: var(--sidebar-bg);
             padding: 15px;
             box-shadow: 4px 0 10px rgba(0, 0, 0, 0.5);
@@ -119,9 +120,11 @@
             font-size: 0.8em;
             font-weight: bold;
             margin-left: 5px;
+            text-transform: uppercase;
         }
-        .web-tag { background-color: var(--system-web); color: #000; }
+        .odoo-tag { background-color: var(--system-odoo); color: #000; }
         .qbo-tag { background-color: var(--system-qbo); color: #000; }
+        .web-tag { background-color: var(--system-web); color: #000; }
 
         /* 流程图样式 */
         .flowchart-container {
@@ -161,139 +164,152 @@
             border-style: solid;
             border-color: var(--flow-arrow-color) transparent transparent transparent;
         }
-        .note { /* ... */ }
+        .note {
+            background-color: var(--note-bg);
+            color: var(--text-color);
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 5px solid var(--note-border);
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
         .alert-danger { border-left: 5px solid #ff3b30; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        DodoWheels 运营系统流程规范 (WEB/QBO)
+        DodoWheels 运营系统集成管理规范 (Odoo/QBO)
     </div>
 
     <div class="container content-wrapper">
         <div class="sidebar">
-            <div class="sidebar-title">核心业务流程</div>
-            <a href="#section-overview" class="menu-item active" data-target="overview">🏠 概览与系统定义</a>
-            <a href="#section-procurement" class="menu-item" data-target="procurement">🛒 采购与入库</a>
-            <a href="#section-inbound" class="menu-item" data-target="inbound">📦 上架与库存</a>
-            <a href="#section-outbound" class="menu-item" data-target="outbound">🚚 下架与出库</a>
-            <a href="#section-delivery" class="menu-item" data-target="delivery">🚛 配送与结算</a>
+            <div class="sidebar-title">核心业务流程与系统</div>
+            <a href="#section-general" class="menu-item active" data-target="general">✅ 总则与岗位职责</a>
+            <a href="#section-procurement" class="menu-item" data-target="procurement">🛒 采购与信息建立</a>
+            <a href="#section-inbound" class="menu-item" data-target="inbound">📦 入库与上架作业</a>
+            <a href="#section-outbound" class="menu-item" data-target="outbound">🚚 下架与出库作业</a>
+            <a href="#section-delivery" class="menu-item" data-target="delivery">🚛 配送与财务结算</a>
         </div>
 
         <div class="main-content">
-            <div id="overview" class="content-section">
-                <h2>I. 概览与系统定义</h2>
+            <div id="general" class="content-section">
+                <h2>I. 总则、系统定义与岗位职责</h2>
 
                 <div class="note">
-                    **核心系统定义：**<br>
-                    1. <span style="color:var(--system-web);">**WEB系统/WMS：**</span> 运营指令、库存管理、流程驱动。<br>
-                    2. <span style="color:var(--system-qbo);">**QBO：**</span> 财务核算、发票管理、应付/应收账款。
+                    **系统定义：**<br>
+                    1. <span style="color:var(--system-odoo);">**Odoo (WMS/ERP)：**</span> 核心运营系统，用于管理 PO/SO、库存、流程指令（收货/上架/拣货/出库）。<br>
+                    2. <span style="color:var(--system-qbo);">**QBO (QuickBooks)：**</span> 财务系统，用于处理采购/销售发票的财务核算。<br>
+                    3. <span style="color:var(--system-web);">**Website Backend：**</span> 电商后台，用于新产品信息展示和零售价设置。
                 </div>
 
-                <h3>1.1 关键角色与职责</h3>
+                <h3>1.1 仓储岗位职责简述 (SOP-WH-001/DE-001)</h3>
                 <ul>
-                    <li>**@Pan (主管)：** 流程审核、系统权限管理、QBO发票审核。</li>
-                    <li>**@TIM：** <span class="system-tag web-tag">WEB系统</span> 产品信息（SKU）建立与维护。</li>
-                    <li>**@zhiyou, @Susan (财务)：** <span class="system-tag qbo-tag">QBO</span> 采购发票录入及销售发票核对。</li>
-                    <li>**仓库人员 (涂/孙/丁/许师傅)：** <span class="system-tag web-tag">WEB系统</span> WMS操作、实物操作。</li>
+                    <li>**仓库主管：** 负责流程审核、安全管理、系统权限、异常处理报告。</li>
+                    <li>**仓储人员/区域负责人：** 负责实物操作（接货、上架、拣货）、<span class="system-tag odoo-tag">Odoo</span> WMS 模块执行、库位准确性维护 (目标 >99.8%)。</li>
+                    <li>**采购/产品创建组：** 负责 <span class="system-tag odoo-tag">Odoo</span> PO 创建，新产品信息（SKU、图片、花纹）在 <span class="system-tag web-tag">Website</span> 和 <span class="system-tag qbo-tag">QBO</span> 的同步建立。</li>
+                    <li>**配送员：** 负责货物装载、交付、客户签收、<span class="process-step">现金/支票收款</span>和回仓后的单据整理及财务交接。</li>
                 </ul>
-
-                <h3>1.2 库区责任划分 (A-P排)</h3>
-                <p>每个区域负责人对 WEB 系统中其负责排位范围内的库存数据准确性负主要责任。</p>
             </div>
 
             <div id="procurement" class="content-section" style="display:none;">
-                <h2>II. 采购与入库 (Purchase & Receiving)</h2>
+                <h2>II. 采购与信息建立流程 (Purchase & Product Setup)</h2>
 
-                <h3>2.1 业务流程图</h3>
+                <h3>2.1 系统集成流程图 (采购/产品组)</h3>
                 
                 <div class="flowchart-container">
-                    <div class="flow-step">1. <span class="responsibility">采购</span>在 <span class="system-tag web-tag">WEB系统</span>创建 PO</div>
+                    <div class="flow-step">1. <span class="responsibility">采购</span>确认订单，在 <span class="system-tag odoo-tag">Odoo</span> 创建 <span class="process-step">采购订单 (PO)</span></div>
                     <div class="flow-connector"></div>
-                    <div class="flow-step">2. <span class="responsibility">TIM</span>在 <span class="system-tag web-tag">WEB系统</span>建立/更新 SKU (入库前必须完成)</div>
+                    <div class="flow-step">2. 判断：是否为大批量新产品？<br>是 → 进入下一步；否 → 跳至第 5 步</div>
                     <div class="flow-connector"></div>
-                    <div class="flow-step">3. 货物到港验收 → <span class="responsibility">仓库</span>在 <span class="system-tag web-tag">WEB系统</span><span class="process-step">执行收货 (GR)</span></div>
+                    <div class="flow-step">3. <span class="responsibility">产品组</span>收集信息 (SKU, 尺寸, 花纹, 图片) → 在 <span class="system-tag web-tag">Website</span> 后台创建新产品</div>
                     <div class="flow-connector"></div>
-                    <div class="flow-step">4. 签收单 + 采购发票交财务</div>
+                    <div class="flow-step">4. <span class="responsibility">财务/采购</span>在 <span class="system-tag qbo-tag">QBO</span> 中同步创建/更新新产品 SKU</div>
                     <div class="flow-connector"></div>
-                    <div class="flow-step">5. <span class="responsibility">财务</span>在 <span class="system-tag qbo-tag">QBO</span>录入<span class="process-step">采购发票</span> (创建应付账款)</div>
+                    <div class="flow-step">5. <span class="process-step">老板确认零售价</span> → 更改 <span class="system-tag web-tag">Website</span> 零售价并启动预销售</div>
                 </div>
 
-                <h3>2.2 重点注意事项 (系统/实物)</h3>
+                <h3>2.2 重点注意事项 (SOP-WH-001 & 从采购到...)</h3>
                 <ul>
-                    <li><span class="responsibility">系统同步：</span> WEB 系统收货后，需确保系统库存立即更新。</li>
-                    <li><span class="responsibility">财务交接：</span> 仓库签收单必须与**供应商发票**同时交财务，以确保 QBO 录入的发票金额与收货数量匹配。</li>
-                    <li><span class="responsibility">入库位置：</span> 签收后，系统内标记入库位置：Dodo→备货区，Publico→T0。</li>
+                    <li><span class="responsibility">SKU 准确性：</span> 产品 SKU 必须在 <span class="system-tag odoo-tag">Odoo</span>、<span class="system-tag web-tag">Website</span> 和 <span class="system-tag qbo-tag">QBO</span> 中**完全一致**，这是后续所有流程的基础。</li>
+                    <li><span class="responsibility">时效性：</span> 采购启动海运当天，须向供应商索取商业发票。产品信息必须在**货物到港前**创建完毕。</li>
+                    <li><span class="responsibility">直采订单：</span> 直采订单（Direct Shipments）**无需创建 PO**，但仍需确保产品信息在各系统中存在。</li>
                 </ul>
             </div>
 
             <div id="inbound" class="content-section" style="display:none;">
-                <h2>III. 上架与库存管理 (Putaway & Inventory)</h2>
+                <h2>III. 入库与上架作业 (Receiving & Putaway)</h2>
 
-                <h3>3.1 上架流程图</h3>
+                <h3>3.1 入库流程图 (GR)</h3>
                 
                 <div class="flowchart-container">
-                    <div class="flow-step">1. 货物停留在<span class="process-step">收货区/备货区</span> (临时位置)</div>
+                    <div class="flow-step">1. 货物到达装卸区 → <span class="process-step">实物验收</span> (核对数量、型号、质量)</div>
                     <div class="flow-connector"></div>
-                    <div class="flow-step">2. <span class="responsibility">系统</span>生成上架指令 (目标排位 A-P) <span class="system-tag web-tag">WEB系统</span></div>
+                    <div class="flow-step">2. 判定：<span class="process-step">异常入库</span> (质量/数量不符)?<br>是 → 填写《异常入库记录单》 (SOP-WH-001) → 隔离至待处理区</div>
                     <div class="flow-connector"></div>
-                    <div class="flow-step">3. <span class="responsibility">区域负责人</span>将货物搬运至指定排位</div>
+                    <div class="flow-step">3. <span class="responsibility">仓库</span>在 <span class="system-tag odoo-tag">Odoo</span> 中执行 <span class="process-step">收货 (GR)</span> 操作 → 自动生成上架指令</div>
                     <div class="flow-connector"></div>
-                    <div class="flow-step">4. <span class="responsibility">区域负责人</span>在 <span class="system-tag web-tag">WEB系统</span>执行<span class="process-step">上架确认</span> (更新排位库存)</div>
+                    <div class="flow-step">4. <span class="responsibility">仓库</span>将**签收单**交**财务**</div>
                 </div>
 
-                <h3>3.2 重点注意事项 (库存准确性)</h3>
-                <ul>
-                    <li><span class="responsibility">及时性：</span> 上架操作必须在**4小时内**完成，确保货物不占用收货区。</li>
-                    <li><span class="responsibility">准确性：</span> 上架确认时，系统位置必须与实物位置**100%一致**。错误的排位登记将导致拣货失败。</li>
-                    <li><span class="responsibility">盘点：</span> 区域负责人负责所在区域的<span class="system-tag web-tag">WEB系统</span>库存与实物一致，确保准确率 $\mathbf{>99.8\%}$。</li>
-                </ul>
+                <h3>3.2 上架流程 (SOP-WH-001)</h3>
+                <ol>
+                    <li>**获取指令：** <span class="responsibility">区域负责人</span>在 <span class="system-tag odoo-tag">Odoo</span> 中查看或打印上架指令，指令包含目标库位（A-P 排）。</li>
+                    <li>**实物搬运：** 使用相应设备（叉车、梯子），将货物从收货区搬运至指令库位。</li>
+                    <li>**库位标识：** 确保货物标签朝向通道，并放置于**正确库位**。</li>
+                    <li>**系统确认：** 在 <span class="system-tag odoo-tag">Odoo</span> 中执行 <span class="process-step">上架确认</span>，更新库存至最终排位。</li>
+                </ol>
+
+                <div class="note alert-danger">
+                    **🚨 关键点：** 异常入库（质量问题、数量短缺）必须遵循 SOP-WH-001 的流程，隔离存放并及时通知采购和主管。未处理完成的异常货物**严禁上架**到常规库位。
+                </div>
             </div>
 
             <div id="outbound" class="content-section" style="display:none;">
-                <h2>IV. 下架与出库 (Picking & Shipping)</h2>
+                <h2>IV. 下架与出库作业 (Picking & Goods Issue)</h2>
 
-                <h3>4.1 业务流程图 (销售)</h3>
+                <h3>4.1 下架/出库流程图 (SO/调拨)</h3>
                 
                 <div class="flowchart-container">
-                    <div class="flow-step">1. <span class="responsibility">销售</span>创建<span class="process-step">销售订单 (SO)</span>/<span class="process-step">调拨单 (ESTIMATE)</span> <span class="system-tag web-tag">WEB系统</span></div>
+                    <div class="flow-step">1. <span class="responsibility">销售</span>在 <span class="system-tag odoo-tag">Odoo</span> 创建 <span class="process-step">销售订单 (SO)</span> / 调拨指令 (ESTIMATE)</div>
                     <div class="flow-connector"></div>
-                    <div class="flow-step">2. <span class="system-tag web-tag">WEB系统</span>生成<span class="process-step">拣货任务</span> (锁定库存)</div>
+                    <div class="flow-step">2. <span class="system-tag odoo-tag">Odoo</span> 生成<span class="process-step">拣货任务</span> → 锁定指定排位 (A-P) 的库存</div>
                     <div class="flow-connector"></div>
-                    <div class="flow-step">3. <span class="responsibility">区域负责人</span>执行<span class="process-step">下架/拣货</span> (从A-P排) → 集中到发货区</div>
+                    <div class="flow-step">3. <span class="responsibility">仓库人员</span>执行<span class="process-step">下架/拣货</span> (SOP-WH-001) → 运至发货区</div>
                     <div class="flow-connector"></div>
-                    <div class="flow-step">4. 货物复核 → <span class="responsibility">仓库</span>在 <span class="system-tag web-tag">WEB系统</span>执行<span class="process-step">出库确认</span> (Goods Issue)</div>
+                    <div class="flow-step">4. 货物复核、打包 → <span class="responsibility">仓库</span>在 <span class="system-tag odoo-tag">Odoo</span> 中执行 <span class="process-step">出库确认 (GI)</span></div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">5. <span class="system-tag odoo-tag">Odoo</span> 库存自动减少 → 数据同步给物流/配送环节</div>
                 </div>
 
-                <h3>4.2 重点注意事项 (订单与系统)</h3>
+                <h3>4.2 重点注意事项 (SOP-WH-001)</h3>
                 <ul>
-                    <li><span class="responsibility">单据分离：</span> **销售单**是客户提货凭证。**ESTIMATE单**是内部库存转移凭证。严禁混用！</li>
-                    <li><span class="responsibility">备货机制：</span> 收到ESTIMATE单后，必须立即在 <span class="system-tag web-tag">WEB系统</span>执行**库存预留**并实物备货，防止库存被其他订单抢占。</li>
-                    <li><span class="responsibility">系统出库：</span> 货物实际离开仓库后，必须及时在 <span class="system-tag web-tag">WEB系统</span>完成出库操作，否则系统库存将虚高。</li>
+                    <li><span class="responsibility">拣货准确率：</span> 必须保证拣货精准，<span class="process-step">无误拣、漏拣</span>。这是岗位技能考核的核心指标。</li>
+                    <li><span class="responsibility">系统时效性：</span> 货物实际装车前，**必须**完成 <span class="system-tag odoo-tag">Odoo</span> 中的出库确认（GI）操作，以确保系统库存的实时准确性。</li>
+                    <li><span class="responsibility">调拨单据：</span> 仓库间调货仅使用 **ESTIMATE单**，严禁使用 SO 单据。调出仓必须在 Odoo 中执行库存转移操作。</li>
                 </ul>
             </div>
 
             <div id="delivery" class="content-section" style="display:none;">
                 <h2>V. 配送与财务结算 (Delivery & Settlement)</h2>
 
-                <h3>5.1 业务流程图 (财务集成)</h3>
+                <h3>5.1 配送交接流程图 (配送员/财务)</h3>
                 
                 <div class="flowchart-container">
-                    <div class="flow-step">1. 仓库将货物交由<span class="process-step">物流/司机</span> (客户在销售单签字)</div>
+                    <div class="flow-step">1. <span class="process-step">配送员</span>装载货物 (核对配送单) → 车辆与工具检查 (SOP-DE-001)</div>
                     <div class="flow-connector"></div>
-                    <div class="flow-step">2. <span class="responsibility">WEB系统</span>的<span class="process-step">出库数据</span>推送给 <span class="system-tag qbo-tag">QBO</span> (生成待开票记录)</div>
+                    <div class="flow-step">2. <span class="process-step">客户收货</span> → 客户在配送单上**手写签字并记录实际送达时间**</div>
                     <div class="flow-connector"></div>
-                    <div class="flow-step">3. <span class="responsibility">操作/销售</span>在 <span class="system-tag web-tag">WEB系统</span>开具<span class="process-step">销售发票</span> (或收据)</div>
+                    <div class="flow-step">3. <span class="responsibility">配送员</span>回仓 → 整理<span class="process-step">签收单、收款凭证</span> (现金/支票)、加油票据</div>
                     <div class="flow-connector"></div>
-                    <div class="flow-step">4. <span class="responsibility">财务</span>在 <span class="system-tag qbo-tag">QBO</span>核对发票/收款，完成<span class="process-step">财务结算</span></div>
+                    <div class="flow-step">4. <span class="responsibility">配送员</span>与<span class="responsibility">财务</span>交接：核对收款金额与单据一致 → <span class="responsibility">财务</span>在 <span class="system-tag qbo-tag">QBO</span> 录入发票/收款</div>
                 </div>
 
-                <h3>5.2 重点注意事项 (单据与责任)</h3>
+                <h3>5.2 重点注意事项 (SOP-DE-001)</h3>
                 <ul>
-                    <li><span class="responsibility">交接凭证：</span> 司机/客户必须在**销售单**上签字，这份签收单是物流交付完成的最终凭证。</li>
-                    <li><span class="responsibility">财务核对：</span> 财务人员需要定期核对 <span class="system-tag web-tag">WEB系统</span>的出库记录和 <span class="system-tag qbo-tag">QBO</span>的销售发票，确保收入准确。</li>
-                    <li><span class="responsibility">Publico结算：</span> Publico 销售出单（dodo---publico）后，其销售单需交财务，作为内部结算依据。</li>
+                    <li><span class="responsibility">回仓清点：</span> 配送员返仓前必须**清点车内货物**，确保无遗漏或错放，并检查退回或异常货物是否完整记录。</li>
+                    <li><span class="responsibility">异常反馈：</span> 如有延误、拒收、交通或天气问题，应**立即**整理成《异常记录表》并提交主管或客服人员，确保跟进处理。</li>
+                    <li><span class="responsibility">财务核对：</span> 所有收款凭证（现金/支票）必须**逐一核对**后与对应签收单订附，确保零差错交接给财务人员进行 <span class="system-tag qbo-tag">QBO</span> 登记。</li>
                 </ul>
             </div>
             
@@ -328,7 +344,7 @@
             });
 
             // 初始加载时显示第一个section
-            showSection('overview');
+            showSection('general');
         });
     </script>
 
