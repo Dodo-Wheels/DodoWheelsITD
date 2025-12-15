@@ -3,350 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels 运营系统集成管理规范 (Odoo/QBO)</title>
+    <title>WEB + QBO 采购销售协同 SOP</title>
     <style>
-        /* 1. 基础暗黑配色 */
-        body {
-            font-family: 'SF Pro Text', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #1a1a1a;
-            color: #f0f0f0;
-        }
-        .container {
-            display: flex;
-            min-height: 100vh;
-        }
-        
-        /* 2. 蓝色强调色 */
         :root {
-            --accent-color: #007aff; /* Mac 蓝色 */
-            --highlight-color: #0060c0;
-            --sidebar-bg: #222222;
-            --content-bg: #282828;
-            --table-header-bg: #383838;
-            --note-bg: #333333;
-            --note-border: #ffcc00;
-            --text-color: #f0f0f0;
-            --flow-box-bg: #3c3c3c; /* 流程图方框背景 */
-            --flow-arrow-color: #00bfff; /* 流程箭头颜色 */
-            --system-odoo: #4cd964; /* Odoo/WEB系统颜色 (绿色) */
-            --system-qbo: #ff9500; /* QBO系统颜色 (橙色) */
-            --system-web: #ffcc00; /* Website/电商系统 (黄色) */
+            --primary: #2ca01c; /* QBO 经典绿 */
+            --dark: #232323;
+            --light-bg: #f4f5f8;
+            --accent: #0077c5;
         }
 
-        /* 头部样式 */
-        .header {
-            background-color: var(--accent-color);
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 1.6em;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
-            font-weight: 500;
-        }
+        body { font-family: 'Segoe UI', system-ui; margin: 0; display: flex; background: var(--light-bg); color: var(--dark); }
 
-        /* 侧边菜单栏 */
-        .sidebar {
-            width: 280px;
-            background-color: var(--sidebar-bg);
-            padding: 15px;
-            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.5);
-            flex-shrink: 0;
-        }
-        .sidebar-title {
-            color: #aaaaaa;
-            padding: 10px 15px;
-            font-size: 0.85em;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 10px;
-            border-bottom: 1px solid #333;
-        }
-        .sidebar a {
-            display: block;
-            margin: 5px 0;
-            padding: 12px 15px;
-            text-decoration: none;
-            color: var(--text-color);
-            border-radius: 8px;
-            transition: background-color 0.2s, color 0.2s;
-            font-size: 0.95em;
-        }
-        .sidebar a:hover {
-            background-color: #3d3d3d;
-            color: var(--accent-color);
-        }
-        .sidebar a.active {
-            background-color: var(--highlight-color);
-            color: white;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            font-weight: 500;
-        }
+        /* 侧边栏 */
+        nav { width: 260px; height: 100vh; background: var(--dark); color: white; position: fixed; }
+        .nav-header { padding: 25px; background: #1a1a1a; font-weight: bold; border-bottom: 2px solid var(--primary); }
+        nav ul { list-style: none; padding: 0; }
+        nav ul li a { display: block; padding: 15px 25px; color: #bbb; text-decoration: none; transition: 0.3s; font-size: 0.9rem; }
+        nav ul li a:hover { color: white; background: #333; border-left: 4px solid var(--primary); }
 
-        /* 主内容区域 */
-        .main-content {
-            flex-grow: 1;
-            padding: 30px 40px;
-            background-color: var(--content-bg);
-        }
+        /* 主内容 */
+        main { margin-left: 260px; padding: 40px; flex: 1; }
+        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        
+        h2 { color: var(--primary); margin-top: 0; display: flex; align-items: center; gap: 10px; }
+        .tag { font-size: 0.75rem; padding: 3px 8px; border-radius: 3px; background: #eee; color: #666; font-weight: normal; }
 
-        /* 标题和文字样式 */
-        h2 {
-            color: var(--accent-color);
-            border-bottom: 3px solid #3d3d3d;
-            padding-bottom: 10px;
-            margin-top: 0;
-            font-weight: 600;
-        }
-        h3 {
-            color: #d0d0d0;
-            margin-top: 25px;
-            border-left: 5px solid var(--accent-color);
-            padding-left: 10px;
-            font-size: 1.3em;
-        }
-        .responsibility {
-            font-weight: bold;
-            color: #4cd964;
-        }
-        .process-step {
-            font-weight: bold;
-            color: var(--accent-color);
-        }
-        .system-tag {
-            padding: 3px 6px;
-            border-radius: 4px;
-            font-size: 0.8em;
-            font-weight: bold;
-            margin-left: 5px;
-            text-transform: uppercase;
-        }
-        .odoo-tag { background-color: var(--system-odoo); color: #000; }
-        .qbo-tag { background-color: var(--system-qbo); color: #000; }
-        .web-tag { background-color: var(--system-web); color: #000; }
+        /* 细化步骤样式 */
+        .step-group { margin-top: 20px; border-left: 3px solid #eee; padding-left: 20px; }
+        .action-point { margin-bottom: 20px; }
+        .action-point strong { display: block; color: var(--accent); margin-bottom: 5px; }
+        
+        .sync-box { background: #eef9ee; border: 1px solid #c8e6c9; padding: 15px; border-radius: 6px; font-size: 0.9rem; margin-top: 10px; }
+        .warning { color: #d32f2f; font-weight: bold; font-size: 0.85rem; }
 
-        /* 流程图样式 */
-        .flowchart-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 30px 0;
-            padding: 10px;
-            border: 1px dashed #444;
-            border-radius: 8px;
-        }
-        .flow-step {
-            width: 80%;
-            max-width: 450px;
-            background-color: var(--flow-box-bg);
-            border: 2px solid var(--accent-color);
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-            position: relative;
-            font-weight: 500;
-        }
-        .flow-connector {
-            width: 0;
-            height: 30px;
-            border-left: 2px solid var(--flow-arrow-color);
-            position: relative;
-        }
-        .flow-connector::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: -6px;
-            border-width: 6px;
-            border-style: solid;
-            border-color: var(--flow-arrow-color) transparent transparent transparent;
-        }
-        .note {
-            background-color: var(--note-bg);
-            color: var(--text-color);
-            padding: 15px;
-            border-radius: 6px;
-            border-left: 5px solid var(--note-border);
-            margin: 20px 0;
-            font-size: 0.95em;
-        }
-        .alert-danger { border-left: 5px solid #ff3b30; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; border: 1px solid #eee; text-align: left; }
+        th { background: #fafafa; font-size: 0.85rem; }
+
+        @media print { nav { display: none; } main { margin-left: 0; } }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        DodoWheels 运营系统集成管理规范 (Odoo/QBO)
-    </div>
+<nav>
+    <div class="nav-header">WEB + QBO 执行手册</div>
+    <ul>
+        <li><a href="#p2-detail">阶段二：双系统数据建立</a></li>
+        <li><a href="#p3-detail">阶段三：物流单据准备</a></li>
+        <li><a href="#p4-detail">阶段四：到货核销与开售</a></li>
+        <li><a href="#audit">库存审计与纠错</a></li>
+    </ul>
+</nav>
 
-    <div class="container content-wrapper">
-        <div class="sidebar">
-            <div class="sidebar-title">核心业务流程与系统</div>
-            <a href="#section-general" class="menu-item active" data-target="general">✅ 总则与岗位职责</a>
-            <a href="#section-procurement" class="menu-item" data-target="procurement">🛒 采购与信息建立</a>
-            <a href="#section-inbound" class="menu-item" data-target="inbound">📦 入库与上架作业</a>
-            <a href="#section-outbound" class="menu-item" data-target="outbound">🚚 下架与出库作业</a>
-            <a href="#section-delivery" class="menu-item" data-target="delivery">🚛 配送与财务结算</a>
-        </div>
+<main>
+    <h1>产品采购至销售全流程细化</h1>
 
-        <div class="main-content">
-            <div id="general" class="content-section">
-                <h2>I. 总则、系统定义与岗位职责</h2>
-
-                <div class="note">
-                    **系统定义：**<br>
-                    1. <span style="color:var(--system-odoo);">**Odoo (WMS/ERP)：**</span> 核心运营系统，用于管理 PO/SO、库存、流程指令（收货/上架/拣货/出库）。<br>
-                    2. <span style="color:var(--system-qbo);">**QBO (QuickBooks)：**</span> 财务系统，用于处理采购/销售发票的财务核算。<br>
-                    3. <span style="color:var(--system-web);">**Website Backend：**</span> 电商后台，用于新产品信息展示和零售价设置。
-                </div>
-
-                <h3>1.1 仓储岗位职责简述 (SOP-WH-001/DE-001)</h3>
-                <ul>
-                    <li>**仓库主管：** 负责流程审核、安全管理、系统权限、异常处理报告。</li>
-                    <li>**仓储人员/区域负责人：** 负责实物操作（接货、上架、拣货）、<span class="system-tag odoo-tag">Odoo</span> WMS 模块执行、库位准确性维护 (目标 >99.8%)。</li>
-                    <li>**采购/产品创建组：** 负责 <span class="system-tag odoo-tag">Odoo</span> PO 创建，新产品信息（SKU、图片、花纹）在 <span class="system-tag web-tag">Website</span> 和 <span class="system-tag qbo-tag">QBO</span> 的同步建立。</li>
-                    <li>**配送员：** 负责货物装载、交付、客户签收、<span class="process-step">现金/支票收款</span>和回仓后的单据整理及财务交接。</li>
-                </ul>
-            </div>
-
-            <div id="procurement" class="content-section" style="display:none;">
-                <h2>II. 采购与信息建立流程 (Purchase & Product Setup)</h2>
-
-                <h3>2.1 系统集成流程图 (采购/产品组)</h3>
-                
-                <div class="flowchart-container">
-                    <div class="flow-step">1. <span class="responsibility">采购</span>确认订单，在 <span class="system-tag odoo-tag">Odoo</span> 创建 <span class="process-step">采购订单 (PO)</span></div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">2. 判断：是否为大批量新产品？<br>是 → 进入下一步；否 → 跳至第 5 步</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">3. <span class="responsibility">产品组</span>收集信息 (SKU, 尺寸, 花纹, 图片) → 在 <span class="system-tag web-tag">Website</span> 后台创建新产品</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">4. <span class="responsibility">财务/采购</span>在 <span class="system-tag qbo-tag">QBO</span> 中同步创建/更新新产品 SKU</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">5. <span class="process-step">老板确认零售价</span> → 更改 <span class="system-tag web-tag">Website</span> 零售价并启动预销售</div>
-                </div>
-
-                <h3>2.2 重点注意事项 (SOP-WH-001 & 从采购到...)</h3>
-                <ul>
-                    <li><span class="responsibility">SKU 准确性：</span> 产品 SKU 必须在 <span class="system-tag odoo-tag">Odoo</span>、<span class="system-tag web-tag">Website</span> 和 <span class="system-tag qbo-tag">QBO</span> 中**完全一致**，这是后续所有流程的基础。</li>
-                    <li><span class="responsibility">时效性：</span> 采购启动海运当天，须向供应商索取商业发票。产品信息必须在**货物到港前**创建完毕。</li>
-                    <li><span class="responsibility">直采订单：</span> 直采订单（Direct Shipments）**无需创建 PO**，但仍需确保产品信息在各系统中存在。</li>
-                </ul>
-            </div>
-
-            <div id="inbound" class="content-section" style="display:none;">
-                <h2>III. 入库与上架作业 (Receiving & Putaway)</h2>
-
-                <h3>3.1 入库流程图 (GR)</h3>
-                
-                <div class="flowchart-container">
-                    <div class="flow-step">1. 货物到达装卸区 → <span class="process-step">实物验收</span> (核对数量、型号、质量)</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">2. 判定：<span class="process-step">异常入库</span> (质量/数量不符)?<br>是 → 填写《异常入库记录单》 (SOP-WH-001) → 隔离至待处理区</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">3. <span class="responsibility">仓库</span>在 <span class="system-tag odoo-tag">Odoo</span> 中执行 <span class="process-step">收货 (GR)</span> 操作 → 自动生成上架指令</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">4. <span class="responsibility">仓库</span>将**签收单**交**财务**</div>
-                </div>
-
-                <h3>3.2 上架流程 (SOP-WH-001)</h3>
-                <ol>
-                    <li>**获取指令：** <span class="responsibility">区域负责人</span>在 <span class="system-tag odoo-tag">Odoo</span> 中查看或打印上架指令，指令包含目标库位（A-P 排）。</li>
-                    <li>**实物搬运：** 使用相应设备（叉车、梯子），将货物从收货区搬运至指令库位。</li>
-                    <li>**库位标识：** 确保货物标签朝向通道，并放置于**正确库位**。</li>
-                    <li>**系统确认：** 在 <span class="system-tag odoo-tag">Odoo</span> 中执行 <span class="process-step">上架确认</span>，更新库存至最终排位。</li>
-                </ol>
-
-                <div class="note alert-danger">
-                    **🚨 关键点：** 异常入库（质量问题、数量短缺）必须遵循 SOP-WH-001 的流程，隔离存放并及时通知采购和主管。未处理完成的异常货物**严禁上架**到常规库位。
-                </div>
-            </div>
-
-            <div id="outbound" class="content-section" style="display:none;">
-                <h2>IV. 下架与出库作业 (Picking & Goods Issue)</h2>
-
-                <h3>4.1 下架/出库流程图 (SO/调拨)</h3>
-                
-                <div class="flowchart-container">
-                    <div class="flow-step">1. <span class="responsibility">销售</span>在 <span class="system-tag odoo-tag">Odoo</span> 创建 <span class="process-step">销售订单 (SO)</span> / 调拨指令 (ESTIMATE)</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">2. <span class="system-tag odoo-tag">Odoo</span> 生成<span class="process-step">拣货任务</span> → 锁定指定排位 (A-P) 的库存</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">3. <span class="responsibility">仓库人员</span>执行<span class="process-step">下架/拣货</span> (SOP-WH-001) → 运至发货区</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">4. 货物复核、打包 → <span class="responsibility">仓库</span>在 <span class="system-tag odoo-tag">Odoo</span> 中执行 <span class="process-step">出库确认 (GI)</span></div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">5. <span class="system-tag odoo-tag">Odoo</span> 库存自动减少 → 数据同步给物流/配送环节</div>
-                </div>
-
-                <h3>4.2 重点注意事项 (SOP-WH-001)</h3>
-                <ul>
-                    <li><span class="responsibility">拣货准确率：</span> 必须保证拣货精准，<span class="process-step">无误拣、漏拣</span>。这是岗位技能考核的核心指标。</li>
-                    <li><span class="responsibility">系统时效性：</span> 货物实际装车前，**必须**完成 <span class="system-tag odoo-tag">Odoo</span> 中的出库确认（GI）操作，以确保系统库存的实时准确性。</li>
-                    <li><span class="responsibility">调拨单据：</span> 仓库间调货仅使用 **ESTIMATE单**，严禁使用 SO 单据。调出仓必须在 Odoo 中执行库存转移操作。</li>
-                </ul>
-            </div>
-
-            <div id="delivery" class="content-section" style="display:none;">
-                <h2>V. 配送与财务结算 (Delivery & Settlement)</h2>
-
-                <h3>5.1 配送交接流程图 (配送员/财务)</h3>
-                
-                <div class="flowchart-container">
-                    <div class="flow-step">1. <span class="process-step">配送员</span>装载货物 (核对配送单) → 车辆与工具检查 (SOP-DE-001)</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">2. <span class="process-step">客户收货</span> → 客户在配送单上**手写签字并记录实际送达时间**</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">3. <span class="responsibility">配送员</span>回仓 → 整理<span class="process-step">签收单、收款凭证</span> (现金/支票)、加油票据</div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">4. <span class="responsibility">配送员</span>与<span class="responsibility">财务</span>交接：核对收款金额与单据一致 → <span class="responsibility">财务</span>在 <span class="system-tag qbo-tag">QBO</span> 录入发票/收款</div>
-                </div>
-
-                <h3>5.2 重点注意事项 (SOP-DE-001)</h3>
-                <ul>
-                    <li><span class="responsibility">回仓清点：</span> 配送员返仓前必须**清点车内货物**，确保无遗漏或错放，并检查退回或异常货物是否完整记录。</li>
-                    <li><span class="responsibility">异常反馈：</span> 如有延误、拒收、交通或天气问题，应**立即**整理成《异常记录表》并提交主管或客服人员，确保跟进处理。</li>
-                    <li><span class="responsibility">财务核对：</span> 所有收款凭证（现金/支票）必须**逐一核对**后与对应签收单订附，确保零差错交接给财务人员进行 <span class="system-tag qbo-tag">QBO</span> 登记。</li>
-                </ul>
+    <div id="p2-detail" class="card">
+        <h2>建立产品档案 <span class="tag">负责人：采购+财务</span></h2>
+        <p>当确认订单后，必须在 WEB 和 QBO 同步创建信息，确保数据对齐。</p>
+        
+        <div class="step-group">
+            <div class="action-point">
+                <strong>1. QBO (QuickBooks Online) 录入</strong>
+                - 创建 <b>New Item</b>，类型选 <i>Inventory</i>。<br>
+                - <b>SKU 规范：</b> 必须与 WEB 后台 SKU 字符完全一致（区分大小写）。<br>
+                - <b>Initial Quantity on Hand：</b> 设为 0。
             </div>
             
+            <div class="action-point">
+                <strong>2. WEB (网站后台) 录入</strong>
+                - 创建产品页面，设置 <b>Inventory Policy</b> 为“允许预售订单”。<br>
+                - 录入重量、规格（用于计算网站运费）。<br>
+                - **启动预售**：库存数手动填入海运在途数量。
+            </div>
+
+            <div class="sync-box">
+                🔄 <b>数据同步校验：</b> 在 Excel 中建立《新产品核对表》，核对：<br>
+                [ ] QBO 售价 == WEB 售价<br>
+                [ ] QBO SKU == WEB SKU
+            </div>
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuItems = document.querySelectorAll('.menu-item');
-            const sections = document.querySelectorAll('.content-section');
+    <div id="p4-detail" class="card">
+        <h2>到货核销与正式开售 <span class="tag">负责人：进口组+仓库+财务</span></h2>
+        <p>这是资金流（QBO）和实物流（仓库）汇合的关键节点。</p>
 
-            function showSection(targetId) {
-                sections.forEach(section => {
-                    section.style.display = 'none';
-                });
-                document.getElementById(targetId).style.display = 'block';
+        <div class="step-group">
+            <div class="action-point">
+                <strong>1. QBO 入库操作 (Convert PO to Bill)</strong>
+                - 收到仓库卸货报告后，在 QBO 中找到对应的 Purchase Order。<br>
+                - 点击 <b>Copy to Bill</b>，将实收数量更新至 Bill。<br>
+                - <span class="warning">关键点：</span> 录入海运费、关税，分摊至 <i>Landed Cost</i>，确保毛利计算准确。
+            </div>
 
-                menuItems.forEach(item => {
-                    item.classList.remove('active');
-                    if (item.getAttribute('data-target') === targetId) {
-                        item.classList.add('active');
-                    }
-                });
-            }
+            <div class="action-point">
+                <strong>2. WEB 库存转正</strong>
+                - 进入网站后台，将产品状态从“预售/Pre-order”改为“现货/In-stock”。<br>
+                - <b>手动校准库存：</b> 根据仓库清点单（Physical Count），修正网站库存数字。
+            </div>
+        </div>
+        
+    </div>
 
-            menuItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('data-target');
-                    showSection(targetId);
-                });
-            });
-
-            // 初始加载时显示第一个section
-            showSection('general');
-        });
-    </script>
+    <div id="audit" class="card">
+        <h2>🚨 常见异常处理机制</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>问题场景</th>
+                    <th>QBO 处理动作</th>
+                    <th>WEB 处理动作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b>实收短缺 (Shortage)</b></td>
+                    <td>在 Bill 中按实收数量入库，余数留存或删除。</td>
+                    <td>立即扣减网站可售库存，防止超卖。</td>
+                </tr>
+                <tr>
+                    <td><b>价格临时变动</b></td>
+                    <td>更新 QBO 售价，重新导出 Price List。</td>
+                    <td>同步修改 WEB 价格，检查是否有未付款预售单需调整。</td>
+                </tr>
+                <tr>
+                    <td><b>海运滞期</b></td>
+                    <td>无需动作，保持 PO 开启状态。</td>
+                    <td>更新产品页 ETA 日期，群发通知邮件。</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
 
 </body>
 </html>
