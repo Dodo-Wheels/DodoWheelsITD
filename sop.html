@@ -3,175 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Hub | 数字化运营门户</title>
+    <title>D-OPERATIONS | 销售启动全流程</title>
     <style>
         :root {
             --bg: #1c1c1e;
-            --navbar: rgba(28, 28, 30, 0.8);
+            --navbar: rgba(28, 28, 30, 0.9);
             --accent-blue: #0A84FF;
             --accent-purple: #BF5AF2;
             --accent-orange: #FF9500;
             --accent-green: #32D74B;
             --text-main: #ffffff;
             --text-dim: #a1a1a6;
-            --card-bg: rgba(255, 255, 255, 0.06);
+            --card-bg: rgba(44, 44, 46, 0.9);
             --border: rgba(255, 255, 255, 0.1);
         }
 
         body, html {
             margin: 0; padding: 0; height: 100%;
-            font-family: -apple-system, "SF Pro Display", sans-serif;
-            background-color: var(--bg);
-            color: var(--text-main);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-family: -apple-system, "SF Pro Display", "PingFang SC", sans-serif;
+            background-color: var(--bg); color: var(--text-main);
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
         }
 
-        /* 动态背景 */
         .desktop-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at 50% 50%, #1a2a6c 0%, #000000 100%);
             z-index: -1;
         }
 
-        /* 顶部导航 */
-        .navbar {
-            height: 50px; background: var(--navbar); backdrop-filter: blur(30px);
-            display: flex; align-items: center; justify-content: space-between; padding: 0 40px;
-            border-bottom: 0.5px solid var(--border); position: fixed; top: 0; width: 100%; z-index: 1000;
-            box-sizing: border-box;
-        }
-
-        .home-btn { font-weight: 700; display: flex; align-items: center; gap: 10px; letter-spacing: 0.5px; }
-        .time-info { color: var(--text-dim); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
-
-        /* 全局容器：垂直居中 */
-        .main-container {
-            width: 1000px;
-            display: flex;
-            flex-direction: column;
-            gap: 60px; /* 各组件间距 */
-            padding: 40px;
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* 1. 顶部数据看板 (2列居中) */
-        .dashboard-row {
-            display: flex;
-            gap: 30px;
-            justify-content: center;
-        }
-
-        .stat-card {
-            width: 320px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 24px;
-            border-radius: 24px;
-            backdrop-filter: blur(20px);
-            transition: 0.3s;
-        }
-        .stat-card:hover { border-color: var(--accent-blue); background: rgba(255,255,255,0.08); }
-        .stat-card .label { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        .stat-card .value { font-size: 2.2rem; font-weight: 700; color: white; }
-        .stat-card .trend { font-size: 0.75rem; color: var(--accent-blue); margin-top: 8px; font-weight: 500; }
-
-        /* 2. 核心 App 区域 (居中) */
-        .app-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 50px;
-            justify-items: center;
-        }
-
-        .app-item {
-            display: flex; flex-direction: column; align-items: center;
-            cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-decoration: none;
-        }
-
-        .app-item:hover { transform: scale(1.15); }
-
-        .app-icon {
-            width: 95px; height: 95px; border-radius: 24px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 45px; margin-bottom: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        }
-
+        /* 首页布局 */
+        .main-container { width: 1000px; display: flex; flex-direction: column; gap: 60px; transition: 0.5s; text-align: center;}
+        .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 50px; justify-items: center; }
+        .app-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.3s; }
+        .app-item:hover { transform: scale(1.1); }
+        .app-icon { width: 90px; height: 90px; border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 12px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
         .icon-prod { background: linear-gradient(135deg, #BF5AF2, #5E5CE6); }
         .icon-sales { background: linear-gradient(135deg, #0A84FF, #007AFF); }
         .icon-wh { background: linear-gradient(135deg, #FF9500, #FF5E00); }
         .icon-logi { background: linear-gradient(135deg, #32D74B, #1DB954); }
 
-        .app-label { font-size: 1rem; font-weight: 600; color: white; }
-
-        /* 3. 底部组件 (居中) */
-        .bottom-widgets {
-            display: flex;
-            gap: 30px;
-            justify-content: center;
-        }
-
-        .widget-box {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 25px;
-            backdrop-filter: blur(20px);
-        }
-
-        .news-widget { width: 500px; }
-        .links-widget { width: 200px; }
-
-        .widget-title { font-size: 0.8rem; font-weight: 700; margin-bottom: 15px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
-        .news-item { font-size: 0.9rem; margin-bottom: 12px; display: flex; gap: 12px; line-height: 1.4; color: #d1d1d6; }
-        .news-tag { color: var(--accent-orange); font-weight: 800; }
-
-        .quick-link { display: flex; align-items: center; color: var(--accent-blue); text-decoration: none; font-size: 0.9rem; margin-bottom: 12px; transition: 0.2s; }
-        .quick-link:hover { opacity: 0.8; padding-left: 5px; }
-
-        /* 内容视图容器 */
+        /* 内容详情页视图 */
         .content-view {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             background: var(--bg); transform: translateY(100%);
-            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); z-index: 2000; overflow-y: auto;
+            transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1); z-index: 2000; overflow-y: auto;
         }
         .content-view.active { transform: translateY(0); }
+
+        /* 时间轴样式 */
+        .timeline-container { max-width: 900px; margin: 80px auto; padding: 40px; }
+        .back-btn { color: var(--accent-blue); cursor: pointer; margin-bottom: 30px; display: inline-block; font-weight: 500; }
+        
+        .timeline { position: relative; padding-left: 50px; list-style: none; }
+        .timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+
+        .timeline-item { position: relative; margin-bottom: 50px; }
+        .timeline-dot { 
+            position: absolute; left: -38px; top: 5px; width: 16px; height: 16px; 
+            border-radius: 50%; background: var(--accent-blue); border: 4px solid var(--bg); 
+            box-shadow: 0 0 10px var(--accent-blue);
+        }
+
+        .timeline-content { background: var(--card-bg); padding: 25px; border-radius: 18px; border: 1px solid var(--border); }
+        .time-tag { color: var(--accent-blue); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .phase-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;}
+        .role-badge { font-size: 0.75rem; background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 20px; color: var(--text-dim); }
+
+        .logic-card { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; margin-top: 10px; font-size: 0.9rem; border-left: 3px solid var(--accent-purple); }
+        .logic-card b { color: var(--accent-purple); }
+
+        ul.detail-list { padding-left: 20px; color: #d1d1d6; font-size: 0.95rem; }
+        ul.detail-list li { margin-bottom: 8px; }
+
     </style>
 </head>
 <body>
 
 <div class="desktop-bg"></div>
 
-<nav class="navbar">
-    <div class="home-btn" onclick="closeAll()">
-        <span></span> <b>D-OPERATIONS</b>
-    </div>
-    <div class="time-info" id="clock">Loading...</div>
-</nav>
-
-<div class="main-container">
-    <div class="dashboard-row">
-        <div class="stat-card">
-            <div class="label">在途集装箱 / Containers</div>
-            <div class="value">04</div>
-            <div class="trend">最近到港: 12/20 (MTL)</div>
-        </div>
-        <div class="stat-card">
-            <div class="label">待发订单 / Pending Orders</div>
-            <div class="value">128</div>
-            <div class="trend">较昨日 +12% 预售激增</div>
-        </div>
-    </div>
-
+<div class="main-container" id="launcher">
+    <h1 style="font-weight: 800; letter-spacing: -1px; margin-bottom: 0;">D-OPERATIONS</h1>
+    <p style="color: var(--text-dim); margin-bottom: 40px;">WEB & QBO 数字化管理门户</p>
+    
     <div class="app-grid">
         <div class="app-item" onclick="openModule('prod')">
             <div class="app-icon icon-prod">🏷️</div>
@@ -190,42 +103,96 @@
             <span class="app-label">配送管理</span>
         </div>
     </div>
+</div>
 
-    <div class="bottom-widgets">
-        <div class="widget-box news-widget">
-            <div class="widget-title">系统通告 / News</div>
-            <div class="news-item"><span class="news-tag">●</span> BC码头罢工风险监控中，ETA 存在 3-5 天延期可能。</div>
-            <div class="news-item"><span class="news-tag">●</span> QBO 结转 Bill 时的 Landed Cost 分摊细则已更新。</div>
-        </div>
-        <div class="widget-box links-widget">
-            <div class="widget-title">快捷入口</div>
-            <a href="#" class="quick-link">➜ QuickBooks</a>
-            <a href="#" class="quick-link">➜ Web Backend</a>
-            <a href="#" class="quick-link">➜ Tracking API</a>
+<div id="view-sales" class="content-view">
+    <div class="timeline-container">
+        <div class="back-btn" onclick="closeAll()">← 返回主控台</div>
+        <h2 style="font-size: 2rem; margin-bottom: 40px;">📈 销售管理：全流程时间轴</h2>
+
+        <div class="timeline">
+            
+            <li class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="time-tag">-45 天 至 -28 天</span>
+                    <div class="phase-title">阶段一：采购启动 <span class="role-badge">负责人：采购</span></div>
+                    <ul class="detail-list">
+                        <li>确认采购订单并启动海运（-28 天）。</li>
+                        <li><b>海运当天：</b> 向供应商索取商业发票 (Commercial Invoice)。</li>
+                    </ul>
+                    <div class="logic-card">
+                        <b>决策逻辑：</b> 是否包含客户直采？<br>
+                        ➔ <b>是：</b> 顺延至开具 Bill 环节。<br>
+                        ➔ <b>否：</b> 进入阶段二产品创建。
+                    </div>
+                </div>
+            </li>
+
+            <li class="timeline-item">
+                <div class="timeline-dot" style="background: var(--accent-purple); box-shadow: 0 0 10px var(--accent-purple);"></div>
+                <div class="timeline-content">
+                    <span class="time-tag">-21 天 左右</span>
+                    <div class="phase-title">阶段二：产品创建与信息完善 <span class="role-badge">负责人：采购 + 产品组</span></div>
+                    <ul class="detail-list">
+                        <li><b>WEB 后台：</b> 录入新产品 SKU、描述、分类、价格及图片信息。</li>
+                        <li><b>QBO 系统：</b> 创建对应新产品条目（同步 SKU）。</li>
+                        <li><b>价格决策：</b> 老板确认售价后，更新网站价格并<b>启动预销售</b>。</li>
+                    </ul>
+                    <div class="logic-card">
+                        <b>决策逻辑：</b> 是否有大批量新产品（品牌/规格变化）？<br>
+                        ➔ <b>是：</b> 整理全套新产品信息录入系统。<br>
+                        ➔ <b>否：</b> 执行标准 PO 创建流程。
+                    </div>
+                </div>
+            </li>
+
+            <li class="timeline-item">
+                <div class="timeline-dot" style="background: var(--accent-orange); box-shadow: 0 0 10px var(--accent-orange);"></div>
+                <div class="timeline-content">
+                    <span class="time-tag">-10 天 至 0 天</span>
+                    <div class="phase-title">阶段三：运输与到货前准备 <span class="role-badge">负责人：进口组</span></div>
+                    <ul class="detail-list">
+                        <li><b>-10 天：</b> 集装箱到达 BC 码头。</li>
+                        <li><b>-7 天：</b> 火车起运，通知仓库检查收货计划及库位。</li>
+                        <li><b>抵达蒙特利尔：</b> 发布正式到货通知单。</li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="timeline-item">
+                <div class="timeline-dot" style="background: var(--accent-green); box-shadow: 0 0 10px var(--accent-green);"></div>
+                <div class="timeline-content">
+                    <span class="time-tag">DAY 0 (到货当天)</span>
+                    <div class="phase-title">阶段四：到货与正式销售启动 <span class="role-badge">负责人：进口组 + 仓库组</span></div>
+                    <ul class="detail-list">
+                        <li><b>入库作业：</b> 物理卸货完成，QBO 录入 Bill。</li>
+                        <li><b>库存转换：</b> Validate 收货计划，网站同步释放现货库存。</li>
+                        <li><b>全面开售：</b> 卸货结束，由预售转为正式现货销售。</li>
+                    </ul>
+                </div>
+            </li>
+
         </div>
     </div>
 </div>
 
-<div id="view-prod" class="content-view">
-    </div>
-
 <script>
     function openModule(mod) {
-        // 实际应用中此处可跳转或显示内容层
-        alert(mod + ' 手册详情加载中...');
+        if(mod === 'sales') {
+            document.getElementById('view-sales').classList.add('active');
+            document.getElementById('launcher').style.opacity = '0';
+            document.getElementById('launcher').style.transform = 'scale(0.9)';
+        } else {
+            alert(mod + ' 模块暂未配置时间轴，请点击“销售管理”。');
+        }
     }
 
     function closeAll() {
-        // 关闭逻辑
+        document.getElementById('view-sales').classList.remove('active');
+        document.getElementById('launcher').style.opacity = '1';
+        document.getElementById('launcher').style.transform = 'scale(1)';
     }
-
-    function updateClock() {
-        const now = new Date();
-        const options = { weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
-        document.getElementById('clock').innerText = now.toLocaleString('en-US', options).toUpperCase();
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
 </script>
 
 </body>
