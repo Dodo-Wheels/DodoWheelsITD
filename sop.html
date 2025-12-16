@@ -14,7 +14,6 @@
             color: #e0e0e0;
         }
         .container {
-            /* 移除flex布局，让内容区域占据整个视口宽度 */
             display: block; 
             min-height: 100vh;
         }
@@ -50,7 +49,7 @@
         }
 
         /* ------------------------------------- */
-        /* 3. Odoo 应用卡片导航 (模仿首页) */
+        /* 3. Odoo 应用卡片导航 (首页) */
         /* ------------------------------------- */
         .app-dashboard {
             display: grid;
@@ -58,7 +57,6 @@
             gap: 25px;
             margin-bottom: 40px;
             padding: 20px 0;
-            border-bottom: 1px solid #333;
         }
 
         .app-card {
@@ -93,47 +91,82 @@
         }
 
         /* ------------------------------------- */
-        /* 4. 流程详情 (隐藏/显示) */
+        /* 4. 模态窗口 (Modal) 样式 */
         /* ------------------------------------- */
-
-        .content-section {
-            background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-            border: 1px solid #333333;
+        .modal {
+            display: none; /* 默认隐藏 */
+            position: fixed;
+            z-index: 1000; /* 确保在最顶层 */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8); /* 半透明暗黑背景 */
+            backdrop-filter: blur(5px); /* Mac风格毛玻璃效果 */
         }
 
-        /* 标题和文字样式 */
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: 5% auto; /* 居中显示，并提供顶部间距 */
+            padding: 30px;
+            border: 1px solid #333;
+            width: 80%;
+            max-width: 1000px; /* 控制最大宽度 */
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
+            position: relative;
+        }
+
+        .modal-close {
+            color: #aaa;
+            float: right;
+            font-size: 30px;
+            font-weight: bold;
+            transition: color 0.2s;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            cursor: pointer;
+        }
+
+        .modal-close:hover,
+        .modal-close:focus {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        /* 流程内容样式 - 在 Modal 内部 */
+        .content-section {
+            /* 移除原有的卡片阴影和边框，因为它已经在 Modal-content 中了 */
+            background-color: transparent; 
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            border: none;
+        }
+
+        /* 标题和流程图样式（保持不变或略作调整以适应 modal） */
         h2 {
-            color: var(--system-odoo); /* 流程名称使用 Odoo 绿 */
+            color: var(--system-odoo);
             border-bottom: 2px solid #3d3d3d;
             padding-bottom: 10px;
             margin-top: 0;
             font-weight: 600;
-            font-size: 1.8em;
-            letter-spacing: 0.5px;
+            font-size: 2em;
         }
-        h3 {
-            color: var(--accent-color);
-            margin-top: 25px;
-            padding-left: 0;
-            font-size: 1.4em;
-            font-weight: 600;
-        }
-        
-        /* 流程图样式保持不变（已满足居中要求） */
         .flowchart-container {
+            /* 流程图区域在 Modal 中居中 */
             display: flex;
             flex-direction: column;
             align-items: center; 
-            margin: 30px 0;
+            margin: 30px auto; /* 增加左右自动边距 */
             padding: 20px 0;
-            border-radius: 8px;
+            max-width: 800px;
         }
         .flow-step {
             width: 90%;
-            max-width: 550px;
+            max-width: 500px; /* 流程卡片宽度略微缩小 */
             background-color: var(--flow-box-bg);
             border: 1px solid var(--accent-color);
             border-radius: 10px;
@@ -143,36 +176,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             position: relative;
             font-weight: 400;
-            transition: transform 0.2s;
-        }
-        .flow-step:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0, 122, 255, 0.3);
-        }
-        .flow-icon-detail { /* 流程详情中的图标 */
-            font-size: 2.5em;
-            color: var(--accent-color);
-            margin-bottom: 8px;
-            display: block;
-        }
-        .flow-text {
-            font-size: 1em;
-            line-height: 1.5;
-        }
-        .flow-connector {
-            width: 0;
-            height: 35px;
-            border-left: 3px dashed var(--flow-arrow-color);
-            position: relative;
-        }
-        .flow-connector::after {
-            content: '↓';
-            position: absolute;
-            top: 100%;
-            left: -8px;
-            font-size: 18px;
-            color: var(--flow-arrow-color);
-            transform: translateY(-10px);
         }
 
         /* 强调色和标签保持不变 */
@@ -182,7 +185,6 @@
         .odoo-tag { background-color: #4cd964; }
         .qbo-tag { background-color: #ff9500; }
         .web-tag { background-color: #ffcc00; }
-
         .note { background-color: #333333; color: #f0f0f0; padding: 15px; border-radius: 6px; border-left: 5px solid #ffcc00; margin: 20px 0; font-size: 0.95em; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); }
         .alert-danger { background-color: #3d1c1c; border-left: 5px solid #ff3b30; }
 
@@ -220,208 +222,212 @@
                 </a>
             </div>
             
-            <div id="general" class="content-section">
-                <h2>I. 🎯 系统总览与岗位角色</h2>
-
-                <div class="note">
-                    **核心原则：** Odoo 是唯一库存真相来源 (Single Source of Truth)。所有实物移动，必须在 Odoo 中进行同步操作。
-                </div>
-
-                <h3>1.1 关键系统与职责映射</h3>
-                <p>高效运营依赖于系统间的数据一致性与角色分工。</p>
-                <ul>
-                    <li>**Odoo (WMS/ERP):** 负责所有 **库存状态**、**流程指令** (GR/GI, PO/SO) 和 **运营数据**。</li>
-                    <li>**QBO (QuickBooks):** 负责所有 **成本/收入核算**、**发票生成** 和 **现金流管理**。</li>
-                    <li>**Website Backend:** 负责 **产品市场信息** 和 **对外零售定价**。</li>
-                </ul>
-                
-                <h3>1.2 岗位集成点</h3>
-                <p>以下角色负责执行系统对接的关键操作：</p>
-                <ul>
-                    <li><span class="responsibility">采购/产品组：</span> 确保 SKU 在 <span class="system-tag odoo-tag">Odoo</span>, <span class="system-tag web-tag">Website</span>, <span class="system-tag qbo-tag">QBO</span> 中完全同步。</li>
-                    <li><span class="responsibility">仓储人员：</span> 负责 <span class="system-tag odoo-tag">Odoo</span> WMS 模块的 **GR/上架/拣货/GI** 四大操作。</li>
-                    <li><span class="responsibility">配送员：</span> 负责 **现金/支票** 收款并与 <span class="system-tag qbo-tag">财务</span> 完成交接核对。</li>
-                </ul>
-            </div>
-
-            <div id="procurement" class="content-section" style="display:none;">
-                <h2>II. 💰 采购与产品上线流程 (PO-to-Web)</h2>
-
-                <h3>2.1 跨系统协作流程图</h3>
-                
-                <div class="flowchart-container">
-                    <div class="flow-step">
-                        <span class="flow-icon-detail">📝</span>
-                        <p class="flow-text"><span class="responsibility">采购</span>在 <span class="system-tag odoo-tag">Odoo</span> 创建 **采购订单 (PO)** 并确认。</p>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">
-                        <span class="flow-icon-detail">🆕</span>
-                        <p class="flow-text">如果为新产品，<span class="responsibility">产品组</span>同步在 <span class="system-tag web-tag">Website</span> 后台创建 SKU、图片、花纹。</p>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">
-                        <span class="flow-icon-detail">🔗</span>
-                        <p class="flow-text"><span class="responsibility">财务/采购</span>在 <span class="system-tag qbo-tag">QBO</span> **同步创建新产品 SKU**，确保科目映射正确。</p>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">
-                        <span class="flow-icon-detail">💲</span>
-                        <p class="flow-text"><span class="process-step">老板</span>确认并更新 <span class="system-tag web-tag">Website</span> 零售价，启动预销售。</p>
-                    </div>
-                </div>
-
-                <h3>2.2 重点注意事项</h3>
-                <ul>
-                    <li>**PO 锁定：** PO 一经确认，**Odoo** 即生成收货指令。除非主管授权，否则采购员不得随意修改 PO 数量。</li>
-                    <li>**数据一致性：** **SKU 必须 100% 一致**。任何差异将导致后续 GR/GI 流程和 QBO 财务核算失败。</li>
-                </ul>
-            </div>
-
-            <div id="inbound" class="content-section" style="display:none;">
-                <h2>III. 📥 WMS 入库作业流程 (GR & Putaway)</h2>
-
-                <h3>3.1 系统/实物操作流程图</h3>
-                
-                <div class="flowchart-container">
-                    <div class="flow-step">
-                        <span class="flow-icon-detail">🚚</span>
-                        <p class="flow-text">货物到达装卸区，<span class="responsibility">仓库</span>执行 **实物验收**。</p>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">
-                        <span class="flow-icon-detail">⚠️</span>
-                        <p class="flow-text">如有异常，填写《异常入库单》并隔离。正常货物 → <span class="responsibility">仓库</span>在 <span class="system-tag odoo-tag">Odoo</span> 执行 **收货 (GR)**。</p>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">
-                        <span class="flow-icon-detail">📍</span>
-                        <p class="flow-text"><span class="system-tag odoo-tag">Odoo</span> 自动生成上架指令。<span class="responsibility">区域负责人</span>按指令将货物上架到目标库位。</p>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">
-                        <span class="flow-icon-detail">✅</span>
-                        <p class="flow-text">完成上架后，在 <span class="system-tag odoo-tag">Odoo</span> 中执行 **上架确认**，并向 <span class="responsibility">财务</span> 提交签收单据。</p>
-                    </div>
-                </div>
-
-                <h3>3.2 规范要求</h3>
-                <div class="note alert-danger">
-                    **🚨 严禁：** 异常货物未经采购主管书面批准和系统调拨操作，**严禁上架**到常规 A-P 库位。
-                </div>
-                <ol>
-                    <li>**GR 必须与实物同步：** 在 Odoo 中点击 GR 的数量，必须与实际验收的数量一致。</li>
-                    <li>**库位准确性：** 任何货物都必须有明确的库位。库位更新操作必须在 Odoo 中即时完成。</li>
-                </ol>
-            </div>
-
-            <div id="outbound" class="content-section" style="display:none;">
-                <h2>IV. 📤 WMS 出库作业流程 (Picking & GI)</h2>
-
-                <h3>4.1 系统/实物操作流程图</h3>
-                
-                <div class="flowchart-container">
-                    <div class="flow-step">
-                        <span class="flow-icon-detail">🧾</span>
-                        <p class="flow-text"><span class="responsibility">销售</span>在 <span class="system-tag odoo-tag">Odoo</span> 创建 **销售订单 (SO)** / 调拨单 (ESTIMATE)。</p>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">
-                        <span class="flow-icon-detail">🔒</span>
-                        <p class="flow-text"><span class="system-tag odoo-tag">Odoo</span> 自动生成 **拣货任务**，并锁定指定库位的库存。</p>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">
-                        <span class="flow-icon-detail">🛒</span>
-                        <p class="flow-text"><span class="responsibility">仓库人员</span>执行 **下架/拣货**，运至发货区进行复核与打包。</p>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">
-                        <span class="flow-icon-detail">📤</span>
-                        <p class="flow-text">货物装车前，<span class="responsibility">仓库</span>在 <span class="system-tag odoo-tag">Odoo</span> 中执行 **出库确认 (GI)**，完成库存扣减。</p>
-                    </div>
-                </div>
-
-                <h3>4.2 规范要求</h3>
-                <p>拣货准确率是衡量仓库绩效的核心指标。</p>
-                <ul>
-                    <li>**系统实时性：** GI 操作必须在**货物离开仓库前**完成。严禁先出库后操作 GI。</li>
-                    <li>**调拨合规：** 仓库间调货**只能**使用 ESTIMATE 单。使用 SO 调货将导致错误的财务记录。</li>
-                </ul>
-            </div>
-
-            <div id="delivery" class="content-section" style="display:none;">
-                <h2>V. 💳 配送与财务闭环流程 (Delivery & Settlement)</h2>
-
-                <h3>5.1 跨系统交接流程图</h3>
-                
-                <div class="flowchart-container">
-                    <div class="flow-step">
-                        <span class="flow-icon-detail">🚛</span>
-                        <p class="flow-text"><span class="responsibility">配送员</span>装载货物，核对配送单与实物一致 (SOP-DE-001)。</p>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">
-                        <span class="flow-icon-detail">✍️</span>
-                        <p class="flow-text">客户收货后，必须在配送单上**手写签字**并记录送达时间。</p>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">
-                        <span class="flow-icon-detail">💵</span>
-                        <p class="flow-text"><span class="responsibility">配送员</span>回仓后，整理签收单、收款凭证 (现金/支票) 和票据。</p>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-step">
-                        <span class="flow-icon-detail">🏦</span>
-                        <p class="flow-text"><span class="responsibility">配送员</span>与 <span class="responsibility">财务</span> 逐一核对交接，<span class="responsibility">财务</span> 在 <span class="system-tag qbo-tag">QBO</span> 录入收款/发票。</p>
-                    </div>
-                </div>
-
-                <h3>5.2 规范要求</h3>
-                <p>确保资金流和信息流的同步，实现财务闭环。</p>
-                <ul>
-                    <li>**零差错交接：** 所有收款必须与对应的签收单附在一起。财务仅在单据完整且核对无误后才进行 <span class="system-tag qbo-tag">QBO</span> 登记。</li>
-                    <li>**异常处理：** 配送员必须在回仓时提交《异常记录表》，说明延误、拒收或退货情况，以便客服和仓库及时处理。</li>
-                </ul>
-            </div>
-            
         </div>
+    </div>
+
+    <div id="flowModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div id="modalBody">
+                </div>
+        </div>
+    </div>
+
+    <div id="hiddenContent" style="display:none;">
+
+        <div id="general" class="content-section">
+            <h2>I. 🎯 系统总览与岗位角色</h2>
+            <div class="note">
+                **核心原则：** Odoo 是唯一库存真相来源 (Single Source of Truth)。所有实物移动，必须在 Odoo 中进行同步操作。
+            </div>
+            <h3>1.1 关键系统与职责映射</h3>
+            <ul>
+                <li>**Odoo (WMS/ERP):** 负责所有 **库存状态**、**流程指令** (GR/GI, PO/SO) 和 **运营数据**。</li>
+                <li>**QBO (QuickBooks):** 负责所有 **成本/收入核算**、**发票生成** 和 **现金流管理**。</li>
+                <li>**Website Backend:** 负责 **产品市场信息** 和 **对外零售定价**。</li>
+            </ul>
+            <h3>1.2 岗位集成点</h3>
+            <ul>
+                <li><span class="responsibility">采购/产品组：</span> 确保 SKU 在 <span class="system-tag odoo-tag">Odoo</span>, <span class="system-tag web-tag">Website</span>, <span class="system-tag qbo-tag">QBO</span> 中完全同步。</li>
+                <li><span class="responsibility">仓储人员：</span> 负责 <span class="system-tag odoo-tag">Odoo</span> WMS 模块的 **GR/上架/拣货/GI** 四大操作。</li>
+                <li><span class="responsibility">配送员：</span> 负责 **现金/支票** 收款并与 <span class="system-tag qbo-tag">财务</span> 完成交接核对。</li>
+            </ul>
+        </div>
+
+        <div id="procurement" class="content-section">
+            <h2>II. 💰 采购与产品上线流程 (PO-to-Web)</h2>
+            <h3>2.1 跨系统协作流程图 </h3>
+            <div class="flowchart-container">
+                <div class="flow-step">
+                    <span class="flow-icon-detail">📝</span>
+                    <p class="flow-text"><span class="responsibility">采购</span>在 <span class="system-tag odoo-tag">Odoo</span> 创建 **采购订单 (PO)** 并确认。</p>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step">
+                    <span class="flow-icon-detail">🆕</span>
+                    <p class="flow-text">如果为新产品，<span class="responsibility">产品组</span>同步在 <span class="system-tag web-tag">Website</span> 后台创建 SKU、图片、花纹。</p>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step">
+                    <span class="flow-icon-detail">🔗</span>
+                    <p class="flow-text"><span class="responsibility">财务/采购</span>在 <span class="system-tag qbo-tag">QBO</span> **同步创建新产品 SKU**，确保科目映射正确。</p>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step">
+                    <span class="flow-icon-detail">💲</span>
+                    <p class="flow-text"><span class="process-step">老板</span>确认并更新 <span class="system-tag web-tag">Website</span> 零售价，启动预销售。</p>
+                </div>
+            </div>
+            <h3>2.2 重点注意事项</h3>
+            <ul>
+                <li>**PO 锁定：** PO 一经确认，**Odoo** 即生成收货指令。除非主管授权，否则采购员不得随意修改 PO 数量。</li>
+                <li>**数据一致性：** **SKU 必须 100% 一致**。任何差异将导致后续 GR/GI 流程和 QBO 财务核算失败。</li>
+            </ul>
+        </div>
+
+        <div id="inbound" class="content-section">
+            <h2>III. 📥 WMS 入库作业流程 (GR & Putaway)</h2>
+            <h3>3.1 系统/实物操作流程图 </h3>
+            <div class="flowchart-container">
+                <div class="flow-step">
+                    <span class="flow-icon-detail">🚚</span>
+                    <p class="flow-text">货物到达装卸区，<span class="responsibility">仓库</span>执行 **实物验收**。</p>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step">
+                    <span class="flow-icon-detail">⚠️</span>
+                    <p class="flow-text">如有异常，填写《异常入库单》并隔离。正常货物 → <span class="responsibility">仓库</span>在 <span class="system-tag odoo-tag">Odoo</span> 执行 **收货 (GR)**。</p>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step">
+                    <span class="flow-icon-detail">📍</span>
+                    <p class="flow-text"><span class="system-tag odoo-tag">Odoo</span> 自动生成上架指令。<span class="responsibility">区域负责人</span>按指令将货物上架到目标库位。</p>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step">
+                    <span class="flow-icon-detail">✅</span>
+                    <p class="flow-text">完成上架后，在 <span class="system-tag odoo-tag">Odoo</span> 中执行 **上架确认**，并向 <span class="responsibility">财务</span> 提交签收单据。</p>
+                </div>
+            </div>
+            <h3>3.2 规范要求</h3>
+            <div class="note alert-danger">
+                **🚨 严禁：** 异常货物未经采购主管书面批准和系统调拨操作，**严禁上架**到常规 A-P 库位。
+            </div>
+            <ol>
+                <li>**GR 必须与实物同步：** 在 Odoo 中点击 GR 的数量，必须与实际验收的数量一致。</li>
+                <li>**库位准确性：** 任何货物都必须有明确的库位。库位更新操作必须在 Odoo 中即时完成。</li>
+            </ol>
+        </div>
+
+        <div id="outbound" class="content-section">
+            <h2>IV. 📤 WMS 出库作业流程 (Picking & GI)</h2>
+            <h3>4.1 系统/实物操作流程图 </h3>
+            <div class="flowchart-container">
+                <div class="flow-step">
+                    <span class="flow-icon-detail">🧾</span>
+                    <p class="flow-text"><span class="responsibility">销售</span>在 <span class="system-tag odoo-tag">Odoo</span> 创建 **销售订单 (SO)** / 调拨单 (ESTIMATE)。</p>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step">
+                    <span class="flow-icon-detail">🔒</span>
+                    <p class="flow-text"><span class="system-tag odoo-tag">Odoo</span> 自动生成 **拣货任务**，并锁定指定库位的库存。</p>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step">
+                    <span class="flow-icon-detail">🛒</span>
+                    <p class="flow-text"><span class="responsibility">仓库人员</span>执行 **下架/拣货**，运至发货区进行复核与打包。</p>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step">
+                    <span class="flow-icon-detail">📤</span>
+                    <p class="flow-text">货物装车前，<span class="responsibility">仓库</span>在 <span class="system-tag odoo-tag">Odoo</span> 中执行 **出库确认 (GI)**，完成库存扣减。</p>
+                </div>
+            </div>
+            <h3>4.2 规范要求</h3>
+            <p>拣货准确率是衡量仓库绩效的核心指标。</p>
+            <ul>
+                <li>**系统实时性：** GI 操作必须在**货物离开仓库前**完成。严禁先出库后操作 GI。</li>
+                <li>**调拨合规：** 仓库间调货**只能**使用 ESTIMATE 单。使用 SO 调货将导致错误的财务记录。</li>
+            </ul>
+        </div>
+
+        <div id="delivery" class="content-section">
+            <h2>V. 💳 配送与财务闭环流程 (Delivery & Settlement)</h2>
+            <h3>5.1 跨系统交接流程图 </h3>
+            <div class="flowchart-container">
+                <div class="flow-step">
+                    <span class="flow-icon-detail">🚛</span>
+                    <p class="flow-text"><span class="responsibility">配送员</span>装载货物，核对配送单与实物一致 (SOP-DE-001)。</p>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step">
+                    <span class="flow-icon-detail">✍️</span>
+                    <p class="flow-text">客户收货后，必须在配送单上**手写签字**并记录送达时间。</p>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step">
+                    <span class="flow-icon-detail">💵</span>
+                    <p class="flow-text"><span class="responsibility">配送员</span>回仓后，整理签收单、收款凭证 (现金/支票) 和票据。</p>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step">
+                    <span class="flow-icon-detail">🏦</span>
+                    <p class="flow-text"><span class="responsibility">配送员</span>与 <span class="responsibility">财务</span> 逐一核对交接，<span class="responsibility">财务</span> 在 <span class="system-tag qbo-tag">QBO</span> 录入收款/发票。</p>
+                </div>
+            </div>
+            <h3>5.2 规范要求</h3>
+            <p>确保资金流和信息流的同步，实现财务闭环。</p>
+            <ul>
+                <li>**零差错交接：** 所有收款必须与对应的签收单附在一起。财务仅在单据完整且核对无误后才进行 <span class="system-tag qbo-tag">QBO</span> 登记。</li>
+                <li>**异常处理：** 配送员必须在回仓时提交《异常记录表》，说明延误、拒收或退货情况，以便客服和仓库及时处理。</li>
+            </ul>
+        </div>
+
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const menuItems = document.querySelectorAll('.app-card');
-            const sections = document.querySelectorAll('.content-section');
+            const modal = document.getElementById('flowModal');
+            const modalBody = document.getElementById('modalBody');
+            const closeBtn = document.querySelector('.modal-close');
 
-            // 保持第一个 section 默认可见
-            const initialTargetId = 'general';
-            sections.forEach(section => {
-                section.style.display = 'none';
-            });
-            document.getElementById(initialTargetId).style.display = 'block';
-
-            function showSection(targetId) {
-                sections.forEach(section => {
-                    section.style.display = 'none';
-                });
-                const targetSection = document.getElementById(targetId);
-                if(targetSection) {
-                    targetSection.style.display = 'block';
-                    // 滚动到流程详情开始位置
-                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            }
-
+            // 当用户点击应用卡片时
             menuItems.forEach(item => {
                 item.addEventListener('click', function(e) {
                     e.preventDefault();
                     const targetId = this.getAttribute('data-target');
-                    showSection(targetId);
+                    const targetContent = document.getElementById(targetId);
+
+                    if (targetContent) {
+                        // 1. 克隆内容
+                        const contentClone = targetContent.cloneNode(true);
+                        
+                        // 2. 清空并插入克隆的内容到 Modal body
+                        modalBody.innerHTML = '';
+                        modalBody.appendChild(contentClone);
+                        
+                        // 3. 显示 Modal 窗口
+                        modal.style.display = "block";
+                        
+                        // 4. 阻止背景滚动
+                        document.body.style.overflow = 'hidden'; 
+                    }
                 });
             });
 
-            // 初始加载时确保滚动到顶部（方便查看应用卡片）
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // 当用户点击 (x) 或窗口外部时关闭 Modal
+            closeBtn.onclick = function() {
+                modal.style.display = "none";
+                document.body.style.overflow = 'auto'; // 恢复背景滚动
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                    document.body.style.overflow = 'auto'; // 恢复背景滚动
+                }
+            }
         });
     </script>
 
