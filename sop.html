@@ -1,3 +1,16 @@
+好的，我理解您的要求。您希望将侧边栏（菜单）的样式调整得更像 **Odoo 应用主页**的风格：**模块化、图标突出、并居中显示**，同时保持 **Mac 暗黑主题**和 **蓝色辅助色**。
+
+Odoo 首页的特点是使用大图标和模块名来代表不同的应用程序。我将把侧边栏改为这种**模块卡片式导航**，并将其放置在主内容区域的顶部（或作为主内容的一部分），来模仿这种仪表板结构。
+
+由于标准 HTML 的侧边栏 (`.sidebar`) 结构与 Odoo 首页的网格 (`.main-content`) 结构冲突，我将进行以下重大调整：
+
+1. **移除左侧固定侧边栏。**
+2. **将导航菜单转换为 Odoo 风格的 "应用卡片" 区域**，位于主内容顶部，使用网格布局。
+3. 点击卡片后，跳转并显示相应流程的详细内容。
+
+以下是修改后的 HTML 代码，实现了 **Mac 暗黑主题 + Odoo 应用模块卡片式导航** 的风格：
+
+```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -14,7 +27,8 @@
             color: #e0e0e0;
         }
         .container {
-            display: flex;
+            /* 移除flex布局，让内容区域占据整个视口宽度 */
+            display: block; 
             min-height: 100vh;
         }
         
@@ -22,7 +36,6 @@
         :root {
             --accent-color: #007aff; /* Mac 蓝色 (用于主强调) */
             --highlight-color: #004d99; /* 选中/活动背景 */
-            --sidebar-bg: #1c1c1c;
             --content-bg: #0d0d0d; 
             --card-bg: #1c1c1c; /* Odoo Dashboard 风格卡片背景 */
             --flow-box-bg: #333333; /* 流程图步骤卡片背景 */
@@ -40,61 +53,62 @@
             font-size: 1.8em;
             font-weight: 600;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* 侧边菜单栏 */
-        .sidebar {
-            width: 280px;
-            background-color: var(--sidebar-bg);
-            padding: 15px;
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.6);
-            flex-shrink: 0;
-        }
-        .sidebar-title {
-            color: #888888;
-            padding: 10px 15px;
-            font-size: 0.85em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 10px;
-            border-bottom: 1px solid #333;
-        }
-        .sidebar a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 5px 0;
-            padding: 12px 15px;
-            text-decoration: none;
-            color: #e0e0e0;
-            border-radius: 8px;
-            transition: background-color 0.2s;
-            font-size: 0.95em;
-        }
-        .sidebar a:hover {
-            background-color: #383838;
-        }
-        .sidebar a.active {
-            background-color: var(--highlight-color);
-            color: white;
-            font-weight: 500;
-            border-left: 5px solid var(--accent-color);
+            text-align: center;
         }
 
-        /* 主内容区域 - 网格布局容纳卡片 */
+        /* 主内容区域 */
         .main-content {
-            flex-grow: 1;
             padding: 30px;
             background-color: var(--content-bg);
-            display: grid;
-            grid-template-columns: 1fr; 
-            gap: 30px; 
         }
 
-        /* Odoo 风格卡片 (模块化) */
+        /* ------------------------------------- */
+        /* 3. Odoo 应用卡片导航 (模仿首页) */
+        /* ------------------------------------- */
+        .app-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* 响应式网格 */
+            gap: 25px;
+            margin-bottom: 40px;
+            padding: 20px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .app-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px 15px;
+            text-align: center;
+            text-decoration: none;
+            color: #e0e0e0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease-in-out;
+            border: 1px solid #333;
+            cursor: pointer;
+        }
+
+        .app-card:hover {
+            background-color: #282828;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 122, 255, 0.3);
+        }
+
+        .app-icon {
+            font-size: 3.5em; /* 大图标 */
+            margin-bottom: 10px;
+            display: block;
+            color: var(--accent-color); /* 使用蓝色作为图标主色 */
+        }
+
+        .app-title {
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        /* ------------------------------------- */
+        /* 4. 流程详情 (隐藏/显示) */
+        /* ------------------------------------- */
+
         .content-section {
             background-color: var(--card-bg);
             padding: 30px;
@@ -120,35 +134,8 @@
             font-size: 1.4em;
             font-weight: 600;
         }
-        ul, ol {
-            padding-left: 20px;
-            line-height: 1.8;
-        }
         
-        /* 角色和动作强调 */
-        .responsibility {
-            font-weight: bold;
-            color: var(--system-odoo);
-        }
-        .process-step {
-            font-weight: bold;
-            color: var(--system-web); /* 动作使用黄色 */
-        }
-        .system-tag {
-            padding: 4px 8px;
-            border-radius: 5px;
-            font-size: 0.85em;
-            font-weight: bold;
-            margin-left: 8px;
-            text-transform: uppercase;
-            color: #000;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-        }
-        .odoo-tag { background-color: var(--system-odoo); }
-        .qbo-tag { background-color: var(--system-qbo); }
-        .web-tag { background-color: var(--system-web); }
-
-        /* 特色流程图样式 - 流程卡片化 */
+        /* 流程图样式保持不变（已满足居中要求） */
         .flowchart-container {
             display: flex;
             flex-direction: column;
@@ -157,7 +144,6 @@
             padding: 20px 0;
             border-radius: 8px;
         }
-        /* 流程卡片 */
         .flow-step {
             width: 90%;
             max-width: 550px;
@@ -176,7 +162,7 @@
             transform: translateY(-3px);
             box-shadow: 0 6px 15px rgba(0, 122, 255, 0.3);
         }
-        .flow-icon {
+        .flow-icon-detail { /* 流程详情中的图标 */
             font-size: 2.5em;
             color: var(--accent-color);
             margin-bottom: 8px;
@@ -193,7 +179,7 @@
             position: relative;
         }
         .flow-connector::after {
-            content: '↓'; /* 使用箭头符号代替三角形 */
+            content: '↓';
             position: absolute;
             top: 100%;
             left: -8px;
@@ -201,22 +187,18 @@
             color: var(--flow-arrow-color);
             transform: translateY(-10px);
         }
-        
-        /* 提示框 */
-        .note {
-            background-color: #333333;
-            color: #f0f0f0;
-            padding: 15px;
-            border-radius: 6px;
-            border-left: 5px solid var(--note-border);
-            margin: 20px 0;
-            font-size: 0.95em;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
-        .alert-danger { 
-            background-color: #3d1c1c; 
-            border-left: 5px solid #ff3b30; 
-        }
+
+        /* 强调色和标签保持不变 */
+        .responsibility { font-weight: bold; color: #4cd964; }
+        .process-step { font-weight: bold; color: #ffcc00; }
+        .system-tag { padding: 4px 8px; border-radius: 5px; font-size: 0.85em; font-weight: bold; margin-left: 8px; text-transform: uppercase; color: #000; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); }
+        .odoo-tag { background-color: #4cd964; }
+        .qbo-tag { background-color: #ff9500; }
+        .web-tag { background-color: #ffcc00; }
+
+        .note { background-color: #333333; color: #f0f0f0; padding: 15px; border-radius: 6px; border-left: 5px solid #ffcc00; margin: 20px 0; font-size: 0.95em; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); }
+        .alert-danger { background-color: #3d1c1c; border-left: 5px solid #ff3b30; }
+
     </style>
 </head>
 <body>
@@ -225,17 +207,32 @@
         DodoWheels **OpsFlow** **运营系统集成指南**
     </div>
 
-    <div class="container content-wrapper">
-        <div class="sidebar">
-            <div class="sidebar-title">⚡️ 模块化流程导航</div>
-            <a href="#section-general" class="menu-item active" data-target="general">✅ 系统总览与角色</a>
-            <a href="#section-procurement" class="menu-item" data-target="procurement">💰 采购与产品上线</a>
-            <a href="#section-inbound" class="menu-item" data-target="inbound">📥 WMS 入库作业</a>
-            <a href="#section-outbound" class="menu-item" data-target="outbound">📤 WMS 出库作业</a>
-            <a href="#section-delivery" class="menu-item" data-target="delivery">💳 配送与财务闭环</a>
-        </div>
-
+    <div class="container">
         <div class="main-content">
+
+            <div class="app-dashboard">
+                <a href="#" class="app-card" data-target="general">
+                    <span class="app-icon">✅</span>
+                    <span class="app-title">系统总览与角色</span>
+                </a>
+                <a href="#" class="app-card" data-target="procurement">
+                    <span class="app-icon">💰</span>
+                    <span class="app-title">采购与产品上线</span>
+                </a>
+                <a href="#" class="app-card" data-target="inbound">
+                    <span class="app-icon">📥</span>
+                    <span class="app-title">WMS 入库作业</span>
+                </a>
+                <a href="#" class="app-card" data-target="outbound">
+                    <span class="app-icon">📤</span>
+                    <span class="app-title">WMS 出库作业</span>
+                </a>
+                <a href="#" class="app-card" data-target="delivery">
+                    <span class="app-icon">💳</span>
+                    <span class="app-title">配送与财务闭环</span>
+                </a>
+            </div>
+            
             <div id="general" class="content-section">
                 <h2>I. 🎯 系统总览与岗位角色</h2>
 
@@ -267,22 +264,22 @@
                 
                 <div class="flowchart-container">
                     <div class="flow-step">
-                        <span class="flow-icon">📝</span>
+                        <span class="flow-icon-detail">📝</span>
                         <p class="flow-text"><span class="responsibility">采购</span>在 <span class="system-tag odoo-tag">Odoo</span> 创建 **采购订单 (PO)** 并确认。</p>
                     </div>
                     <div class="flow-connector"></div>
                     <div class="flow-step">
-                        <span class="flow-icon">🆕</span>
+                        <span class="flow-icon-detail">🆕</span>
                         <p class="flow-text">如果为新产品，<span class="responsibility">产品组</span>同步在 <span class="system-tag web-tag">Website</span> 后台创建 SKU、图片、花纹。</p>
                     </div>
                     <div class="flow-connector"></div>
                     <div class="flow-step">
-                        <span class="flow-icon">🔗</span>
+                        <span class="flow-icon-detail">🔗</span>
                         <p class="flow-text"><span class="responsibility">财务/采购</span>在 <span class="system-tag qbo-tag">QBO</span> **同步创建新产品 SKU**，确保科目映射正确。</p>
                     </div>
                     <div class="flow-connector"></div>
                     <div class="flow-step">
-                        <span class="flow-icon">💲</span>
+                        <span class="flow-icon-detail">💲</span>
                         <p class="flow-text"><span class="process-step">老板</span>确认并更新 <span class="system-tag web-tag">Website</span> 零售价，启动预销售。</p>
                     </div>
                 </div>
@@ -301,22 +298,22 @@
                 
                 <div class="flowchart-container">
                     <div class="flow-step">
-                        <span class="flow-icon">🚚</span>
+                        <span class="flow-icon-detail">🚚</span>
                         <p class="flow-text">货物到达装卸区，<span class="responsibility">仓库</span>执行 **实物验收**。</p>
                     </div>
                     <div class="flow-connector"></div>
                     <div class="flow-step">
-                        <span class="flow-icon">⚠️</span>
+                        <span class="flow-icon-detail">⚠️</span>
                         <p class="flow-text">如有异常，填写《异常入库单》并隔离。正常货物 → <span class="responsibility">仓库</span>在 <span class="system-tag odoo-tag">Odoo</span> 执行 **收货 (GR)**。</p>
                     </div>
                     <div class="flow-connector"></div>
                     <div class="flow-step">
-                        <span class="flow-icon">📍</span>
+                        <span class="flow-icon-detail">📍</span>
                         <p class="flow-text"><span class="system-tag odoo-tag">Odoo</span> 自动生成上架指令。<span class="responsibility">区域负责人</span>按指令将货物上架到目标库位。</p>
                     </div>
                     <div class="flow-connector"></div>
                     <div class="flow-step">
-                        <span class="flow-icon">✅</span>
+                        <span class="flow-icon-detail">✅</span>
                         <p class="flow-text">完成上架后，在 <span class="system-tag odoo-tag">Odoo</span> 中执行 **上架确认**，并向 <span class="responsibility">财务</span> 提交签收单据。</p>
                     </div>
                 </div>
@@ -338,22 +335,22 @@
                 
                 <div class="flowchart-container">
                     <div class="flow-step">
-                        <span class="flow-icon">🧾</span>
+                        <span class="flow-icon-detail">🧾</span>
                         <p class="flow-text"><span class="responsibility">销售</span>在 <span class="system-tag odoo-tag">Odoo</span> 创建 **销售订单 (SO)** / 调拨单 (ESTIMATE)。</p>
                     </div>
                     <div class="flow-connector"></div>
                     <div class="flow-step">
-                        <span class="flow-icon">🔒</span>
+                        <span class="flow-icon-detail">🔒</span>
                         <p class="flow-text"><span class="system-tag odoo-tag">Odoo</span> 自动生成 **拣货任务**，并锁定指定库位的库存。</p>
                     </div>
                     <div class="flow-connector"></div>
                     <div class="flow-step">
-                        <span class="flow-icon">🛒</span>
+                        <span class="flow-icon-detail">🛒</span>
                         <p class="flow-text"><span class="responsibility">仓库人员</span>执行 **下架/拣货**，运至发货区进行复核与打包。</p>
                     </div>
                     <div class="flow-connector"></div>
                     <div class="flow-step">
-                        <span class="flow-icon">📤</span>
+                        <span class="flow-icon-detail">📤</span>
                         <p class="flow-text">货物装车前，<span class="responsibility">仓库</span>在 <span class="system-tag odoo-tag">Odoo</span> 中执行 **出库确认 (GI)**，完成库存扣减。</p>
                     </div>
                 </div>
@@ -373,22 +370,22 @@
                 
                 <div class="flowchart-container">
                     <div class="flow-step">
-                        <span class="flow-icon">🚛</span>
+                        <span class="flow-icon-detail">🚛</span>
                         <p class="flow-text"><span class="responsibility">配送员</span>装载货物，核对配送单与实物一致 (SOP-DE-001)。</p>
                     </div>
                     <div class="flow-connector"></div>
                     <div class="flow-step">
-                        <span class="flow-icon">✍️</span>
+                        <span class="flow-icon-detail">✍️</span>
                         <p class="flow-text">客户收货后，必须在配送单上**手写签字**并记录送达时间。</p>
                     </div>
                     <div class="flow-connector"></div>
                     <div class="flow-step">
-                        <span class="flow-icon">💵</span>
+                        <span class="flow-icon-detail">💵</span>
                         <p class="flow-text"><span class="responsibility">配送员</span>回仓后，整理签收单、收款凭证 (现金/支票) 和票据。</p>
                     </div>
                     <div class="flow-connector"></div>
                     <div class="flow-step">
-                        <span class="flow-icon">🏦</span>
+                        <span class="flow-icon-detail">🏦</span>
                         <p class="flow-text"><span class="responsibility">配送员</span>与 <span class="responsibility">财务</span> 逐一核对交接，<span class="responsibility">财务</span> 在 <span class="system-tag qbo-tag">QBO</span> 录入收款/发票。</p>
                     </div>
                 </div>
@@ -406,8 +403,15 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const menuItems = document.querySelectorAll('.menu-item');
+            const menuItems = document.querySelectorAll('.app-card');
             const sections = document.querySelectorAll('.content-section');
+
+            // 保持第一个 section 默认可见
+            const initialTargetId = 'general';
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(initialTargetId).style.display = 'block';
 
             function showSection(targetId) {
                 sections.forEach(section => {
@@ -416,16 +420,9 @@
                 const targetSection = document.getElementById(targetId);
                 if(targetSection) {
                     targetSection.style.display = 'block';
-                    // 确保滚动到顶部查看新模块
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    // 滚动到流程详情开始位置
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
-
-                menuItems.forEach(item => {
-                    item.classList.remove('active');
-                    if (item.getAttribute('data-target') === targetId) {
-                        item.classList.add('active');
-                    }
-                });
             }
 
             menuItems.forEach(item => {
@@ -436,10 +433,12 @@
                 });
             });
 
-            // 初始加载时显示第一个section
-            showSection('general');
+            // 初始加载时确保滚动到顶部（方便查看应用卡片）
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     </script>
 
 </body>
 </html>
+
+```
