@@ -5,205 +5,193 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DodoWheels 运营系统集成管理规范 (Odoo/QBO)</title>
     <style>
-        /* 1. Odoo 浅色基础配色 */
+        /* 1. 基础 Mac 暗黑配色 */
         body {
-            font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
+            font-family: 'SF Pro Text', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f7f7f7; /* 极浅灰色背景 */
-            color: #333333;
+            background-color: #1a1a1a; /* 暗黑背景 */
+            color: #f0f0f0; /* 亮文本 */
         }
         .container {
             display: flex;
             min-height: 100vh;
         }
-
-        /* 2. Odoo 强调色定义 */
+        
+        /* 2. Mac/蓝色强调色 */
         :root {
-            --odoo-green: #4CAF50; /* Odoo 绿色 */
-            --odoo-blue: #008784; /* Odoo 蓝绿色 */
-            --highlight-color: #e0f7e0; /* 选中/悬停浅绿 */
-            --sidebar-bg: #ffffff;
-            --content-bg: #f7f7f7;
-            --table-header-bg: #f0f0f0;
-            --note-bg: #fffbe6; /* 提醒黄色背景 */
-            --note-border: #ffcc00; /* 提醒黄色边框 */
-            --text-color: #333333;
-            --flow-box-bg: #ffffff; /* 流程图方框白色背景 */
-            --flow-border-color: #cccccc;
-            --flow-arrow-color: var(--odoo-blue); 
-            --system-odoo: #4CAF50; /* Odoo 系统颜色 (绿色) */
-            --system-qbo: #008784; /* QBO 系统颜色 (蓝绿色/海蓝) */
-            --system-web: #FFA726; /* Website/电商系统 (橙色) */
-            --danger-color: #E53935;
+            --accent-color: #007aff; /* Mac 蓝色 */
+            --highlight-color: #0060c0;
+            --sidebar-bg: #222222;
+            --content-bg: #1a1a1a; /* 保持内容区域背景一致 */
+            --card-bg: #282828; /* Odoo Dashboard 风格卡片背景 */
+            --table-header-bg: #383838;
+            --note-bg: #333333;
+            --note-border: #ffcc00;
+            --text-color: #f0f0f0;
+            --flow-box-bg: #3c3c3c; /* 流程图方框背景 */
+            --flow-arrow-color: #00bfff; /* 流程箭头颜色 */
+            --system-odoo: #4cd964; /* Odoo/WEB系统颜色 (绿色) */
+            --system-qbo: #ff9500; /* QBO系统颜色 (橙色) */
+            --system-web: #ffcc00; /* Website/电商系统 (黄色) */
         }
 
-        /* 头部样式 - 简洁扁平化 */
+        /* 头部样式 */
         .header {
-            background-color: var(--odoo-blue); /* 使用Odoo Blue */
+            background-color: var(--accent-color);
             color: white;
             padding: 15px;
             text-align: center;
             font-size: 1.6em;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
             font-weight: 500;
         }
 
-        /* 侧边菜单栏 - 简洁白色 */
+        /* 侧边菜单栏 */
         .sidebar {
             width: 280px;
             background-color: var(--sidebar-bg);
-            padding: 15px 0;
-            box-shadow: 1px 0 5px rgba(0, 0, 0, 0.05);
+            padding: 15px;
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.5);
             flex-shrink: 0;
         }
         .sidebar-title {
-            color: #888888;
+            color: #aaaaaa;
             padding: 10px 15px;
             font-size: 0.85em;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-top: 10px;
-            border-bottom: 1px solid #eeeeee;
+            border-bottom: 1px solid #333;
         }
         .sidebar a {
-            display: flex; /* 使用 flex 实现对齐 */
-            align-items: center;
-            gap: 10px; /* 图标和文字间距 */
-            margin: 0;
+            display: block;
+            margin: 5px 0;
             padding: 12px 15px;
             text-decoration: none;
             color: var(--text-color);
-            border-radius: 0; /* 取消圆角，更扁平 */
+            border-radius: 8px;
             transition: background-color 0.2s, color 0.2s;
             font-size: 0.95em;
         }
         .sidebar a:hover {
-            background-color: #f0f0f0;
-            color: var(--odoo-blue);
+            background-color: #3d3d3d;
+            color: var(--accent-color);
         }
         .sidebar a.active {
-            background-color: var(--highlight-color); /* 浅绿背景 */
-            color: var(--odoo-blue);
-            border-left: 4px solid var(--odoo-green); /* Odoo 风格的左侧强调条 */
-            font-weight: 600;
-        }
-        .sidebar a.active:hover {
-             background-color: var(--highlight-color);
+            background-color: var(--highlight-color);
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            font-weight: 500;
         }
 
-        /* 主内容区域 */
+        /* 主内容区域 - 模仿 Odoo 仪表板布局 */
         .main-content {
             flex-grow: 1;
             padding: 30px 40px;
             background-color: var(--content-bg);
+            /* 使用 Grid 布局适应卡片 */
+            display: grid;
+            grid-template-columns: 1fr; 
+            gap: 30px; 
         }
+        /* Odoo Dashboard 风格卡片 */
+        .content-section {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
 
         /* 标题和文字样式 */
         h2 {
-            color: var(--odoo-blue);
-            border-bottom: 2px solid #dddddd;
+            color: var(--accent-color);
+            border-bottom: 3px solid #3d3d3d;
             padding-bottom: 10px;
             margin-top: 0;
             font-weight: 600;
-            font-size: 1.8em;
         }
         h3 {
-            color: var(--text-color);
+            color: #d0d0d0;
             margin-top: 25px;
-            border-left: 4px solid var(--odoo-green); /* Odoo 绿色强调 */
+            border-left: 5px solid var(--accent-color);
             padding-left: 10px;
             font-size: 1.3em;
-            font-weight: 600;
-        }
-        ul, ol {
-            padding-left: 20px;
-            line-height: 1.6;
-        }
-        li {
-            margin-bottom: 8px;
         }
         .responsibility {
             font-weight: bold;
-            color: var(--odoo-blue);
+            color: var(--system-odoo); /* 负责人使用绿色 */
         }
         .process-step {
             font-weight: bold;
-            color: #333333;
+            color: var(--accent-color);
         }
-
-        /* 系统标签 - 扁平化，适应浅色背景 */
         .system-tag {
             padding: 3px 6px;
-            border-radius: 3px;
+            border-radius: 4px;
             font-size: 0.8em;
             font-weight: bold;
             margin-left: 5px;
             text-transform: uppercase;
-            color: white;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
-        .odoo-tag { background-color: var(--system-odoo); }
-        .qbo-tag { background-color: var(--system-qbo); }
-        .web-tag { background-color: var(--system-web); }
+        .odoo-tag { background-color: var(--system-odoo); color: #000; }
+        .qbo-tag { background-color: var(--system-qbo); color: #000; }
+        .web-tag { background-color: var(--system-web); color: #000; }
 
-        /* 流程图样式 - 清晰扁平 */
+        /* 流程图样式 - 居中且突出 */
         .flowchart-container {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: center; /* 核心：水平居中 */
             margin: 30px 0;
-            padding: 20px;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            background-color: white;
+            padding: 10px;
+            border: 1px dashed #444;
+            border-radius: 8px;
+            background-color: #333333; /* 流程图区域稍亮 */
         }
         .flow-step {
             width: 80%;
             max-width: 450px;
             background-color: var(--flow-box-bg);
-            border: 1px solid var(--flow-border-color);
-            border-radius: 4px;
+            border: 2px solid var(--accent-color);
+            border-radius: 8px;
             padding: 15px;
             text-align: center;
             margin-bottom: 15px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
             position: relative;
             font-weight: 500;
-            line-height: 1.4;
+        }
+        /* 确保流程图中的图标/文字也是居中对齐的 */
+        .flow-step p {
+            margin: 0;
         }
         .flow-connector {
             width: 0;
-            height: 25px;
+            height: 30px;
             border-left: 2px solid var(--flow-arrow-color);
             position: relative;
-            margin-bottom: 5px;
         }
         .flow-connector::after {
             content: '';
             position: absolute;
             top: 100%;
-            left: -5px;
-            border-width: 5px;
+            left: -6px;
+            border-width: 6px;
             border-style: solid;
             border-color: var(--flow-arrow-color) transparent transparent transparent;
         }
-        
-        /* 提示框样式 */
         .note {
             background-color: var(--note-bg);
             color: var(--text-color);
             padding: 15px;
-            border-radius: 4px;
+            border-radius: 6px;
             border-left: 5px solid var(--note-border);
             margin: 20px 0;
             font-size: 0.95em;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
-        .alert-danger { 
-            background-color: #ffebee;
-            border-left: 5px solid var(--danger-color); 
-        }
+        .alert-danger { border-left: 5px solid #ff3b30; }
     </style>
 </head>
 <body>
@@ -263,7 +251,7 @@
                 <ul>
                     <li><span class="responsibility">SKU 准确性：</span> 产品 SKU 必须在 <span class="system-tag odoo-tag">Odoo</span>、<span class="system-tag web-tag">Website</span> 和 <span class="system-tag qbo-tag">QBO</span> 中**完全一致**，这是后续所有流程的基础。</li>
                     <li><span class="responsibility">时效性：</span> 采购启动海运当天，须向供应商索取商业发票。产品信息必须在**货物到港前**创建完毕。</li>
-                    <li><span class="responsibility">直采订单：</span> 直采订单（Direct Shipments）**无需创建 PO**，但仍需确保产品信息在各系统中存在。</li>
+                    <li><span class="responsibility">直采订单：** 直采订单（Direct Shipments）**无需创建 PO**，但仍需确保产品信息在各系统中存在。</li>
                 </ul>
             </div>
 
@@ -355,7 +343,11 @@
                 sections.forEach(section => {
                     section.style.display = 'none';
                 });
-                document.getElementById(targetId).style.display = 'block';
+                // 使用 fadeIn 效果（可选）
+                const targetSection = document.getElementById(targetId);
+                if(targetSection) {
+                    targetSection.style.display = 'block';
+                }
 
                 menuItems.forEach(item => {
                     item.classList.remove('active');
