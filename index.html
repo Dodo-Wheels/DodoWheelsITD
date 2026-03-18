@@ -12,6 +12,7 @@
             --neon-purple: #bd00ff;
             --neon-green: #00ff88;
             --neon-orange: #ff9d00;
+            --neon-gold: #ffcc00;
             --text-main: #ffffff;
             --text-dim: #a1a1a6;
         }
@@ -42,38 +43,52 @@
             z-index: 1000; background: #000; transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1);
         }
         .login-card {
-            display: flex; width: 850px; height: 500px; background: rgba(10,10,10,0.9);
+            display: flex; width: 1000px; height: 620px; background: rgba(10,10,10,0.9);
             border: 1px solid rgba(0, 122, 255, 0.3); border-radius: 40px; overflow: hidden;
             box-shadow: 0 0 80px rgba(0, 122, 255, 0.15); backdrop-filter: blur(30px);
         }
 
         /* --- 协同工作动画区 --- */
         .anim-side {
-            width: 380px; background: rgba(0,0,0,0.3); border-right: 1px solid rgba(0, 122, 255, 0.1);
-            position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 40px;
+            width: 450px; background: rgba(0,0,0,0.3); border-right: 1px solid rgba(0, 122, 255, 0.1);
+            position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px;
         }
-        .worker-row { display: flex; align-items: center; gap: 20px; width: 80%; }
+        
+        /* 角色网格布局 */
+        .role-grid { display: flex; flex-direction: column; align-items: center; gap: 25px; width: 100%; }
+        .role-row { display: flex; justify-content: center; gap: 15px; width: 100%; }
+
+        .worker-item { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 110px; }
         .icon-box { 
-            width: 60px; height: 60px; border-radius: 15px; border: 1px solid var(--neon-blue);
-            display: flex; justify-content: center; align-items: center; font-size: 24px;
+            width: 55px; height: 55px; border-radius: 15px; border: 1px solid var(--neon-blue);
+            display: flex; justify-content: center; align-items: center; font-size: 22px;
             background: rgba(0, 122, 255, 0.1); position: relative;
         }
-        .icon-box::after { content: ''; position: absolute; inset: -5px; border-radius: 18px; border: 1px solid rgba(0,122,255,0.2); animation: pulse 2s infinite; }
+        .icon-box::after { content: ''; position: absolute; inset: -4px; border-radius: 18px; border: 1px solid rgba(0,122,255,0.2); animation: pulse 2s infinite; }
         
-        /* IT Animation */
+        /* 特殊颜色 */
+        .gold-border { border-color: var(--neon-gold); background: rgba(255, 204, 0, 0.1); }
+        .gold-border::after { border-color: rgba(255, 204, 0, 0.3); }
+
+        /* 动画定义 */
         .it-hand { animation: typing 0.2s infinite alternate; }
-        @keyframes typing { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+        @keyframes typing { from { transform: translateY(0); } to { transform: translateY(-4px); } }
         
-        /* Warehouse Animation */
         .wh-box { animation: lift 1.5s infinite ease-in-out; }
-        @keyframes lift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes lift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
-        /* CS Animation */
-        .cs-wave { width: 10px; height: 10px; background: var(--neon-blue); border-radius: 50%; animation: sonar 1.5s infinite; opacity: 0; }
-        @keyframes sonar { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
+        .cs-wave { width: 8px; height: 8px; background: var(--neon-blue); border-radius: 50%; animation: sonar 1.5s infinite; opacity: 0; }
+        @keyframes sonar { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(2.2); opacity: 0; } }
 
-        .worker-info b { display: block; font-size: 14px; color: #fff; }
-        .worker-info span { font-size: 11px; color: var(--text-dim); }
+        .driver-steer { animation: rotate 3s infinite ease-in-out; }
+        @keyframes rotate { 0%, 100% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } }
+
+        .money-float { animation: float 2s infinite ease-in-out; }
+        @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-5px) scale(1.1); } }
+
+        .worker-info { text-align: center; }
+        .worker-info b { display: block; font-size: 11px; color: #fff; letter-spacing: 0.5px; }
+        .worker-info span { font-size: 9px; color: var(--text-dim); white-space: nowrap; }
 
         /* --- 主门户布局 --- */
         #portal-section {
@@ -89,7 +104,6 @@
         .lang-btn { padding: 8px 15px; border: none; background: transparent; color: var(--text-dim); cursor: pointer; border-radius: 10px; font-weight: 800; font-size: 12px; transition: 0.3s; }
         .lang-btn.active { background: #fff; color: #000; box-shadow: 0 4px 15px rgba(255,255,255,0.2); }
         
-        /* 退出按钮样式 */
         .exit-btn {
             background: rgba(255, 59, 48, 0.1); color: #ff3b30; border: 1px solid rgba(255, 59, 48, 0.3);
             padding: 8px 15px; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: bold;
@@ -176,19 +190,43 @@
     <div id="login-wrapper">
         <div class="login-card">
             <div class="anim-side">
-                <div class="worker-row">
-                    <div class="icon-box">👨‍💻<div class="it-hand" style="position:absolute; bottom:5px; right:5px; font-size:12px;">⌨️</div></div>
-                    <div class="worker-info"><b>IT DEPT</b><span>System Maintenance</span></div>
+                <div class="role-grid">
+                    <div class="worker-item" style="margin-bottom: 10px;">
+                        <div class="icon-box gold-border">👑<div style="position:absolute; bottom:2px; right:2px; font-size:10px;">✨</div></div>
+                        <div class="worker-info"><b>OWNER</b><span>Strategic Decision</span></div>
+                    </div>
+
+                    <div class="role-row">
+                        <div class="worker-item">
+                            <div class="icon-box">👨‍💻<div class="it-hand" style="position:absolute; bottom:5px; right:5px; font-size:12px;">⌨️</div></div>
+                            <div class="worker-info"><b>IT DEPT</b><span>Maintenance</span></div>
+                        </div>
+                        <div class="worker-item">
+                            <div class="icon-box">📦<div class="wh-box" style="position:absolute; top:5px; right:5px; font-size:12px;">🛠️</div></div>
+                            <div class="worker-info"><b>WAREHOUSE</b><span>Inventory</span></div>
+                        </div>
+                        <div class="worker-item">
+                            <div class="icon-box">🎧<div class="cs-wave" style="position:absolute; top:18px; right:18px;"></div></div>
+                            <div class="worker-info"><b>SUPPORT</b><span>Clients</span></div>
+                        </div>
+                    </div>
+
+                    <div class="role-row">
+                        <div class="worker-item">
+                            <div class="icon-box">🚢<div style="position:absolute; bottom:5px; right:5px; font-size:12px;">🌍</div></div>
+                            <div class="worker-info"><b>LOGISTICS</b><span>Import/Export</span></div>
+                        </div>
+                        <div class="worker-item">
+                            <div class="icon-box">🚚<div class="driver-steer" style="position:absolute; bottom:2px; right:2px; font-size:12px;">🎡</div></div>
+                            <div class="worker-info"><b>DRIVER</b><span>Fleet Ops</span></div>
+                        </div>
+                        <div class="worker-item">
+                            <div class="icon-box">💰<div class="money-float" style="position:absolute; top:5px; right:5px; font-size:12px;">📈</div></div>
+                            <div class="worker-info"><b>FINANCE</b><span>Accounting</span></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="worker-row">
-                    <div class="icon-box">📦<div class="wh-box" style="position:absolute; top:5px; right:5px; font-size:12px;">🛠️</div></div>
-                    <div class="worker-info"><b>WAREHOUSE</b><span>Inventory Syncing</span></div>
-                </div>
-                <div class="worker-row">
-                    <div class="icon-box">🎧<div class="cs-wave" style="position:absolute; top:20px; right:20px;"></div></div>
-                    <div class="worker-info"><b>SUPPORT</b><span>Client Processing</span></div>
-                </div>
-                <div style="position:absolute; bottom:20px; color:rgba(0,122,255,0.5); font-size:10px; letter-spacing:2px;">COLLABORATION MODE ACTIVE</div>
+                <div style="position:absolute; bottom:20px; color:rgba(0,122,255,0.4); font-size:9px; letter-spacing:2px; font-weight: bold;">ENTERPRISE COLLABORATION ACTIVE</div>
             </div>
 
             <div style="flex:1; padding: 60px; display:flex; flex-direction:column; justify-content:center;">
@@ -334,7 +372,7 @@
         const translations = {
             zh: {
                 "m1-t": "派送管理系统", "m1-d": "实时调度与 AI 路径规划控制台",
-                "m2-t": "仓库管理 system", "m2-d": "数字化资产追踪与库存效能分析",
+                "m2-t": "仓库管理系统", "m2-d": "数字化资产追踪与库存效能分析",
                 "m3-t": "知识库系统", "m3-d": "企业知识库与员工自动化认证",
                 "admin-title": "以下APP是DodoWheels服务器专用", "tim-msg": "💡 服务器专用，任何问题联系 Tim",
                 "cat-web": "网站相关 APP (14)", "cat-qbo": "QBO 相关 APP (7)", "cat-other": "其他相关 APP (7)",
