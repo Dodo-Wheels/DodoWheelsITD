@@ -3,75 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels 企业生态系统门户</title>
+    <title>DodoWheels | 身份验证终端</title>
     <style>
-        /* --- 核心样式重置 --- */
         :root {
-            --bg-color: #050509;
-            --primary-gradient: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-            --secondary-gradient: linear-gradient(135deg, #ea00ff 0%, #7300ff 100%);
-            --accent-gradient: linear-gradient(135deg, #fff700 0%, #ff8c00 100%);
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --bg-color: #010103;
+            --primary-geo: #00f2fe; /* 青色 - 派送/科技 */
+            --primary-light: rgba(0, 242, 254, 0.2);
+            --error-color: #ff3b3b;
+            --success-color: #00ff88;
             --text-main: #ffffff;
             --text-muted: #8b9bb4;
             --font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.05);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            outline: none;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             font-family: var(--font-family);
             height: 100vh;
-            overflow: hidden;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
             --webkit-font-smoothing: antialiased;
         }
 
-        /* --- 动态粒子背景 Canvas --- */
-        #particle-canvas {
+        /* --- 背景 3D 地球（Canvas 模拟） --- */
+        #globe-canvas {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            left: -10%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60vh;
+            height: 60vh;
+            opacity: 0.4;
             z-index: 1;
-            opacity: 0.6;
         }
 
-        /* --- 主体容器 --- */
-        .main-container {
+        /* --- 背景氛围光圈 --- */
+        .ambient-glow {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            background: 
+                radial-gradient(circle at 10% 50%, rgba(0, 242, 254, 0.15) 0%, rgba(0,0,0,0) 40%),
+                radial-gradient(circle at 90% 10%, rgba(115, 0, 255, 0.1) 0%, rgba(0,0,0,0) 30%);
+            z-index: 0;
+        }
+
+        /* --- 主登录容器 (Glassmorphism) --- */
+        .login-master-container {
             position: relative;
-            z-index: 2;
+            z-index: 10;
+            display: flex;
+            width: 900px;
+            height: 550px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        /* --- 左侧：品牌与状态展示 --- */
+        .login-info-section {
+            flex: 1;
+            padding: 50px;
             display: flex;
             flex-direction: column;
-            height: 100%;
-            padding: 40px;
-            background: radial-gradient(circle at 50% 50%, rgba(20, 20, 35, 0.5) 0%, rgba(5, 5, 9, 1) 100%);
-        }
-
-        /* --- 头部导航 --- */
-        header {
-            display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 60px;
-            padding: 0 20px;
+            border-right: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.2);
         }
 
-        .logo {
-            font-size: 28px;
+        .brand-logo {
+            font-size: 24px;
             font-weight: 800;
             letter-spacing: -1px;
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             display: flex;
@@ -79,466 +94,408 @@
             gap: 10px;
         }
         
-        .logo::before {
+        .brand-logo::before {
             content: '';
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            background: var(--primary-gradient);
+            width: 15px;
+            height: 15px;
+            background: var(--primary-geo);
             border-radius: 50%;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.6);
+            box-shadow: 0 0 15px var(--primary-geo);
         }
 
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: var(--glass-bg);
-            padding: 10px 20px;
-            border-radius: 40px;
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(10px);
-        }
-
-        .avatar {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: var(--secondary-gradient);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .welcome-text {
+        .terminal-status {
+            font-family: 'Courier New', Courier, monospace; /* 模拟终端字体 */
+            font-size: 12px;
             color: var(--text-muted);
-            font-size: 14px;
+            line-height: 1.8;
         }
 
-        .user-name {
-            color: var(--text-main);
-            font-weight: 600;
+        .status-line { display: block; opacity: 0; animation: typeIn 0.5s forwards; }
+        .status-line:nth-child(1) { animation-delay: 0.2s; }
+        .status-line:nth-child(2) { animation-delay: 0.4s; }
+        .status-line:nth-child(3) { animation-delay: 0.6s; }
+        .status-line:nth-child(4) { animation-delay: 0.8s; color: var(--primary-geo); }
+
+        @keyframes typeIn {
+            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(5px); }
         }
 
-        /* --- 标题区域 --- */
-        .hero-section {
-            text-align: center;
-            margin-bottom: 80px;
+        /* --- 右侧：验证交互区域 --- */
+        .login-auth-section {
+            flex: 1.2;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
         }
 
-        .hero-section h1 {
-            font-size: 48px;
-            font-weight: 800;
-            letter-spacing: -1.5px;
-            margin-bottom: 15px;
+        .auth-header {
+            margin-bottom: 40px;
+        }
+
+        .auth-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
             background: linear-gradient(180deg, #fff 0%, #bbb 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .hero-section p {
+        .auth-header p {
             color: var(--text-muted);
-            font-size: 18px;
-            max-width: 600px;
-            margin: 0 auto;
-            font-weight: 300;
-        }
-
-        /* --- 系统卡片网格布局 --- */
-        .systems-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-            perspective: 1000px; /* 为3D效果添加透视 */
-        }
-
-        /* --- 卡片基础样式 (Glassmorphism) --- */
-        .system-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 40px;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            display: flex;
-            flex-direction: column;
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            text-decoration: none;
-            transform-style: preserve-3d; /* 开启3D空间 */
-        }
-
-        /* 卡片悬停效果 */
-        .system-card:hover {
-            transform: translateY(-10px) rotateX(5deg) rotateY(2deg);
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        /* 卡片背景光晕 */
-        .system-card::before {
-            content: '';
-            position: absolute;
-            width: 150px;
-            height: 150px;
-            background: var(--card-color, var(--primary-gradient));
-            filter: blur(100px);
-            opacity: 0.1;
-            top: -50px;
-            right: -50px;
-            transition: opacity 0.5s;
-        }
-
-        .system-card:hover::before {
-            opacity: 0.3;
-        }
-
-        /* 图标区域 */
-        .card-icon {
-            width: 60px;
-            height: 60px;
-            margin-bottom: 30px;
-            position: relative;
-            transform: translateZ(20px); /* 悬浮感 */
-        }
-
-        /* 标题和描述 */
-        .system-card h2 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--text-main);
-            letter-spacing: -0.5px;
-            transform: translateZ(15px);
-        }
-
-        .system-card p {
-            font-size: 15px;
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: auto; /* 将按钮推到底部 */
-            font-weight: 300;
-            transform: translateZ(10px);
-        }
-
-        /* 进入系统按钮样式 */
-        .enter-btn {
-            margin-top: 30px;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
             font-size: 14px;
-            font-weight: 600;
-            background: var(--card-color, var(--primary-gradient));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            transition: gap 0.3s;
-            transform: translateZ(10px);
+            font-weight: 300;
         }
 
-        .enter-btn svg {
-            width: 16px;
-            height: 16px;
-            fill: none;
-            stroke: url(#gradient-id); /* 初始状态，会被JS修改 */
-            stroke-width: 2;
-            transition: transform 0.3s;
-        }
-        
-        .enter-btn svg path {
-             stroke: currentColor; /* 让SVG继承文本渐变色，需要配合JS修正 */
+        /* --- 输入区域 --- */
+        .input-group {
+            width: 100%;
+            position: relative;
+            margin-bottom: 20px;
         }
 
-        .system-card:hover .enter-btn {
+        .input-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary-geo);
+            margin-bottom: 8px;
+            display: block;
+            margin-left: 5px;
+        }
+
+        .geo-input {
+            width: 100%;
+            padding: 18px 25px;
+            font-size: 18px;
+            letter-spacing: 5px; /* 密码感 */
+            font-family: 'Courier New', Courier, monospace;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+
+        .geo-input:focus {
+            border-color: var(--primary-geo);
+            background: rgba(0, 242, 254, 0.03);
+            box-shadow: 0 0 15px var(--primary-light);
+        }
+
+        /* 错误状态 */
+        .input-group.error .geo-input {
+            border-color: var(--error-color);
+            box-shadow: 0 0 15px rgba(255, 59, 59, 0.2);
+            animation: shake 0.4s ease;
+        }
+
+        /* 成功状态 */
+        .input-group.success .geo-input {
+            border-color: var(--success-color);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+        }
+
+        /* --- 生物识别模拟区 (高大上核心) --- */
+        .biometric-area {
+            width: 100%;
+            display: flex;
+            align-items: center;
             gap: 15px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
         }
 
-        .system-card:hover .enter-btn svg {
-            transform: translateX(5px);
+        .biometric-icon {
+            width: 40px;
+            height: 40px;
+            transition: all 0.3s ease;
         }
 
-        /* --- 各系统特定配色与SVG图标 --- */
-        
-        /* 1. 派送系统 - 青蓝色 */
-        .sys-delivery {
-            --card-color: var(--primary-gradient);
-        }
-        
-        /* 2. 仓管系统 - 紫色 */
-        .sys-warehouse {
-            --card-color: var(--secondary-gradient);
-        }
-        
-        /* 3. 学习系统 - 橙黄色 */
-        .sys-learning {
-            --card-color: var(--accent-gradient);
-        }
-
-        /* SVG 图标样式修正 */
-        .icon-svg {
+        .biometric-icon svg {
             width: 100%;
             height: 100%;
+            fill: none;
+            stroke: var(--text-muted);
+            stroke-width: 1;
         }
 
-        /* 页脚 */
-        footer {
+        .biometric-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* 生物识别激活/错误状态 */
+        .input-group.error + .biometric-area .biometric-icon svg { stroke: var(--error-color); }
+        .input-group.success + .biometric-area .biometric-icon svg { stroke: var(--success-color); }
+        .input-group.success + .biometric-area .biometric-icon { animation: pulse 1s infinite; }
+
+        /* --- 登录按钮 --- */
+        .login-btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #000;
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #7300ff 100%);
+            background-size: 200% auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn:hover {
+            background-position: right center;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .login-btn:active { transform: translateY(1px); }
+
+        /* 按钮加载/成功状态 */
+        .login-btn.processing { pointer-events: none; opacity: 0.7; color: rgba(0,0,0,0.5); }
+        .login-btn.success { background: var(--success-color); color: #000; box-shadow: 0 0 30px rgba(0, 255, 136, 0.5); }
+
+        /* 页脚版权 */
+        .login-footer {
             position: absolute;
             bottom: 20px;
-            left: 0;
             width: 100%;
             text-align: center;
-            font-size: 12px;
-            color: rgba(255,255,255,0.2);
-            z-index: 2;
+            font-size: 10px;
+            color: rgba(255,255,255,0.15);
             letter-spacing: 1px;
+            z-index: 5;
+        }
+
+        /* --- 动画关键帧 --- */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 255, 136, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
         }
 
         /* --- 响应式适配 --- */
-        @media (max-width: 1024px) {
-            .systems-grid {
-                gap: 20px;
-                padding: 0 20px;
-            }
-            .hero-section h1 { font-size: 36px; }
-        }
-
-        @media (max-width: 768px) {
-            body { overflow: auto; }
-            .main-container { height: auto; padding: 20px; }
-            .systems-grid {
-                grid-template-columns: 1fr;
-                perspective: none;
-            }
-            header { margin-bottom: 40px; flex-direction: column; gap: 20px; }
-            .system-card:hover { transform: translateY(-5px); }
+        @media (max-width: 950px) {
+            .login-master-container { width: 90%; flex-direction: column; height: auto; }
+            .login-info-section { border-right: none; border-bottom: 1px solid var(--glass-border); padding: 30px; }
+            #globe-canvas { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="particle-canvas"></canvas>
+    <div class="ambient-glow"></div>
+    <canvas id="globe-canvas"></canvas>
 
-    <div class="main-container">
-        <header>
-            <div class="logo">DodoWheels</div>
-            <div class="user-info">
-                <span class="welcome-text">欢迎回来,</span>
-                <span class="user-name">Admin</span>
-                <div class="avatar">A</div>
-            </div>
-        </header>
-
-        <section class="hero-section">
-            <h1>数字生态系统门户</h1>
-            <p>集成化智能管理平台，连接派送、仓储与持续学习，驱动业务高效运转。</p>
-        </section>
-
-        <section class="systems-grid">
+    <main class="login-master-container">
+        
+        <section class="login-info-section">
+            <div class="brand-logo">DodoWheels</div>
             
-            <a href="#" class="system-card sys-delivery">
-                <div class="card-icon">
-                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="grad-delivery" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#00f2fe;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#4facfe;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <path d="M9 20L3 17V4L9 7M9 20L15 17M9 20V7M15 17L21 20V7L15 4M15 17V4M9 7L15 4" stroke="url(#grad-delivery)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M15 10L18 13L21 10" stroke="url(#grad-delivery)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <h2>DodoWheels-派送系统</h2>
-                <p>实时物流追踪、智能路径规划、运力调度与终端签收管理。其于AI算法优化每一单派送效率。</p>
-                <div class="enter-btn">
-                    进入系统
-                    <svg viewBox="0 0 16 16"><path d="M6 12l4-4-4-4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-            </a>
-
-            <a href="#" class="system-card sys-warehouse">
-                <div class="card-icon">
-                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="grad-warehouse" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#ea00ff;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#7300ff;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.73z" stroke="url(#grad-warehouse)" stroke-width="1.5"/>
-                        <path d="M3.27 6.96L12 12.01l8.73-5.05" stroke="url(#grad-warehouse)" stroke-width="1.5"/>
-                        <path d="M12 22.08V12" stroke="url(#grad-warehouse)" stroke-width="1.5"/>
-                    }
-                    </svg>
-                </div>
-                <h2>DodoWheels-仓管系统</h2>
-                <p>数字化库存控制、入库出库管理、全自动盘点与空间优化。实现仓储全流程透明化与高精度。</p>
-                <div class="enter-btn">
-                    进入系统
-                    <svg viewBox="0 0 16 16"><path d="M6 12l4-4-4-4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-            </a>
-
-            <a href="#" class="system-card sys-learning">
-                <div class="card-icon">
-                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="grad-learning" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#fff700;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <path d="M22 19C22 19.5304 21.7893 20.0391 21.4142 20.4142C21.0391 20.7893 20.5304 21 20 21H4C3.46957 21 2.96086 20.7893 2.58579 20.4142C2.21071 20.0391 2 19.5304 2 19V5C2 4.46957 2.21071 3.96086 2.58579 3.58579C2.96086 3.21071 3.46957 3 4 3H10L14 7H20C20.5304 7 21.0391 7.21071 21.4142 7.58579C21.7893 7.96086 22 8.46957 22 9V19Z" stroke="url(#grad-learning)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M11 11L9 14H13L11 17" stroke="url(#grad-learning)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <h2>DodoWheels-学习系统</h2>
-                <p>员工在线培训、岗位技能考核、驾驶员安全教育与职业发展规划。打造学习型组织，持续提升效能。</p>
-                <div class="enter-btn">
-                    进入系统
-                    <svg viewBox="0 0 16 16"><path d="M6 12l4-4-4-4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-            </a>
-
+            <div class="terminal-status">
+                <span class="status-line">> INIT TERMINAL PROTOCOL... [OK]</span>
+                <span class="status-line">> ESTABLISHING SECURE LINK... [OK]</span>
+                <span class="status-line">> AWAITING ACCESS CODE...</span>
+                <span class="status-line">> SYSTEM: DODOWHEELS ECOSYSTEM</span>
+            </div>
         </section>
 
-        <footer>
-            POWERED BY DODOWHEELS TECHNOLOGY © 2023. ALL RIGHTS RESERVED.
-        </footer>
-    </div>
+        <section class="login-auth-section">
+            <div class="auth-header">
+                <h1>身份验证</h1>
+                <p>请输入您的安全访问码以继续</p>
+            </div>
+
+            <div class="input-group" id="input-group">
+                <label class="input-label" for="access-code">Access Code</label>
+                <input type="password" id="access-code" class="geo-input" placeholder="••••" maxlength="10">
+            </div>
+
+            <div class="biometric-area">
+                <div class="biometric-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M7 10.5V6.5a2.5 2.5 0 0 1 5 0v4m-5 0h5m-5 0a3.5 3.5 0 1 1 7 0v1.5m0-1.5v-1a2.5 2.5 0 0 1 5 0v2.5M12 12v1.5m0-1.5a3.5 3.5 0 1 1 7 0v1.5m-7-1.5V6.5a1.5 1.5 0 0 0-3 0v4m3 0V12" stroke-linecap="round"/>
+                        <path d="M12 21.5c-4 0-7-2.5-7-6v-1.5h14v1.5c0 3.5-3 6-7 6Z"/>
+                    </svg>
+                </div>
+                <div class="biometric-text">
+                    <span style="color:white; font-weight:600;">模拟生物感应</span><br>
+                    需配合访问码进行多重协议校验
+                </div>
+            </div>
+
+            <button class="login-btn" id="login-btn">验证访问权限</button>
+
+        </section>
+    </main>
+
+    <footer class="login-footer">
+        SECURE ACCESS TERMINAL v2.1 | DODOWHEELS TECHNOLOGY
+    </footer>
 
     <script>
-        // --- 1. 动态粒子背景脚本 ---
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height, particles;
+        // --- 核心登录逻辑 ---
+        const accessCodeInput = document.getElementById('access-code');
+        const loginBtn = document.getElementById('login-btn');
+        const inputGroup = document.getElementById('input-group');
 
-        // 设置画布大小
-        function setCanvasSize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
+        // 正确的访问码
+        const VALID_CODE = 'dodo';
 
-        // 粒子对象
-        function Particle(x, y) {
-            this.x = x || Math.random() * width;
-            this.y = y || Math.random() * height;
-            this.vx = (Math.random() - 0.5) * 0.3; // 极慢的速度
-            this.vy = (Math.random() - 0.5) * 0.3;
-            this.radius = Math.random() * 1.5;
-        }
+        loginBtn.addEventListener('click', performLogin);
 
-        Particle.prototype.draw = function() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.random * Math.PI * 2);
-            ctx.fillStyle = 'rgba(100, 150, 255, 0.3)';
-            ctx.fill();
-        };
+        // 支持回车键登录
+        accessCodeInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') performLogin();
+        });
 
-        Particle.prototype.update = function() {
-            this.x += this.vx;
-            this.y += this.vy;
+        function performLogin() {
+            const code = accessCodeInput.value.trim().toLowerCase(); // 统一转小写
 
-            // 边界检测
-            if (this.x < 0 || this.x > width) this.vx = -this.vx;
-            if (this.y < 0 || this.y > height) this.vy = -this.vy;
-        };
+            // 清除之前的状态
+            inputGroup.classList.remove('error', 'success');
+            loginBtn.innerText = "验证访问权限";
+            loginBtn.classList.remove('processing', 'success');
 
-        // 初始化
-        function initParticles() {
-            setCanvasSize();
-            particles = [];
-            const particleCount = Math.max(50, Math.floor(width * height / 15000)); // 根据屏幕大小调整数量
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
+            if (!code) {
+                showError("请输入访问码");
+                return;
             }
-        }
 
-        // 绘制连接线
-        function drawLines() {
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const p1 = particles[i];
-                    const p2 = particles[j];
-                    const dx = p1.x - p2.x;
-                    const dy = p1.y - p2.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
+            // 模拟验证过程 (高大上需要有一点点延迟)
+            loginBtn.innerText = "正在校验...";
+            loginBtn.classList.add('processing');
 
-                    if (dist < 150) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(100, 150, 255, ${0.15 * (1 - dist / 150)})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(p1.x, p1.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
-                    }
+            setTimeout(() => {
+                if (code === VALID_CODE) {
+                    showSuccess();
+                } else {
+                    showError("访问码无效，安全协议已启动");
                 }
-            }
+            }, 1200); // 1.2秒延迟模拟
         }
 
-        // 动画循环
-        function animate() {
+        function showError(msg) {
+            inputGroup.classList.add('error');
+            loginBtn.innerText = "验证失败";
+            loginBtn.classList.remove('processing');
+            accessCodeInput.value = ''; // 清空输入
+            accessCodeInput.focus();
+
+            // 3秒后尝试恢复按钮文字，但保持红色
+            setTimeout(() => {
+                if(inputGroup.classList.contains('error'))
+                    loginBtn.innerText = "重试身份验证";
+            }, 3000);
+        }
+
+        function showSuccess() {
+            inputGroup.classList.add('success');
+            loginBtn.classList.remove('processing');
+            loginBtn.classList.add('success');
+            loginBtn.innerText = "验证通过 / 正在接入...";
+
+            // 模拟门户系统接入动画，随后跳转
+            setTimeout(() => {
+                // 跳转到您的门户主页 (请确保 portal.html 文件存在)
+                window.location.href = 'portal.html'; 
+            }, 1500);
+        }
+
+
+        // --- 背景 3D 地球模拟脚本 (Canvas) ---
+        // 这是一个简单的点阵地球模拟，用于增加科技感，实际生产可用Three.js
+        const canvas = document.getElementById('globe-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function setCanvasSize() {
+            width = canvas.width = canvas.parentElement.offsetHeight * 0.6;
+            height = canvas.height = canvas.parentElement.offsetHeight * 0.6;
+        }
+
+        const points = [];
+        const numPoints = 250;
+        const radius = width * 0.45 || 150;
+
+        // 初始化点
+        for (let i = 0; i < numPoints; i++) {
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.random() * Math.PI;
+            points.push({
+                x: radius * Math.sin(phi) * Math.cos(theta),
+                y: radius * Math.sin(phi) * Math.sin(theta),
+                z: radius * Math.cos(phi),
+                originalRadius: radius * (0.95 + Math.random() * 0.1) // 轻微震动感
+            });
+        }
+
+        let angle = 0;
+
+        function drawGlobe() {
             ctx.clearRect(0, 0, width, height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
+            ctx.translate(width / 2, height / 2);
+
+            angle += 0.003; // 旋转速度
+
+            points.forEach(p => {
+                // 旋转变换
+                const x1 = p.x * Math.cos(angle) - p.z * Math.sin(angle);
+                const z1 = p.x * Math.sin(angle) + p.z * Math.cos(angle);
+                
+                // 透视投影
+                const perspective = 300 / (300 + z1);
+                const screenX = x1 * perspective;
+                const screenY = p.y * perspective;
+
+                // 绘制点，根据深度设置透明度和大小
+                const opacity = (z1 + radius) / (2 * radius); // 前亮后暗
+                ctx.beginPath();
+                ctx.arc(screenX, screenY, perspective * 1.5, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 242, 254, ${opacity * 0.5})`;
+                ctx.fill();
+                
+                // 偶而绘制连接线条增加科技感
+                if(Math.random() < 0.02 && z1 > 0) {
+                     ctx.beginPath();
+                     ctx.moveTo(screenX, screenY);
+                     ctx.lineTo(screenX + (Math.random()-0.5)*10, screenY + (Math.random()-0.5)*10);
+                     ctx.strokeStyle = `rgba(0, 242, 254, 0.1)`;
+                     ctx.lineWidth = 0.5;
+                     ctx.stroke();
+                }
             });
-            drawLines();
-            requestAnimationFrame(animate);
+
+            ctx.translate(-width / 2, -height / 2);
+            requestAnimationFrame(drawGlobe);
         }
 
-        // 事件监听
-        window.addEventListener('resize', initParticles);
-        initParticles();
-        animate();
+        window.addEventListener('resize', setCanvasSize);
+        setCanvasSize();
+        drawGlobe();
 
-
-        // --- 2. 卡片3D重力感应效果 (视差) ---
-        const cards = document.querySelectorAll('.system-card');
-
-        cards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                if (window.innerWidth < 768) return; // 移动端禁用
-
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left; // 鼠标在卡片内的X坐标
-                const y = e.clientY - rect.top;  // 鼠标在卡片内的Y坐标
-
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-
-                // 计算旋转角度 (最大 10 度)
-                const rotateX = ((y - centerY) / centerY) * -10;
-                const rotateY = ((x - centerX) / centerX) * 10;
-
-                card.style.transform = `translateY(-10px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            });
-
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'translateY(0) rotateX(0) rotateY(0)';
-            });
-        });
-        
-        // --- 3. 修正 按钮 SVG 颜色继承问题 ---
-        // 因为SVG在Defs中定义了渐变，直接在CSS中用 currentColor 比较麻烦，
-        // 这里用JS动态给每个卡片的按钮SVG内部路径设置对应的变量颜色。
-        document.querySelectorAll('.system-card').forEach(card => {
-            const btnSvgPath = card.querySelector('.enter-btn svg path');
-            const cardColor = getComputedStyle(card).getPropertyValue('--card-color');
-            
-            // 提取渐变中的结束颜色作为图标边框色 (简单处理)
-            // 实际生产中可以专门定义一个变量
-            if(cardColor.includes('4facfe')) btnSvgPath.setAttribute('stroke', '#4facfe'); // Delivery
-            if(cardColor.includes('7300ff')) btnSvgPath.setAttribute('stroke', '#7300ff'); // Warehouse
-            if(cardColor.includes('ff8c00')) btnSvgPath.setAttribute('stroke', '#ff8c00'); // Learning
-        });
     </script>
 </body>
 </html>
