@@ -1,150 +1,408 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DodoWheels自研系统平台</title>
-<style>
-    body {
-        margin: 0;
-        font-family: 'Segoe UI', Arial, sans-serif;
-        background-color: #121212;
-        color: #00bfff;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-    }
-    #loginPage {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        text-align: center;
-        padding: 0 10px;
-        box-sizing: border-box;
-    }
-    #loginPage img { width: 120px; margin-bottom: 20px; }
-    #loginPage h1 { margin-bottom: 10px; font-size: 2em; color: #1e90ff; }
-    #loginPage input { width: 100%; max-width: 300px; padding: 10px; margin: 5px 0; border-radius: 5px; border: none; outline: none; box-sizing: border-box; }
-    #loginPage button { width: 100%; max-width: 320px; padding: 10px; margin-top: 15px; border: none; border-radius: 5px; background: linear-gradient(90deg, #1e90ff, #00bfff); color: #fff; font-weight: bold; cursor: pointer; }
-    #loginPage .error { color: #ff4d4d; margin-top: 10px; display: none; }
-    #toolPage { display: none; padding: 20px; flex: 1; box-sizing: border-box; }
-    h1 { text-align: center; margin: 20px 0; font-size: 2em; }
-    .tools {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 15px;
-    }
-    .tool {
-        background: #1c1c1c;
-        border: 1px solid #00bfff50;
-        border-radius: 10px;
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 0 15px #00bfff30;
-        transition: transform 0.2s;
-        min-height: 160px;
-    }
-    .tool:hover { transform: translateY(-5px); box-shadow: 0 0 25px #00bfff70; }
-    .tool svg { width: 50px; height: 50px; margin-bottom: 10px; fill: #00bfff; }
-    .tool h3 { font-size: 1.1em; color: #00bfff; margin-bottom: 10px; text-align: center; }
-    .tool button, .tool span { width: 100%; padding: 8px 0; margin-top: 10px; font-weight: bold; text-align: center; border-radius: 5px; border: none; }
-    .tool button { background: linear-gradient(90deg, #1e90ff, #00bfff); color: #fff; cursor: pointer; }
-    .tool span { background: #444; color: #00bfff; cursor: default; }
-    a { text-decoration: none; width: 100%; }
-    @media (max-width: 1200px) { .tools { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 900px)  { .tools { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 600px)  { .tools { grid-template-columns: 1fr; } }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DodoWheels | Global Enterprise OS</title>
+    <style>
+        :root {
+            --bg-color: #010103;
+            --primary-geo: #00f2fe;
+            --secondary-purp: #7300ff;
+            --accent-gold: #fff700;
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: #8b9bb4;
+            --font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- 背景层 --- */
+        #particle-canvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; opacity: 0.4;
+        }
+
+        .ambient-glow {
+            position: absolute;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 242, 254, 0.04) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .page-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- 登录模块 --- */
+        #login-section {
+            display: flex;
+            width: 800px;
+            height: 480px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            backdrop-filter: blur(40px);
+            transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+        }
+
+        .login-left {
+            flex: 1; padding: 50px; border-right: 1px solid var(--glass-border);
+            display: flex; flex-direction: column; justify-content: space-between;
+            background: rgba(0,0,0,0.4);
+        }
+
+        .login-right { flex: 1.2; padding: 50px; display: flex; flex-direction: column; justify-content: center; }
+
+        .geo-input {
+            width: 100%; padding: 18px; background: rgba(0,0,0,0.6);
+            border: 1px solid var(--glass-border); border-radius: 16px;
+            color: white; font-size: 20px; letter-spacing: 8px; text-align: center;
+            margin: 20px 0; transition: 0.3s;
+        }
+
+        .geo-input:focus { border-color: var(--primary-geo); box-shadow: 0 0 25px rgba(0, 242, 254, 0.2); }
+
+        .login-btn {
+            padding: 18px; border-radius: 16px; border: none;
+            background: linear-gradient(135deg, var(--primary-geo), var(--secondary-purp));
+            color: #000; font-weight: 800; cursor: pointer; text-transform: uppercase;
+            letter-spacing: 2px; transition: 0.4s;
+        }
+
+        /* --- 门户模块 --- */
+        #portal-section {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 40px 60px;
+            display: none; 
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+            transform: scale(1.05);
+            transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .portal-main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            width: 100%;
+            max-width: 1300px;
+            perspective: 2000px;
+        }
+
+        .system-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 40px 30px;
+            border-radius: 24px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            transition: 0.1s ease-out;
+            transform-style: preserve-3d;
+            backdrop-filter: blur(20px);
+            cursor: pointer;
+            min-height: 320px;
+        }
+
+        .system-card:hover { 
+            border-color: rgba(255,255,255,0.4); 
+            background: rgba(255,255,255,0.08);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .system-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--theme-color), transparent);
+            animation: scan 3s infinite linear;
+        }
+
+        @keyframes scan { 0% { left: -100%; } 100% { left: 100%; } }
+
+        .card-icon { width: 45px; height: 45px; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--theme-color)); }
+        .card-data { font-family: monospace; font-size: 11px; color: var(--theme-color); margin-top: auto; display: block; padding-top: 20px; }
+        .card-link-hint { position: absolute; bottom: 15px; right: 20px; font-size: 10px; color: var(--text-muted); opacity: 0; transition: 0.3s; }
+        .system-card:hover .card-link-hint { opacity: 1; transform: translateX(-5px); }
+
+        /* --- 按钮样式 --- */
+        .logout-btn {
+            background: rgba(255, 50, 50, 0.1); border: 1px solid rgba(255, 50, 50, 0.2);
+            color: #ff3232; padding: 10px 20px; border-radius: 12px; cursor: pointer;
+            font-size: 13px; font-weight: 600; transition: 0.3s;
+        }
+        .logout-btn:hover { background: #ff3232; color: #fff; }
+
+        .lang-btn { background:none; border:none; color:var(--text-muted); padding:5px 10px; cursor:pointer; font-size:11px; font-weight: 500; }
+        .lang-btn.active { color: var(--primary-geo); font-weight: 800; }
+
+        /* --- 动画类 --- */
+        .hidden { opacity: 0 !important; transform: scale(0.8) !important; pointer-events: none; }
+        .visible { display: flex !important; opacity: 1 !important; transform: scale(1) !important; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        @media (max-width: 1000px) {
+            .systems-grid { grid-template-columns: 1fr; }
+            #portal-section { overflow-y: auto; padding: 20px; }
+            .portal-main-content { margin-top: 40px; }
+            .system-card { min-height: auto; }
+        }
+    </style>
 </head>
 <body>
-<div id="loginPage">
-    <img src="logo.png" alt="DodoWheels Logo">
-    <h1>DodoWheels自研系统平台</h1>
-    <input type="text" id="username" placeholder="用户名">
-    <input type="password" id="password" placeholder="密码">
-    <button onclick="login()">登录</button>
-    <div class="error" id="errorMsg">用户名或密码错误</div>
-</div>
 
-<div id="toolPage">
-    <h1>所有工具</h1>
-    <div class="tools" id="toolsContainer"></div>
-</div>
+    <div class="ambient-glow"></div>
+    <canvas id="particle-canvas"></canvas>
 
-<script>
-const toolsData = [
-    {name: "网站产品最新序号获取工具", status: "download", icon: '<circle cx="32" cy="32" r="30"/>'},
-    {name: "网站产品价格更新工具", status: "download", icon: '<rect x="12" y="12" width="40" height="40" rx="5"/>'},
-    {name: "网站新增产品工具", status: "download", icon: '<polygon points="32,8 56,56 8,56"/>'},
-    {name: "网站客户端产品检查工具", status: "download", icon: '<path d="M16 32h32M32 16v32"/>'},
-    {name: "网站服务端产品检查工具", status: "dev", icon: '<circle cx="32" cy="32" r="24"/>'},
-    {name: "网站客户端产品抓取工具", status: "download", icon: '<path d="M16 16h32v32H16z"/>'},
-    {name: "网站客户信息抓取工具", status: "dev", icon: '<polygon points="32,8 56,32 32,56 8,32"/>'},
-    {name: "网站服务端订单抓取工具", status: "download", icon: '<circle cx="32" cy="32" r="20"/>'},
-    {name: "网站车辆适配信息工具", status: "dev", icon: '<rect x="16" y="16" width="32" height="32"/>'},
-    {name: "网站OnHand库存-Name更新工具", status: "download", icon: '<path d="M16 32h32"/>'},
-    {name: "网站OnHand库存-Sku更新工具", status: "download", icon: '<path d="M32 16v32"/>'},
-    {name: "网站产品SKU更新工具", status: "download", icon: '<circle cx="32" cy="32" r="12"/>'},
-    {name: "网站产品名称更新工具", status: "download", icon: '<rect x="20" y="20" width="24" height="24"/>'},
-    {name: "网站PO数量-DNS更新工具", status: "download", icon: '<polygon points="32,16 48,48 16,48"/>'},
-    {name: "QBO产品名称调整工具", status: "download", icon: '<circle cx="32" cy="32" r="28"/>'},
-    {name: "QBO产品库存初始化预处理工具", status: "download", icon: '<rect x="12" y="12" width="40" height="40"/>'},
-    {name: "QBO产品库存初始化工具", status: "download", icon: '<polygon points="32,8 56,56 8,56"/>'},
-    {name: "QBO产品库存调整工具", status: "download", icon: '<path d="M16 32h32M32 16v32"/>'},
-    {name: "QBO新建产品工具", status: "download", icon: '<circle cx="32" cy="32" r="24"/>'},
-    {name: "QBO价格维护工具", status: "download", icon: '<path d="M16 16h32v32H16z"/>'},
-    {name: "QBO产品SKU更新工具", status: "download", icon: '<polygon points="32,8 56,32 32,56 8,32"/>'},
-    {name: "工作流数据工具", status: "download", icon: '<circle cx="32" cy="32" r="20"/>'},
-    {name: "OCR识别工具", status: "download", icon: '<rect x="16" y="16" width="32" height="32"/>'},
-    {name: "DodoWheels数据中心", status: "dev", icon: '<path d="M16 32h32"/>'},
-    {name: "DodoWheels智能AI小助手", status: "download", icon: '<path d="M32 16v32"/>'},
-    {name: "DodoWheels价格查询工具", status: "download", icon: '<circle cx="32" cy="32" r="12"/>'},
-    {name: "QBO和WEB库存数量校验工具", status: "download", icon: '<rect x="20" y="20" width="24" height="24"/>'},
-    {name: "车辆数据适配预处理工具", status: "download", icon: '<polygon points="32,16 48,48 16,48"/>'},
-    {name: "QBO和WEB库存数据校验工具", status: "download", icon: '<circle cx="32" cy="32" r="28"/>'},
-    {name: "QBO分仓库存更新WEB数据预处理工具", status: "download", icon: '<rect x="12" y="12" width="40" height="40"/>'},
-    {name: "QBO分仓库存更新WEB数据同步工具", status: "download", icon: '<polygon points="32,8 56,56 8,56"/>'},
-    {name: "公司库内大屏显示工具", status: "download", icon: '<path d="M16 32h32M32 16v32"/>'}
-];
+    <div class="page-wrapper">
+        
+        <section id="login-section">
+            <div class="login-left">
+                <h2 style="color:var(--primary-geo); font-size: 32px;">DodoWheels</h2>
+                <div style="font-family: monospace; font-size: 11px; color: var(--text-muted); line-height: 2.2;">
+                    > GATEWAY: GLOBAL<br>
+                    > REGION: MULTI-LANG<br>
+                    > AUTH: REQUIRED
+                </div>
+            </div>
+            <div class="login-right">
+                <h1 id="login-title" style="font-size: 22px; margin-bottom: 8px;">身份验证</h1>
+                <p id="login-subtitle" style="font-size: 13px; color: var(--text-muted);">请输入授权码</p>
+                <input type="password" id="code-input" class="geo-input" placeholder="••••" maxlength="4">
+                <button id="login-btn-text" class="login-btn" onclick="login()">解锁系统</button>
+                <p id="err" style="color:#ff3232; font-size: 11px; margin-top: 15px; display: none; text-align: center;">ACCESS DENIED</p>
+            </div>
+        </section>
 
-function login() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const errorMsg = document.getElementById('errorMsg');
-    if(username === 'admin' && password === '010203') {
-        document.getElementById('loginPage').style.display = 'none';
-        document.getElementById('toolPage').style.display = 'block';
-        renderTools();
-    } else { errorMsg.style.display = 'block'; }
-}
+        <section id="portal-section">
+            <nav class="nav-bar">
+                <div style="font-size: 20px; font-weight: 900; color: var(--primary-geo); letter-spacing: -0.5px;">DODOWHEELS HUB</div>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <div style="background:rgba(255,255,255,0.05); padding:4px; border-radius:10px; border: 1px solid var(--glass-border); display: flex;">
+                        <button class="lang-btn active" id="btn-zh" onclick="setLang('zh')">ZH</button>
+                        <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+                        <button class="lang-btn" id="btn-fr" onclick="setLang('fr')">FR</button>
+                    </div>
+                    <button id="logout-text" class="logout-btn" onclick="logout()">安全退出</button>
+                </div>
+            </nav>
 
-function renderTools() {
-    const container = document.getElementById('toolsContainer');
-    toolsData.forEach(tool => {
-        const div = document.createElement('div');
-        div.className = 'tool';
-        // 插入 SVG
-        div.innerHTML = `<svg viewBox="0 0 64 64">${tool.icon}</svg>`;
-        const h3 = document.createElement('h3');
-        h3.innerText = tool.name;
-        div.appendChild(h3);
-        if(tool.status === 'download') {
-            const btn = document.createElement('button');
-            btn.innerText = '下载';
-            div.appendChild(btn);
-        } else {
-            const span = document.createElement('span');
-            span.innerText = '开发中';
-            div.appendChild(span);
+            <div class="portal-main-content">
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <h1 id="p-title" style="font-size: 40px; margin-bottom: 10px; font-weight: 200; background: linear-gradient(to bottom, #fff, #999); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">数字生态系统门户</h1>
+                    <p id="p-desc" style="color: var(--text-muted); letter-spacing: 5px; font-size: 10px; text-transform: uppercase;">Cloud Integrated Logistics Interface</p>
+                </div>
+
+                <div class="systems-grid">
+                    <div class="system-card" style="--theme-color: var(--primary-geo);" 
+                         onmousemove="tilt(event, this)" onmouseleave="untilt(this)"
+                         onclick="window.open('https://dodo-drivers.vercel.app/', '_blank')">
+                        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--primary-geo)" stroke-width="2"><path d="M9 20L3 17V4L9 7M9 20L15 17M9 20V7M15 17L21 20V7L15 4M15 17V4M9 7L15 4"/></svg></div>
+                        <h2 id="t1" style="font-size: 19px; margin-bottom: 12px;">派送管理系统</h2>
+                        <p id="d1" style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">实时运力监控，AI智能路径规划与即时签收反馈系统。</p>
+                        <span class="card-data">> LIVE_FLEET: <span class="counter" data-target="158">0</span></span>
+                        <span id="hint1" class="card-link-hint">接入控制台 ↗</span>
+                    </div>
+
+                    <div class="system-card" style="--theme-color: var(--secondary-purp);" 
+                         onmousemove="tilt(event, this)" onmouseleave="untilt(this)"
+                         onclick="window.open('https://dodo-tools.vercel.app/', '_blank')">
+                        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--secondary-purp)" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.73zM3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg></div>
+                        <h2 id="t2" style="font-size: 19px; margin-bottom: 12px;">库管工具系统</h2>
+                        <p id="d2" style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">数字化库存控制，支持多维资产盘点与空间效能优化。</p>
+                        <span class="card-data">> CAPACITY: <span class="counter" data-target="92">0</span>%</span>
+                        <span id="hint2" class="card-link-hint">接入控制台 ↗</span>
+                    </div>
+
+                    <div class="system-card" style="--theme-color: var(--accent-gold);" 
+                         onmousemove="tilt(event, this)" onmouseleave="untilt(this)"
+                         onclick="window.open('https://dodolms.vercel.app/', '_blank')">
+                        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2"><path d="M22 19V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2zM11 11l-2 3h4l-2 3"/></svg></div>
+                        <h2 id="t3" style="font-size: 19px; margin-bottom: 12px;">内部学习中心</h2>
+                        <p id="d3" style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">员工技能成长矩阵，提供数字化培训手册及自动化认证。</p>
+                        <span class="card-data">> ACTIVE_LMS: <span class="counter" data-target="524">0</span></span>
+                        <span id="hint3" class="card-link-hint">接入控制台 ↗</span>
+                    </div>
+                </div>
+            </div>
+
+            <footer style="text-align: center; color: rgba(255,255,255,0.1); font-size: 10px; letter-spacing: 2px; width: 100%; padding-bottom: 10px;">
+                DODOWHEELS GLOBAL OS © 2026 - MULTILINGUAL INTERFACE
+            </footer>
+        </section>
+
+    </div>
+
+    <script>
+        // 核心跳转逻辑
+        function login() {
+            const input = document.getElementById('code-input');
+            const loginBox = document.getElementById('login-section');
+            const portal = document.getElementById('portal-section');
+            if(input.value.toLowerCase() === 'dodo') {
+                loginBox.classList.add('hidden');
+                setTimeout(() => {
+                    loginBox.style.display = 'none';
+                    portal.classList.add('visible');
+                    startCounters();
+                }, 600);
+            } else {
+                document.getElementById('err').style.display = 'block';
+                loginBox.style.animation = 'shake 0.4s';
+                setTimeout(() => loginBox.style.animation = '', 400);
+            }
         }
-        container.appendChild(div);
-    });
-}
-</script>
+
+        function logout() {
+            const loginBox = document.getElementById('login-section');
+            const portal = document.getElementById('portal-section');
+            portal.classList.remove('visible');
+            setTimeout(() => {
+                portal.style.display = 'none';
+                loginBox.style.display = 'flex';
+                setTimeout(() => loginBox.classList.remove('hidden'), 50);
+                document.getElementById('code-input').value = '';
+                document.getElementById('err').style.display = 'none';
+            }, 600);
+        }
+
+        function tilt(e, card) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const rX = ((y - rect.height / 2) / rect.height) * -15;
+            const rY = ((x - rect.width / 2) / rect.width) * 15;
+            card.style.transform = `rotateX(${rX}deg) rotateY(${rY}deg) translateY(-8px)`;
+        }
+
+        function untilt(card) {
+            card.style.transform = `rotateX(0deg) rotateY(0deg) translateY(0)`;
+        }
+
+        function startCounters() {
+            document.querySelectorAll('.counter').forEach(c => {
+                const target = +c.getAttribute('data-target');
+                let count = 0;
+                const update = () => {
+                    if(count < target) {
+                        count = Math.ceil(count + target / 40);
+                        c.innerText = count > target ? target : count;
+                        setTimeout(update, 30);
+                    }
+                };
+                update();
+            });
+        }
+
+        // 语言映射
+        const langMap = {
+            zh: {
+                pt: "数字生态系统门户", t1: "派送管理系统", d1: "实时运力监控，AI智能路径规划与即时签收反馈系统。",
+                t2: "库管工具系统", d2: "数字化库存控制，支持多维资产盘点与空间效能优化。",
+                t3: "内部学习中心", d3: "员工技能成长矩阵，提供数字化培训手册及自动化认证。",
+                lo: "安全退出", h: "接入控制台 ↗", lin: "身份验证", sub: "请输入授权码", lbtn: "解锁进入"
+            },
+            en: {
+                pt: "Digital Ecosystem Portal", t1: "Delivery Management", d1: "Real-time fleet tracking, AI route planning, and instant POD systems.",
+                t2: "Warehouse Tools", d2: "Digital inventory control, asset auditing, and space optimization.",
+                t3: "Learning Hub", d3: "Competency matrix, digital training manuals, and certification center.",
+                lo: "Secure Logout", h: "Access Hub ↗", lin: "Authentication", sub: "Enter authorization code", lbtn: "Unlock System"
+            },
+            fr: {
+                pt: "Portail de l'Écosystème Numérique", t1: "Gestion des Livraisons", d1: "Suivi de flotte en temps réel, planification AI et retour POD instantané.",
+                t2: "Outils de Stockage", d2: "Contrôle numérique des stocks, audit des actifs et optimisation de l'espace.",
+                t3: "Centre d'Apprentissage", d3: "Matrice de compétences, manuels de formation et certification automatisée.",
+                lo: "Déconnexion", h: "Accéder au Hub ↗", lin: "Authentification", sub: "Entrez le code d'accès", lbtn: "Déverrouiller"
+            }
+        };
+
+        function setLang(l) {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + l).classList.add('active');
+            
+            document.getElementById('p-title').innerText = langMap[l].pt;
+            document.getElementById('t1').innerText = langMap[l].t1; document.getElementById('d1').innerText = langMap[l].d1;
+            document.getElementById('t2').innerText = langMap[l].t2; document.getElementById('d2').innerText = langMap[l].d2;
+            document.getElementById('t3').innerText = langMap[l].t3; document.getElementById('d3').innerText = langMap[l].d3;
+            document.getElementById('logout-text').innerText = langMap[l].lo;
+            document.getElementById('hint1').innerText = langMap[l].h;
+            document.getElementById('hint2').innerText = langMap[l].h;
+            document.getElementById('hint3').innerText = langMap[l].h;
+            // 登录界面同步切换
+            document.getElementById('login-title').innerText = langMap[l].lin;
+            document.getElementById('login-subtitle').innerText = langMap[l].sub;
+            document.getElementById('login-btn-text').innerText = langMap[l].lbtn;
+        }
+
+        // 背景动画
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let pts = [];
+        function init() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            pts = Array(80).fill().map(() => ({
+                x: Math.random()*canvas.width, y: Math.random()*canvas.height,
+                vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3
+            }));
+        }
+        function draw() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = "rgba(0, 242, 254, 0.2)";
+            pts.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if(p.x<0 || p.x>canvas.width) p.vx*=-1;
+                if(p.y<0 || p.y>canvas.height) p.vy*=-1;
+                ctx.beginPath(); ctx.arc(p.x, p.y, 1, 0, Math.PI*2); ctx.fill();
+            });
+            requestAnimationFrame(draw);
+        }
+        window.addEventListener('resize', init);
+        init(); draw();
+    </script>
 </body>
 </html>
