@@ -8,7 +8,7 @@
         :root {
             --bg-dark: #000000;
             --card-bg: rgba(28, 28, 30, 0.6);
-            --neon-blue: #007aff; /* 调整为更纯正、深邃的蓝色 */
+            --neon-blue: #007aff; 
             --neon-purple: #bd00ff;
             --neon-green: #00ff88;
             --neon-orange: #ff9d00;
@@ -28,7 +28,7 @@
             position: relative;
         }
 
-        /* --- 动态背景色彩气泡 (强化蓝色调) --- */
+        /* --- 动态背景色彩气泡 --- */
         .bg-blobs { position: absolute; inset: 0; z-index: -1; overflow: hidden; filter: blur(80px); opacity: 0.5; }
         .blob { position: absolute; border-radius: 50%; animation: move 20s infinite alternate; }
         .b1 { width: 450px; height: 450px; background: var(--neon-blue); top: -10%; left: -10%; }
@@ -51,44 +51,58 @@
         /* --- 主门户布局 --- */
         #portal-section {
             width: 100%; max-width: 1250px; padding: 20px;
-            display: none; flex-direction: column; gap: 25px;
+            display: none; flex-direction: column; gap: 20px;
             animation: fadeInScale 0.8s forwards;
         }
         @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-        /* 顶部栏 */
         .header { display: flex; justify-content: space-between; align-items: center; }
         .lang-group { display: flex; gap: 5px; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
         .lang-btn { padding: 8px 15px; border: none; background: transparent; color: var(--text-dim); cursor: pointer; border-radius: 10px; font-weight: 800; font-size: 12px; transition: 0.3s; }
         .lang-btn.active { background: #fff; color: #000; box-shadow: 0 4px 15px rgba(255,255,255,0.2); }
 
-        /* 三大主要系统 */
+        /* --- 自研系统仪表盘 --- */
+        .dashboard-banner {
+            background: rgba(0, 122, 255, 0.08);
+            border: 1px solid rgba(0, 122, 255, 0.2);
+            border-radius: 25px;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        .dash-item { display: flex; flex-direction: column; gap: 5px; }
+        .dash-val { font-size: 28px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 15px rgba(0, 122, 255, 0.5); }
+        .dash-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+        .dash-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.1); }
+
+        /* 三大系统卡片 */
         .major-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
         .major-card {
-            padding: 40px 30px; border-radius: 35px; text-align: center; cursor: pointer;
+            padding: 35px 30px; border-radius: 35px; text-align: center; cursor: pointer;
             transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid rgba(255,255,255,0.1); background: var(--card-bg);
             backdrop-filter: blur(20px); position: relative;
         }
         .major-card::before { content: ''; position: absolute; inset: 0; border-radius: 35px; padding: 2px; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0.5; transition: 0.5s; }
-        
         .c-blue::before { background: linear-gradient(135deg, var(--neon-blue), transparent); }
         .c-purple::before { background: linear-gradient(135deg, var(--neon-purple), transparent); }
         .c-green::before { background: linear-gradient(135deg, var(--neon-green), transparent); }
-
-        .major-card:hover { transform: translateY(-15px) scale(1.02); }
+        .major-card:hover { transform: translateY(-10px) scale(1.02); }
         .c-blue:hover { box-shadow: 0 20px 50px rgba(0, 122, 255, 0.3); border-color: var(--neon-blue); }
         .c-purple:hover { box-shadow: 0 20px 50px rgba(189, 0, 255, 0.3); border-color: var(--neon-purple); }
         .c-green:hover { box-shadow: 0 20px 50px rgba(0, 255, 136, 0.3); border-color: var(--neon-green); }
 
-        .major-card h2 { font-size: 24px; margin-bottom: 12px; font-weight: 900; }
-        .major-card p { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+        .major-card h2 { font-size: 22px; margin-bottom: 8px; font-weight: 900; }
+        .major-card p { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
 
-        /* Admin 控制中心 */
+        /* Admin 列表 */
         .admin-panel {
             background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 40px; padding: 30px; display: flex; flex-direction: column;
-            max-height: 52vh; backdrop-filter: blur(30px);
+            border-radius: 40px; padding: 25px 30px; display: flex; flex-direction: column;
+            max-height: 48vh; backdrop-filter: blur(30px);
         }
         .admin-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .tim-badge { 
@@ -103,16 +117,15 @@
         .app-scroller::-webkit-scrollbar { width: 5px; }
         .app-scroller::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
 
-        .cat-group h3 { font-size: 13px; font-weight: 900; letter-spacing: 2px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .cat-group h3 { font-size: 12px; font-weight: 900; letter-spacing: 2px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         .cat-group h3::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
-        
         .cat-web h3 { color: var(--neon-blue); }
         .cat-qbo h3 { color: var(--neon-purple); }
         .cat-other h3 { color: var(--neon-green); }
 
         .app-item {
             background: rgba(255,255,255,0.03); border-radius: 14px; padding: 12px 18px;
-            margin-bottom: 10px; font-size: 12.5px; border: 1px solid transparent;
+            margin-bottom: 10px; font-size: 12px; border: 1px solid transparent;
             display: flex; justify-content: space-between; align-items: center;
             transition: 0.3s;
         }
@@ -120,7 +133,7 @@
         .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); }
         .dot-beta { background: var(--neon-orange); box-shadow: 0 0 10px var(--neon-orange); }
 
-        .footer { text-align: center; margin-top: 15px; font-size: 10px; color: #555; letter-spacing: 5px; }
+        .footer { text-align: center; margin-top: 10px; font-size: 10px; color: #555; letter-spacing: 5px; }
     </style>
 </head>
 <body>
@@ -146,13 +159,40 @@
     <section id="portal-section">
         <div class="header">
             <div style="font-size: 26px; font-weight: 900; letter-spacing: -1px; color: #fff;">DODOWHEELS <span style="color:var(--neon-blue)">HUB</span></div>
-            <div style="display: flex; gap: 20px; align-items:center;">
-                <div class="lang-group">
-                    <button class="lang-btn active" onclick="changeLang('zh', this)">ZH</button>
-                    <button class="lang-btn" onclick="changeLang('en', this)">EN</button>
-                    <button class="lang-btn" onclick="changeLang('fr', this)">FR</button>
-                </div>
-                <button onclick="location.reload()" style="background:rgba(255,69,58,0.1); border:1px solid rgba(255,69,58,0.2); color:#ff453a; padding:10px 20px; border-radius:15px; font-size:12px; font-weight:bold; cursor:pointer;">LOGOUT</button>
+            <div class="lang-group">
+                <button class="lang-btn active" onclick="changeLang('zh', this)">ZH</button>
+                <button class="lang-btn" onclick="changeLang('en', this)">EN</button>
+                <button class="lang-btn" onclick="changeLang('fr', this)">FR</button>
+            </div>
+        </div>
+
+        <div class="dashboard-banner">
+            <div class="dash-item">
+                <div class="dash-val">3</div>
+                <div class="dash-label">整合系统</div>
+            </div>
+            <div class="dash-divider"></div>
+            <div class="dash-item">
+                <div class="dash-val">28</div>
+                <div class="dash-label">工具系统总数</div>
+            </div>
+            <div class="dash-divider"></div>
+            <div class="dash-item">
+                <div class="dash-val" style="color:var(--neon-blue)">14</div>
+                <div class="dash-label">网站 APP</div>
+            </div>
+            <div class="dash-item">
+                <div class="dash-val" style="color:var(--neon-purple)">7</div>
+                <div class="dash-label">QBO APP</div>
+            </div>
+            <div class="dash-item">
+                <div class="dash-val" style="color:var(--neon-green)">7</div>
+                <div class="dash-label">其他 APP</div>
+            </div>
+            <div class="dash-divider"></div>
+            <div class="dash-item">
+                <div class="dash-val" style="color:var(--neon-orange)">1</div>
+                <div class="dash-label">正在开发中</div>
             </div>
         </div>
 
@@ -173,13 +213,13 @@
 
         <div class="admin-panel">
             <div class="admin-nav">
-                <div style="font-weight: 900; font-size: 15px; letter-spacing: 1px;" data-i18n="admin-title">ADMIN 控制中心</div>
+                <div style="font-weight: 900; font-size: 15px; letter-spacing: 1px;" data-i18n="admin-title">以下APP是DodoWheels服务器专用</div>
                 <div class="tim-badge" id="tim-text" data-i18n="tim-msg">💡 服务器专用，任何问题联系 Tim</div>
             </div>
 
             <div class="app-scroller">
                 <div class="cat-group cat-web">
-                    <h3 data-i18n="cat-web">网站相关 APP</h3>
+                    <h3 data-i18n="cat-web">网站相关 APP (14)</h3>
                     <div class="app-item"><span data-i18n="a1">网站产品最新序号获取工具</span><div class="status-dot"></div></div>
                     <div class="app-item"><span data-i18n="a2">网站产品价格更新工具</span><div class="status-dot"></div></div>
                     <div class="app-item"><span data-i18n="a3">网站新增产品工具</span><div class="status-dot"></div></div>
@@ -196,7 +236,7 @@
                     <div class="app-item"><span data-i18n="a14">网站PO数量-DNS更新工具</span><div class="status-dot"></div></div>
                 </div>
                 <div class="cat-group cat-qbo">
-                    <h3 data-i18n="cat-qbo">QBO 相关 APP</h3>
+                    <h3 data-i18n="cat-qbo">QBO 相关 APP (7)</h3>
                     <div class="app-item"><span data-i18n="a15">QBO产品名称调整工具</span><div class="status-dot"></div></div>
                     <div class="app-item"><span data-i18n="a16">QBO产品库存初始化预处理</span><div class="status-dot"></div></div>
                     <div class="app-item"><span data-i18n="a17">QBO产品库存初始化工具</span><div class="status-dot"></div></div>
@@ -206,7 +246,7 @@
                     <div class="app-item"><span data-i18n="a21">QBO产品SKU更新工具</span><div class="status-dot"></div></div>
                 </div>
                 <div class="cat-group cat-other">
-                    <h3 data-i18n="cat-other">其他相关 APP</h3>
+                    <h3 data-i18n="cat-other">其他相关 APP (7)</h3>
                     <div class="app-item"><span data-i18n="a22">Dodo AI 小助手</span><div class="status-dot"></div></div>
                     <div class="app-item"><span data-i18n="a23">DodoWheels价格查询工具</span><div class="status-dot"></div></div>
                     <div class="app-item"><span data-i18n="a24">QBO和WEB库存数量校验</span><div class="status-dot"></div></div>
@@ -221,14 +261,13 @@
     </section>
 
     <script>
-        // 1. 黑客动画 (使用更深的蓝色)
         const canvas = document.getElementById('hacker-canvas');
         const ctx = canvas.getContext('2d');
         let drops = Array(30).fill(1);
         function draw() {
             ctx.fillStyle = "rgba(0,0,0,0.05)";
             ctx.fillRect(0,0,380,500);
-            ctx.fillStyle = "#007aff"; // 深科技蓝
+            ctx.fillStyle = "#007aff"; 
             ctx.font = "15px monospace";
             drops.forEach((y, i) => {
                 const text = String.fromCharCode(Math.random()*128);
@@ -239,7 +278,6 @@
         }
         setInterval(draw, 33);
 
-        // 2. 登录逻辑
         function handleLogin() {
             if(document.getElementById('code-input').value.toLowerCase() === 'dodo') {
                 document.getElementById('login-wrapper').style.opacity = '0';
@@ -250,14 +288,13 @@
             }
         }
 
-        // 3. 翻译字典 (已同步文案修改)
         const translations = {
             zh: {
                 "m1-t": "派送管理系统", "m1-d": "实时调度与 AI 路径规划控制台",
                 "m2-t": "仓库管理系统", "m2-d": "数字化资产追踪与库存效能分析",
                 "m3-t": "知识库系统", "m3-d": "企业知识库与员工自动化认证",
-                "admin-title": "ADMIN 控制中心", "tim-msg": "💡 服务器专用，任何问题联系 Tim",
-                "cat-web": "网站相关 APP", "cat-qbo": "QBO 相关 APP", "cat-other": "其他相关 APP",
+                "admin-title": "以下APP是DodoWheels服务器专用", "tim-msg": "💡 服务器专用，任何问题联系 Tim",
+                "cat-web": "网站相关 APP (14)", "cat-qbo": "QBO 相关 APP (7)", "cat-other": "其他相关 APP (7)",
                 "a1": "网站产品最新序号获取工具", "a2": "网站产品价格更新工具", "a3": "网站新增产品工具",
                 "a4": "网站客户端产品检查工具", "a5": "网站服务端产品检查工具", "a6": "网站客户端产品抓取工具",
                 "a7": "网站客户信息抓取工具", "a8": "网站服务端订单抓取工具", "a9": "网站车辆适配信息工具",
@@ -272,15 +309,8 @@
                 "m1-t": "Delivery OS", "m1-d": "Real-time Dispatch & AI Logistics",
                 "m2-t": "Warehouse OS", "m2-d": "Inventory Tracking & Analytics",
                 "m3-t": "Knowledge Base", "m3-d": "LMS & Corporate Certification",
-                "admin-title": "ADMIN CONTROL UNIT", "tim-msg": "💡 Server Only, Contact Tim",
-                "cat-web": "WEB APPS", "cat-qbo": "QBO APPS", "cat-other": "MISC APPS"
-            },
-            fr: {
-                "m1-t": "Système de Livraison", "m1-d": "Dispatching Temps Réel & IA",
-                "m2-t": "Gestion d'Entrepôt", "m2-d": "Suivi de Stock & Analyse",
-                "m3-t": "Base de Connaissance", "m3-d": "Formation & Certifications",
-                "admin-title": "UNITÉ DE CONTRÔLE ADMIN", "tim-msg": "💡 Serveur Uniq, Contactez Tim",
-                "cat-web": "APPS WEB", "cat-qbo": "APPS QBO", "cat-other": "AUTRES APPS"
+                "admin-title": "SERVER EXCLUSIVE APPS", "tim-msg": "💡 Server Only, Contact Tim",
+                "cat-web": "WEB APPS (14)", "cat-qbo": "QBO APPS (7)", "cat-other": "MISC APPS (7)"
             }
         };
 
