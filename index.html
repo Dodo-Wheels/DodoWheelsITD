@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels | Enterprise OS Gateway</title>
+    <title>DodoWheels | Unified Enterprise OS</title>
     <style>
         :root {
             --bg-color: #010103;
@@ -14,7 +14,7 @@
             --glass-border: rgba(255, 255, 255, 0.1);
             --text-main: #ffffff;
             --text-muted: #8b9bb4;
-            --font-family: 'SF Pro Display', -apple-system, sans-serif;
+            --font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
@@ -24,30 +24,39 @@
             color: var(--text-main);
             font-family: var(--font-family);
             height: 100vh;
+            width: 100vw;
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* --- 背景动态粒子 --- */
+        /* --- 背景层 --- */
         #particle-canvas {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; opacity: 0.5;
+            z-index: 1; opacity: 0.4;
         }
 
         .ambient-glow {
             position: absolute;
-            width: 100vw; height: 100vh;
-            background: radial-gradient(circle at 50% 50%, rgba(0, 242, 254, 0.05) 0%, transparent 80%);
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 242, 254, 0.04) 0%, transparent 70%);
             z-index: 0;
+        }
+
+        .page-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         /* --- 登录模块 --- */
         #login-section {
-            position: relative;
-            z-index: 20;
             display: flex;
             width: 800px;
             height: 480px;
@@ -83,40 +92,56 @@
             letter-spacing: 2px; transition: 0.4s;
         }
 
-        .login-btn:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(0, 242, 254, 0.4); }
-
-        /* --- 门户模块 --- */
+        /* --- 门户模块 (修复版布局) --- */
         #portal-section {
-            position: absolute; width: 100%; height: 100%; padding: 60px;
-            display: none; flex-direction: column;
-            opacity: 0; transform: scale(0.9);
-            transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
-            z-index: 10;
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 40px 60px;
+            display: none; 
+            flex-direction: column;
+            justify-content: space-between; /* 关键：撑开 Header, Content, Footer */
+            opacity: 0;
+            transform: scale(1.05);
+            transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; }
-
-        .btn-group { display: flex; gap: 15px; align-items: center; }
-
-        .logout-btn {
-            background: rgba(255, 50, 50, 0.1); border: 1px solid rgba(255, 50, 50, 0.2);
-            color: #ff3232; padding: 10px 20px; border-radius: 12px; cursor: pointer;
-            font-size: 13px; font-weight: 600; transition: 0.3s;
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
         }
 
-        .logout-btn:hover { background: #ff3232; color: #fff; box-shadow: 0 0 20px rgba(255,50,50,0.3); }
+        .portal-main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* 关键：让标题和卡片垂直居中 */
+            align-items: center;
+        }
 
-        /* --- 系统磁贴卡片 --- */
         .systems-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 35px;
-            max-width: 1280px; margin: auto; perspective: 2000px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            width: 100%;
+            max-width: 1300px;
+            perspective: 2000px;
         }
 
         .system-card {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            padding: 45px 35px; border-radius: 30px; text-decoration: none;
-            position: relative; overflow: hidden; transition: 0.1s ease-out;
-            transform-style: preserve-3d; backdrop-filter: blur(20px);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 40px 30px;
+            border-radius: 24px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            transition: 0.1s ease-out;
+            transform-style: preserve-3d;
+            backdrop-filter: blur(20px);
             cursor: pointer;
         }
 
@@ -126,7 +151,7 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
 
-        /* 顶部扫描流光 */
+        /* 卡片流光 */
         .system-card::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
             background: linear-gradient(90deg, transparent, var(--theme-color), transparent);
@@ -135,28 +160,36 @@
 
         @keyframes scan { 0% { left: -100%; } 100% { left: 100%; } }
 
-        .card-data {
-            font-family: monospace; font-size: 11px; color: var(--theme-color);
-            margin-top: 25px; display: block; letter-spacing: 1px;
-            opacity: 0.8;
-        }
-
-        .card-icon { width: 50px; height: 50px; margin-bottom: 25px; filter: drop-shadow(0 0 10px var(--theme-color)); }
-
-        .card-link-hint {
-            position: absolute; bottom: 20px; right: 25px;
-            font-size: 10px; color: var(--text-muted); opacity: 0; transition: 0.3s;
-        }
+        .card-icon { width: 45px; height: 45px; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--theme-color)); }
+        .card-data { font-family: monospace; font-size: 11px; color: var(--theme-color); margin-top: 20px; display: block; }
+        .card-link-hint { position: absolute; bottom: 15px; right: 20px; font-size: 10px; color: var(--text-muted); opacity: 0; transition: 0.3s; }
         .system-card:hover .card-link-hint { opacity: 1; transform: translateX(-5px); }
 
+        /* --- 按钮样式 --- */
+        .logout-btn {
+            background: rgba(255, 50, 50, 0.1); border: 1px solid rgba(255, 50, 50, 0.2);
+            color: #ff3232; padding: 10px 20px; border-radius: 12px; cursor: pointer;
+            font-size: 13px; font-weight: 600; transition: 0.3s;
+        }
+        .logout-btn:hover { background: #ff3232; color: #fff; }
+
+        .lang-btn { background:none; border:none; color:var(--text-muted); padding:5px 12px; cursor:pointer; font-size:12px; }
+        .lang-btn.active { color: var(--primary-geo); font-weight: bold; }
+
         /* --- 动画类 --- */
-        .hidden { opacity: 0 !important; transform: scale(0.7) !important; pointer-events: none; }
+        .hidden { opacity: 0 !important; transform: scale(0.8) !important; pointer-events: none; }
         .visible { display: flex !important; opacity: 1 !important; transform: scale(1) !important; }
 
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-10px); }
             75% { transform: translateX(10px); }
+        }
+
+        @media (max-width: 1000px) {
+            .systems-grid { grid-template-columns: 1fr; }
+            #portal-section { overflow-y: auto; padding: 20px; }
+            .portal-main-content { margin-top: 40px; }
         }
     </style>
 </head>
@@ -165,90 +198,89 @@
     <div class="ambient-glow"></div>
     <canvas id="particle-canvas"></canvas>
 
-    <div class="page-wrapper" style="width:100%; display:flex; justify-content:center;">
+    <div class="page-wrapper">
         
         <section id="login-section">
             <div class="login-left">
-                <h2 style="color:var(--primary-geo); font-size: 32px; letter-spacing: -1px;">DodoWheels</h2>
+                <h2 style="color:var(--primary-geo); font-size: 32px;">DodoWheels</h2>
                 <div style="font-family: monospace; font-size: 11px; color: var(--text-muted); line-height: 2.2;">
-                    > GATEWAY_STATUS: SECURE<br>
-                    > CLOUD_NODE: VERCEL_PRO<br>
-                    > ENCRYPTION: SHA-256<br>
-                    > SYSTEM_VER: 2.0.4
+                    > GATEWAY: SECURE<br>
+                    > NODE: CLOUD_V2<br>
+                    > AUTH: REQUIRED
                 </div>
             </div>
             <div class="login-right">
-                <h1 style="font-size: 24px; margin-bottom: 10px;">身份验证</h1>
-                <p style="font-size: 13px; color: var(--text-muted);">请输入 4 位访问码接入生态系统</p>
+                <h1 style="font-size: 22px; margin-bottom: 8px;">系统验证</h1>
+                <p style="font-size: 13px; color: var(--text-muted);">请输入授权码</p>
                 <input type="password" id="code-input" class="geo-input" placeholder="••••" maxlength="4">
-                <button class="login-btn" onclick="login()">解锁进入控制台</button>
-                <p id="err" style="color:#ff3232; font-size: 12px; margin-top: 15px; display: none;">ACCESS DENIED: 无效密钥</p>
+                <button class="login-btn" onclick="login()">解锁进入</button>
+                <p id="err" style="color:#ff3232; font-size: 11px; margin-top: 15px; display: none; text-align: center;">验证失败: 密钥无效</p>
             </div>
         </section>
 
         <section id="portal-section">
             <nav class="nav-bar">
                 <div style="font-size: 22px; font-weight: 900; color: var(--primary-geo); letter-spacing: -0.5px;">DODOWHEELS HUB</div>
-                <div class="btn-group">
-                    <div class="lang-switcher" style="background:rgba(255,255,255,0.05); padding:4px; border-radius:10px; display:flex; border: 1px solid var(--glass-border);">
-                        <button style="background:none; border:none; color:white; padding:5px 12px; cursor:pointer; font-size:12px;" onclick="setLang('zh')">ZH</button>
-                        <button style="background:none; border:none; color:white; padding:5px 12px; cursor:pointer; font-size:12px;" onclick="setLang('en')">EN</button>
+                <div style="display: flex; gap: 20px; align-items: center;">
+                    <div style="background:rgba(255,255,255,0.05); padding:4px; border-radius:10px; border: 1px solid var(--glass-border);">
+                        <button class="lang-btn active" id="btn-zh" onclick="setLang('zh')">ZH</button>
+                        <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
                     </div>
                     <button class="logout-btn" onclick="logout()">安全退出</button>
                 </div>
             </nav>
 
-            <div style="text-align: center; margin-bottom: 60px;">
-                <h1 id="p-title" style="font-size: 44px; margin-bottom: 10px; font-weight: 200; background: linear-gradient(to bottom, #fff, #999); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">数字生态系统门户</h1>
-                <p id="p-desc" style="color: var(--text-muted); letter-spacing: 5px; font-size: 12px; text-transform: uppercase;">Cloud Integrated Logistics Interface</p>
+            <div class="portal-main-content">
+                <div style="text-align: center; margin-bottom: 50px;">
+                    <h1 id="p-title" style="font-size: 42px; margin-bottom: 10px; font-weight: 200; background: linear-gradient(to bottom, #fff, #999); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">数字生态系统门户</h1>
+                    <p id="p-desc" style="color: var(--text-muted); letter-spacing: 5px; font-size: 11px; text-transform: uppercase;">Cloud Integrated Logistics Interface</p>
+                </div>
+
+                <div class="systems-grid">
+                    <div class="system-card" style="--theme-color: var(--primary-geo);" 
+                         onmousemove="tilt(event, this)" onmouseleave="untilt(this)"
+                         onclick="window.open('https://dodo-drivers.vercel.app/', '_blank')">
+                        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--primary-geo)" stroke-width="2"><path d="M9 20L3 17V4L9 7M9 20L15 17M9 20V7M15 17L21 20V7L15 4M15 17V4M9 7L15 4"/></svg></div>
+                        <h2 id="t1" style="font-size: 20px; margin-bottom: 12px;">派送管理系统</h2>
+                        <p id="d1" style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">实时运力监控，AI智能路径规划与即时签收反馈系统。</p>
+                        <span class="card-data">> ACTIVE_FLEET: <span class="counter" data-target="158">0</span></span>
+                        <span class="card-link-hint">接入控制台 ↗</span>
+                    </div>
+
+                    <div class="system-card" style="--theme-color: var(--secondary-purp);" 
+                         onmousemove="tilt(event, this)" onmouseleave="untilt(this)"
+                         onclick="window.open('https://dodo-tools.vercel.app/', '_blank')">
+                        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--secondary-purp)" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.73zM3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg></div>
+                        <h2 id="t2" style="font-size: 20px; margin-bottom: 12px;">库管工具系统</h2>
+                        <p id="d2" style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">数字化库存控制，支持多维资产盘点与空间效能优化。</p>
+                        <span class="card-data">> STORAGE_EFF: <span class="counter" data-target="92">0</span>%</span>
+                        <span class="card-link-hint">接入控制台 ↗</span>
+                    </div>
+
+                    <div class="system-card" style="--theme-color: var(--accent-gold);" 
+                         onmousemove="tilt(event, this)" onmouseleave="untilt(this)"
+                         onclick="window.open('https://dodolms.vercel.app/', '_blank')">
+                        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2"><path d="M22 19V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2zM11 11l-2 3h4l-2 3"/></svg></div>
+                        <h2 id="t3" style="font-size: 20px; margin-bottom: 12px;">内部学习中心</h2>
+                        <p id="d3" style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">员工技能成长矩阵，提供数字化培训手册及自动化认证。</p>
+                        <span class="card-data">> ONLINE_USERS: <span class="counter" data-target="524">0</span></span>
+                        <span class="card-link-hint">接入控制台 ↗</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="systems-grid">
-                <div class="system-card" style="--theme-color: var(--primary-geo);" 
-                     onmousemove="tilt(event, this)" onmouseleave="untilt(this)"
-                     onclick="window.open('https://dodo-drivers.vercel.app/', '_blank')">
-                    <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--primary-geo)" stroke-width="2"><path d="M9 20L3 17V4L9 7M9 20L15 17M9 20V7M15 17L21 20V7L15 4M15 17V4M9 7L15 4"/></svg></div>
-                    <h2 id="t1">派送管理系统</h2>
-                    <p id="d1">全球运力实时地图，AI智能路线测算与即时签收反馈。</p>
-                    <span class="card-data">> LIVE_DRIVERS: <span class="counter" data-target="158">0</span></span>
-                    <span class="card-link-hint">点击接入 ↗</span>
-                </div>
-
-                <div class="system-card" style="--theme-color: var(--secondary-purp);" 
-                     onmousemove="tilt(event, this)" onmouseleave="untilt(this)"
-                     onclick="window.open('https://dodo-tools.vercel.app/', '_blank')">
-                    <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--secondary-purp)" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.73zM3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg></div>
-                    <h2 id="t2">库管工具系统</h2>
-                    <p id="d2">数字化库存控制中心，支持资产盘点与空间自动化优化。</p>
-                    <span class="card-data">> STORAGE_EFF: <span class="counter" data-target="94">0</span>%</span>
-                    <span class="card-link-hint">点击接入 ↗</span>
-                </div>
-
-                <div class="system-card" style="--theme-color: var(--accent-gold);" 
-                     onmousemove="tilt(event, this)" onmouseleave="untilt(this)"
-                     onclick="window.open('https://dodolms.vercel.app/', '_blank')">
-                    <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2"><path d="M22 19V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2zM11 11l-2 3h4l-2 3"/></svg></div>
-                    <h2 id="t3">LMS 学习系统</h2>
-                    <p id="d3">员工技能成长矩阵，提供在线培训手册及自动考核认证。</p>
-                    <span class="card-data">> ENROLLED: <span class="counter" data-target="642">0</span></span>
-                    <span class="card-link-hint">点击接入 ↗</span>
-                </div>
-            </div>
-            
-            <footer style="margin-top: auto; text-align: center; color: rgba(255,255,255,0.1); font-size: 10px; letter-spacing: 2px;">
-                DODOWHEELS CLOUD ECOSYSTEM v2.0 - SECURE ACCESS
+            <footer style="text-align: center; color: rgba(255,255,255,0.1); font-size: 10px; letter-spacing: 2px; width: 100%;">
+                DODOWHEELS ENTERPRISE OS © 2026 - ENCRYPTED CONNECTION
             </footer>
         </section>
 
     </div>
 
     <script>
-        // --- 核心逻辑 ---
         function login() {
             const input = document.getElementById('code-input');
             const loginBox = document.getElementById('login-section');
             const portal = document.getElementById('portal-section');
-            
             if(input.value.toLowerCase() === 'dodo') {
                 loginBox.classList.add('hidden');
                 setTimeout(() => {
@@ -276,60 +308,57 @@
             }, 600);
         }
 
-        // --- 3D 视差 ---
         function tilt(e, card) {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            const rotateX = ((y - rect.height / 2) / rect.height) * -15;
-            const rotateY = ((x - rect.width / 2) / rect.width) * 15;
-            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+            const rX = ((y - rect.height / 2) / rect.height) * -15;
+            const rY = ((x - rect.width / 2) / rect.width) * 15;
+            card.style.transform = `rotateX(${rX}deg) rotateY(${rY}deg) translateY(-8px)`;
         }
 
         function untilt(card) {
             card.style.transform = `rotateX(0deg) rotateY(0deg) translateY(0)`;
         }
 
-        // --- 数字动画 ---
         function startCounters() {
-            const counters = document.querySelectorAll('.counter');
-            counters.forEach(c => {
+            document.querySelectorAll('.counter').forEach(c => {
                 const target = +c.getAttribute('data-target');
                 let count = 0;
                 const update = () => {
-                    const speed = target / 50;
                     if(count < target) {
-                        count = Math.ceil(count + speed);
-                        c.innerText = count;
+                        count = Math.ceil(count + target / 40);
+                        c.innerText = count > target ? target : count;
                         setTimeout(update, 30);
-                    } else { c.innerText = target; }
+                    }
                 };
                 update();
             });
         }
 
-        // --- 多语言支持 ---
         const langMap = {
             zh: {
-                pt: "数字生态系统门户", t1: "派送管理系统", d1: "全球运力实时地图，AI智能路线测算与即时签收反馈。",
-                t2: "库管工具系统", d2: "数字化库存控制中心，支持资产盘点与空间自动化优化。",
-                t3: "LMS 学习系统", d3: "员工技能成长矩阵，提供在线培训手册及自动考核认证。"
+                pt: "数字生态系统门户", t1: "派送管理系统", d1: "实时运力监控，AI智能路径规划与即时签收反馈系统。",
+                t2: "库管工具系统", d2: "数字化库存控制，支持多维资产盘点与空间效能优化。",
+                t3: "内部学习中心", d3: "员工技能成长矩阵，提供数字化培训手册及自动化认证。"
             },
             en: {
-                pt: "Digital Ecosystem Portal", t1: "Delivery Management", d1: "Real-time fleet tracking, AI route planning, and instant POD.",
+                pt: "Digital Ecosystem Portal", t1: "Delivery Management", d1: "Real-time fleet tracking, AI route planning, and instant POD systems.",
                 t2: "Warehouse Tools", d2: "Digital inventory control, asset auditing, and space optimization.",
-                t3: "Learning System", d3: "Skill growth matrix, online training manuals, and certification."
+                t3: "Learning Hub", d3: "Competency matrix, digital training manuals, and certification center."
             }
         };
 
         function setLang(l) {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + l).classList.add('active');
             document.getElementById('p-title').innerText = langMap[l].pt;
             document.getElementById('t1').innerText = langMap[l].t1; document.getElementById('d1').innerText = langMap[l].d1;
             document.getElementById('t2').innerText = langMap[l].t2; document.getElementById('d2').innerText = langMap[l].d2;
             document.getElementById('t3').innerText = langMap[l].t3; document.getElementById('d3').innerText = langMap[l].d3;
         }
 
-        // --- 背景粒子 ---
+        // 背景动画
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let pts = [];
