@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DodoWheels | In-house Access Platform</title>
     <style>
-        /* 定义品牌颜色 */
         :root {
-            --brand-blue: #00f2fe; /* 您要求的蓝色 */
+            --brand-blue: #00f2fe;
             --bg-dark: #0a0a0a;
             --text-dim: #737373;
             --input-bg: rgba(255, 255, 255, 0.05);
@@ -17,118 +16,171 @@
         
         body { 
             background-color: var(--bg-dark); 
-            font-family: -apple-system, system-ui, sans-serif; 
+            font-family: -apple-system, "SF Pro Display", system-ui, sans-serif; 
             height: 100vh; display: flex; justify-content: center; align-items: center; 
+            color: #fff;
         }
 
-        /* 外部大卡片 */
         .card { 
             display: flex; width: 850px; height: 480px; 
             background: #000; border: 1px solid rgba(255,255,255,0.1); 
             border-radius: 40px; box-shadow: 0 40px 100px rgba(0,0,0,0.8); overflow: hidden; 
         }
 
-        /* 黑客雨动画左侧 */
+        /* 左侧 Canvas 黑客雨 */
         .card-left { 
-            flex: 1; position: relative; border-right: 1px solid #333; overflow: hidden; 
+            flex: 1; position: relative; border-right: 1px solid #222; overflow: hidden; 
         }
-        #hacker-bg { position: absolute; inset: 0; opacity: 0.8; }
+        #hacker-bg { position: absolute; inset: 0; }
+        
         .branding { 
             position: absolute; bottom: 30px; left: 30px; font-family: monospace; 
-            font-size: 11px; color: var(--text-dim); line-height: 1.8; 
+            font-size: 11px; color: var(--brand-blue); line-height: 1.8; opacity: 0.7;
         }
 
-        /* 登录表单右侧 */
+        /* 右侧登录表单 */
         .card-right { 
             flex: 1.2; padding: 60px 50px; display: flex; flex-direction: column; justify-content: center; 
         }
 
-        /* 标题 - 使用蓝色并分两行 */
         .title { 
             color: var(--brand-blue); 
-            font-size: 30px; font-weight: 800; line-height: 1.2; letter-spacing: -1px; margin-bottom: 8px; 
+            font-size: 34px; font-weight: 800; line-height: 1.2; letter-spacing: -1px; margin-bottom: 8px; 
         }
         
-        .subtitle { color: var(--text-dim); font-size: 13px; text-transform: uppercase; margin-bottom: 30px; }
+        .subtitle { color: var(--text-dim); font-size: 13px; text-transform: uppercase; margin-bottom: 35px; letter-spacing: 2px; }
 
-        /* 输入框 - 高级毛玻璃 */
-        .input-box { 
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); 
-            border-radius: 18px; padding: 22px; margin-bottom: 25px; 
-            display: flex; gap: 20px; justify-content: center; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); 
+        /* 修复后的输入框：真正的 Input */
+        .input-group { position: relative; margin-bottom: 30px; }
+        
+        .input-field {
+            width: 100%;
+            background: rgba(255,255,255,0.03); 
+            border: 1px solid rgba(0, 242, 254, 0.2); 
+            border-radius: 18px; 
+            padding: 20px 25px; 
+            color: #fff;
+            font-size: 18px;
+            letter-spacing: 4px;
+            outline: none;
+            transition: all 0.3s;
+            caret-color: var(--brand-blue); /* 蓝色光标 */
         }
-        .input-box .dot { width: 8px; height: 8px; background: #333; border-radius: 50%; }
 
-        /* 按钮 - 使用蓝色且不拉伸 */
-        .btn-wrapper { display: flex; justify-content: start; }
+        .input-field:focus {
+            border-color: var(--brand-blue);
+            background: rgba(0, 242, 254, 0.05);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
+        }
+
+        .input-field::placeholder {
+            color: #333;
+            letter-spacing: 1px;
+            font-size: 14px;
+        }
+
+        /* 按钮 - 保持不拉伸 */
+        .btn-wrapper { display: flex; justify-content: flex-start; }
         .btn-sign-in { 
             background: var(--brand-blue); border: none; 
             color: #000; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; 
-            padding: 16px 50px; border-radius: 12px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; 
+            padding: 18px 60px; border-radius: 14px; cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
         }
-        .btn-sign-in:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3); }
+        .btn-sign-in:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 25px rgba(0, 242, 254, 0.4); 
+            filter: brightness(1.1);
+        }
+        .btn-sign-in:active { transform: translateY(-1px); }
 
     </style>
 </head>
 <body>
 
-    <div class="card">
+    <div class="card" id="login-card">
         <div class="card-left">
             <canvas id="hacker-bg"></canvas>
             <div class="branding">
-                > DODO_CMD: SECURITY_INITIALIZED<br>
-                > NODE: HUB-GLOBAL-OS-V9<br>
-                > ENCRYPTION: AES-256 ACTIVE
+                > DODO_CMD: MONITOR_ACTIVE<br>
+                > NODE: HUB-GLOBAL-V9<br>
+                > ENCRYPTION: AES-256
             </div>
         </div>
         <div class="card-right">
             <div class="title">
                 DodoWheels<br>自研系统平台
             </div>
-            <div class="subtitle">INTERNAL ACCESS PLATFORM</div>
+            <div class="subtitle">Internal Access Only</div>
             
-            <div class="input-box">
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
+            <div class="input-group">
+                <input type="password" class="input-field" placeholder="ENTER ACCESS CODE" id="access-code">
             </div>
 
             <div class="btn-wrapper">
-                <button class="btn-sign-in">SIGN IN</button>
+                <button class="btn-sign-in" onclick="handleLogin()">Sign In</button>
             </div>
         </div>
     </div>
 
     <script>
+        // --- 黑客雨动画逻辑 ---
         const canvas = document.getElementById('hacker-bg');
         const ctx = canvas.getContext('2d');
-        const fontSize = 15;
-        const columns = Math.floor(350 / fontSize);
-        const drops = Array(columns).fill(1);
-        const letters = "01Dod0WHEELS";
+        let width, height, columns, drops;
+        const fontSize = 16;
+        const letters = "01DODOWHEELS";
 
-        function drawHackerRain() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-            ctx.fillRect(0, 0, 350, 480);
-            ctx.fillStyle = "#00f2fe"; /* 使用蓝色黑客雨 */
-            ctx.font = fontSize + "px monospace";
+        function initCanvas() {
+            width = 350;
+            height = 480;
+            canvas.width = width;
+            canvas.height = height;
+            columns = Math.floor(width / fontSize);
+            drops = Array(columns).fill(1);
+        }
+
+        function draw() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+            ctx.fillRect(0, 0, width, height);
+            
+            ctx.fillStyle = "#00f2fe"; // 品牌蓝色雨
+            ctx.font = `bold ${fontSize}px monospace`;
+
             drops.forEach((y, i) => {
                 const text = letters.charAt(Math.floor(Math.random() * letters.length));
                 ctx.fillText(text, i * fontSize, y * fontSize);
-                if(y * fontSize > 480 && Math.random() > 0.98) drops[i] = 0;
+                
+                if (y * fontSize > height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
                 drops[i]++;
             });
         }
 
-        function resizeHackerCanvas() {
-            canvas.width = 350;
-            canvas.height = 480;
+        // --- 登录逻辑 ---
+        function handleLogin() {
+            const code = document.getElementById('access-code').value;
+            const btn = document.querySelector('.btn-sign-in');
+            
+            if(code.length > 0) {
+                btn.innerText = "VERIFYING...";
+                document.getElementById('login-card').style.opacity = '0.5';
+                document.getElementById('login-card').style.transform = 'scale(0.98)';
+                document.getElementById('login-card').style.transition = '0.5s';
+                
+                // 模拟跳转过程
+                setTimeout(() => {
+                    alert('验证成功，正在进入系统...');
+                }, 1000);
+            } else {
+                alert('请输入访问代码');
+            }
         }
 
         window.addEventListener('load', () => {
-            resizeHackerCanvas();
-            setInterval(drawHackerRain, 33);
+            initCanvas();
+            setInterval(draw, 35);
         });
     </script>
 </body>
