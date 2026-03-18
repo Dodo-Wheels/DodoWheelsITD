@@ -3,259 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels | Universal Hub v5.0</title>
+    <title>DodoWheels | 自研系统平台 v7.0</title>
     <style>
         :root {
-            --mac-dark: #000000;
-            --mac-card: rgba(28, 28, 30, 0.7);
-            --blue-glow: #00f2fe;
-            --purple-glow: #a100ff;
-            --teal-glow: #00ffd5;
-            --warning-orange: #ff9800;
-            --text-dim: #a1a1a6;
+            --bg-black: #000000;
+            --card-glass: rgba(32, 32, 35, 0.6);
+            --neon-blue: #00d2ff;
+            --neon-purple: #9d50bb;
+            --neon-green: #38ef7d;
+            --neon-gold: #f2994a;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, "SF Pro Display", sans-serif; }
         
         body { 
-            background-color: var(--mac-dark); 
-            color: #fff; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center; /* 确保整体居中 */
-            overflow: hidden;
+            background: var(--bg-black); color: #fff; 
+            height: 100vh; display: flex; justify-content: center; align-items: center;
+            overflow: hidden; position: relative;
         }
 
-        /* --- 登录页：代码雨（保留黑客感） --- */
-        #login-wrapper {
-            position: fixed; inset: 0; display: flex; justify-content: center; align-items: center;
-            z-index: 1000; background: #000; transition: 1s cubic-bezier(0.19, 1, 0.22, 1);
-        }
-        .login-card {
-            display: flex; width: 800px; height: 450px; background: rgba(20,20,20,0.8);
-            border: 1px solid #333; border-radius: 30px; overflow: hidden; backdrop-filter: blur(20px);
-        }
-        #hacker-canvas { width: 350px; background: #000; opacity: 0.6; }
+        /* 背景流光气泡 */
+        .bg-glow { position: absolute; inset: 0; z-index: -1; filter: blur(120px); opacity: 0.5; }
+        .blob { position: absolute; width: 500px; height: 500px; border-radius: 50%; animation: drift 25s infinite alternate; }
+        .b1 { background: rgba(0, 210, 255, 0.3); top: -10%; left: -10%; }
+        .b2 { background: rgba(157, 80, 187, 0.3); bottom: -10%; right: -10%; animation-delay: -7s; }
+        @keyframes drift { from { transform: translate(0,0); } to { transform: translate(150px, 150px); } }
 
-        /* --- 主门户布局 --- */
-        #portal-section {
-            width: 100%;
-            max-width: 1300px;
-            padding: 40px;
-            display: none; /* 登录后显示 */
-            flex-direction: column;
-            gap: 30px;
-            animation: appAppear 1s ease forwards;
+        /* 登录页 */
+        #login-screen {
+            position: fixed; inset: 0; z-index: 999; background: #000;
+            display: flex; justify-content: center; align-items: center; transition: 1s;
         }
-
-        @keyframes appAppear { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-
-        /* 顶部栏：语言与退出 */
-        .top-nav { display: flex; justify-content: space-between; align-items: center; }
-        .lang-switch { display: flex; gap: 8px; background: rgba(255,255,255,0.05); padding: 4px; border-radius: 12px; }
-        .lang-btn { padding: 6px 12px; border: none; background: none; color: var(--text-dim); cursor: pointer; border-radius: 8px; font-size: 11px; font-weight: bold; transition: 0.3s; }
-        .lang-btn.active { background: #fff; color: #000; }
-
-        /* 三大系统卡片：多色彩突出 */
-        .major-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
-        .major-card {
-            background: var(--mac-card);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 35px 30px;
-            border-radius: 28px;
-            text-align: center;
-            transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+        .login-box {
+            display: flex; width: 850px; height: 480px; background: #0a0a0a;
+            border: 1px solid #333; border-radius: 40px; overflow: hidden; box-shadow: 0 0 80px rgba(0,0,0,1);
         }
-        /* 三色突出 */
-        .major-card.c1:hover { border-color: var(--blue-glow); box-shadow: 0 0 30px rgba(0, 242, 254, 0.2); }
-        .major-card.c2:hover { border-color: var(--purple-glow); box-shadow: 0 0 30px rgba(161, 0, 255, 0.2); }
-        .major-card.c3:hover { border-color: var(--teal-glow); box-shadow: 0 0 30px rgba(0, 255, 213, 0.2); }
+        #hacker-bg { width: 350px; background: #000; border-right: 1px solid #222; opacity: 0.8; }
+
+        /* 主界面容器 */
+        #main-ui {
+            width: 100%; max-width: 1280px; padding: 30px;
+            display: none; flex-direction: column; gap: 35px;
+            animation: slideUp 0.8s cubic-bezier(0.2, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Header */
+        .header { display: flex; justify-content: space-between; align-items: center; }
+        .brand-title { font-size: 28px; font-weight: 900; letter-spacing: -1px; }
+        .brand-title span { color: var(--neon-blue); }
         
-        .major-card h2 { font-size: 22px; margin-bottom: 12px; letter-spacing: -0.5px; }
-        .major-card p { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+        .nav-right { display: flex; gap: 20px; align-items: center; }
+        .lang-pills { background: rgba(255,255,255,0.05); padding: 5px; border-radius: 15px; display: flex; gap: 5px; border: 1px solid rgba(255,255,255,0.1); }
+        .lang-btn { padding: 8px 16px; border: none; background: transparent; color: #888; cursor: pointer; border-radius: 10px; font-weight: 800; font-size: 12px; transition: 0.3s; }
+        .lang-btn.active { background: #fff; color: #000; box-shadow: 0 5px 15px rgba(255,255,255,0.3); }
 
-        /* Admin 区域：紧凑滚动机架 */
-        .admin-shelf {
-            background: var(--mac-card);
-            border-radius: 32px;
-            padding: 35px;
-            border: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            flex-direction: column;
-            max-height: 50vh; /* 限制高度防止撑开 */
+        /* 三大系统卡片 - 色彩加强版 */
+        .major-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .card {
+            padding: 45px 35px; border-radius: 35px; text-align: center; cursor: pointer;
+            background: var(--card-glass); border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(25px); transition: 0.5s; position: relative;
         }
-        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .tim-notice { background: rgba(255, 152, 0, 0.1); border: 1px solid rgba(255, 152, 0, 0.3); color: var(--warning-orange); padding: 6px 16px; border-radius: 10px; font-size: 12px; font-weight: bold; }
-
-        .tools-container { 
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; 
-            overflow-y: auto; padding-right: 15px;
-        }
-        .tools-container::-webkit-scrollbar { width: 4px; }
-        .tools-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-
-        .cat-title { font-size: 12px; font-weight: 800; letter-spacing: 1px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-        .cat-title::before { content: ''; width: 4px; height: 14px; border-radius: 2px; }
+        .card:hover { transform: translateY(-12px); border-width: 2px; }
         
-        .cat-web .cat-title { color: var(--blue-glow); } .cat-web .cat-title::before { background: var(--blue-glow); }
-        .cat-qbo .cat-title { color: var(--purple-glow); } .cat-qbo .cat-title::before { background: var(--purple-glow); }
-        .cat-other .cat-title { color: var(--teal-glow); } .cat-other .cat-title::before { background: var(--teal-glow); }
+        /* 蓝色系 */
+        .c-blue:hover { border-color: var(--neon-blue); box-shadow: 0 15px 40px rgba(0, 210, 255, 0.3); background: rgba(0, 210, 255, 0.05); }
+        .c-blue h2 { color: var(--neon-blue); }
+        /* 紫色系 */
+        .c-purple:hover { border-color: var(--neon-purple); box-shadow: 0 15px 40px rgba(157, 80, 187, 0.3); background: rgba(157, 80, 187, 0.05); }
+        .c-purple h2 { color: var(--neon-purple); }
+        /* 绿色系 */
+        .c-green:hover { border-color: var(--neon-green); box-shadow: 0 15px 40px rgba(56, 239, 125, 0.3); background: rgba(56, 239, 125, 0.05); }
+        .c-green h2 { color: var(--neon-green); }
 
-        .tool-pill {
-            background: rgba(255,255,255,0.03);
-            margin-bottom: 8px; padding: 10px 15px; border-radius: 12px;
+        .card h2 { font-size: 26px; margin-bottom: 15px; font-weight: 800; }
+        .card p { font-size: 14px; color: #aaa; line-height: 1.6; }
+
+        /* Admin 区域 */
+        .admin-box {
+            background: var(--card-glass); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 40px; padding: 35px; display: flex; flex-direction: column;
+            max-height: 50vh; backdrop-filter: blur(30px);
+        }
+        .admin-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .tim-alert { 
+            background: linear-gradient(90deg, rgba(242,153,74,0.2), transparent);
+            color: var(--neon-gold); border: 1px solid var(--neon-gold);
+            padding: 10px 25px; border-radius: 14px; font-size: 13px; font-weight: 900;
+            animation: breathe 2.5s infinite linear;
+        }
+        @keyframes breathe { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+        .scroll-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; overflow-y: auto; padding-right: 15px; }
+        .scroll-grid::-webkit-scrollbar { width: 5px; }
+        .scroll-grid::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+        .cat-title { font-size: 13px; font-weight: 900; letter-spacing: 2px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; opacity: 0.9; }
+        .cat-web .cat-title { color: var(--neon-blue); }
+        .cat-qbo .cat-title { color: var(--neon-purple); }
+        .cat-other .cat-title { color: var(--neon-green); }
+
+        .app-pill {
+            background: rgba(255,255,255,0.03); border-radius: 14px; padding: 14px 20px;
+            margin-bottom: 12px; font-size: 13px; border: 1px solid transparent;
             display: flex; justify-content: space-between; align-items: center;
-            font-size: 12px; border: 1px solid transparent; transition: 0.2s;
+            transition: 0.3s; cursor: pointer; color: #ccc;
         }
-        .tool-pill:hover { background: rgba(255,255,255,0.08); transform: translateX(4px); }
-        .status-dot { width: 6px; height: 6px; border-radius: 50%; }
-        .dot-live { background: #34c759; box-shadow: 0 0 8px #34c759; }
-        .dot-beta { background: var(--warning-orange); box-shadow: 0 0 8px var(--warning-orange); }
+        .app-pill:hover { background: rgba(255,255,255,0.08); transform: translateX(8px); color: #fff; border-color: rgba(255,255,255,0.1); }
+        
+        .status { width: 8px; height: 8px; border-radius: 50%; background: var(--neon-green); box-shadow: 0 0 12px var(--neon-green); }
+        .status.beta { background: var(--neon-gold); box-shadow: 0 0 12px var(--neon-gold); }
 
-        .footer { margin-top: 20px; text-align: center; font-size: 10px; color: #444; letter-spacing: 3px; }
+        .footer { text-align: center; margin-top: 20px; font-size: 10px; color: #444; letter-spacing: 6px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div id="login-wrapper">
-        <div class="login-card">
-            <canvas id="hacker-canvas"></canvas>
+    <div class="bg-glow"><div class="blob b1"></div><div class="blob b2"></div></div>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <canvas id="hacker-bg"></canvas>
             <div style="flex:1; padding: 60px; display:flex; flex-direction:column; justify-content:center;">
-                <h1 style="font-size: 30px; margin-bottom: 10px;">DodoWheels OS</h1>
-                <input type="password" id="code-input" placeholder="••••" maxlength="4" style="background:rgba(255,255,255,0.05); border:1px solid #333; padding:20px; border-radius:15px; color:var(--blue-glow); font-size:24px; text-align:center; margin: 20px 0; letter-spacing:10px;">
-                <button onclick="handleLogin()" style="background:#fff; color:#000; border:none; padding:18px; border-radius:15px; font-weight:900; cursor:pointer;">SIGN IN</button>
+                <h1 style="font-size: 32px; font-weight: 900; margin-bottom: 10px;">DodoWheels</h1>
+                <p style="color:#666; font-size:14px; margin-bottom:30px;">INTERNAL ACCESS PLATFORM</p>
+                <input type="password" id="pw" placeholder="••••" maxlength="4" style="background:#1a1a1a; border:1px solid #333; padding:25px; border-radius:20px; color:var(--neon-blue); font-size:30px; text-align:center; letter-spacing:15px; width:100%;">
+                <button onclick="unlock()" style="margin-top:20px; background:#fff; color:#000; border:none; padding:20px; border-radius:20px; font-weight:900; cursor:pointer; font-size:16px; transition:0.3s;">SIGN IN</button>
             </div>
         </div>
     </div>
 
-    <section id="portal-section">
-        <div class="top-nav">
-            <div style="font-size: 24px; font-weight: 900; letter-spacing: -1px;">DODOWHEELS HUB</div>
-            <div style="display: flex; gap: 20px; align-items:center;">
-                <div class="lang-switch">
-                    <button class="lang-btn active" onclick="setLang('zh', this)">ZH</button>
-                    <button class="lang-btn" onclick="setLang('en', this)">EN</button>
-                    <button class="lang-btn" onclick="setLang('fr', this)">FR</button>
+    <section id="main-ui">
+        <div class="header">
+            <div class="brand-title">DodoWheels <span>自研系统平台</span></div>
+            <div class="nav-right">
+                <div class="lang-pills">
+                    <button class="lang-btn active" onclick="setLanguage('zh', this)">中文</button>
+                    <button class="lang-btn" onclick="setLanguage('en', this)">EN</button>
+                    <button class="lang-btn" onclick="setLanguage('fr', this)">FR</button>
                 </div>
-                <button onclick="location.reload()" style="background:rgba(255,50,50,0.1); border:none; color:#ff453a; padding:8px 16px; border-radius:10px; font-size:11px; font-weight:bold; cursor:pointer;">LOGOUT</button>
+                <button onclick="location.reload()" style="background:none; border: 1px solid #444; color:#888; padding:8px 16px; border-radius:12px; font-size:11px; cursor:pointer;">退出系统</button>
             </div>
         </div>
 
         <div class="major-grid">
-            <div class="major-card c1" onclick="window.open('https://dodo-drivers.vercel.app/')">
-                <h2 id="major-t1">派送管理系统</h2>
-                <p id="major-d1">实时调度与 AI 路径规划控制台</p>
+            <div class="card c-blue" onclick="window.open('https://dodo-drivers.vercel.app/')">
+                <h2 id="m1-t">派送管理系统</h2>
+                <p id="m1-d">自研 AI 调度引擎，实时运力监控与路径最优化控制中心。</p>
             </div>
-            <div class="major-card c2" onclick="window.open('https://dodo-tools.vercel.app/')">
-                <h2 id="major-t2">库管工具系统</h2>
-                <p id="major-d2">数字化资产追踪与库存效能分析</p>
+            <div class="card c-purple" onclick="window.open('https://dodo-tools.vercel.app/')">
+                <h2 id="m2-t">库管工具系统</h2>
+                <p id="m2-d">全链路数字化资产管理，实时追踪库存动态与仓储效能。</p>
             </div>
-            <div class="major-card c3" onclick="window.open('https://dodolms.vercel.app/')">
-                <h2 id="major-t3">学习中心</h2>
-                <p id="major-d3">企业知识库与员工自动化认证</p>
-            </div>
-        </div>
-
-        <div class="admin-shelf">
-            <div class="admin-header">
-                <div style="font-weight: bold; font-size: 14px; color: #fff;">ADMIN CONTROL UNIT</div>
-                <div class="tim-notice" id="tim-hint">💡 服务器专用，故障联系 Tim</div>
-            </div>
-
-            <div class="tools-container">
-                <div class="category-box cat-web">
-                    <div class="cat-title">WEBSITE SERVICES</div>
-                    <div class="tool-pill"><span>最新序号获取工具</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>产品价格更新工具</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>网站新增产品工具</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>客户端产品检查</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>服务端产品检查</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>客户端产品抓取</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>客户信息抓取工具</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>服务端订单抓取</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>车辆适配信息工具</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>OnHand Name更新</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>OnHand Sku更新</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>产品SKU更新工具</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>产品名称更新工具</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>PO数量-DNS更新</span><div class="status-dot dot-live"></div></div>
-                </div>
-
-                <div class="category-box cat-qbo">
-                    <div class="cat-title">FINANCIAL SERVICES</div>
-                    <div class="tool-pill"><span>QBO产品名称调整</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>库存初始化预处理</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>产品库存初始化工具</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>产品库存调整工具</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>QBO新建产品工具</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>QBO价格维护工具</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>QBO产品SKU更新</span><div class="status-dot dot-live"></div></div>
-                </div>
-
-                <div class="category-box cat-other">
-                    <div class="cat-title">UTILITY & SYNC</div>
-                    <div class="tool-pill"><span>Dodo AI 小助手</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>价格查询工具</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>QBO/WEB库存校验</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>QBO/WEB数据校验</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>集装箱处理工具</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill"><span>OCR识别工具</span><div class="status-dot dot-live"></div></div>
-                    <div class="tool-pill" style="border: 1px solid rgba(255,152,0,0.2);"><span>网单同步QBO工具</span><div class="status-dot dot-beta"></div></div>
-                </div>
+            <div class="card c-green" onclick="window.open('https://dodolms.vercel.app/')">
+                <h2 id="m3-t">学习中心</h2>
+                <p id="m3-d">企业内部知识库平台，自动化员工入职培训与技能认证系统。</p>
             </div>
         </div>
 
-        <div class="footer">DODOWHEELS INFRASTRUCTURE • 2026</div>
+        <div class="admin-box">
+            <div class="admin-top">
+                <div style="font-weight: 900; font-size: 16px; letter-spacing: 1px;" id="admin-title">ADMIN 自研工具集</div>
+                <div class="tim-alert" id="tim-msg">💡 服务器专用，故障联系 Tim</div>
+            </div>
+
+            <div class="scroll-grid">
+                <div class="cat-group cat-web">
+                    <div class="cat-title" id="cat-web">网站相关 APPS</div>
+                    <div class="app-pill"><span>网站产品最新序号获取工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>网站产品价格更新工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>网站新增产品工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>网站客户端产品检查工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>网站服务端产品检查工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>网站客户端产品抓取工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>网站客户信息抓取工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>网站服务端订单抓取工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>网站车辆适配信息工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>网站OnHand库存-Name更新</span><div class="status"></div></div>
+                    <div class="app-pill"><span>网站OnHand库存-Sku更新</span><div class="status"></div></div>
+                    <div class="app-pill"><span>网站产品SKU更新工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>网站产品名称更新工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>网站PO数量-DNS更新工具</span><div class="status"></div></div>
+                </div>
+                <div class="cat-group cat-qbo">
+                    <div class="cat-title" id="cat-qbo">QBO 相关 APPS</div>
+                    <div class="app-pill"><span>QBO产品名称调整工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>QBO库存初始化预处理</span><div class="status"></div></div>
+                    <div class="app-pill"><span>QBO产品库存初始化工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>QBO产品库存调整工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>QBO新建产品工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>QBO价格维护工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>QBO产品SKU更新工具</span><div class="status"></div></div>
+                </div>
+                <div class="cat-group cat-other">
+                    <div class="cat-title" id="cat-other">综合及同步工具</div>
+                    <div class="app-pill"><span>DodoWheels智能AI小助手</span><div class="status"></div></div>
+                    <div class="app-pill"><span>DodoWheels价格查询工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>QBO和WEB库存数量校验</span><div class="status"></div></div>
+                    <div class="app-pill"><span>QBO和WEB库存数据校验</span><div class="status"></div></div>
+                    <div class="app-pill"><span>集装箱处理工具</span><div class="status"></div></div>
+                    <div class="app-pill"><span>OCR识别工具</span><div class="status"></div></div>
+                    <div class="app-pill" style="border: 1px solid rgba(242,153,74,0.3);"><span>网站网单同步QBO工具</span><div class="status beta"></div></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">DODOWHEELS IN-HOUSE PLATFORM • SECURITY LAYER 7 ACTIVE</div>
     </section>
 
     <script>
-        // 1. 黑客流光
-        const canvas = document.getElementById('hacker-canvas');
+        // 1. Hacker Canvas
+        const canvas = document.getElementById('hacker-bg');
         const ctx = canvas.getContext('2d');
         let drops = Array(30).fill(1);
-        function draw() {
-            ctx.fillStyle = "rgba(0,0,0,0.05)";
-            ctx.fillRect(0,0,350,450);
-            ctx.fillStyle = "#00f2fe";
-            ctx.font = "15px monospace";
+        function matrix() {
+            ctx.fillStyle = "rgba(0,0,0,0.08)";
+            ctx.fillRect(0,0,350,480);
+            ctx.fillStyle = "#00d2ff";
+            ctx.font = "14px monospace";
             drops.forEach((y, i) => {
-                ctx.fillText(String.fromCharCode(Math.random()*128), i*15, y*15);
-                if(y*15 > 450 && Math.random() > 0.975) drops[i] = 0;
+                const txt = String.fromCharCode(Math.random()*128);
+                ctx.fillText(txt, i*15, y*15);
+                if(y*15 > 480 && Math.random() > 0.98) drops[i] = 0;
                 drops[i]++;
             });
         }
-        setInterval(draw, 33);
+        setInterval(matrix, 35);
 
-        // 2. 登录控制
-        function handleLogin() {
-            if(document.getElementById('code-input').value.toLowerCase() === 'dodo') {
-                document.getElementById('login-wrapper').style.opacity = '0';
+        // 2. Unlock Logic
+        function unlock() {
+            if(document.getElementById('pw').value.toLowerCase() === 'dodo') {
+                document.getElementById('login-screen').style.opacity = '0';
                 setTimeout(() => {
-                    document.getElementById('login-wrapper').style.display = 'none';
-                    document.getElementById('portal-section').style.display = 'flex';
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('main-ui').style.display = 'flex';
                 }, 800);
             }
         }
 
-        // 3. 多语言逻辑
-        const langData = {
-            zh: { t1: "派送管理系统", d1: "实时调度与 AI 路径规划", tim: "💡 服务器专用，故障联系 Tim" },
-            en: { t1: "Delivery System", d1: "Real-time dispatch & AI Routing", tim: "💡 Server Only, Contact Tim for issues" },
-            fr: { t1: "Système de Livraison", d1: "Planification d'IA et Dispatching", tim: "💡 Serveur Uniquement, Contactez Tim" }
+        // 3. 多语言逻辑 (修复版)
+        const dict = {
+            zh: {
+                m1t: "派送管理系统", m1d: "自研 AI 调度引擎，实时运力监控与路径最优化控制中心。",
+                m2t: "库管工具系统", m2d: "全链路数字化资产管理，实时追踪库存动态与仓储效能。",
+                m3t: "学习中心", m3d: "企业内部知识库平台，自动化员工入职培训与技能认证系统。",
+                admin: "ADMIN 自研工具集", tim: "💡 服务器专用，故障联系 Tim",
+                web: "网站相关 APPS", qbo: "QBO 相关 APPS", other: "综合及同步工具"
+            },
+            en: {
+                m1t: "Delivery Management", m1d: "In-house AI dispatch engine, real-time monitoring and routing center.",
+                m2t: "Warehouse System", m2d: "End-to-end digital asset tracking and storage efficiency analytics.",
+                m3t: "Learning Center", m3d: "Internal knowledge base for automated onboarding and certification.",
+                admin: "ADMIN PRO TOOLS", tim: "💡 Server Only, Contact Tim for Help",
+                web: "WEB SERVICES", qbo: "QBO SERVICES", other: "SYNC & UTILITIES"
+            },
+            fr: {
+                m1t: "Gestion de Livraison", m1d: "Moteur d'IA interne, surveillance en temps réel et optimisation des routes.",
+                m2t: "Système d'Entrepôt", m2d: "Suivi numérique des actifs et analyse de l'efficacité du stockage.",
+                m3t: "Centre d'Apprentissage", m3d: "Base de connaissances interne pour l'intégration et la certification.",
+                admin: "UNITÉ ADMIN PRO", tim: "💡 Serveur Uniq, Contactez Tim",
+                web: "SERVICES WEB", qbo: "SERVICES QBO", other: "SYNC & UTILITAIRES"
+            }
         };
 
-        function setLang(l, btn) {
+        function setLanguage(lang, btn) {
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            document.getElementById('major-t1').innerText = langData[l].t1;
-            document.getElementById('major-d1').innerText = langData[l].d1;
-            document.getElementById('tim-hint').innerText = langData[l].tim;
-            // 同理可扩展其他翻译
+            
+            document.getElementById('m1-t').innerText = dict[lang].m1t;
+            document.getElementById('m1-d').innerText = dict[lang].m1d;
+            document.getElementById('m2-t').innerText = dict[lang].m2t;
+            document.getElementById('m2-d').innerText = dict[lang].m2d;
+            document.getElementById('m3-t').innerText = dict[lang].m3t;
+            document.getElementById('m3-d').innerText = dict[lang].m3d;
+            document.getElementById('admin-title').innerText = dict[lang].admin;
+            document.getElementById('tim-msg').innerText = dict[lang].tim;
+            document.getElementById('cat-web').innerText = dict[lang].web;
+            document.getElementById('cat-qbo').innerText = dict[lang].qbo;
+            document.getElementById('cat-other').innerText = dict[lang].other;
         }
     </script>
 </body>
