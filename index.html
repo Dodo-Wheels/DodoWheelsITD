@@ -29,9 +29,9 @@
             position: relative;
         }
 
-        /* --- 动态背景色彩气泡 --- */
+        /* --- 动态背景 --- */
         .bg-blobs { position: absolute; inset: 0; z-index: -1; overflow: hidden; filter: blur(80px); opacity: 0.5; }
-        .blob { position: absolute; border-radius: 50%; animation: move blobs_move 20s infinite alternate; }
+        .blob { position: absolute; border-radius: 50%; animation: blobs_move 20s infinite alternate; }
         .b1 { width: 450px; height: 450px; background: var(--neon-blue); top: -10%; left: -10%; }
         .b2 { width: 550px; height: 550px; background: #0033ff; bottom: -10%; right: -10%; animation-delay: -5s; }
         .b3 { width: 350px; height: 350px; background: #0055ff; top: 40%; left: 40%; animation-delay: -10s; }
@@ -48,7 +48,6 @@
             box-shadow: 0 0 80px rgba(0, 122, 255, 0.15); backdrop-filter: blur(30px);
         }
 
-        /* --- 协同工作动画区 --- */
         .anim-side {
             width: 450px; background: rgba(0,0,0,0.3); border-right: 1px solid rgba(0, 122, 255, 0.1);
             position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px;
@@ -65,23 +64,17 @@
         }
         .icon-box::after { content: ''; position: absolute; inset: -4px; border-radius: 18px; border: 1px solid rgba(0,122,255,0.2); animation: pulse 2s infinite; }
         
-        /* BOSS 专用金色效果 */
         .gold-border { border-color: var(--neon-gold); background: rgba(255, 204, 0, 0.15); box-shadow: 0 0 15px rgba(255, 204, 0, 0.2); }
         .gold-border::after { border-color: rgba(255, 204, 0, 0.4); }
 
-        /* 动画定义 */
         .it-hand { animation: typing 0.2s infinite alternate; }
         @keyframes typing { from { transform: translateY(0); } to { transform: translateY(-4px); } }
-        
         .wh-box { animation: lift 1.5s infinite ease-in-out; }
         @keyframes lift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-
         .cs-wave { width: 8px; height: 8px; background: var(--neon-blue); border-radius: 50%; animation: sonar 1.5s infinite; opacity: 0; }
         @keyframes sonar { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(2.2); opacity: 0; } }
-
         .driver-steer { animation: rotate 3s infinite ease-in-out; }
         @keyframes rotate { 0%, 100% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } }
-
         .money-float { animation: float 2s infinite ease-in-out; }
         @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-5px) scale(1.1); } }
 
@@ -89,7 +82,7 @@
         .worker-info b { display: block; font-size: 11px; color: #fff; letter-spacing: 0.5px; }
         .worker-info span { font-size: 9px; color: var(--text-dim); white-space: nowrap; }
 
-        /* --- 主门户布局 --- */
+        /* --- 主门户 --- */
         #portal-section {
             width: 100%; max-width: 1250px; padding: 20px;
             display: none; flex-direction: column; gap: 20px;
@@ -110,7 +103,6 @@
         }
         .exit-btn:hover { background: #ff3b30; color: #fff; box-shadow: 0 0 15px rgba(255, 59, 48, 0.4); }
 
-        /* --- 仪表盘 --- */
         .dashboard-banner {
             background: rgba(0, 122, 255, 0.08); border: 1px solid rgba(0, 122, 255, 0.2);
             border-radius: 25px; padding: 20px 40px; display: flex; justify-content: space-around;
@@ -121,7 +113,6 @@
         .dash-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
         .dash-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.1); }
 
-        /* 卡片网格 */
         .major-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
         .major-card {
             padding: 35px 30px; border-radius: 35px; text-align: center; cursor: pointer;
@@ -153,7 +144,6 @@
             padding: 8px 20px; border-radius: 12px; font-size: 13px; font-weight: bold;
             animation: pulse 2s infinite;
         }
-        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.98); } }
 
         .app-scroller { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; overflow-y: auto; padding-right: 15px; }
         .app-scroller::-webkit-scrollbar { width: 5px; }
@@ -180,106 +170,57 @@
 </head>
 <body>
 
-    <div class="bg-blobs">
-        <div class="blob b1"></div>
-        <div class="blob b2"></div>
-        <div class="blob b3"></div>
-    </div>
+    <div class="bg-blobs"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
 
     <div id="login-wrapper">
         <div class="login-card">
             <div class="anim-side">
                 <div class="role-grid">
                     <div class="worker-item" style="margin-bottom: 10px;">
-                        <div class="icon-box gold-border">👑<div style="position:absolute; bottom:2px; right:2px; font-size:10px;">✨</div></div>
+                        <div class="icon-box gold-border">👑</div>
                         <div class="worker-info"><b>BOSS</b><span>Strategic Decision</span></div>
                     </div>
-
                     <div class="role-row">
-                        <div class="worker-item">
-                            <div class="icon-box">👨‍💻<div class="it-hand" style="position:absolute; bottom:5px; right:5px; font-size:12px;">⌨️</div></div>
-                            <div class="worker-info"><b>IT DEPT</b><span>Maintenance</span></div>
-                        </div>
-                        <div class="worker-item">
-                            <div class="icon-box">📦<div class="wh-box" style="position:absolute; top:5px; right:5px; font-size:12px;">🛠️</div></div>
-                            <div class="worker-info"><b>WAREHOUSE</b><span>Inventory</span></div>
-                        </div>
-                        <div class="worker-item">
-                            <div class="icon-box">🎧<div class="cs-wave" style="position:absolute; top:18px; right:18px;"></div></div>
-                            <div class="worker-info"><b>SUPPORT</b><span>Clients</span></div>
-                        </div>
+                        <div class="worker-item"><div class="icon-box">👨‍💻</div><div class="worker-info"><b>IT DEPT</b><span>Maintenance</span></div></div>
+                        <div class="worker-item"><div class="icon-box">📦</div><div class="worker-info"><b>WAREHOUSE</b><span>Inventory</span></div></div>
+                        <div class="worker-item"><div class="icon-box">🎧</div><div class="worker-info"><b>SUPPORT</b><span>Clients</span></div></div>
                     </div>
-
                     <div class="role-row">
-                        <div class="worker-item">
-                            <div class="icon-box">🚢<div style="position:absolute; bottom:5px; right:5px; font-size:12px;">🌍</div></div>
-                            <div class="worker-info"><b>LOGISTICS</b><span>Import/Export</span></div>
-                        </div>
-                        <div class="worker-item">
-                            <div class="icon-box">🚚<div class="driver-steer" style="position:absolute; bottom:2px; right:2px; font-size:12px;">🎡</div></div>
-                            <div class="worker-info"><b>DRIVER</b><span>Fleet Ops</span></div>
-                        </div>
-                        <div class="worker-item">
-                            <div class="icon-box">💰<div class="money-float" style="position:absolute; top:5px; right:5px; font-size:12px;">📈</div></div>
-                            <div class="worker-info"><b>FINANCE</b><span>Accounting</span></div>
-                        </div>
+                        <div class="worker-item"><div class="icon-box">🚢</div><div class="worker-info"><b>LOGISTICS</b><span>Import</span></div></div>
+                        <div class="worker-item"><div class="icon-box">🚚</div><div class="worker-info"><b>DRIVER</b><span>Fleet</span></div></div>
+                        <div class="worker-item"><div class="icon-box">💰</div><div class="worker-info"><b>FINANCE</b><span>Accounting</span></div></div>
                     </div>
                 </div>
-                <div style="position:absolute; bottom:20px; color:rgba(0,122,255,0.4); font-size:9px; letter-spacing:2px; font-weight: bold;">ENTERPRISE COLLABORATION ACTIVE</div>
             </div>
-
             <div style="flex:1; padding: 60px; display:flex; flex-direction:column; justify-content:center;">
-                <h1 style="font-size: 34px; letter-spacing: 1px; line-height: 1.2; margin-bottom: 10px;">DodoWheels<br>自研系统平台</h1>
-                <p style="color:var(--text-dim); font-size:14px; margin-bottom:30px;">ENTER SYSTEM ACCESS CODE</p>
+                <h1 style="font-size: 34px; margin-bottom: 10px;">DodoWheels<br>自研系统平台</h1>
                 <input type="password" id="code-input" placeholder="••••" maxlength="4" style="background:rgba(0,122,255,0.05); border:1px solid rgba(0,122,255,0.4); padding:22px; border-radius:20px; color:var(--neon-blue); font-size:28px; text-align:center; letter-spacing:15px;">
-                <button onclick="handleLogin()" style="margin-top:25px; background:var(--neon-blue); color:#fff; border:none; padding:20px; border-radius:20px; font-weight:900; cursor:pointer; font-size:16px;">UNLOCK HUB</button>
+                <button onclick="handleLogin()" style="margin-top:25px; background:var(--neon-blue); color:#fff; border:none; padding:20px; border-radius:20px; font-weight:900; cursor:pointer;">UNLOCK HUB</button>
             </div>
         </div>
     </div>
 
     <section id="portal-section">
         <div class="header">
-            <div style="font-size: 26px; font-weight: 900; letter-spacing: -1px; color: #fff;">DODOWHEELS <span style="color:var(--neon-blue)">HUB</span></div>
+            <div style="font-size: 26px; font-weight: 900; color: #fff;">DODOWHEELS <span style="color:var(--neon-blue)">HUB</span></div>
             <div class="nav-right">
                 <div class="lang-group">
                     <button class="lang-btn active" onclick="changeLang('zh', this)">ZH</button>
                     <button class="lang-btn" onclick="changeLang('en', this)">EN</button>
                     <button class="lang-btn" onclick="changeLang('fr', this)">FR</button>
                 </div>
-                <button class="exit-btn" onclick="handleLogout()">
-                    <span>Log Out</span>
-                </button>
+                <button class="exit-btn" onclick="handleLogout()"><span id="exit-text">退出登录</span></button>
             </div>
         </div>
 
         <div class="dashboard-banner">
-            <div class="dash-item">
-                <div class="dash-val">3</div>
-                <div class="dash-label">整合系统</div>
-            </div>
+            <div class="dash-item"><div class="dash-val">3</div><div class="dash-label" data-i18n="stat-1">整合系统</div></div>
             <div class="dash-divider"></div>
-            <div class="dash-item">
-                <div class="dash-val">28</div>
-                <div class="dash-label">工具系统总数</div>
-            </div>
+            <div class="dash-item"><div class="dash-val">28</div><div class="dash-label" data-i18n="stat-2">工具总数</div></div>
             <div class="dash-divider"></div>
-            <div class="dash-item">
-                <div class="dash-val" style="color:var(--neon-blue)">14</div>
-                <div class="dash-label">网站 APP</div>
-            </div>
-            <div class="dash-item">
-                <div class="dash-val" style="color:var(--neon-purple)">7</div>
-                <div class="dash-label">QBO APP</div>
-            </div>
-            <div class="dash-item">
-                <div class="dash-val" style="color:var(--neon-green)">7</div>
-                <div class="dash-label">其他 APP</div>
-            </div>
-            <div class="dash-divider"></div>
-            <div class="dash-item">
-                <div class="dash-val" style="color:var(--neon-orange)">1</div>
-                <div class="dash-label">正在开发中</div>
-            </div>
+            <div class="dash-item"><div class="dash-val" style="color:var(--neon-blue)">14</div><div class="dash-label" data-i18n="stat-3">网站 APP</div></div>
+            <div class="dash-item"><div class="dash-val" style="color:var(--neon-purple)">7</div><div class="dash-label" data-i18n="stat-4">QBO APP</div></div>
+            <div class="dash-item"><div class="dash-val" style="color:var(--neon-green)">7</div><div class="dash-label" data-i18n="stat-5">其他 APP</div></div>
         </div>
 
         <div class="major-grid">
@@ -299,47 +240,46 @@
 
         <div class="admin-panel">
             <div class="admin-nav">
-                <div style="font-weight: 900; font-size: 15px; letter-spacing: 1px;" data-i18n="admin-title">💡以下APP是DodoWheels服务器专用，任何问题联系Tim</div>
-                <div class="tim-badge" id="tim-text" data-i18n="tim-msg"></div>
+                <div style="font-weight: 900; font-size: 15px;" data-i18n="admin-title">💡 以下APP是DodoWheels服务器专用</div>
+                <div class="tim-badge" data-i18n="tim-msg">💡 联系 Tim 获取支持</div>
             </div>
-
             <div class="app-scroller">
                 <div class="cat-group cat-web">
                     <h3 data-i18n="cat-web">网站相关 APP (14)</h3>
-                    <div class="app-item"><span data-i18n="a1">网站产品最新序号获取工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a2">网站产品价格更新工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a3">网站新增产品工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a4">网站客户端产品检查工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a5">网站服务端产品检查工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a6">网站客户端产品抓取工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a7">网站客户信息抓取工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a8">网站服务端订单抓取工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a9">网站车辆适配信息工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a10">网站OnHand库存-Name更新</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a11">网站OnHand库存-Sku更新</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a12">网站产品SKU更新工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a13">网站产品名称更新工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a14">网站PO数量-DNS更新工具</span><div class="status-dot"></div></div>
+                    <div class="app-item">1. 网站产品最新序号获取工具<div class="status-dot"></div></div>
+                    <div class="app-item">2. 网站产品价格更新工具<div class="status-dot"></div></div>
+                    <div class="app-item">3. 网站新增产品工具<div class="status-dot"></div></div>
+                    <div class="app-item">4. 网站客户端产品检查工具<div class="status-dot"></div></div>
+                    <div class="app-item">5. 网站服务端产品检查工具<div class="status-dot"></div></div>
+                    <div class="app-item">6. 网站客户端产品抓取工具<div class="status-dot"></div></div>
+                    <div class="app-item">7. 网站客户信息抓取工具<div class="status-dot"></div></div>
+                    <div class="app-item">8. 网站服务端订单抓取工具<div class="status-dot"></div></div>
+                    <div class="app-item">9. 网站车辆适配信息工具<div class="status-dot"></div></div>
+                    <div class="app-item">10. 网站OnHand库存-Name更新<div class="status-dot"></div></div>
+                    <div class="app-item">11. 网站OnHand库存-Sku更新<div class="status-dot"></div></div>
+                    <div class="app-item">12. 网站产品SKU更新工具<div class="status-dot"></div></div>
+                    <div class="app-item">13. 网站产品名称更新工具<div class="status-dot"></div></div>
+                    <div class="app-item">14. 网站PO数量-DNS更新工具<div class="status-dot"></div></div>
                 </div>
                 <div class="cat-group cat-qbo">
                     <h3 data-i18n="cat-qbo">QBO 相关 APP (7)</h3>
-                    <div class="app-item"><span data-i18n="a15">QBO产品名称调整工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a16">QBO产品库存初始化预处理</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a17">QBO产品库存初始化工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a18">QBO产品库存调整工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a19">QBO新建产品工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a20">QBO价格维护工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a21">QBO产品SKU更新工具</span><div class="status-dot"></div></div>
+                    <div class="app-item">15. QBO产品名称调整工具<div class="status-dot"></div></div>
+                    <div class="app-item">16. QBO产品库存初始化预处理<div class="status-dot"></div></div>
+                    <div class="app-item">17. QBO产品库存初始化工具<div class="status-dot"></div></div>
+                    <div class="app-item">18. QBO产品库存调整工具<div class="status-dot"></div></div>
+                    <div class="app-item">19. QBO新建产品工具<div class="status-dot"></div></div>
+                    <div class="app-item">20. QBO价格维护工具<div class="status-dot"></div></div>
+                    <div class="app-item">21. QBO产品SKU更新工具<div class="status-dot"></div></div>
                 </div>
                 <div class="cat-group cat-other">
                     <h3 data-i18n="cat-other">其他相关 APP (7)</h3>
-                    <div class="app-item"><span data-i18n="a22">Dodo AI 小助手</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a23">DodoWheels价格查询工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a24">QBO和WEB库存数量校验</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a25">QBO和WEB库存数据校验</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a26">集装箱处理工具</span><div class="status-dot"></div></div>
-                    <div class="app-item"><span data-i18n="a27">OCR识别工具</span><div class="status-dot"></div></div>
-                    <div class="app-item" style="border-color:var(--neon-orange)"><span data-i18n="a28">网站网单同步QBO工具</span><div class="status-dot dot-beta"></div></div>
+                    <div class="app-item">22. Dodo AI 小助手<div class="status-dot"></div></div>
+                    <div class="app-item">23. DodoWheels价格查询工具<div class="status-dot"></div></div>
+                    <div class="app-item">24. QBO和WEB库存数量校验<div class="status-dot"></div></div>
+                    <div class="app-item">25. QBO和WEB库存数据校验<div class="status-dot"></div></div>
+                    <div class="app-item">26. 集装箱处理工具<div class="status-dot"></div></div>
+                    <div class="app-item">27. OCR识别工具<div class="status-dot"></div></div>
+                    <div class="app-item" style="border-color:var(--neon-orange)">28. 网站网单同步QBO工具<div class="status-dot dot-beta"></div></div>
                 </div>
             </div>
         </div>
@@ -347,37 +287,30 @@
     </section>
 
     <script>
-        function handleLogin() {
-            if(document.getElementById('code-input').value.toLowerCase() === 'dodo') {
-                document.getElementById('login-wrapper').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('login-wrapper').style.display = 'none';
-                    document.getElementById('portal-section').style.display = 'flex';
-                }, 800);
-            }
-        }
-
-        function handleLogout() {
-            document.getElementById('code-input').value = ''; 
-            document.getElementById('portal-section').style.display = 'none';
-            document.getElementById('login-wrapper').style.display = 'flex';
-            setTimeout(() => {
-                document.getElementById('login-wrapper').style.opacity = '1';
-            }, 50);
-        }
-
         const translations = {
             zh: {
-                "m1-t": "派送管理系统", "m1-d": "实时调度与 AI 路径规划控制台",
+                "exit-text": "退出登录", "m1-t": "派送管理系统", "m1-d": "实时调度与 AI 路径规划控制台",
                 "m2-t": "仓库管理系统", "m2-d": "数字化资产追踪与库存效能分析",
                 "m3-t": "知识库系统", "m3-d": "企业知识库与员工自动化认证",
-                "admin-title": "以下APP是DodoWheels服务器专用", "tim-msg": "💡 服务器专用，任何问题联系 Tim"
+                "admin-title": "💡 以下APP是DodoWheels服务器专用", "tim-msg": "💡 联系 Tim 获取支持",
+                "stat-1": "整合系统", "stat-2": "工具总数", "stat-3": "网站 APP", "stat-4": "QBO APP", "stat-5": "其他 APP",
+                "cat-web": "网站相关 APP (14)", "cat-qbo": "QBO 相关 APP (7)", "cat-other": "其他相关 APP (7)"
             },
             en: {
-                "m1-t": "Delivery OS", "m1-d": "Real-time Dispatch & AI Logistics",
+                "exit-text": "Log Out", "m1-t": "Delivery OS", "m1-d": "Real-time Dispatch & AI Logistics",
                 "m2-t": "Warehouse OS", "m2-d": "Inventory Tracking & Analytics",
                 "m3-t": "Knowledge Base", "m3-d": "LMS & Corporate Certification",
-                "admin-title": "SERVER EXCLUSIVE APPS", "tim-msg": "💡 Server Only, Contact Tim"
+                "admin-title": "💡 SERVER EXCLUSIVE APPS", "tim-msg": "💡 Contact Tim for Support",
+                "stat-1": "INTEGRATED", "stat-2": "TOTAL TOOLS", "stat-3": "WEB APPS", "stat-4": "QBO APPS", "stat-5": "OTHER APPS",
+                "cat-web": "WEB APPS (14)", "cat-qbo": "QBO APPS (7)", "cat-other": "OTHER APPS (7)"
+            },
+            fr: {
+                "exit-text": "Déconnexion", "m1-t": "Système Livraison", "m1-d": "Dispatch et IA Logistique",
+                "m2-t": "Système Entrepôt", "m2-d": "Suivi des actifs et inventaire",
+                "m3-t": "Base Connaissances", "m3-d": "Formation et Certification",
+                "admin-title": "💡 APPS EXCLUSIVES AU SERVEUR", "tim-msg": "💡 Contactez Tim pour l'aide",
+                "stat-1": "SYSTÈMES", "stat-2": "OUTILS TOTAL", "stat-3": "APPS WEB", "stat-4": "APPS QBO", "stat-5": "AUTRES APPS",
+                "cat-web": "APPS WEB (14)", "cat-qbo": "APPS QBO (7)", "cat-other": "AUTRES APPS (7)"
             }
         };
 
@@ -386,10 +319,23 @@
             btn.classList.add('active');
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (translations[lang] && translations[lang][key]) {
-                    el.innerText = translations[lang][key];
-                }
+                if (translations[lang][key]) el.innerText = translations[lang][key];
             });
+            document.getElementById('exit-text').innerText = translations[lang]["exit-text"];
+        }
+
+        function handleLogin() {
+            if(document.getElementById('code-input').value.toLowerCase() === 'dodo') {
+                document.getElementById('login-wrapper').style.opacity = '0';
+                setTimeout(() => { document.getElementById('login-wrapper').style.display = 'none'; document.getElementById('portal-section').style.display = 'flex'; }, 800);
+            }
+        }
+
+        function handleLogout() {
+            document.getElementById('code-input').value = ''; 
+            document.getElementById('portal-section').style.display = 'none';
+            document.getElementById('login-wrapper').style.display = 'flex';
+            setTimeout(() => { document.getElementById('login-wrapper').style.opacity = '1'; }, 50);
         }
     </script>
 </body>
