@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels | Cyber Hub v6.0</title>
+    <title>DodoWheels | 自研系统平台 v6.0</title>
     <style>
         :root {
             --bg-dark: #000000;
@@ -28,12 +28,12 @@
             position: relative;
         }
 
-        /* --- 动态背景色彩气泡 --- */
+        /* --- 动态背景色彩气泡 (已调整为蓝色系) --- */
         .bg-blobs { position: absolute; inset: 0; z-index: -1; overflow: hidden; filter: blur(80px); opacity: 0.4; }
         .blob { position: absolute; border-radius: 50%; animation: move 20s infinite alternate; }
         .b1 { width: 400px; height: 400px; background: var(--neon-blue); top: -10%; left: -10%; }
-        .b2 { width: 500px; height: 500px; background: var(--neon-purple); bottom: -10%; right: -10%; animation-delay: -5s; }
-        .b3 { width: 300px; height: 300px; background: var(--neon-green); top: 40%; left: 40%; animation-delay: -10s; }
+        .b2 { width: 500px; height: 500px; background: #007aff; bottom: -10%; right: -10%; animation-delay: -5s; }
+        .b3 { width: 300px; height: 300px; background: var(--neon-blue); top: 40%; left: 40%; animation-delay: -10s; }
         @keyframes move { from { transform: translate(0,0); } to { transform: translate(100px, 100px); } }
 
         /* --- 登录页 --- */
@@ -43,10 +43,10 @@
         }
         .login-card {
             display: flex; width: 850px; height: 500px; background: rgba(15,15,15,0.9);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 40px; overflow: hidden;
+            border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 40px; overflow: hidden;
             box-shadow: 0 0 100px rgba(0,0,0,0.8); backdrop-filter: blur(30px);
         }
-        #hacker-canvas { width: 380px; background: #000; border-right: 1px solid rgba(255,255,255,0.05); }
+        #hacker-canvas { width: 380px; background: #000; border-right: 1px solid rgba(0, 242, 254, 0.1); }
 
         /* --- 主门户布局 --- */
         #portal-section {
@@ -62,7 +62,7 @@
         .lang-btn { padding: 8px 15px; border: none; background: transparent; color: var(--text-dim); cursor: pointer; border-radius: 10px; font-weight: 800; font-size: 12px; transition: 0.3s; }
         .lang-btn.active { background: #fff; color: #000; box-shadow: 0 4px 15px rgba(255,255,255,0.2); }
 
-        /* 三大主要系统：极光凸显样式 */
+        /* 三大主要系统 */
         .major-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
         .major-card {
             padding: 40px 30px; border-radius: 35px; text-align: center; cursor: pointer;
@@ -72,7 +72,6 @@
         }
         .major-card::before { content: ''; position: absolute; inset: 0; border-radius: 35px; padding: 2px; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0.5; transition: 0.5s; }
         
-        /* 独立色彩定义 */
         .c-blue::before { background: linear-gradient(135deg, var(--neon-blue), transparent); }
         .c-purple::before { background: linear-gradient(135deg, var(--neon-purple), transparent); }
         .c-green::before { background: linear-gradient(135deg, var(--neon-green), transparent); }
@@ -93,8 +92,8 @@
         }
         .admin-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .tim-badge { 
-            background: linear-gradient(90deg, rgba(255,157,0,0.2), rgba(255,157,0,0.1));
-            color: var(--neon-orange); border: 1px solid var(--neon-orange);
+            background: linear-gradient(90deg, rgba(0,242,254,0.15), rgba(0,242,254,0.05));
+            color: var(--neon-blue); border: 1px solid var(--neon-blue);
             padding: 8px 20px; border-radius: 12px; font-size: 13px; font-weight: bold;
             animation: pulse 2s infinite;
         }
@@ -136,9 +135,9 @@
         <div class="login-card">
             <canvas id="hacker-canvas"></canvas>
             <div style="flex:1; padding: 60px; display:flex; flex-direction:column; justify-content:center;">
-                <h1 style="font-size: 34px; letter-spacing: -1px; margin-bottom: 5px;">DODO WHEELS</h1>
+                <h1 style="font-size: 30px; letter-spacing: -1px; margin-bottom: 5px;">DodoWheels自研系统平台</h1>
                 <p style="color:var(--text-dim); font-size:14px; margin-bottom:30px;">ENTER SYSTEM ACCESS CODE</p>
-                <input type="password" id="code-input" placeholder="••••" maxlength="4" style="background:rgba(255,255,255,0.05); border:1px solid #333; padding:22px; border-radius:20px; color:var(--neon-blue); font-size:28px; text-align:center; letter-spacing:15px;">
+                <input type="password" id="code-input" placeholder="••••" maxlength="4" style="background:rgba(0,242,254,0.05); border:1px solid rgba(0,242,254,0.3); padding:22px; border-radius:20px; color:var(--neon-blue); font-size:28px; text-align:center; letter-spacing:15px;">
                 <button onclick="handleLogin()" style="margin-top:25px; background:var(--neon-blue); color:#000; border:none; padding:20px; border-radius:20px; font-weight:900; cursor:pointer; font-size:16px;">UNLOCK HUB</button>
             </div>
         </div>
@@ -222,7 +221,7 @@
     </section>
 
     <script>
-        // 1. 黑客动画
+        // 1. 黑客动画 (已调整为蓝色)
         const canvas = document.getElementById('hacker-canvas');
         const ctx = canvas.getContext('2d');
         let drops = Array(30).fill(1);
@@ -251,7 +250,7 @@
             }
         }
 
-        // 3. 翻译字典 (包含 25+ App 的翻译示例)
+        // 3. 翻译字典
         const translations = {
             zh: {
                 "m1-t": "派送管理系统", "m1-d": "实时调度与 AI 路径规划控制台",
@@ -259,8 +258,15 @@
                 "m3-t": "学习中心", "m3-d": "企业知识库与员工自动化认证",
                 "admin-title": "ADMIN 控制中心", "tim-msg": "💡 服务器专用，故障联系 Tim",
                 "cat-web": "网站相关 APP", "cat-qbo": "QBO 相关 APP", "cat-other": "其他相关 APP",
-                "a1": "网站产品最新序号获取", "a15": "QBO产品名称调整", "a28": "网站网单同步QBO工具"
-                // ...篇幅有限，此处可补全所有 a1-a28
+                "a1": "网站产品最新序号获取工具", "a2": "网站产品价格更新工具", "a3": "网站新增产品工具",
+                "a4": "网站客户端产品检查工具", "a5": "网站服务端产品检查工具", "a6": "网站客户端产品抓取工具",
+                "a7": "网站客户信息抓取工具", "a8": "网站服务端订单抓取工具", "a9": "网站车辆适配信息工具",
+                "a10": "网站OnHand库存-Name更新", "a11": "网站OnHand库存-Sku更新", "a12": "网站产品SKU更新工具",
+                "a13": "网站产品名称更新工具", "a14": "网站PO数量-DNS更新工具",
+                "a15": "QBO产品名称调整工具", "a16": "QBO产品库存初始化预处理", "a17": "QBO产品库存初始化工具",
+                "a18": "QBO产品库存调整工具", "a19": "QBO新建产品工具", "a20": "QBO价格维护工具", "a21": "QBO产品SKU更新工具",
+                "a22": "Dodo AI 小助手", "a23": "DodoWheels价格查询工具", "a24": "QBO和WEB库存数量校验",
+                "a25": "QBO和WEB库存数据校验", "a26": "集装箱处理工具", "a27": "OCR识别工具", "a28": "网站网单同步QBO工具"
             },
             en: {
                 "m1-t": "Delivery OS", "m1-d": "Real-time Dispatch & AI Logistics",
@@ -268,7 +274,7 @@
                 "m3-t": "LMS Center", "m3-d": "Knowledge Base & Certification",
                 "admin-title": "ADMIN CONTROL UNIT", "tim-msg": "💡 Server Only, Contact Tim",
                 "cat-web": "WEB APPS", "cat-qbo": "QBO APPS", "cat-other": "MISC APPS",
-                "a1": "Web Product Serial Fetcher", "a15": "QBO Name Adjuster", "a28": "Order Sync QBO Tool"
+                "a1": "Web Serial Fetcher", "a28": "Order Sync QBO Tool"
             },
             fr: {
                 "m1-t": "Système de Livraison", "m1-d": "Dispatching Temps Réel & IA",
@@ -276,19 +282,16 @@
                 "m3-t": "Centre de Formation", "m3-d": "Base de Connaissance & Certifs",
                 "admin-title": "UNITÉ DE CONTRÔLE ADMIN", "tim-msg": "💡 Serveur Uniq, Contactez Tim",
                 "cat-web": "APPS WEB", "cat-qbo": "APPS QBO", "cat-other": "AUTRES APPS",
-                "a1": "Récupérateur de Séries Web", "a15": "Ajusteur de Nom QBO", "a28": "Outil Sync Commande QBO"
+                "a1": "Récupérateur de Séries Web", "a28": "Outil Sync Commande QBO"
             }
         };
 
         function changeLang(lang, btn) {
-            // 切换按钮样式
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
-            // 遍历所有带 data-i18n 的元素
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (translations[lang][key]) {
+                if (translations[lang] && translations[lang][key]) {
                     el.innerText = translations[lang][key];
                 }
             });
