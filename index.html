@@ -84,7 +84,7 @@
 
         /* --- 主门户 --- */
         #portal-section {
-            width: 100%; max-width: 1250px; padding: 20px;
+            width: 100%; max-width: 1350px; padding: 20px;
             display: none; flex-direction: column; gap: 20px;
             animation: fadeInScale 0.8s forwards;
         }
@@ -113,9 +113,10 @@
         .dash-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
         .dash-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.1); }
 
-        .major-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        /* 修改为 4 列布局 */
+        .major-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
         .major-card {
-            padding: 35px 30px; border-radius: 35px; text-align: center; cursor: pointer;
+            padding: 30px 20px; border-radius: 35px; text-align: center; cursor: pointer;
             transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid rgba(255,255,255,0.1); background: var(--card-bg);
             backdrop-filter: blur(20px); position: relative;
@@ -124,13 +125,16 @@
         .c-blue::before { background: linear-gradient(135deg, var(--neon-blue), transparent); }
         .c-purple::before { background: linear-gradient(135deg, var(--neon-purple), transparent); }
         .c-green::before { background: linear-gradient(135deg, var(--neon-green), transparent); }
+        .c-orange::before { background: linear-gradient(135deg, var(--neon-orange), transparent); }
+
         .major-card:hover { transform: translateY(-10px) scale(1.02); }
         .c-blue:hover { box-shadow: 0 20px 50px rgba(0, 122, 255, 0.3); border-color: var(--neon-blue); }
         .c-purple:hover { box-shadow: 0 20px 50px rgba(189, 0, 255, 0.3); border-color: var(--neon-purple); }
         .c-green:hover { box-shadow: 0 20px 50px rgba(0, 255, 136, 0.3); border-color: var(--neon-green); }
+        .c-orange:hover { box-shadow: 0 20px 50px rgba(255, 157, 0, 0.3); border-color: var(--neon-orange); }
 
-        .major-card h2 { font-size: 22px; margin-bottom: 8px; font-weight: 900; }
-        .major-card p { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+        .major-card h2 { font-size: 20px; margin-bottom: 8px; font-weight: 900; }
+        .major-card p { font-size: 12px; color: var(--text-dim); line-height: 1.4; }
 
         .admin-panel {
             background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
@@ -166,6 +170,7 @@
         .dot-beta { background: var(--neon-orange); box-shadow: 0 0 10px var(--neon-orange); }
 
         .footer { text-align: center; margin-top: 10px; font-size: 10px; color: #555; letter-spacing: 5px; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -214,7 +219,7 @@
         </div>
 
         <div class="dashboard-banner">
-            <div class="dash-item"><div class="dash-val">3</div><div class="dash-label" data-i18n="stat-1">整合系统</div></div>
+            <div class="dash-item"><div class="dash-val">4</div><div class="dash-label" data-i18n="stat-1">整合系统</div></div>
             <div class="dash-divider"></div>
             <div class="dash-item"><div class="dash-val">28</div><div class="dash-label" data-i18n="stat-2">工具总数</div></div>
             <div class="dash-divider"></div>
@@ -235,6 +240,10 @@
             <div class="major-card c-green" onclick="window.open('https://dodolms.vercel.app/')">
                 <h2 data-i18n="m3-t">知识库系统</h2>
                 <p data-i18n="m3-d">企业知识库与员工自动化认证</p>
+            </div>
+            <div class="major-card c-orange" onclick="alert('System Link Pending / 链接待定')">
+                <h2 data-i18n="m4-t">公司 KPI 系统</h2>
+                <p data-i18n="m4-d">绩效指标实时监控与数据化考评</p>
             </div>
         </div>
 
@@ -292,6 +301,7 @@
                 "exit-text": "退出登录", "m1-t": "派送管理系统", "m1-d": "实时调度与 AI 路径规划控制台",
                 "m2-t": "仓库管理系统", "m2-d": "数字化资产追踪与库存效能分析",
                 "m3-t": "知识库系统", "m3-d": "企业知识库与员工自动化认证",
+                "m4-t": "公司 KPI 系统", "m4-d": "绩效指标实时监控与数据化考评",
                 "admin-title": "💡 以下APP是DodoWheels服务器专用,任何问题联系Tim获取支持 💡", "tim-msg": "",
                 "stat-1": "整合系统", "stat-2": "工具总数", "stat-3": "网站 APP", "stat-4": "QBO APP", "stat-5": "其他 APP",
                 "cat-web": "网站相关 APP (14)", "cat-qbo": "QBO 相关 APP (7)", "cat-other": "其他相关 APP (7)"
@@ -300,6 +310,7 @@
                 "exit-text": "Log Out", "m1-t": "Delivery OS", "m1-d": "Real-time Dispatch & AI Logistics",
                 "m2-t": "Warehouse OS", "m2-d": "Inventory Tracking & Analytics",
                 "m3-t": "Knowledge Base", "m3-d": "LMS & Corporate Certification",
+                "m4-t": "Corporate KPI", "m4-d": "Real-time Performance Metrics & Evaluation",
                 "admin-title": "💡 SERVER EXCLUSIVE APPS Contact Tim for Support 💡", "tim-msg": "",
                 "stat-1": "INTEGRATED", "stat-2": "TOTAL TOOLS", "stat-3": "WEB APPS", "stat-4": "QBO APPS", "stat-5": "OTHER APPS",
                 "cat-web": "WEB APPS (14)", "cat-qbo": "QBO APPS (7)", "cat-other": "OTHER APPS (7)"
@@ -308,6 +319,7 @@
                 "exit-text": "Déconnexion", "m1-t": "Système Livraison", "m1-d": "Dispatch et IA Logistique",
                 "m2-t": "Système Entrepôt", "m2-d": "Suivi des actifs et inventaire",
                 "m3-t": "Base Connaissances", "m3-d": "Formation et Certification",
+                "m4-t": "Système KPI", "m4-d": "Indicateurs de performance et évaluation",
                 "admin-title": "💡 APPS EXCLUSIVES AU SERVEUR Contactez Tim pour l'aide 💡", "tim-msg": "",
                 "stat-1": "SYSTÈMES", "stat-2": "OUTILS TOTAL", "stat-3": "APPS WEB", "stat-4": "APPS QBO", "stat-5": "AUTRES APPS",
                 "cat-web": "APPS WEB (14)", "cat-qbo": "APPS QBO (7)", "cat-other": "AUTRES APPS (7)"
