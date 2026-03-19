@@ -13,7 +13,7 @@
             --neon-green: #00ff88;
             --neon-orange: #ff9d00;
             --neon-gold: #ffcc00;
-            --neon-cyan: #00d4ff; /* 新增客服系统色值 */
+            --neon-cyan: #00d4ff;
             --text-main: #ffffff;
             --text-dim: #a1a1a6;
         }
@@ -49,30 +49,53 @@
             box-shadow: 0 0 80px rgba(0, 122, 255, 0.15); backdrop-filter: blur(30px);
         }
 
+        /* --- 修复左侧图片展示区 --- */
         .anim-side {
-            width: 450px; background: rgba(0,0,0,0.3); border-right: 1px solid rgba(0, 122, 255, 0.1);
-            position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px;
+            width: 450px; 
+            background: rgba(0,0,0,0.3); 
+            border-right: 1px solid rgba(0, 122, 255, 0.1);
+            position: relative; 
+            overflow: hidden;
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
         }
         
-        .role-grid { display: flex; flex-direction: column; align-items: center; gap: 25px; width: 100%; }
-        .role-row { display: flex; justify-content: center; gap: 15px; width: 100%; }
+        #gallery-img {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 1.5s ease-in-out;
+            filter: brightness(0.65) contrast(1.1); /* 稍微压暗以突出前面的 BOSS 标识 */
+        }
 
-        .worker-item { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 110px; }
+        .role-overlay {
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.45);
+            padding: 20px 30px;
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 204, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
         .icon-box { 
-            width: 55px; height: 55px; border-radius: 15px; border: 1px solid var(--neon-blue);
-            display: flex; justify-content: center; align-items: center; font-size: 22px;
-            background: rgba(0, 122, 255, 0.1); position: relative;
+            width: 60px; height: 60px; border-radius: 18px; border: 1px solid var(--neon-gold);
+            display: flex; justify-content: center; align-items: center; font-size: 26px;
+            background: rgba(255, 204, 0, 0.1); position: relative;
         }
-        .icon-box::after { content: ''; position: absolute; inset: -4px; border-radius: 18px; border: 1px solid rgba(0,122,255,0.2); animation: pulse 2s infinite; }
+        .icon-box::after { content: ''; position: absolute; inset: -4px; border-radius: 20px; border: 1px solid rgba(255, 204, 0, 0.2); animation: pulse 2s infinite; }
         
-        .gold-border { border-color: var(--neon-gold); background: rgba(255, 204, 0, 0.15); box-shadow: 0 0 15px rgba(255, 204, 0, 0.2); }
-        .gold-border::after { border-color: rgba(255, 204, 0, 0.4); }
-
         .worker-info { text-align: center; }
-        .worker-info b { display: block; font-size: 11px; color: #fff; letter-spacing: 0.5px; }
-        .worker-info span { font-size: 9px; color: var(--text-dim); white-space: nowrap; }
+        .worker-info b { display: block; font-size: 14px; color: #fff; letter-spacing: 2px; text-transform: uppercase; }
+        .worker-info span { font-size: 10px; color: var(--text-dim); }
 
-        /* --- 主门户 --- */
+        /* --- 主门户其他样式保持不变 --- */
         #portal-section {
             width: 100%; max-width: 1400px; padding: 20px;
             display: none; flex-direction: column; gap: 20px;
@@ -103,7 +126,6 @@
         .dash-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
         .dash-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.1); }
 
-        /* --- 网格调整为 5 列以适应新卡片 --- */
         .major-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; }
         .major-card {
             padding: 25px 15px; border-radius: 30px; text-align: center; cursor: pointer;
@@ -173,23 +195,16 @@
     <div id="login-wrapper">
         <div class="login-card">
             <div class="anim-side">
-                <div class="role-grid">
-                    <div class="worker-item" style="margin-bottom: 10px;">
-                        <div class="icon-box gold-border">👑</div>
-                        <div class="worker-info"><b>BOSS</b><span>Strategic Decision</span></div>
-                    </div>
-                    <div class="role-row">
-                        <div class="worker-item"><div class="icon-box">👨‍💻</div><div class="worker-info"><b>IT DEPT</b><span>Maintenance</span></div></div>
-                        <div class="worker-item"><div class="icon-box">📦</div><div class="worker-info"><b>WAREHOUSE</b><span>Inventory</span></div></div>
-                        <div class="worker-item"><div class="icon-box">🎧</div><div class="worker-info"><b>SUPPORT</b><span>Clients</span></div></div>
-                    </div>
-                    <div class="role-row">
-                        <div class="worker-item"><div class="icon-box">🚢</div><div class="worker-info"><b>LOGISTICS</b><span>Import</span></div></div>
-                        <div class="worker-item"><div class="icon-box">🚚</div><div class="worker-info"><b>DRIVER</b><span>Fleet</span></div></div>
-                        <div class="worker-item"><div class="icon-box">💰</div><div class="worker-info"><b>FINANCE</b><span>Accounting</span></div></div>
+                <div id="gallery-img"></div>
+                <div class="role-overlay">
+                    <div class="icon-box">👑</div>
+                    <div class="worker-info">
+                        <b>BOSS</b>
+                        <span>DodoWheels Center</span>
                     </div>
                 </div>
             </div>
+
             <div style="flex:1; padding: 60px; display:flex; flex-direction:column; justify-content:center;">
                 <h1 style="font-size: 34px; margin-bottom: 10px;">DodoWheels<br>自研系统平台</h1>
                 <input type="password" id="code-input" placeholder="••••" maxlength="4" style="background:rgba(0,122,255,0.05); border:1px solid rgba(0,122,255,0.4); padding:22px; border-radius:20px; color:var(--neon-blue); font-size:28px; text-align:center; letter-spacing:15px;">
@@ -294,6 +309,39 @@
     </section>
 
     <script>
+        // 图片资源数组
+        const galleryImages = [
+            'https://www.dodowheels.com/image/cache/catalog/DOUBLESTAR/DW02-2560x600.jpg',
+            'https://www.dodowheels.com/image/cache/catalog/KAPSEN/KAPSEN%20RW501-2560x600.jpg',
+            'https://www.dodowheels.com/image/cache/catalog/TESCHE%204S-2560x600.jpg',
+            'https://www.dodowheels.com/image/cache/catalog/5334-Z%20performance-2560x600.jpg',
+            'https://www.dodowheels.com/image/cache/catalog/5%20holes-2560x600.jpg'
+        ];
+
+        let currentImgIndex = 0;
+
+        function cycleImages() {
+            const imgDiv = document.getElementById('gallery-img');
+            
+            // 淡出
+            imgDiv.style.opacity = '0';
+            
+            setTimeout(() => {
+                // 切换地址
+                imgDiv.style.backgroundImage = `url('${galleryImages[currentImgIndex]}')`;
+                // 淡入
+                imgDiv.style.opacity = '1';
+                
+                currentImgIndex = (currentImgIndex + 1) % galleryImages.length;
+            }, 800); // 配合 CSS transition
+        }
+
+        // 页面初始化
+        window.onload = () => {
+            cycleImages(); 
+            setInterval(cycleImages, 5000); // 每5秒切换一次
+        };
+
         const translations = {
             zh: {
                 "exit-text": "退出登录", "m1-t": "派送管理系统", "m1-d": "实时调度与 AI 路径规划控制台",
