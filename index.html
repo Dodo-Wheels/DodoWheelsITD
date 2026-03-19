@@ -100,7 +100,7 @@
         /* 3x3 矩阵 */
         .major-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .major-card {
-            padding: 30px 15px; border-radius: 30px; text-align: center; cursor: pointer;
+            padding: 25px 15px; border-radius: 30px; text-align: center; cursor: pointer;
             transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid rgba(255,255,255,0.1); background: var(--card-bg);
             backdrop-filter: blur(20px); position: relative;
@@ -111,43 +111,40 @@
         .c-green::before { background: linear-gradient(135deg, var(--neon-green), transparent); }
         .c-cyan::before { background: linear-gradient(135deg, var(--neon-cyan), transparent); }
         .c-orange::before { background: linear-gradient(135deg, var(--neon-orange), transparent); }
-        
         .major-card:hover { transform: translateY(-8px) scale(1.02); border-color: rgba(255,255,255,0.3); }
-        .major-card h2 { font-size: 19px; margin-bottom: 8px; font-weight: 900; }
+        .major-card h2 { font-size: 18px; margin-bottom: 8px; font-weight: 900; }
         .major-card p { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
 
-        /* --- 工具控制台 & 文字提示 --- */
+        /* --- 工具控制台 --- */
         .admin-panel {
             background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
             border-radius: 35px; padding: 20px 30px; display: flex; flex-direction: column;
-            height: 38vh; backdrop-filter: blur(30px);
+            height: 40vh; backdrop-filter: blur(30px);
         }
         .admin-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .tim-badge { color: var(--neon-blue); border: 1px solid var(--neon-blue); padding: 8px 20px; border-radius: 12px; font-size: 12px; font-weight: bold; animation: pulse 2s infinite; }
+        .tim-badge { color: var(--neon-blue); border: 1px solid rgba(0, 122, 255, 0.3); padding: 8px 20px; border-radius: 12px; font-size: 12px; font-weight: bold; background: rgba(0, 122, 255, 0.05); }
 
         .app-scroller { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; overflow-y: auto; padding-right: 15px; }
         .app-scroller::-webkit-scrollbar { width: 5px; }
         .app-scroller::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
-
-        .cat-group h3 { font-size: 12px; font-weight: 900; letter-spacing: 2px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
-        .cat-group h3::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
-        .cat-web h3 { color: var(--neon-blue); }
-        .cat-qbo h3 { color: var(--neon-purple); }
-        .cat-other h3 { color: var(--neon-green); }
 
         .app-item {
             background: rgba(255,255,255,0.03); border-radius: 12px; padding: 10px 15px;
             margin-bottom: 8px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; border: 1px solid transparent;
         }
         .app-item:hover { background: rgba(255,255,255,0.08); transform: translateX(5px); color: #fff; }
-        /* 修复：APP 29 的橘色框效果 */
         .border-orange { border: 1px solid var(--neon-orange) !important; box-shadow: 0 0 10px rgba(255, 157, 0, 0.2); }
         
+        .cat-group h3 { font-size: 12px; font-weight: 900; letter-spacing: 2px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+        .cat-group h3::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+        .cat-web h3 { color: var(--neon-blue); }
+        .cat-qbo h3 { color: var(--neon-purple); }
+        .cat-other h3 { color: var(--neon-green); }
+
         .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); }
         .dot-beta { background: var(--neon-orange); box-shadow: 0 0 10px var(--neon-orange); }
 
         .footer { text-align: center; margin-top: 10px; font-size: 10px; color: #444; letter-spacing: 5px; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -205,7 +202,7 @@
         <div class="admin-panel">
             <div class="admin-nav">
                 <div style="font-weight: 900; font-size: 15px;" data-i18n="admin-title">💡 专用服务器控制台 💡</div>
-                <div class="tim-badge" data-i18n="tim-msg">💡 任何问题联系 Tim 获取支持 💡</div>
+                <div class="tim-badge" data-i18n="tim-msg">💡 以下APP是DodoWheels服务器专用,任何问题联系Tim获取支持 💡</div>
             </div>
             <div class="app-scroller">
                 <div class="cat-group cat-web">
@@ -282,19 +279,15 @@
             scroller.style.transform = `translateX(${-currentIndex * sideWidth}px)`;
         }
 
-        function moveNext() {
-            currentIndex = (currentIndex + 1) % rawImages.length;
-            updateScroll();
-        }
-
+        function moveNext() { currentIndex = (currentIndex + 1) % rawImages.length; updateScroll(); }
         function moveNextManual() { stopAuto(); moveNext(); startAuto(); }
         function movePrev() { stopAuto(); currentIndex = (currentIndex - 1 + rawImages.length) % rawImages.length; updateScroll(); startAuto(); }
         function startAuto() { autoTimer = setInterval(moveNext, 5000); }
         function stopAuto() { clearInterval(autoTimer); }
 
         const translations = {
-            zh: { "exit-text": "退出登录", "m1-t": "派送管理系统", "m1-d": "实时调度与 AI 路径规划控制台", "m2-t": "仓库管理系统", "m2-d": "数字化资产追踪与库存效能分析", "m3-t": "知识库系统", "m3-d": "企业知识库与员工自动化认证", "m4-t": "KPI 数据中心", "m4-d": "绩效指标实时监控与数据化考评", "m5-t": "客服管理系统", "m5-d": "全渠道客户支持与工单追踪系统", "m6-t": "销售支持CRM系统", "m6-d": "客户关系维护与销售线索转化追踪", "admin-title": "💡 专用服务器控制台 💡", "tim-msg": "💡 任何问题联系 Tim 获取支持 💡", "stat-1": "整合系统", "stat-2": "工具总数", "stat-3": "网站 APP", "stat-4": "QBO APP", "stat-5": "其他 APP", "cat-web": "网站相关 APP (15)", "cat-qbo": "QBO 相关 APP (7)", "cat-other": "其他相关 APP (7)" },
-            en: { "exit-text": "Log Out", "m1-t": "Delivery OS", "m1-d": "Real-time Dispatch & AI Logistics", "m2-t": "Warehouse OS", "m2-d": "Inventory Tracking & Analytics", "m3-t": "Knowledge Base", "m3-d": "LMS & Corporate Certification", "m4-t": "KPI Data Center", "m4-d": "Real-time Performance Metrics", "m5-t": "CS Management", "m5-d": "Ticket Tracking System", "m6-t": "Sales CRM", "m6-d": "Sales Lead Tracking", "admin-title": "💡 SERVER CONSOLE 💡", "tim-msg": "💡 CONTACT TIM FOR SUPPORT 💡", "stat-1": "SYSTEMS", "stat-2": "TOOLS", "stat-3": "WEB APPS", "stat-4": "QBO APPS", "stat-5": "OTHER", "cat-web": "WEB (15)", "cat-qbo": "QBO (7)", "cat-other": "OTHER (7)" }
+            zh: { "exit-text": "退出登录", "m1-t": "派送管理系统", "m1-d": "实时调度与 AI 路径规划控制台", "m2-t": "仓库管理系统", "m2-d": "数字化资产追踪与库存效能分析", "m3-t": "知识库系统", "m3-d": "企业知识库与员工自动化认证", "m4-t": "KPI 数据中心", "m4-d": "绩效指标实时监控与数据化考评", "m5-t": "客服管理系统", "m5-d": "全渠道客户支持与工单追踪系统", "m6-t": "销售支持CRM系统", "m6-d": "客户关系维护与销售线索转化追踪", "admin-title": "💡 专用服务器控制台 💡", "tim-msg": "💡 以下APP是DodoWheels服务器专用,任何问题联系Tim获取支持 💡", "stat-1": "整合系统", "stat-2": "工具总数", "stat-3": "网站 APP", "stat-4": "QBO APP", "stat-5": "其他 APP", "cat-web": "网站相关 APP (15)", "cat-qbo": "QBO 相关 APP (7)", "cat-other": "其他相关 APP (7)" },
+            en: { "exit-text": "Log Out", "m1-t": "Delivery OS", "m1-d": "Real-time Dispatch & AI Logistics", "m2-t": "Warehouse OS", "m2-d": "Inventory Tracking & Analytics", "m3-t": "Knowledge Base", "m3-d": "LMS & Corporate Certification", "m4-t": "KPI Data Center", "m4-d": "Real-time Performance Metrics", "m5-t": "CS Management", "m5-d": "Ticket Tracking System", "m6-t": "Sales CRM", "m6-d": "Sales Lead Tracking", "admin-title": "💡 SERVER CONSOLE 💡", "tim-msg": "💡 Apps for DodoWheels Server only, contact Tim for support 💡", "stat-1": "SYSTEMS", "stat-2": "TOOLS", "stat-3": "WEB APPS", "stat-4": "QBO APPS", "stat-5": "OTHER", "cat-web": "WEB (15)", "cat-qbo": "QBO (7)", "cat-other": "OTHER (7)" }
         };
 
         function changeLang(lang, btn) {
@@ -310,10 +303,7 @@
         function handleLogin() {
             if(document.getElementById('code-input').value.toLowerCase() === 'dodo') {
                 document.getElementById('login-wrapper').style.opacity = '0';
-                setTimeout(() => { 
-                    document.getElementById('login-wrapper').style.display = 'none'; 
-                    document.getElementById('portal-section').style.display = 'flex'; 
-                }, 800);
+                setTimeout(() => { document.getElementById('login-wrapper').style.display = 'none'; document.getElementById('portal-section').style.display = 'flex'; }, 800);
             }
         }
 
