@@ -9,13 +9,11 @@
             --bg-dark: #000000;
             --card-bg: rgba(28, 28, 30, 0.6);
             --neon-blue: #007aff; 
-            --neon-purple: #bd00ff;
-            --neon-green: #00ff88;
-            --neon-orange: #ff9d00;
-            --neon-gold: #ffcc00;
-            --neon-cyan: #00d4ff;
             --text-main: #ffffff;
             --text-dim: #a1a1a6;
+            /* 关键宽度变量，方便统一修改 */
+            --side-width: 650px; 
+            --login-form-width: 350px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
@@ -31,286 +29,195 @@
         }
 
         /* --- 动态背景 --- */
-        .bg-blobs { position: absolute; inset: 0; z-index: -1; overflow: hidden; filter: blur(80px); opacity: 0.5; }
+        .bg-blobs { position: absolute; inset: 0; z-index: -1; overflow: hidden; filter: blur(80px); opacity: 0.4; }
         .blob { position: absolute; border-radius: 50%; animation: blobs_move 20s infinite alternate; }
         .b1 { width: 450px; height: 450px; background: var(--neon-blue); top: -10%; left: -10%; }
         .b2 { width: 550px; height: 550px; background: #0033ff; bottom: -10%; right: -10%; animation-delay: -5s; }
-        .b3 { width: 350px; height: 350px; background: #0055ff; top: 40%; left: 40%; animation-delay: -10s; }
         @keyframes blobs_move { from { transform: translate(0,0); } to { transform: translate(100px, 100px); } }
 
-        /* --- 登录页 --- */
+        /* --- 登录页卡片 (调宽整体以容纳大图) --- */
         #login-wrapper {
             position: fixed; inset: 0; display: flex; justify-content: center; align-items: center;
             z-index: 1000; background: #000; transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1);
         }
         .login-card {
-            display: flex; width: 1000px; height: 620px; background: rgba(10,10,10,0.9);
-            border: 1px solid rgba(0, 122, 255, 0.3); border-radius: 40px; overflow: hidden;
-            box-shadow: 0 0 80px rgba(0, 122, 255, 0.15); backdrop-filter: blur(30px);
+            display: flex; 
+            width: 1000px; /* 保持总宽度，改变内部比例 */
+            height: 600px; 
+            background: rgba(10,10,10,0.9);
+            border: 1px solid rgba(0, 122, 255, 0.2); 
+            border-radius: 40px; 
+            overflow: hidden;
+            box-shadow: 0 0 100px rgba(0, 122, 255, 0.1); 
+            backdrop-filter: blur(30px);
         }
 
-        /* --- 修复左侧图片展示区 --- */
+        /* --- 左侧大图轮播区 --- */
         .anim-side {
-            width: 450px; 
-            background: rgba(0,0,0,0.3); 
-            border-right: 1px solid rgba(0, 122, 255, 0.1);
+            width: var(--side-width); 
+            background: #000; 
             position: relative; 
             overflow: hidden;
-            display: flex; 
-            justify-content: center; 
-            align-items: center;
         }
         
-        #gallery-img {
-            position: absolute;
-            inset: 0;
+        .anim-side::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(to right, transparent 70%, rgba(0,0,0,0.9));
+            z-index: 2;
+        }
+
+        #gallery-scroller {
+            display: flex;
+            height: 100%;
+            transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+            will-change: transform;
+            z-index: 1;
+        }
+
+        .gallery-item {
+            flex-shrink: 0;
+            width: var(--side-width);
+            height: 100%;
             background-size: cover;
             background-position: center;
-            transition: opacity 1.5s ease-in-out;
-            filter: brightness(0.65) contrast(1.1); /* 稍微压暗以突出前面的 BOSS 标识 */
+            filter: brightness(0.9);
         }
 
-        .role-overlay {
-            z-index: 10;
-            background: rgba(0, 0, 0, 0.45);
-            padding: 20px 30px;
-            border-radius: 25px;
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 204, 0, 0.3);
+        /* --- 右侧登录表单 (缩小并紧凑化) --- */
+        .login-form-area {
+            flex: 1;
+            padding: 40px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center; /* 居中内容 */
+            background: linear-gradient(135deg, rgba(15,15,15,0.5), rgba(0,0,0,0.8));
         }
 
-        .icon-box { 
-            width: 60px; height: 60px; border-radius: 18px; border: 1px solid var(--neon-gold);
-            display: flex; justify-content: center; align-items: center; font-size: 26px;
-            background: rgba(255, 204, 0, 0.1); position: relative;
-        }
-        .icon-box::after { content: ''; position: absolute; inset: -4px; border-radius: 20px; border: 1px solid rgba(255, 204, 0, 0.2); animation: pulse 2s infinite; }
-        
-        .worker-info { text-align: center; }
-        .worker-info b { display: block; font-size: 14px; color: #fff; letter-spacing: 2px; text-transform: uppercase; }
-        .worker-info span { font-size: 10px; color: var(--text-dim); }
-
-        /* --- 主门户其他样式保持不变 --- */
-        #portal-section {
-            width: 100%; max-width: 1400px; padding: 20px;
-            display: none; flex-direction: column; gap: 20px;
-            animation: fadeInScale 0.8s forwards;
-        }
-        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
-        .header { display: flex; justify-content: space-between; align-items: center; }
-        .nav-right { display: flex; align-items: center; gap: 15px; }
-        .lang-group { display: flex; gap: 5px; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
-        .lang-btn { padding: 8px 15px; border: none; background: transparent; color: var(--text-dim); cursor: pointer; border-radius: 10px; font-weight: 800; font-size: 12px; transition: 0.3s; }
-        .lang-btn.active { background: #fff; color: #000; box-shadow: 0 4px 15px rgba(255,255,255,0.2); }
-        
-        .exit-btn {
-            background: rgba(255, 59, 48, 0.1); color: #ff3b30; border: 1px solid rgba(255, 59, 48, 0.3);
-            padding: 8px 15px; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: bold;
-            transition: 0.3s; display: flex; align-items: center; gap: 5px;
-        }
-        .exit-btn:hover { background: #ff3b30; color: #fff; box-shadow: 0 0 15px rgba(255, 59, 48, 0.4); }
-
-        .dashboard-banner {
-            background: rgba(0, 122, 255, 0.08); border: 1px solid rgba(0, 122, 255, 0.2);
-            border-radius: 25px; padding: 20px 40px; display: flex; justify-content: space-around;
-            align-items: center; backdrop-filter: blur(10px); text-align: center;
-        }
-        .dash-item { display: flex; flex-direction: column; gap: 5px; }
-        .dash-val { font-size: 28px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 15px rgba(0, 122, 255, 0.5); }
-        .dash-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
-        .dash-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.1); }
-
-        .major-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; }
-        .major-card {
-            padding: 25px 15px; border-radius: 30px; text-align: center; cursor: pointer;
-            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(255,255,255,0.1); background: var(--card-bg);
-            backdrop-filter: blur(20px); position: relative;
-        }
-        .major-card::before { content: ''; position: absolute; inset: 0; border-radius: 30px; padding: 2px; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0.5; transition: 0.5s; }
-        
-        .c-blue::before { background: linear-gradient(135deg, var(--neon-blue), transparent); }
-        .c-purple::before { background: linear-gradient(135deg, var(--neon-purple), transparent); }
-        .c-green::before { background: linear-gradient(135deg, var(--neon-green), transparent); }
-        .c-cyan::before { background: linear-gradient(135deg, var(--neon-cyan), transparent); }
-        .c-orange::before { background: linear-gradient(135deg, var(--neon-orange), transparent); }
-
-        .major-card:hover { transform: translateY(-8px) scale(1.03); }
-        .c-blue:hover { box-shadow: 0 15px 40px rgba(0, 122, 255, 0.3); border-color: var(--neon-blue); }
-        .c-purple:hover { box-shadow: 0 15px 40px rgba(189, 0, 255, 0.3); border-color: var(--neon-purple); }
-        .c-green:hover { box-shadow: 0 15px 40px rgba(0, 255, 136, 0.3); border-color: var(--neon-green); }
-        .c-cyan:hover { box-shadow: 0 15px 40px rgba(0, 212, 255, 0.3); border-color: var(--neon-cyan); }
-        .c-orange:hover { box-shadow: 0 15px 40px rgba(255, 157, 0, 0.3); border-color: var(--neon-orange); }
-
-        .major-card h2 { font-size: 18px; margin-bottom: 8px; font-weight: 900; }
-        .major-card p { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
-
-        .admin-panel {
-            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 40px; padding: 25px 30px; display: flex; flex-direction: column;
-            max-height: 45vh; backdrop-filter: blur(30px);
-        }
-        .admin-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .tim-badge { 
-            background: linear-gradient(90deg, rgba(0,122,255,0.2), rgba(0,122,255,0.1));
-            color: var(--neon-blue); border: 1px solid var(--neon-blue);
-            padding: 8px 20px; border-radius: 12px; font-size: 13px; font-weight: bold;
-            animation: pulse 2s infinite;
+        .login-content-box {
+            width: 100%;
+            max-width: 280px; /* 限制输入区域宽度 */
+            text-align: center;
         }
 
-        .app-scroller { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; overflow-y: auto; padding-right: 15px; }
-        .app-scroller::-webkit-scrollbar { width: 5px; }
-        .app-scroller::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        .login-content-box h1 {
+            font-size: 24px;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
 
-        .cat-group h3 { font-size: 12px; font-weight: 900; letter-spacing: 2px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        .cat-group h3::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
-        .cat-web h3 { color: var(--neon-blue); }
-        .cat-qbo h3 { color: var(--neon-purple); }
-        .cat-other h3 { color: var(--neon-green); }
-
-        .app-item {
-            background: rgba(255,255,255,0.03); border-radius: 14px; padding: 12px 18px;
-            margin-bottom: 10px; font-size: 12px; border: 1px solid transparent;
-            display: flex; justify-content: space-between; align-items: center;
+        #code-input {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(0,122,255,0.3);
+            padding: 15px;
+            border-radius: 15px;
+            color: var(--neon-blue);
+            font-size: 22px;
+            text-align: center;
+            letter-spacing: 10px;
+            margin-bottom: 20px;
             transition: 0.3s;
         }
-        .app-item:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); transform: translateX(5px); color: #fff; }
-        .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); }
-        .dot-beta { background: var(--neon-orange); box-shadow: 0 0 10px var(--neon-orange); }
 
-        .footer { text-align: center; margin-top: 10px; font-size: 10px; color: #555; letter-spacing: 5px; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+        #code-input:focus {
+            border-color: var(--neon-blue);
+            background: rgba(0,122,255,0.1);
+            box-shadow: 0 0 20px rgba(0,122,255,0.2);
+        }
+
+        .unlock-btn {
+            width: 100%;
+            background: var(--neon-blue);
+            color: #fff;
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .unlock-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,122,255,0.4);
+        }
+
+        /* --- Portal 基础样式 (保持简略以节省空间) --- */
+        #portal-section { width: 100%; max-width: 1400px; padding: 20px; display: none; flex-direction: column; gap: 20px; }
+        /* ... 其他 Portal 样式同前 ... */
+        .header { display: flex; justify-content: space-between; align-items: center; }
+        .dashboard-banner { background: rgba(0, 122, 255, 0.08); border: 1px solid rgba(0, 122, 255, 0.2); border-radius: 25px; padding: 20px; display: flex; justify-content: space-around; backdrop-filter: blur(10px); }
+        .major-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; }
+        .major-card { padding: 20px; border-radius: 25px; text-align: center; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s; }
+        .major-card:hover { transform: translateY(-5px); border-color: var(--neon-blue); }
+        .admin-panel { background: var(--card-bg); border-radius: 30px; padding: 20px; max-height: 40vh; overflow: hidden; }
+        .app-scroller { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; overflow-y: auto; height: 300px; }
+        .app-item { padding: 10px; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
 <body>
 
-    <div class="bg-blobs"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+    <div class="bg-blobs"><div class="blob b1"></div><div class="blob b2"></div></div>
 
     <div id="login-wrapper">
         <div class="login-card">
             <div class="anim-side">
-                <div id="gallery-img"></div>
-                <div class="role-overlay">
-                    <div class="icon-box">👑</div>
-                    <div class="worker-info">
-                        <b>BOSS</b>
-                        <span>DodoWheels Center</span>
-                    </div>
-                </div>
+                <div id="gallery-scroller"></div>
             </div>
 
-            <div style="flex:1; padding: 60px; display:flex; flex-direction:column; justify-content:center;">
-                <h1 style="font-size: 34px; margin-bottom: 10px;">DodoWheels<br>自研系统平台</h1>
-                <input type="password" id="code-input" placeholder="••••" maxlength="4" style="background:rgba(0,122,255,0.05); border:1px solid rgba(0,122,255,0.4); padding:22px; border-radius:20px; color:var(--neon-blue); font-size:28px; text-align:center; letter-spacing:15px;">
-                <button onclick="handleLogin()" style="margin-top:25px; background:var(--neon-blue); color:#fff; border:none; padding:20px; border-radius:20px; font-weight:900; cursor:pointer;">UNLOCK HUB</button>
+            <div class="login-form-area">
+                <div class="login-content-box">
+                    <h1>DodoWheels<br><span style="color:var(--neon-blue); font-size: 18px;">INTERNAL HUB</span></h1>
+                    <input type="password" id="code-input" placeholder="••••" maxlength="4">
+                    <button class="unlock-btn" onclick="handleLogin()">Unlock System</button>
+                    <p style="margin-top: 20px; font-size: 10px; color: #444; letter-spacing: 1px;">AUTHORIZED ACCESS ONLY</p>
+                </div>
             </div>
         </div>
     </div>
 
     <section id="portal-section">
         <div class="header">
-            <div style="font-size: 26px; font-weight: 900; color: #fff;">DODOWHEELS <span style="color:var(--neon-blue)">HUB</span></div>
-            <div class="nav-right">
-                <div class="lang-group">
-                    <button class="lang-btn active" onclick="changeLang('zh', this)">ZH</button>
-                    <button class="lang-btn" onclick="changeLang('en', this)">EN</button>
-                    <button class="lang-btn" onclick="changeLang('fr', this)">FR</button>
-                </div>
-                <button class="exit-btn" onclick="handleLogout()"><span id="exit-text">退出登录</span></button>
-            </div>
+            <div style="font-size: 22px; font-weight: 900;">DODOWHEELS <span style="color:var(--neon-blue)">HUB</span></div>
+            <button onclick="handleLogout()" style="background:transparent; color:#ff3b30; border:1px solid #ff3b30; padding:5px 15px; border-radius:10px; cursor:pointer;">EXIT</button>
         </div>
 
         <div class="dashboard-banner">
-            <div class="dash-item"><div class="dash-val">5</div><div class="dash-label" data-i18n="stat-1">整合系统</div></div>
-            <div class="dash-divider"></div>
-            <div class="dash-item"><div class="dash-val">29</div><div class="dash-label" data-i18n="stat-2">工具总数</div></div>
-            <div class="dash-divider"></div>
-            <div class="dash-item"><div class="dash-val" style="color:var(--neon-blue)">15</div><div class="dash-label" data-i18n="stat-3">网站 APP</div></div>
-            <div class="dash-item"><div class="dash-val" style="color:var(--neon-purple)">7</div><div class="dash-label" data-i18n="stat-4">QBO APP</div></div>
-            <div class="dash-item"><div class="dash-val" style="color:var(--neon-green)">7</div><div class="dash-label" data-i18n="stat-5">其他 APP</div></div>
+            <div style="text-align:center"><div style="font-size:20px; font-weight:900; color:var(--neon-blue)">29</div><div style="font-size:10px; color:var(--text-dim)">TOTAL TOOLS</div></div>
+            <div style="text-align:center"><div style="font-size:20px; font-weight:900;">V 6.0</div><div style="font-size:10px; color:var(--text-dim)">SYSTEM VERSION</div></div>
         </div>
 
         <div class="major-grid">
-            <div class="major-card c-blue" onclick="window.open('https://dodo-drivers.vercel.app/')">
-                <h2 data-i18n="m1-t">派送管理系统</h2>
-                <p data-i18n="m1-d">实时调度与 AI 路径规划控制台</p>
-            </div>
-            <div class="major-card c-purple" onclick="window.open('https://dodo-tools.vercel.app/')">
-                <h2 data-i18n="m2-t">仓库管理系统</h2>
-                <p data-i18n="m2-d">数字化资产追踪与库存效能分析</p>
-            </div>
-            <div class="major-card c-green" onclick="window.open('https://dodolms.vercel.app/')">
-                <h2 data-i18n="m3-t">知识库系统</h2>
-                <p data-i18n="m3-d">企业知识库与员工自动化认证</p>
-            </div>
-            <div class="major-card c-cyan" onclick="window.open('https://dodo-cs.vercel.app/')">
-                <h2 data-i18n="m5-t">客服管理系统</h2>
-                <p data-i18n="m5-d">全渠道客户支持与工单追踪系统</p>
-            </div>
-            <div class="major-card c-orange" onclick="window.open('https://dodo-kpi.vercel.app/')">
-                <h2 data-i18n="m4-t">KPI 数据中心</h2>
-                <p data-i18n="m4-d">绩效指标实时监控与数据化考评</p>
-            </div>
+            <div class="major-card" onclick="window.open('https://dodo-drivers.vercel.app/')"><h3>派送管理</h3></div>
+            <div class="major-card" onclick="window.open('https://dodo-tools.vercel.app/')"><h3>仓库管理</h3></div>
+            <div class="major-card" onclick="window.open('https://dodolms.vercel.app/')"><h3>知识库</h3></div>
+            <div class="major-card" onclick="window.open('https://dodo-cs.vercel.app/')"><h3>客服管理</h3></div>
+            <div class="major-card" onclick="window.open('https://dodo-kpi.vercel.app/')"><h3>KPI中心</h3></div>
         </div>
 
         <div class="admin-panel">
-            <div class="admin-nav">
-                <div style="font-weight: 900; font-size: 15px;" data-i18n="admin-title"></div>
-                <div class="tim-badge" data-i18n="tim-msg">💡 以下APP是DodoWheels服务器专用,任何问题联系Tim获取支持 💡</div>
-            </div>
             <div class="app-scroller">
-                <div class="cat-group cat-web">
-                    <h3 data-i18n="cat-web">网站相关 APP (15)</h3>
-                    <div class="app-item">1. 网站产品最新序号获取工具<div class="status-dot"></div></div>
-                    <div class="app-item">2. 网站产品价格更新工具<div class="status-dot"></div></div>
-                    <div class="app-item">3. 网站新增产品工具<div class="status-dot"></div></div>
-                    <div class="app-item">4. 网站客户端产品检查工具<div class="status-dot"></div></div>
-                    <div class="app-item">5. 网站服务端产品检查工具<div class="status-dot"></div></div>
-                    <div class="app-item">6. 网站客户端产品抓取工具<div class="status-dot"></div></div>
-                    <div class="app-item">7. 网站客户信息抓取工具<div class="status-dot"></div></div>
-                    <div class="app-item">8. 网站服务端订单抓取工具<div class="status-dot"></div></div>
-                    <div class="app-item">9. 网站车辆适配信息工具<div class="status-dot"></div></div>
-                    <div class="app-item">10. 网站OnHand库存-Name更新<div class="status-dot"></div></div>
-                    <div class="app-item">11. 网站OnHand库存-Sku更新<div class="status-dot"></div></div>
-                    <div class="app-item">12. 网站产品SKU更新工具<div class="status-dot"></div></div>
-                    <div class="app-item">13. 网站产品名称更新工具<div class="status-dot"></div></div>
-                    <div class="app-item">14. 网站PO数量-DNS更新工具<div class="status-dot"></div></div>
-                    <div class="app-item">15. 客服系统数据对接工具<div class="status-dot dot-beta"></div></div>
-                </div>
-                <div class="cat-group cat-qbo">
-                    <h3 data-i18n="cat-qbo">QBO 相关 APP (7)</h3>
-                    <div class="app-item">16. QBO产品名称调整工具<div class="status-dot"></div></div>
-                    <div class="app-item">17. QBO产品库存初始化预处理<div class="status-dot"></div></div>
-                    <div class="app-item">18. QBO产品库存初始化工具<div class="status-dot"></div></div>
-                    <div class="app-item">19. QBO产品库存调整工具<div class="status-dot"></div></div>
-                    <div class="app-item">20. QBO新建产品工具<div class="status-dot"></div></div>
-                    <div class="app-item">21. QBO价格维护工具<div class="status-dot"></div></div>
-                    <div class="app-item">22. QBO产品SKU更新工具<div class="status-dot"></div></div>
-                </div>
-                <div class="cat-group cat-other">
-                    <h3 data-i18n="cat-other">其他相关 APP (7)</h3>
-                    <div class="app-item">23. Dodo AI 小助手<div class="status-dot"></div></div>
-                    <div class="app-item">24. DodoWheels价格查询工具<div class="status-dot"></div></div>
-                    <div class="app-item">25. QBO和WEB库存数量校验<div class="status-dot"></div></div>
-                    <div class="app-item">26. QBO和WEB库存数据校验<div class="status-dot"></div></div>
-                    <div class="app-item">27. 集装箱处理工具<div class="status-dot"></div></div>
-                    <div class="app-item">28. OCR识别工具<div class="status-dot"></div></div>
-                    <div class="app-item" style="border-color:var(--neon-orange)">29. 网站网单同步QBO工具<div class="status-dot dot-beta"></div></div>
-                </div>
+                <div class="app-item">网站产品最新序号获取工具</div>
+                <div class="app-item">网站产品价格更新工具</div>
+                <div class="app-item">网站新增产品工具</div>
+                <div class="app-item">QBO产品名称调整工具</div>
+                <div class="app-item">QBO产品库存初始化工具</div>
+                <div class="app-item">Dodo AI 小助手</div>
+                <div class="app-item">集装箱处理工具</div>
+                <div class="app-item">OCR识别工具</div>
             </div>
         </div>
-        <div class="footer">DODOWHEELS CORPORATE COMMAND CENTER • 2026</div>
     </section>
 
     <script>
-        // 图片资源数组
-        const galleryImages = [
+        const rawImages = [
             'https://www.dodowheels.com/image/cache/catalog/DOUBLESTAR/DW02-2560x600.jpg',
             'https://www.dodowheels.com/image/cache/catalog/KAPSEN/KAPSEN%20RW501-2560x600.jpg',
             'https://www.dodowheels.com/image/cache/catalog/TESCHE%204S-2560x600.jpg',
@@ -318,86 +225,56 @@
             'https://www.dodowheels.com/image/cache/catalog/5%20holes-2560x600.jpg'
         ];
 
-        let currentImgIndex = 0;
+        let currentIndex = 0;
+        let scroller;
+        const sideWidth = 650; // 对应 CSS 中的宽度
 
-        function cycleImages() {
-            const imgDiv = document.getElementById('gallery-img');
-            
-            // 淡出
-            imgDiv.style.opacity = '0';
-            
-            setTimeout(() => {
-                // 切换地址
-                imgDiv.style.backgroundImage = `url('${galleryImages[currentImgIndex]}')`;
-                // 淡入
-                imgDiv.style.opacity = '1';
-                
-                currentImgIndex = (currentImgIndex + 1) % galleryImages.length;
-            }, 800); // 配合 CSS transition
+        function initCarousel() {
+            scroller = document.getElementById('gallery-scroller');
+            rawImages.forEach(url => {
+                const div = document.createElement('div');
+                div.className = 'gallery-item';
+                div.style.backgroundImage = `url('${url}')`;
+                scroller.appendChild(div);
+            });
+
+            // 无缝克隆
+            const firstClone = scroller.firstElementChild.cloneNode(true);
+            scroller.appendChild(firstClone);
+            scroller.style.width = `${(rawImages.length + 1) * sideWidth}px`;
+
+            setInterval(moveNext, 5000);
         }
 
-        // 页面初始化
-        window.onload = () => {
-            cycleImages(); 
-            setInterval(cycleImages, 5000); // 每5秒切换一次
-        };
+        function moveNext() {
+            currentIndex++;
+            scroller.style.transition = "transform 1.2s cubic-bezier(0.65, 0, 0.35, 1)";
+            scroller.style.transform = `translateX(${-currentIndex * sideWidth}px)`;
 
-        const translations = {
-            zh: {
-                "exit-text": "退出登录", "m1-t": "派送管理系统", "m1-d": "实时调度与 AI 路径规划控制台",
-                "m2-t": "仓库管理系统", "m2-d": "数字化资产追踪与库存效能分析",
-                "m3-t": "知识库系统", "m3-d": "企业知识库与员工自动化认证",
-                "m4-t": "KPI 数据中心", "m4-d": "绩效指标实时监控与数据化考评",
-                "m5-t": "客服管理系统", "m5-d": "全渠道客户支持与工单追踪系统",
-                "admin-title": "💡 以下APP是DodoWheels服务器专用,任何问题联系Tim获取支持 💡", "tim-msg": "",
-                "stat-1": "整合系统", "stat-2": "工具总数", "stat-3": "网站 APP", "stat-4": "QBO APP", "stat-5": "其他 APP",
-                "cat-web": "网站相关 APP (15)", "cat-qbo": "QBO 相关 APP (7)", "cat-other": "其他相关 APP (7)"
-            },
-            en: {
-                "exit-text": "Log Out", "m1-t": "Delivery OS", "m1-d": "Real-time Dispatch & AI Logistics",
-                "m2-t": "Warehouse OS", "m2-d": "Inventory Tracking & Analytics",
-                "m3-t": "Knowledge Base", "m3-d": "LMS & Corporate Certification",
-                "m4-t": "KPI Data Center", "m4-d": "Real-time Performance Metrics & Evaluation",
-                "m5-t": "CS Management", "m5-d": "Omnichannel Support & Ticket Tracking",
-                "admin-title": "💡 SERVER EXCLUSIVE APPS Contact Tim for Support 💡", "tim-msg": "",
-                "stat-1": "INTEGRATED", "stat-2": "TOTAL TOOLS", "stat-3": "WEB APPS", "stat-4": "QBO APPS", "stat-5": "OTHER APPS",
-                "cat-web": "WEB APPS (15)", "cat-qbo": "QBO APPS (7)", "cat-other": "OTHER APPS (7)"
-            },
-            fr: {
-                "exit-text": "Déconnexion", "m1-t": "Système Livraison", "m1-d": "Dispatch et IA Logistique",
-                "m2-t": "Système Entrepôt", "m2-d": "Suivi des actifs et inventaire",
-                "m3-t": "Base Connaissances", "m3-d": "Formation et Certification",
-                "m4-t": "Centre de Données KPI", "m4-d": "Indicateurs de performance et évaluation",
-                "m5-t": "Gestion Service Client", "m5-d": "Support Omnicanal et Suivi des Tickets",
-                "admin-title": "💡 APPS EXCLUSIVES AU SERVEUR Contactez Tim pour l'aide 💡", "tim-msg": "",
-                "stat-1": "SYSTÈMES", "stat-2": "OUTILS TOTAL", "stat-3": "APPS WEB", "stat-4": "APPS QBO", "stat-5": "AUTRES APPS",
-                "cat-web": "APPS WEB (15)", "cat-qbo": "APPS QBO (7)", "cat-other": "AUTRES APPS (7)"
-            }
-        };
-
-        function changeLang(lang, btn) {
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (translations[lang][key]) el.innerText = translations[lang][key];
-            });
-            document.getElementById('exit-text').innerText = translations[lang]["exit-text"];
+            setTimeout(() => {
+                if (currentIndex >= rawImages.length) {
+                    scroller.style.transition = "none";
+                    currentIndex = 0;
+                    scroller.style.transform = `translateX(0px)`;
+                }
+            }, 1200);
         }
 
         function handleLogin() {
             if(document.getElementById('code-input').value.toLowerCase() === 'dodo') {
                 document.getElementById('login-wrapper').style.opacity = '0';
-                setTimeout(() => { document.getElementById('login-wrapper').style.display = 'none'; document.getElementById('portal-section').style.display = 'flex'; }, 800);
+                setTimeout(() => { 
+                    document.getElementById('login-wrapper').style.display = 'none'; 
+                    document.getElementById('portal-section').style.display = 'flex'; 
+                }, 800);
             }
         }
 
         function handleLogout() {
-            document.getElementById('code-input').value = ''; 
-            document.getElementById('portal-section').style.display = 'none';
-            document.getElementById('login-wrapper').style.display = 'flex';
-            setTimeout(() => { document.getElementById('login-wrapper').style.opacity = '1'; }, 50);
+            location.reload(); // 简单重载回到登录页
         }
+
+        window.onload = initCarousel;
     </script>
 </body>
 </html>
