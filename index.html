@@ -67,17 +67,6 @@
         .gold-border { border-color: var(--neon-gold); background: rgba(255, 204, 0, 0.15); box-shadow: 0 0 15px rgba(255, 204, 0, 0.2); }
         .gold-border::after { border-color: rgba(255, 204, 0, 0.4); }
 
-        .it-hand { animation: typing 0.2s infinite alternate; }
-        @keyframes typing { from { transform: translateY(0); } to { transform: translateY(-4px); } }
-        .wh-box { animation: lift 1.5s infinite ease-in-out; }
-        @keyframes lift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        .cs-wave { width: 8px; height: 8px; background: var(--neon-blue); border-radius: 50%; animation: sonar 1.5s infinite; opacity: 0; }
-        @keyframes sonar { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(2.2); opacity: 0; } }
-        .driver-steer { animation: rotate 3s infinite ease-in-out; }
-        @keyframes rotate { 0%, 100% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } }
-        .money-float { animation: float 2s infinite ease-in-out; }
-        @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-5px) scale(1.1); } }
-
         .worker-info { text-align: center; }
         .worker-info b { display: block; font-size: 11px; color: #fff; letter-spacing: 0.5px; }
         .worker-info span { font-size: 9px; color: var(--text-dim); white-space: nowrap; }
@@ -113,7 +102,6 @@
         .dash-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
         .dash-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.1); }
 
-        /* 修改为 4 列布局 */
         .major-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
         .major-card {
             padding: 30px 20px; border-radius: 35px; text-align: center; cursor: pointer;
@@ -242,7 +230,7 @@
                 <p data-i18n="m3-d">企业知识库与员工自动化认证</p>
             </div>
             <div class="major-card c-orange" onclick="alert('System Link Pending / 链接待定')">
-                <h2 data-i18n="m4-t">公司 KPI 系统</h2>
+                <h2 data-i18n="m4-t">KPI 数据中心</h2>
                 <p data-i18n="m4-d">绩效指标实时监控与数据化考评</p>
             </div>
         </div>
@@ -301,7 +289,7 @@
                 "exit-text": "退出登录", "m1-t": "派送管理系统", "m1-d": "实时调度与 AI 路径规划控制台",
                 "m2-t": "仓库管理系统", "m2-d": "数字化资产追踪与库存效能分析",
                 "m3-t": "知识库系统", "m3-d": "企业知识库与员工自动化认证",
-                "m4-t": "公司 KPI 系统", "m4-d": "绩效指标实时监控与数据化考评",
+                "m4-t": "KPI 数据中心", "m4-d": "绩效指标实时监控与数据化考评",
                 "admin-title": "💡 以下APP是DodoWheels服务器专用,任何问题联系Tim获取支持 💡", "tim-msg": "",
                 "stat-1": "整合系统", "stat-2": "工具总数", "stat-3": "网站 APP", "stat-4": "QBO APP", "stat-5": "其他 APP",
                 "cat-web": "网站相关 APP (14)", "cat-qbo": "QBO 相关 APP (7)", "cat-other": "其他相关 APP (7)"
@@ -310,7 +298,7 @@
                 "exit-text": "Log Out", "m1-t": "Delivery OS", "m1-d": "Real-time Dispatch & AI Logistics",
                 "m2-t": "Warehouse OS", "m2-d": "Inventory Tracking & Analytics",
                 "m3-t": "Knowledge Base", "m3-d": "LMS & Corporate Certification",
-                "m4-t": "Corporate KPI", "m4-d": "Real-time Performance Metrics & Evaluation",
+                "m4-t": "KPI Data Center", "m4-d": "Real-time Performance Metrics & Evaluation",
                 "admin-title": "💡 SERVER EXCLUSIVE APPS Contact Tim for Support 💡", "tim-msg": "",
                 "stat-1": "INTEGRATED", "stat-2": "TOTAL TOOLS", "stat-3": "WEB APPS", "stat-4": "QBO APPS", "stat-5": "OTHER APPS",
                 "cat-web": "WEB APPS (14)", "cat-qbo": "QBO APPS (7)", "cat-other": "OTHER APPS (7)"
@@ -319,7 +307,7 @@
                 "exit-text": "Déconnexion", "m1-t": "Système Livraison", "m1-d": "Dispatch et IA Logistique",
                 "m2-t": "Système Entrepôt", "m2-d": "Suivi des actifs et inventaire",
                 "m3-t": "Base Connaissances", "m3-d": "Formation et Certification",
-                "m4-t": "Système KPI", "m4-d": "Indicateurs de performance et évaluation",
+                "m4-t": "Centre de Données KPI", "m4-d": "Indicateurs de performance et évaluation",
                 "admin-title": "💡 APPS EXCLUSIVES AU SERVEUR Contactez Tim pour l'aide 💡", "tim-msg": "",
                 "stat-1": "SYSTÈMES", "stat-2": "OUTILS TOTAL", "stat-3": "APPS WEB", "stat-4": "APPS QBO", "stat-5": "AUTRES APPS",
                 "cat-web": "APPS WEB (14)", "cat-qbo": "APPS QBO (7)", "cat-other": "AUTRES APPS (7)"
