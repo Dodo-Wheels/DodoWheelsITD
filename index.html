@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DodoWheels | 自研系统平台 v6.0</title>
     <style>
         :root {
@@ -18,32 +18,33 @@
             --side-width: 650px; 
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         
         body { 
             background-color: var(--bg-dark); 
             color: var(--text-main); 
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
-            height: 100vh; width: 100vw;
+            min-height: 100vh; width: 100vw;
             display: flex; justify-content: center; align-items: center;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
         }
 
         /* 背景特效 */
-        .bg-blobs { position: absolute; inset: 0; z-index: -1; overflow: hidden; filter: blur(80px); opacity: 0.5; }
+        .bg-blobs { position: fixed; inset: 0; z-index: -1; overflow: hidden; filter: blur(80px); opacity: 0.4; }
         .blob { position: absolute; border-radius: 50%; animation: blobs_move 20s infinite alternate; }
-        .b1 { width: 450px; height: 450px; background: var(--neon-blue); top: -10%; left: -10%; }
-        .b2 { width: 550px; height: 550px; background: #0033ff; bottom: -10%; right: -10%; animation-delay: -5s; }
-        @keyframes blobs_move { from { transform: translate(0,0); } to { transform: translate(100px, 100px); } }
+        .b1 { width: 300px; height: 300px; background: var(--neon-blue); top: -5%; left: -5%; }
+        .b2 { width: 400px; height: 400px; background: #0033ff; bottom: -5%; right: -5%; animation-delay: -5s; }
+        @keyframes blobs_move { from { transform: translate(0,0); } to { transform: translate(50px, 50px); } }
 
         /* --- 登录界面 --- */
         #login-wrapper {
             position: fixed; inset: 0; display: flex; justify-content: center; align-items: center;
             z-index: 1000; background: #000; transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+            padding: 20px;
         }
         .login-card {
-            display: flex; width: 1000px; height: 600px; background: rgba(10,10,10,0.95);
+            display: flex; width: 100%; max-width: 1000px; height: 600px; background: rgba(10,10,10,0.95);
             border: 1px solid rgba(0, 122, 255, 0.3); border-radius: 40px; overflow: hidden;
             box-shadow: 0 0 80px rgba(0, 122, 255, 0.15); backdrop-filter: blur(30px);
         }
@@ -51,11 +52,7 @@
         .anim-side::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, transparent 80%, #000); z-index: 2; pointer-events: none; }
         
         #gallery-scroller { display: flex; height: 100%; transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1); will-change: transform; z-index: 1; }
-        .gallery-item { 
-            flex-shrink: 0; width: var(--side-width); height: 100%; 
-            background-size: cover; background-position: center; 
-            background-color: #1a1a1a; filter: brightness(0.8); 
-        }
+        .gallery-item { flex-shrink: 0; width: var(--side-width); height: 100%; background-size: cover; background-position: center; filter: brightness(0.8); }
 
         .nav-arrow {
             position: absolute; top: 50%; transform: translateY(-50%);
@@ -64,9 +61,7 @@
             cursor: pointer; z-index: 10; border: 1px solid rgba(255,255,255,0.2);
             color: white; font-size: 20px; transition: 0.3s; backdrop-filter: blur(10px);
         }
-        .nav-arrow:hover { background: rgba(0, 122, 255, 0.5); border-color: var(--neon-blue); }
-        .arrow-left { left: 20px; }
-        .arrow-right { right: 20px; }
+        .arrow-left { left: 20px; } .arrow-right { right: 20px; }
 
         .login-form-area { flex: 1; padding: 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .login-content-box { width: 100%; max-width: 280px; text-align: center; }
@@ -77,74 +72,74 @@
         #portal-section {
             width: 95%; max-width: 1400px; padding: 20px;
             display: none; flex-direction: column; gap: 20px;
-            animation: fadeInScale 0.8s forwards;
+            animation: fadeInScale 0.8s forwards; margin: 20px auto;
         }
         @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-        .header { display: flex; justify-content: space-between; align-items: center; }
-        .nav-right { display: flex; align-items: center; gap: 15px; }
-        .lang-group { display: flex; gap: 5px; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
-        .lang-btn { padding: 8px 15px; border: none; background: transparent; color: var(--text-dim); cursor: pointer; border-radius: 10px; font-weight: 800; font-size: 12px; transition: 0.3s; }
+        .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
+        .lang-group { display: flex; gap: 5px; background: rgba(255,255,255,0.05); padding: 4px; border-radius: 12px; }
+        .lang-btn { padding: 6px 12px; border: none; background: transparent; color: var(--text-dim); cursor: pointer; border-radius: 8px; font-weight: 800; font-size: 11px; }
         .lang-btn.active { background: #fff; color: #000; }
-        .exit-btn { background: rgba(255, 59, 48, 0.1); color: #ff3b30; border: 1px solid rgba(255, 59, 48, 0.3); padding: 8px 15px; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: bold; }
+        .exit-btn { background: rgba(255, 59, 48, 0.1); color: #ff3b30; border: 1px solid rgba(255, 59, 48, 0.3); padding: 6px 12px; border-radius: 10px; cursor: pointer; font-size: 11px; font-weight: bold; }
 
         .dashboard-banner {
             background: rgba(0, 122, 255, 0.08); border: 1px solid rgba(0, 122, 255, 0.2);
-            border-radius: 25px; padding: 15px 40px; display: flex; justify-content: space-around;
+            border-radius: 25px; padding: 15px; display: grid; grid-template-columns: repeat(5, 1fr);
             align-items: center; backdrop-filter: blur(10px); text-align: center;
         }
-        .dash-item { display: flex; flex-direction: column; gap: 5px; }
-        .dash-val { font-size: 26px; font-weight: 900; color: var(--neon-blue); }
-        .dash-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; }
+        .dash-val { font-size: clamp(18px, 4vw, 26px); font-weight: 900; color: var(--neon-blue); }
+        .dash-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; white-space: nowrap; }
 
-        /* 3x3 矩阵 */
         .major-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .major-card {
             padding: 25px 15px; border-radius: 30px; text-align: center; cursor: pointer;
-            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid rgba(255,255,255,0.1); background: var(--card-bg);
             backdrop-filter: blur(20px); position: relative;
         }
-        .major-card::before { content: ''; position: absolute; inset: 0; border-radius: 30px; padding: 2px; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0.4; transition: 0.5s; }
-        .c-blue::before { background: linear-gradient(135deg, var(--neon-blue), transparent); }
-        .c-purple::before { background: linear-gradient(135deg, var(--neon-purple), transparent); }
-        .c-green::before { background: linear-gradient(135deg, var(--neon-green), transparent); }
-        .c-cyan::before { background: linear-gradient(135deg, var(--neon-cyan), transparent); }
-        .c-orange::before { background: linear-gradient(135deg, var(--neon-orange), transparent); }
-        .major-card:hover { transform: translateY(-8px) scale(1.02); border-color: rgba(255,255,255,0.3); }
-        .major-card h2 { font-size: 18px; margin-bottom: 8px; font-weight: 900; }
+        .major-card:active { transform: scale(0.95); }
+        .major-card h2 { font-size: clamp(14px, 2vw, 18px); margin-bottom: 8px; font-weight: 900; }
         .major-card p { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
 
-        /* --- 工具控制台 --- */
+        /* 控制台 */
         .admin-panel {
             background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 35px; padding: 20px 30px; display: flex; flex-direction: column;
-            height: 40vh; backdrop-filter: blur(30px);
+            border-radius: 35px; padding: 20px; display: flex; flex-direction: column;
+            height: 50vh; min-height: 400px; backdrop-filter: blur(30px);
         }
-        .admin-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .tim-badge { color: var(--neon-blue); border: 1px solid rgba(0, 122, 255, 0.3); padding: 8px 20px; border-radius: 12px; font-size: 12px; font-weight: bold; background: rgba(0, 122, 255, 0.05); }
+        .admin-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+        .tim-badge { color: var(--neon-blue); border: 1px solid rgba(0, 122, 255, 0.3); padding: 8px 15px; border-radius: 12px; font-size: 11px; font-weight: bold; background: rgba(0, 122, 255, 0.05); }
 
-        .app-scroller { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; overflow-y: auto; padding-right: 15px; }
-        .app-scroller::-webkit-scrollbar { width: 5px; }
-        .app-scroller::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
-
+        .app-scroller { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; overflow-y: auto; padding-right: 10px; }
         .app-item {
             background: rgba(255,255,255,0.03); border-radius: 12px; padding: 10px 15px;
-            margin-bottom: 8px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; border: 1px solid transparent;
+            font-size: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid transparent; transition: 0.3s;
         }
-        .app-item:hover { background: rgba(255,255,255,0.08); transform: translateX(5px); color: #fff; }
-        .border-orange { border: 1px solid var(--neon-orange) !important; box-shadow: 0 0 10px rgba(255, 157, 0, 0.2); }
-        
-        .cat-group h3 { font-size: 12px; font-weight: 900; letter-spacing: 2px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+        .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); flex-shrink: 0; margin-left: 10px;}
+        .dot-beta { background: var(--neon-orange); box-shadow: 0 0 10px var(--neon-orange); }
+
+        .cat-group h3 { font-size: 12px; font-weight: 900; margin: 15px 0 10px; display: flex; align-items: center; gap: 10px; }
         .cat-group h3::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
         .cat-web h3 { color: var(--neon-blue); }
         .cat-qbo h3 { color: var(--neon-purple); }
         .cat-other h3 { color: var(--neon-green); }
 
-        .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); }
-        .dot-beta { background: var(--neon-orange); box-shadow: 0 0 10px var(--neon-orange); }
+        .footer { text-align: center; margin: 20px 0; font-size: 10px; color: #444; letter-spacing: 5px; }
 
-        .footer { text-align: center; margin-top: 10px; font-size: 10px; color: #444; letter-spacing: 5px; }
+        /* 移动端适配 */
+        @media (max-width: 850px) {
+            #portal-section { width: 100%; padding: 15px; }
+            .login-card { flex-direction: column; height: auto; max-width: 350px; border-radius: 30px; }
+            .anim-side { display: none; }
+            .login-form-area { padding: 50px 20px; }
+            
+            .dashboard-banner { grid-template-columns: repeat(3, 1fr); gap: 10px; border-radius: 20px; }
+            .major-grid { grid-template-columns: 1fr; gap: 10px; }
+            .admin-panel { height: auto; max-height: none; border-radius: 25px; padding: 15px; }
+            .app-scroller { grid-template-columns: 1fr; height: auto; overflow: visible; }
+            .header { justify-content: center; flex-direction: column; text-align: center; }
+        }
     </style>
 </head>
 <body>
@@ -171,12 +166,11 @@
 
     <section id="portal-section">
         <div class="header">
-            <div style="font-size: 26px; font-weight: 900; color: #fff;">DODOWHEELS <span style="color:var(--neon-blue)">HUB</span></div>
+            <div style="font-size: 24px; font-weight: 900; color: #fff;">DODOWHEELS <span style="color:var(--neon-blue)">HUB</span></div>
             <div class="nav-right">
                 <div class="lang-group">
                     <button class="lang-btn active" onclick="changeLang('zh', this)">ZH</button>
                     <button class="lang-btn" onclick="changeLang('en', this)">EN</button>
-                    <button class="lang-btn" onclick="changeLang('fr', this)">FR</button>
                 </div>
                 <button class="exit-btn" onclick="handleLogout()"><span id="exit-text">退出登录</span></button>
             </div>
@@ -191,18 +185,18 @@
         </div>
 
         <div class="major-grid">
-            <div class="major-card c-orange" onclick="window.open('https://dodo-crms.vercel.app/')"><h2 data-i18n="m6-t">销售支持CRM系统</h2><p data-i18n="m6-d">客户关系维护与销售线索转化追踪</p></div>
-            <div class="major-card c-purple" onclick="window.open('https://dodo-tools.vercel.app/')"><h2 data-i18n="m2-t">仓库管理系统</h2><p data-i18n="m2-d">数字化资产追踪与库存效能分析</p></div>
-            <div class="major-card c-cyan" onclick="window.open('https://dodo-cs.vercel.app/')"><h2 data-i18n="m5-t">客服管理系统</h2><p data-i18n="m5-d">全渠道客户支持与工单追踪系统</p></div>
-            <div class="major-card c-blue" onclick="window.open('https://dodo-drivers.vercel.app/')"><h2 data-i18n="m1-t">派送管理系统</h2><p data-i18n="m1-d">实时调度与 AI 路径规划控制台</p></div>
-            <div class="major-card c-green" onclick="window.open('https://dodolms.vercel.app/')"><h2 data-i18n="m3-t">知识库系统</h2><p data-i18n="m3-d">企业知识库与员工自动化认证</p></div>
-            <div class="major-card c-orange" onclick="window.open('https://dodo-kpi.vercel.app/')"><h2 data-i18n="m4-t">KPI 数据中心</h2><p data-i18n="m4-d">绩效指标实时监控与数据化考评</p></div>
+            <div class="major-card" style="border-top: 2px solid var(--neon-orange)" onclick="window.open('https://dodo-crms.vercel.app/')"><h2 data-i18n="m6-t">销售支持CRM系统</h2><p data-i18n="m6-d">客户关系维护与销售线索转化追踪</p></div>
+            <div class="major-card" style="border-top: 2px solid var(--neon-purple)" onclick="window.open('https://dodo-tools.vercel.app/')"><h2 data-i18n="m2-t">仓库管理系统</h2><p data-i18n="m2-d">数字化资产追踪与库存效能分析</p></div>
+            <div class="major-card" style="border-top: 2px solid var(--neon-cyan)" onclick="window.open('https://dodo-cs.vercel.app/')"><h2 data-i18n="m5-t">客服管理系统</h2><p data-i18n="m5-d">全渠道客户支持与工单追踪系统</p></div>
+            <div class="major-card" style="border-top: 2px solid var(--neon-blue)" onclick="window.open('https://dodo-drivers.vercel.app/')"><h2 data-i18n="m1-t">派送管理系统</h2><p data-i18n="m1-d">实时调度与 AI 路径规划控制台</p></div>
+            <div class="major-card" style="border-top: 2px solid var(--neon-green)" onclick="window.open('https://dodolms.vercel.app/')"><h2 data-i18n="m3-t">知识库系统</h2><p data-i18n="m3-d">企业知识库与员工自动化认证</p></div>
+            <div class="major-card" style="border-top: 2px solid var(--neon-orange)" onclick="window.open('https://dodo-kpi.vercel.app/')"><h2 data-i18n="m4-t">KPI 数据中心</h2><p data-i18n="m4-d">绩效指标实时监控与数据化考评</p></div>
         </div>
 
         <div class="admin-panel">
             <div class="admin-nav">
-                <div style="font-weight: 900; font-size: 15px;" data-i18n="admin-title">💡 专用服务器控制台 💡</div>
-                <div class="tim-badge" data-i18n="tim-msg">💡 以下APP是DodoWheels服务器专用,任何问题联系Tim获取支持 💡</div>
+                <div style="font-weight: 900; font-size: 15px;" data-i18n="admin-title">💡 专用服务器控制台</div>
+                <div class="tim-badge" data-i18n="tim-msg">联系 Tim 获取支持</div>
             </div>
             <div class="app-scroller">
                 <div class="cat-group cat-web">
@@ -241,11 +235,11 @@
                     <div class="app-item">26. QBO和WEB库存数据校验<div class="status-dot"></div></div>
                     <div class="app-item">27. 集装箱处理工具<div class="status-dot"></div></div>
                     <div class="app-item">28. OCR识别工具<div class="status-dot"></div></div>
-                    <div class="app-item border-orange">29. 网站网单同步QBO工具<div class="status-dot dot-beta"></div></div>
+                    <div class="app-item" style="border: 1px solid var(--neon-orange)">29. 网站网单同步QBO工具<div class="status-dot dot-beta"></div></div>
                 </div>
             </div>
         </div>
-        <div class="footer">DODOWHEELS CORPORATE COMMAND CENTER • 2026</div>
+        <div class="footer">DODOWHEELS COMMAND CENTER • 2026</div>
     </section>
 
     <script>
@@ -286,8 +280,8 @@
         function stopAuto() { clearInterval(autoTimer); }
 
         const translations = {
-            zh: { "exit-text": "退出登录", "m1-t": "派送管理系统", "m1-d": "实时调度与 AI 路径规划控制台", "m2-t": "仓库管理系统", "m2-d": "数字化资产追踪与库存效能分析", "m3-t": "知识库系统", "m3-d": "企业知识库与员工自动化认证", "m4-t": "KPI 数据中心", "m4-d": "绩效指标实时监控与数据化考评", "m5-t": "客服管理系统", "m5-d": "全渠道客户支持与工单追踪系统", "m6-t": "销售支持CRM系统", "m6-d": "客户关系维护与销售线索转化追踪", "admin-title": "💡 专用服务器控制台 💡", "tim-msg": "💡 以下APP是DodoWheels服务器专用,任何问题联系Tim获取支持 💡", "stat-1": "整合系统", "stat-2": "工具总数", "stat-3": "网站 APP", "stat-4": "QBO APP", "stat-5": "其他 APP", "cat-web": "网站相关 APP (15)", "cat-qbo": "QBO 相关 APP (7)", "cat-other": "其他相关 APP (7)" },
-            en: { "exit-text": "Log Out", "m1-t": "Delivery OS", "m1-d": "Real-time Dispatch & AI Logistics", "m2-t": "Warehouse OS", "m2-d": "Inventory Tracking & Analytics", "m3-t": "Knowledge Base", "m3-d": "LMS & Corporate Certification", "m4-t": "KPI Data Center", "m4-d": "Real-time Performance Metrics", "m5-t": "CS Management", "m5-d": "Ticket Tracking System", "m6-t": "Sales CRM", "m6-d": "Sales Lead Tracking", "admin-title": "💡 SERVER CONSOLE 💡", "tim-msg": "💡 Apps for DodoWheels Server only, contact Tim for support 💡", "stat-1": "SYSTEMS", "stat-2": "TOOLS", "stat-3": "WEB APPS", "stat-4": "QBO APPS", "stat-5": "OTHER", "cat-web": "WEB (15)", "cat-qbo": "QBO (7)", "cat-other": "OTHER (7)" }
+            zh: { "exit-text": "退出登录", "m1-t": "派送管理系统", "m1-d": "实时调度与 AI 路径规划控制台", "m2-t": "仓库管理系统", "m2-d": "数字化资产追踪与库存效能分析", "m3-t": "知识库系统", "m3-d": "企业知识库与员工自动化认证", "m4-t": "KPI 数据中心", "m4-d": "绩效指标实时监控与数据化考评", "m5-t": "客服管理系统", "m5-d": "全渠道客户支持与工单追踪系统", "m6-t": "销售支持CRM系统", "m6-d": "客户关系维护与销售线索转化追踪", "admin-title": "💡 专用服务器控制台", "tim-msg": "联系 Tim 获取支持", "stat-1": "整合系统", "stat-2": "工具总数", "stat-3": "网站 APP", "stat-4": "QBO APP", "stat-5": "其他 APP", "cat-web": "网站相关 APP (15)", "cat-qbo": "QBO 相关 APP (7)", "cat-other": "其他相关 APP (7)" },
+            en: { "exit-text": "Log Out", "m1-t": "Delivery OS", "m1-d": "Real-time Dispatch & AI Logistics", "m2-t": "Warehouse OS", "m2-d": "Inventory Tracking & Analytics", "m3-t": "Knowledge Base", "m3-d": "LMS & Corporate Certification", "m4-t": "KPI Data Center", "m4-d": "Real-time Performance Metrics", "m5-t": "CS Management", "m5-d": "Ticket Tracking System", "m6-t": "Sales CRM", "m6-d": "Sales Lead Tracking", "admin-title": "💡 SERVER CONSOLE", "tim-msg": "Contact Tim for support", "stat-1": "SYSTEMS", "stat-2": "TOOLS", "stat-3": "WEB", "stat-4": "QBO", "stat-5": "OTHER", "cat-web": "WEB (15)", "cat-qbo": "QBO (7)", "cat-other": "OTHER (7)" }
         };
 
         function changeLang(lang, btn) {
@@ -303,7 +297,11 @@
         function handleLogin() {
             if(document.getElementById('code-input').value.toLowerCase() === 'dodo') {
                 document.getElementById('login-wrapper').style.opacity = '0';
-                setTimeout(() => { document.getElementById('login-wrapper').style.display = 'none'; document.getElementById('portal-section').style.display = 'flex'; }, 800);
+                setTimeout(() => { 
+                    document.getElementById('login-wrapper').style.display = 'none'; 
+                    document.getElementById('portal-section').style.display = 'flex'; 
+                    window.scrollTo(0,0);
+                }, 800);
             }
         }
 
