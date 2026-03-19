@@ -13,6 +13,7 @@
             --neon-green: #00ff88;
             --neon-orange: #ff9d00;
             --neon-gold: #ffcc00;
+            --neon-cyan: #00d4ff; /* 新增客服系统色值 */
             --text-main: #ffffff;
             --text-dim: #a1a1a6;
         }
@@ -73,7 +74,7 @@
 
         /* --- 主门户 --- */
         #portal-section {
-            width: 100%; max-width: 1350px; padding: 20px;
+            width: 100%; max-width: 1400px; padding: 20px;
             display: none; flex-direction: column; gap: 20px;
             animation: fadeInScale 0.8s forwards;
         }
@@ -102,32 +103,36 @@
         .dash-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
         .dash-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.1); }
 
-        .major-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        /* --- 网格调整为 5 列以适应新卡片 --- */
+        .major-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; }
         .major-card {
-            padding: 30px 20px; border-radius: 35px; text-align: center; cursor: pointer;
+            padding: 25px 15px; border-radius: 30px; text-align: center; cursor: pointer;
             transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid rgba(255,255,255,0.1); background: var(--card-bg);
             backdrop-filter: blur(20px); position: relative;
         }
-        .major-card::before { content: ''; position: absolute; inset: 0; border-radius: 35px; padding: 2px; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0.5; transition: 0.5s; }
+        .major-card::before { content: ''; position: absolute; inset: 0; border-radius: 30px; padding: 2px; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0.5; transition: 0.5s; }
+        
         .c-blue::before { background: linear-gradient(135deg, var(--neon-blue), transparent); }
         .c-purple::before { background: linear-gradient(135deg, var(--neon-purple), transparent); }
         .c-green::before { background: linear-gradient(135deg, var(--neon-green), transparent); }
+        .c-cyan::before { background: linear-gradient(135deg, var(--neon-cyan), transparent); }
         .c-orange::before { background: linear-gradient(135deg, var(--neon-orange), transparent); }
 
-        .major-card:hover { transform: translateY(-10px) scale(1.02); }
-        .c-blue:hover { box-shadow: 0 20px 50px rgba(0, 122, 255, 0.3); border-color: var(--neon-blue); }
-        .c-purple:hover { box-shadow: 0 20px 50px rgba(189, 0, 255, 0.3); border-color: var(--neon-purple); }
-        .c-green:hover { box-shadow: 0 20px 50px rgba(0, 255, 136, 0.3); border-color: var(--neon-green); }
-        .c-orange:hover { box-shadow: 0 20px 50px rgba(255, 157, 0, 0.3); border-color: var(--neon-orange); }
+        .major-card:hover { transform: translateY(-8px) scale(1.03); }
+        .c-blue:hover { box-shadow: 0 15px 40px rgba(0, 122, 255, 0.3); border-color: var(--neon-blue); }
+        .c-purple:hover { box-shadow: 0 15px 40px rgba(189, 0, 255, 0.3); border-color: var(--neon-purple); }
+        .c-green:hover { box-shadow: 0 15px 40px rgba(0, 255, 136, 0.3); border-color: var(--neon-green); }
+        .c-cyan:hover { box-shadow: 0 15px 40px rgba(0, 212, 255, 0.3); border-color: var(--neon-cyan); }
+        .c-orange:hover { box-shadow: 0 15px 40px rgba(255, 157, 0, 0.3); border-color: var(--neon-orange); }
 
-        .major-card h2 { font-size: 20px; margin-bottom: 8px; font-weight: 900; }
-        .major-card p { font-size: 12px; color: var(--text-dim); line-height: 1.4; }
+        .major-card h2 { font-size: 18px; margin-bottom: 8px; font-weight: 900; }
+        .major-card p { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
 
         .admin-panel {
             background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
             border-radius: 40px; padding: 25px 30px; display: flex; flex-direction: column;
-            max-height: 48vh; backdrop-filter: blur(30px);
+            max-height: 45vh; backdrop-filter: blur(30px);
         }
         .admin-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .tim-badge { 
@@ -207,11 +212,11 @@
         </div>
 
         <div class="dashboard-banner">
-            <div class="dash-item"><div class="dash-val">4</div><div class="dash-label" data-i18n="stat-1">整合系统</div></div>
+            <div class="dash-item"><div class="dash-val">5</div><div class="dash-label" data-i18n="stat-1">整合系统</div></div>
             <div class="dash-divider"></div>
-            <div class="dash-item"><div class="dash-val">28</div><div class="dash-label" data-i18n="stat-2">工具总数</div></div>
+            <div class="dash-item"><div class="dash-val">29</div><div class="dash-label" data-i18n="stat-2">工具总数</div></div>
             <div class="dash-divider"></div>
-            <div class="dash-item"><div class="dash-val" style="color:var(--neon-blue)">14</div><div class="dash-label" data-i18n="stat-3">网站 APP</div></div>
+            <div class="dash-item"><div class="dash-val" style="color:var(--neon-blue)">15</div><div class="dash-label" data-i18n="stat-3">网站 APP</div></div>
             <div class="dash-item"><div class="dash-val" style="color:var(--neon-purple)">7</div><div class="dash-label" data-i18n="stat-4">QBO APP</div></div>
             <div class="dash-item"><div class="dash-val" style="color:var(--neon-green)">7</div><div class="dash-label" data-i18n="stat-5">其他 APP</div></div>
         </div>
@@ -229,6 +234,10 @@
                 <h2 data-i18n="m3-t">知识库系统</h2>
                 <p data-i18n="m3-d">企业知识库与员工自动化认证</p>
             </div>
+            <div class="major-card c-cyan" onclick="window.open('https://dodo-cs.vercel.app/')">
+                <h2 data-i18n="m5-t">客服管理系统</h2>
+                <p data-i18n="m5-d">全渠道客户支持与工单追踪系统</p>
+            </div>
             <div class="major-card c-orange" onclick="window.open('https://dodo-kpi.vercel.app/')">
                 <h2 data-i18n="m4-t">KPI 数据中心</h2>
                 <p data-i18n="m4-d">绩效指标实时监控与数据化考评</p>
@@ -242,7 +251,7 @@
             </div>
             <div class="app-scroller">
                 <div class="cat-group cat-web">
-                    <h3 data-i18n="cat-web">网站相关 APP (14)</h3>
+                    <h3 data-i18n="cat-web">网站相关 APP (15)</h3>
                     <div class="app-item">1. 网站产品最新序号获取工具<div class="status-dot"></div></div>
                     <div class="app-item">2. 网站产品价格更新工具<div class="status-dot"></div></div>
                     <div class="app-item">3. 网站新增产品工具<div class="status-dot"></div></div>
@@ -257,26 +266,27 @@
                     <div class="app-item">12. 网站产品SKU更新工具<div class="status-dot"></div></div>
                     <div class="app-item">13. 网站产品名称更新工具<div class="status-dot"></div></div>
                     <div class="app-item">14. 网站PO数量-DNS更新工具<div class="status-dot"></div></div>
+                    <div class="app-item">15. 客服系统数据对接工具<div class="status-dot dot-beta"></div></div>
                 </div>
                 <div class="cat-group cat-qbo">
                     <h3 data-i18n="cat-qbo">QBO 相关 APP (7)</h3>
-                    <div class="app-item">15. QBO产品名称调整工具<div class="status-dot"></div></div>
-                    <div class="app-item">16. QBO产品库存初始化预处理<div class="status-dot"></div></div>
-                    <div class="app-item">17. QBO产品库存初始化工具<div class="status-dot"></div></div>
-                    <div class="app-item">18. QBO产品库存调整工具<div class="status-dot"></div></div>
-                    <div class="app-item">19. QBO新建产品工具<div class="status-dot"></div></div>
-                    <div class="app-item">20. QBO价格维护工具<div class="status-dot"></div></div>
-                    <div class="app-item">21. QBO产品SKU更新工具<div class="status-dot"></div></div>
+                    <div class="app-item">16. QBO产品名称调整工具<div class="status-dot"></div></div>
+                    <div class="app-item">17. QBO产品库存初始化预处理<div class="status-dot"></div></div>
+                    <div class="app-item">18. QBO产品库存初始化工具<div class="status-dot"></div></div>
+                    <div class="app-item">19. QBO产品库存调整工具<div class="status-dot"></div></div>
+                    <div class="app-item">20. QBO新建产品工具<div class="status-dot"></div></div>
+                    <div class="app-item">21. QBO价格维护工具<div class="status-dot"></div></div>
+                    <div class="app-item">22. QBO产品SKU更新工具<div class="status-dot"></div></div>
                 </div>
                 <div class="cat-group cat-other">
                     <h3 data-i18n="cat-other">其他相关 APP (7)</h3>
-                    <div class="app-item">22. Dodo AI 小助手<div class="status-dot"></div></div>
-                    <div class="app-item">23. DodoWheels价格查询工具<div class="status-dot"></div></div>
-                    <div class="app-item">24. QBO和WEB库存数量校验<div class="status-dot"></div></div>
-                    <div class="app-item">25. QBO和WEB库存数据校验<div class="status-dot"></div></div>
-                    <div class="app-item">26. 集装箱处理工具<div class="status-dot"></div></div>
-                    <div class="app-item">27. OCR识别工具<div class="status-dot"></div></div>
-                    <div class="app-item" style="border-color:var(--neon-orange)">28. 网站网单同步QBO工具<div class="status-dot dot-beta"></div></div>
+                    <div class="app-item">23. Dodo AI 小助手<div class="status-dot"></div></div>
+                    <div class="app-item">24. DodoWheels价格查询工具<div class="status-dot"></div></div>
+                    <div class="app-item">25. QBO和WEB库存数量校验<div class="status-dot"></div></div>
+                    <div class="app-item">26. QBO和WEB库存数据校验<div class="status-dot"></div></div>
+                    <div class="app-item">27. 集装箱处理工具<div class="status-dot"></div></div>
+                    <div class="app-item">28. OCR识别工具<div class="status-dot"></div></div>
+                    <div class="app-item" style="border-color:var(--neon-orange)">29. 网站网单同步QBO工具<div class="status-dot dot-beta"></div></div>
                 </div>
             </div>
         </div>
@@ -290,27 +300,30 @@
                 "m2-t": "仓库管理系统", "m2-d": "数字化资产追踪与库存效能分析",
                 "m3-t": "知识库系统", "m3-d": "企业知识库与员工自动化认证",
                 "m4-t": "KPI 数据中心", "m4-d": "绩效指标实时监控与数据化考评",
+                "m5-t": "客服管理系统", "m5-d": "全渠道客户支持与工单追踪系统",
                 "admin-title": "💡 以下APP是DodoWheels服务器专用,任何问题联系Tim获取支持 💡", "tim-msg": "",
                 "stat-1": "整合系统", "stat-2": "工具总数", "stat-3": "网站 APP", "stat-4": "QBO APP", "stat-5": "其他 APP",
-                "cat-web": "网站相关 APP (14)", "cat-qbo": "QBO 相关 APP (7)", "cat-other": "其他相关 APP (7)"
+                "cat-web": "网站相关 APP (15)", "cat-qbo": "QBO 相关 APP (7)", "cat-other": "其他相关 APP (7)"
             },
             en: {
                 "exit-text": "Log Out", "m1-t": "Delivery OS", "m1-d": "Real-time Dispatch & AI Logistics",
                 "m2-t": "Warehouse OS", "m2-d": "Inventory Tracking & Analytics",
                 "m3-t": "Knowledge Base", "m3-d": "LMS & Corporate Certification",
                 "m4-t": "KPI Data Center", "m4-d": "Real-time Performance Metrics & Evaluation",
+                "m5-t": "CS Management", "m5-d": "Omnichannel Support & Ticket Tracking",
                 "admin-title": "💡 SERVER EXCLUSIVE APPS Contact Tim for Support 💡", "tim-msg": "",
                 "stat-1": "INTEGRATED", "stat-2": "TOTAL TOOLS", "stat-3": "WEB APPS", "stat-4": "QBO APPS", "stat-5": "OTHER APPS",
-                "cat-web": "WEB APPS (14)", "cat-qbo": "QBO APPS (7)", "cat-other": "OTHER APPS (7)"
+                "cat-web": "WEB APPS (15)", "cat-qbo": "QBO APPS (7)", "cat-other": "OTHER APPS (7)"
             },
             fr: {
                 "exit-text": "Déconnexion", "m1-t": "Système Livraison", "m1-d": "Dispatch et IA Logistique",
                 "m2-t": "Système Entrepôt", "m2-d": "Suivi des actifs et inventaire",
                 "m3-t": "Base Connaissances", "m3-d": "Formation et Certification",
                 "m4-t": "Centre de Données KPI", "m4-d": "Indicateurs de performance et évaluation",
+                "m5-t": "Gestion Service Client", "m5-d": "Support Omnicanal et Suivi des Tickets",
                 "admin-title": "💡 APPS EXCLUSIVES AU SERVEUR Contactez Tim pour l'aide 💡", "tim-msg": "",
                 "stat-1": "SYSTÈMES", "stat-2": "OUTILS TOTAL", "stat-3": "APPS WEB", "stat-4": "APPS QBO", "stat-5": "AUTRES APPS",
-                "cat-web": "APPS WEB (14)", "cat-qbo": "APPS QBO (7)", "cat-other": "AUTRES APPS (7)"
+                "cat-web": "APPS WEB (15)", "cat-qbo": "APPS QBO (7)", "cat-other": "AUTRES APPS (7)"
             }
         };
 
