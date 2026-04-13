@@ -99,7 +99,6 @@
 
         h1 { font-size: 44px; font-weight: 700; letter-spacing: -1.5px; margin: 0 0 50px; }
 
-        /* 内容卡片 */
         .spec-card {
             background: var(--glass-bg);
             backdrop-filter: blur(30px);
@@ -116,7 +115,6 @@
 
         h3 { font-size: 20px; margin-top: 0; margin-bottom: 24px; font-weight: 600; color: #000; }
 
-        /* 截图区域展示 */
         .screenshot-box {
             background: #fbfbfd;
             border-radius: 20px;
@@ -139,12 +137,12 @@
             border: 1px solid rgba(0,0,0,0.05);
         }
 
-        /* 现代表格 */
         .table-container {
             margin-top: 20px;
             border-radius: 16px;
             overflow: hidden;
             border: 1px solid #f2f2f2;
+            margin-bottom: 24px;
         }
 
         table { width: 100%; border-collapse: collapse; background: #fff; }
@@ -181,13 +179,13 @@
 
     <main>
         <div class="content-container">
-            <span class="tag">SPECIFICATION V1.4</span>
+            <span class="tag">SPECIFICATION V1.5</span>
             <h1>轮胎类型图标逻辑调整</h1>
             
             <div class="spec-card">
                 <h3>01. 核心需求</h3>
                 <p style="font-size: 17px; line-height: 1.7; color: #424245; margin-bottom: 30px;">
-                    产品信息维护页面，通过解析 <span class="token">Data</span> 页签中的关键字段，实现产品主图右上角的季节标识自动化渲染。 
+                    产品信息维护页面，通过解析 <span class="token">Data</span> 页签中的关键字段 <span class="token">FINISH</span>，实现产品主图右上角的季节标识自动化渲染。 
                     此举旨在优化用户在客户端浏览轮胎产品时的<strong class="blue-bold">视觉感知</strong>。
                 </p>
                 
@@ -232,6 +230,11 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div class="screenshot-box">
+                    <p>参考图示：四种轮胎类型图标规范</p>
+                    <img src="type.png" alt="轮胎类型图标汇总" class="img-placeholder" style="max-width: 400px; margin: 0 auto;">
+                </div>
             </div>
 
             <div class="spec-card">
@@ -239,7 +242,7 @@
                 <div style="display: flex; justify-content: center; padding: 20px;">
                     <img src="front.png" alt="前端预览截图" style="max-width: 320px; border-radius: 16px; box-shadow: var(--shadow);">
                 </div>
-                <p style="text-align: center; font-size: 13px; color: var(--text-sec); margin-top: 15px;">
+                <p style="text-align: center; font-size: 13px; color: #86868b; margin-top: 15px;">
                     图标需以 Overlay 形式叠加于产品图右上角，边距参考 UI 设计规范。
                 </p>
             </div>
