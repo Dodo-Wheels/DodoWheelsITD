@@ -27,7 +27,9 @@
         /* 侧边栏导航 */
         aside {
             width: 280px;
-            background: var(--accent-blue);
+            background: var(--sidebar-glass, rgba(245, 245, 247, 0.8));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-right: 1px solid rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
@@ -107,7 +109,10 @@
             padding: 40px;
             margin-bottom: 40px;
             box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
         }
+
+        .spec-card:hover { transform: translateY(-5px); }
 
         h3 { font-size: 20px; margin-top: 0; margin-bottom: 24px; font-weight: 600; color: #000; }
 
@@ -188,7 +193,7 @@
                 
                 <div class="screenshot-box">
                     <p>参考截图：后台产品维护页面 (Data 页签)</p>
-                    <img src="局部截取_20260413_094149.png" alt="后台配置截图" class="img-placeholder">
+                    <img src="backend.png" alt="后台配置截图" class="img-placeholder">
                 </div>
             </div>
 
@@ -232,9 +237,9 @@
             <div class="spec-card">
                 <h3>03. 视觉参考 (预览)</h3>
                 <div style="display: flex; justify-content: center; padding: 20px;">
-                    <img src="局部截取_20260413_084212.png" alt="前端预览截图" style="max-width: 280px; border-radius: 16px; box-shadow: var(--shadow);">
+                    <img src="front.png" alt="前端预览截图" style="max-width: 320px; border-radius: 16px; box-shadow: var(--shadow);">
                 </div>
-                <p style="text-align: center; font-size: 13px; color: var(--text-sec);">
+                <p style="text-align: center; font-size: 13px; color: var(--text-sec); margin-top: 15px;">
                     图标需以 Overlay 形式叠加于产品图右上角，边距参考 UI 设计规范。
                 </p>
             </div>
