@@ -3,17 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels | Smart PRD Center</title>
+    <title>DodoWheels | System Design Hub</title>
     <style>
         :root {
             --apple-blue: #0071e3;
-            --bg-gradient: radial-gradient(at 0% 0%, hsla(210,100%,98%,1) 0, transparent 50%), 
-                           radial-gradient(at 50% 0%, hsla(210,100%,95%,1) 0, transparent 50%), 
-                           radial-gradient(at 100% 0%, hsla(210,100%,98%,1) 0, transparent 50%);
-            --sidebar-glass: rgba(245, 245, 247, 0.7);
-            --card-glass: rgba(255, 255, 255, 0.6);
-            --text-main: #1d1d1f;
-            --text-sec: #86868b;
+            --deep-blue: #1d1d1f;
+            --accent-blue: #f5f5f7;
+            --glass-bg: rgba(255, 255, 255, 0.75);
         }
 
         body {
@@ -21,240 +17,185 @@
             margin: 0;
             display: flex;
             height: 100vh;
-            color: var(--text-main);
             background-color: #fff;
-            background-image: var(--bg-gradient);
+            color: var(--deep-blue);
             -webkit-font-smoothing: antialiased;
             overflow: hidden;
         }
 
-        /* 左侧导航 - 毛玻璃 */
+        /* 侧边栏优化 - 极简主义 */
         aside {
-            width: 280px;
-            background: var(--sidebar-glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(0, 0, 0, 0.08);
+            width: 260px;
+            background: var(--accent-blue);
+            border-right: 1px solid rgba(0,0,0,0.08);
             display: flex;
             flex-direction: column;
-            z-index: 10;
+            padding: 40px 0;
         }
 
-        .sidebar-header {
-            padding: 40px 24px 20px;
-        }
-
-        .sidebar-header h2 {
-            font-size: 20px;
+        .brand {
+            padding: 0 24px 40px;
+            font-size: 18px;
             font-weight: 700;
-            margin: 0;
-            background: linear-gradient(135deg, #1d1d1f 0%, #0071e3 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+            color: var(--deep-blue);
         }
 
-        .prd-list { padding: 20px 12px; }
-
-        .prd-item {
-            padding: 14px 16px;
-            cursor: pointer;
-            font-size: 14px;
-            border-radius: 12px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            color: var(--text-main);
-            margin-bottom: 4px;
+        .menu-item {
+            padding: 14px 24px;
+            font-size: 13px;
+            color: var(--apple-blue);
+            background: rgba(0, 113, 227, 0.08);
+            border-left: 4px solid var(--apple-blue);
+            font-weight: 600;
             display: flex;
             align-items: center;
         }
 
-        .prd-item.active {
-            background: #fff;
-            color: var(--apple-blue);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transform: translateX(4px);
-        }
-
-        .prd-item::before {
-            content: "";
-            width: 6px;
-            height: 6px;
-            background: var(--apple-blue);
-            border-radius: 50%;
-            margin-right: 12px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .prd-item.active::before { opacity: 1; }
-
-        /* 右侧内容 - 优雅流线 */
+        /* 主内容区优化 */
         main {
             flex: 1;
             overflow-y: auto;
-            padding: 80px 40px;
-            scroll-behavior: smooth;
+            padding: 60px 5%;
+            background: radial-gradient(circle at 50% 0%, #f0f7ff 0%, #ffffff 100%);
         }
 
         .content-container {
-            max-width: 850px;
+            max-width: 800px;
             margin: 0 auto;
-            animation: fadeIn 0.8s ease-out;
+            animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .status-tag {
+        .tag {
             display: inline-block;
-            padding: 5px 14px;
-            background: rgba(0, 113, 227, 0.1);
-            color: var(--apple-blue);
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 24px;
+            padding: 4px 12px;
+            background: var(--deep-blue);
+            color: #fff;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
         }
 
-        h1 { font-size: 48px; font-weight: 700; letter-spacing: -1.5px; margin: 0 0 12px; }
-        .date { color: var(--text-sec); font-size: 16px; margin-bottom: 60px; }
+        h1 { font-size: 42px; font-weight: 700; letter-spacing: -1.2px; margin: 0 0 40px; }
 
-        .card {
-            background: var(--card-glass);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 28px;
-            padding: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            margin-bottom: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
-            transition: transform 0.3s ease;
+        /* 卡片设计 - 增强阴影与玻璃感 */
+        .spec-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.04);
         }
 
-        .card:hover { transform: translateY(-5px); }
+        h3 { font-size: 18px; margin-bottom: 20px; color: var(--text-sec); border-bottom: 1px solid #eee; padding-bottom: 10px; }
 
-        h3 { 
-            font-size: 22px; 
-            margin-top: 0; 
-            margin-bottom: 24px; 
-            display: flex; 
-            align-items: center; 
-            font-weight: 600;
-        }
-
-        /* 现代表格 */
-        .table-wrapper {
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 20px;
-            padding: 8px;
-            border: 1px solid rgba(0,0,0,0.04);
-        }
-
+        /* 数据映射表 */
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 16px; color: var(--text-sec); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
-        td { padding: 20px 16px; border-top: 1px solid rgba(0,0,0,0.04); font-size: 15px; }
+        th { text-align: left; font-size: 12px; color: #86868b; padding: 12px; text-transform: uppercase; }
+        td { padding: 16px 12px; border-top: 1px solid #f2f2f2; font-size: 14px; }
 
-        .highlight-blue {
+        .type-token {
+            font-family: "SF Mono", monospace;
+            font-weight: 600;
+            color: #d12;
+            background: #fff1f1;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .icon-label {
             color: var(--apple-blue);
             font-weight: 600;
             display: flex;
             align-items: center;
         }
 
-        .highlight-blue::before {
-            content: "✦";
+        .icon-label::before {
+            content: "◆";
             margin-right: 8px;
-            font-size: 12px;
+            font-size: 10px;
         }
 
-        .token {
-            font-family: "SF Mono", monospace;
-            background: #fff;
-            padding: 4px 8px;
-            border-radius: 6px;
-            border: 1px solid rgba(0,0,0,0.05);
-            font-size: 13px;
-            color: #d12;
-        }
-
-        @media (max-width: 900px) {
+        /* 响应式 */
+        @media (max-width: 768px) {
             aside { display: none; }
-            main { padding: 40px 24px; }
-            h1 { font-size: 32px; }
+            main { padding: 40px 20px; }
+            h1 { font-size: 30px; }
         }
     </style>
 </head>
 <body>
 
     <aside>
-        <div class="sidebar-header">
-            <h2>DodoWheels</h2>
-            <p style="font-size: 12px; color: var(--text-sec); margin: 8px 0 0;">SYSTEM DESIGN HUB</p>
-        </div>
-        <nav class="prd-list">
-            <div class="prd-item active">季节图标显示逻辑调整</div>
+        <div class="brand">DodoWheels</div>
+        <nav>
+            <div class="menu-item">轮胎类型图标显示逻辑</div>
         </nav>
     </aside>
 
     <main>
         <div class="content-container">
-            <span class="status-tag">DESIGN SPEC V1.2</span>
-            <h1>季节图标逻辑调整</h1>
-            <div class="date">Released on April 13, 2026</div>
-
-            <div class="card">
-                <h3>01. 核心需求</h3>
-                <p style="font-size: 17px; line-height: 1.6; color: #424245;">
-                    通过解析 <span class="token">Data</span> 页签中的关键字段，实现产品主图右上角的季节标识自动化渲染。
-                    此举旨在优化用户在浏览轮胎产品时的**视觉感知速度**。
+            <span class="tag">System Update V1.3</span>
+            <h1>轮胎类型图标逻辑调整</h1>
+            
+            <div class="spec-card">
+                <h3>01. 逻辑定义</h3>
+                <p style="font-size: 16px; line-height: 1.6;">
+                    系统将通过扫描后台 <span class="type-token">Data</span> 标签下的 <span class="type-token">FINISH</span> 字段，自动在客户端产品图片右上角渲染对应的<strong>轮胎类型（Tire Type）</strong>视觉标识。
                 </p>
             </div>
 
-            <div class="card">
-                <h3>02. 数据映射规范</h3>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>字段输入 (FINISH)</th>
-                                <th>前端视觉呈现</th>
-                                <th>变更类型</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="token">SUMMER</span></td>
-                                <td class="highlight-blue">新版夏季图标</td>
-                                <td>样式重绘</td>
-                            </tr>
-                            <tr>
-                                <td><span class="token">WINTER</span></td>
-                                <td class="highlight-blue">新版冬季图标</td>
-                                <td>样式重绘</td>
-                            </tr>
-                            <tr>
-                                <td><span class="token">ALL SEASON</span></td>
-                                <td class="highlight-blue">四季胎专用标识</td>
-                                <td>逻辑新增</td>
-                            </tr>
-                            <tr>
-                                <td><span class="token">ALL WEATHER</span></td>
-                                <td class="highlight-blue">全天候专用标识</td>
-                                <td>逻辑新增</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="spec-card">
+                <h3>02. 类型映射表</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段录入 (FINISH)</th>
+                            <th>客户端渲染类型</th>
+                            <th>视觉资源</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="type-token">SUMMER</span></td>
+                            <td class="icon-label">夏季轮胎 (Summer)</td>
+                            <td>Icon_Type_S</td>
+                        </tr>
+                        <tr>
+                            <td><span class="type-token">WINTER</span></td>
+                            <td class="icon-label">冬季轮胎 (Winter)</td>
+                            <td>Icon_Type_W</td>
+                        </tr>
+                        <tr>
+                            <td><span class="type-token">ALL SEASON</span></td>
+                            <td class="icon-label">四季轮胎 (All Season)</td>
+                            <td>Icon_Type_AS</td>
+                        </tr>
+                        <tr>
+                            <td><span class="type-token">ALL WEATHER</span></td>
+                            <td class="icon-label">全天候轮胎 (All Weather)</td>
+                            <td>Icon_Type_AW</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
-            <div class="card">
-                <h3>03. 交付标准</h3>
-                <ul style="line-height: 2.2; font-size: 15px; color: #424245; padding-left: 20px;">
-                    <li>所有图标需采用 **Retina @3x** 渲染标准，确保高清显示。</li>
-                    <li>图标定位：距离图片顶部及右侧边缘各 **12pt**。</li>
-                    <li>字段匹配逻辑：**Case-Insensitive**（不区分大小写）。</li>
-                    <li>图标资源：请参考设计稿中对应的 **SF Symbols** 风格组件。</li>
+            <div class="spec-card">
+                <h3>03. 交付细则</h3>
+                <ul style="font-size: 14px; line-height: 2; color: #424245;">
+                    <li><strong>自适应渲染：</strong> 图标在列表页与详情页需根据图片容器比例自适应缩放。</li>
+                    <li><strong>解析规则：</strong> 严格匹配上述四个关键字，忽略大小写，不支持模糊匹配。</li>
+                    <li><strong>层级：</strong> 图标层级（z-index）需高于产品主图，且低于放大预览层。</li>
                 </ul>
             </div>
         </div>
