@@ -2,154 +2,295 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>系统实时同步监控 Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业全流程业务解决方案 - 汇报版</title>
     <style>
         :root {
-            --bg-color: #000000;
-            --card-bg: #1c1c1e;
-            --accent-blue: #0A84FF;
-            --status-green: #30D158;
-            --text-main: #FFFFFF;
-            --text-dim: #8E8E93;
+            --primary-blue: #1a73e8;
+            --accent-blue: #e8f0fe;
+            --text-main: #2c3e50;
+            --text-secondary: #5f6368;
+            --bg-body: #f4f7f9;
+            --bg-card: #ffffff;
+            --border-color: #e1e4e8;
         }
 
         body {
-            background-color: var(--bg-color);
+            font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', -apple-system, sans-serif;
+            background-color: var(--bg-body);
             color: var(--text-main);
-            font-family: -apple-system, "SF Pro Display", sans-serif;
-            padding: 40px;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.6;
         }
 
-        .sync-container {
-            max-width: 1200px;
+        .container {
+            max-width: 1000px;
             margin: 0 auto;
-        }
-
-        .header {
-            margin-bottom: 40px;
-            border-bottom: 1px solid #38383a;
-            padding-bottom: 20px;
-        }
-
-        /* 实时链路样式 */
-        .sync-bridge {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 60px 0;
-            position: relative;
-        }
-
-        .system-node {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 14px;
-            width: 180px;
-            text-align: center;
-            border: 1px solid #38383a;
-            z-index: 2;
-        }
-
-        .line {
-            height: 2px;
-            background: #38383a;
-            flex-grow: 1;
-            margin: 0 10px;
+            background: var(--bg-card);
+            padding: 50px 70px;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             position: relative;
             overflow: hidden;
         }
 
-        /* 模拟实时数据流动画 */
-        .line::after {
-            content: '';
+        /* 顶部装饰条 */
+        .container::before {
+            content: "";
             position: absolute;
-            left: -50px;
-            width: 50px;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
-            animation: flow 2s linear infinite;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #1a73e8, #64b5f6);
         }
 
-        @keyframes flow {
-            0% { left: -50px; }
-            100% { left: 100%; }
+        header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
         }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--status-green);
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 8px;
-            box-shadow: 0 0 8px var(--status-green);
+        header h1 {
+            font-size: 28px;
+            color: var(--primary-blue);
+            margin: 0;
+            letter-spacing: 1px;
         }
 
-        .api-specs {
+        header p {
+            color: var(--text-secondary);
+            margin: 10px 0 0 0;
+            font-size: 14px;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: var(--primary-blue);
+            border-left: 5px solid var(--primary-blue);
+            padding-left: 15px;
+            margin: 40px 0 20px 0;
+        }
+
+        /* 系统布局卡片 */
+        .system-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
-            margin-top: 40px;
+            margin: 30px 0;
         }
 
-        .spec-card {
-            background: var(--card-bg);
-            padding: 20px;
+        .card {
+            background: #fff;
+            border: 1px solid var(--border-color);
             border-radius: 12px;
-            font-family: "SF Mono", Menlo, monospace;
+            padding: 25px 15px;
+            text-align: center;
+            transition: all 0.3s ease;
         }
 
-        code { color: var(--accent-blue); }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(26,115,232,0.1);
+            border-color: var(--primary-blue);
+        }
+
+        .card .icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .card .title {
+            font-weight: bold;
+            font-size: 16px;
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .card .desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* 业务流程闭环表格 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: var(--accent-blue);
+            color: var(--primary-blue);
+            text-align: left;
+            padding: 15px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafbfc;
+        }
+
+        /* 流程可视化路径 */
+        .workflow {
+            background: #f8fbff;
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            margin: 40px 0;
+            border: 1px dashed var(--primary-blue);
+        }
+
+        .node {
+            display: inline-block;
+            background: #fff;
+            border: 2px solid var(--primary-blue);
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            color: var(--primary-blue);
+            box-shadow: 0 4px 10px rgba(26,115,232,0.1);
+        }
+
+        .arrow {
+            display: inline-block;
+            margin: 0 15px;
+            color: var(--primary-blue);
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        /* 汇报摘要 */
+        .summary {
+            background: #fff9c4;
+            border-left: 5px solid #fbc02d;
+            padding: 25px;
+            border-radius: 4px;
+            margin-top: 50px;
+            font-size: 14px;
+        }
+
+        .summary strong {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; width: 100%; }
+        }
     </style>
 </head>
 <body>
 
-<div class="sync-container">
-    <div class="header">
-        <h1 style="font-weight: 600;">System Real-time Sync</h1>
-        <p style="color: var(--text-dim);">实时接口同步架构方案 - DodoWheels 核心 WMS 替换工程</p>
-    </div>
+<div class="container">
+    <header>
+        <h1>公司业务全流程实时闭环架构报告</h1>
+        <p>汇报对象：管理层 / 董事会 | 汇报人：系统设计团队</p>
+    </header>
 
-    <div class="sync-bridge">
-        <div class="system-node">
-            <div class="status-dot"></div>
-            <h4>官网商城</h4>
-            <small style="color:var(--text-dim)">E-commerce</small>
+    <h2>一、 核心系统生态布局</h2>
+    <div class="system-grid">
+        <div class="card">
+            <span class="icon">🌐</span>
+            <span class="title">官网电商平台</span>
+            <span class="desc">品牌展示中心，负责订单捕获与支付确认。</span>
         </div>
-        <div class="line"></div>
-        <div class="system-node" style="border-color: var(--accent-blue);">
-            <div class="status-dot"></div>
-            <h4>OMP 中台</h4>
-            <small style="color:var(--text-dim)">OMS / WMS</small>
+        <div class="card">
+            <span class="icon">⚙️</span>
+            <span class="title">OMP 运营中台</span>
+            <span class="desc">业务核心大脑，集成 OMS 调度与 WMS 管理。</span>
         </div>
-        <div class="line"></div>
-        <div class="system-node">
-            <div class="status-dot"></div>
-            <h4>物流系统</h4>
-            <small style="color:var(--text-dim)">Tracking</small>
+        <div class="card">
+            <span class="icon">🚚</span>
+            <span class="title">物流配送系统</span>
+            <span class="desc">交付监控中心，负责包裹实时轨迹与配送。</span>
         </div>
-        <div class="line"></div>
-        <div class="system-node">
-            <div class="status-dot"></div>
-            <h4>QBO 财务</h4>
-            <small style="color:var(--text-dim)">Accounting</small>
+        <div class="card">
+            <span class="icon">📊</span>
+            <span class="title">QBO 财务系统</span>
+            <span class="desc">价值对账中心，实现财务自动化与税务合规。</span>
         </div>
     </div>
 
-    <div class="api-specs">
-        <div class="spec-card">
-            <h4 style="color: white; border-bottom: 1px solid #333; padding-bottom: 10px;">📦 库存同步 (Real-time Stock)</h4>
-            <p>Method: <code>WEBHOOK / PUSH</code></p>
-            <p>Trigger: WMS 扫码出库/入库</p>
-            <p>Target: 官网电商数据库</p>
-        </div>
-        <div class="spec-card">
-            <h4 style="color: white; border-bottom: 1px solid #333; padding-bottom: 10px;">🧾 财务同步 (Auto-Accounting)</h4>
-            <p>Method: <code>REST API (HTTPS)</code></p>
-            <p>Trigger: 订单标记为 "Completed"</p>
-            <p>Target: QuickBooks Online v3 API</p>
-        </div>
+    <h2>二、 全流程实时闭环数据流</h2>
+    <table>
+        <thead>
+            <tr>
+                <th width="15%">阶段</th>
+                <th width="35%">实时流向</th>
+                <th width="50%">战略价值</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><b>1. 获客下单</b></td>
+                <td>官网商城 ➔ OMP 中台</td>
+                <td>实时同步订单详情，触发 OMS 自动分仓与锁库。</td>
+            </tr>
+            <tr>
+                <td><b>2. 仓配响应</b></td>
+                <td>OMP ➔ 物流系统</td>
+                <td>包裹打包完成即刻生成运单，实现物流零延迟对接。</td>
+            </tr>
+            <tr>
+                <td><b>3. 在途监控</b></td>
+                <td>物流系统 ➔ OMP ➔ 官网</td>
+                <td>GPS 轨迹实时回传，透明化客户交付体验。</td>
+            </tr>
+            <tr>
+                <td><b>4. 财务确认</b></td>
+                <td>OMP ➔ QBO 财务系统</td>
+                <td>发货触发自动 Invoice 生成，确保账实相符。</td>
+            </tr>
+            <tr>
+                <td><b>5. 业务完结</b></td>
+                <td>签收确认 ➔ 全系统反馈</td>
+                <td>完成资金、库存、积分的最后闭环，更新客户画像。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>三、 数字化业务路径可视化</h2>
+    <div class="workflow">
+        <div class="node">数字化营销</div>
+        <span class="arrow">➔</span>
+        <div class="node">智能化调度</div>
+        <span class="arrow">➔</span>
+        <div class="node">精准化交付</div>
+        <span class="arrow">➔</span>
+        <div class="node">合规化核算</div>
     </div>
+
+    <div class="summary">
+        <strong>汇报总结 (Executive Summary)</strong>
+        该集成方案实现了公司运营从“人工驱动”向“数据驱动”的转型。通过 API 的深度集成，各部门间的数据孤岛被打破，管理层可实时掌控库存周转、物流效率及财务现金流。预计上线后将降低 30% 的人工对账成本，并将订单响应速度提升 50% 以上。
+    </div>
+
+    <footer>
+        © 2026 企业数字化系统架构设计方案 | Confidential
+    </footer>
 </div>
 
 </body>
