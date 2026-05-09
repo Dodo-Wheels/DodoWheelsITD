@@ -2,249 +2,252 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>企业数字化转型：全链路实时闭环架构白皮书</title>
+    <title>企业业务全流程实时闭环管理方案</title>
     <style>
         :root {
-            --mac-dark: #1e1e1e;
-            --mac-card: #2d2d2d;
-            --accent-blue: #00aaff;
-            --accent-green: #30d158;
-            --text-silver: #d1d1d1;
-            --border-line: #444;
+            --apple-blue: #007aff;
+            --apple-gray: #86868b;
+            --apple-bg: #ffffff;
+            --apple-card: #f5f5f7;
+            --success: #34c759;
         }
 
         body {
-            font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
-            background-color: #121212;
-            color: var(--text-silver);
+            font-family: -apple-system, "SF Pro SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background-color: var(--apple-bg);
+            color: #1d1d1f;
             margin: 0;
             padding: 40px;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
-        .report-wrapper {
-            max-width: 1200px;
+        .container {
+            max-width: 1000px;
             margin: 0 auto;
-            background: var(--mac-dark);
-            border-radius: 20px;
-            padding: 80px;
-            border: 1px solid var(--border-line);
-            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
         }
 
+        /* 顶部标题 */
         header {
-            border-bottom: 2px solid var(--accent-blue);
-            padding-bottom: 40px;
-            margin-bottom: 60px;
+            text-align: left;
+            border-bottom: 1px solid #d2d2d7;
+            padding-bottom: 30px;
+            margin-bottom: 50px;
         }
 
-        header h1 {
-            font-size: 36px;
-            color: #fff;
-            margin: 0;
-            letter-spacing: 1px;
-        }
+        header h1 { font-size: 34px; font-weight: 600; margin: 0; letter-spacing: -0.5px; }
+        header p { font-size: 19px; color: var(--apple-gray); margin: 10px 0 0; }
 
-        .status-bar {
+        /* 业务闭环可视化 */
+        .business-loop {
             display: flex;
-            gap: 20px;
-            margin-top: 15px;
-            font-size: 13px;
-            color: var(--accent-blue);
-            text-transform: uppercase;
-        }
-
-        /* --- 闭环数据引擎可视化 --- */
-        .engine-container {
-            height: 500px;
-            background: #161616;
-            border-radius: 16px;
-            margin: 40px 0;
+            justify-content: space-between;
+            align-items: center;
+            padding: 60px 0;
             position: relative;
-            border: 1px dashed #555;
-            overflow: hidden;
         }
 
-        .node {
-            position: absolute;
-            width: 160px;
-            padding: 20px;
-            background: var(--mac-card);
-            border: 1px solid var(--accent-blue);
-            border-radius: 12px;
+        .loop-step {
+            width: 200px;
             text-align: center;
-            z-index: 5;
-            transition: 0.3s;
+            z-index: 2;
         }
 
-        .node:hover { box-shadow: 0 0 20px var(--accent-blue); }
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--apple-card);
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            margin: 0 auto 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-        /* 位置 */
-        .top { top: 30px; left: 50%; transform: translateX(-50%); }
-        .center { top: 50%; left: 50%; transform: translate(-50%, -50%); border-color: #fff; width: 200px; }
-        .bottom-left { bottom: 30px; left: 10%; }
-        .bottom-right { bottom: 30px; right: 10%; }
+        .loop-step:hover .step-icon {
+            transform: scale(1.05);
+            background: var(--apple-blue);
+            color: white;
+        }
 
-        /* SVG 连线动画 */
-        .flow-svg {
+        .step-label { font-weight: 600; font-size: 16px; margin-bottom: 5px; display: block; }
+        .step-desc { font-size: 13px; color: var(--apple-gray); display: block; }
+
+        /* 动态连接箭头 */
+        .connector {
+            flex-grow: 1;
+            height: 2px;
+            background: #e5e5ea;
+            margin: 0 10px;
+            position: relative;
+            margin-top: -40px;
+        }
+
+        .connector::after {
+            content: "→";
             position: absolute;
-            width: 100%;
-            height: 100%;
+            right: 0;
+            top: -12px;
+            color: var(--apple-blue);
+            font-size: 20px;
+            animation: pulse 2s infinite;
         }
 
-        .path-loop {
-            fill: none;
-            stroke: rgba(0, 170, 255, 0.2);
-            stroke-width: 2;
+        @keyframes pulse {
+            0% { opacity: 0.3; transform: translateX(-5px); }
+            50% { opacity: 1; transform: translateX(5px); }
+            100% { opacity: 0.3; transform: translateX(-5px); }
         }
 
-        .data-particle {
-            fill: var(--accent-blue);
-            filter: blur(2px);
+        /* 业务详情列表 */
+        .business-section {
+            background: var(--apple-card);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 30px;
         }
 
-        /* --- 深度内容板块 --- */
-        .grid-content {
+        .business-section h2 {
+            font-size: 24px;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .business-section h2::before {
+            content: "";
+            width: 4px;
+            height: 24px;
+            background: var(--apple-blue);
+            margin-right: 12px;
+            border-radius: 2px;
+        }
+
+        .process-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-top: 50px;
+            gap: 30px;
+            margin-top: 20px;
         }
 
-        h2 { color: #fff; border-left: 4px solid var(--accent-blue); padding-left: 15px; margin-top: 60px; }
-        
-        .tech-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
+        .process-item h4 {
+            margin: 0 0 10px 0;
+            color: var(--apple-blue);
+            font-size: 17px;
         }
 
-        .tech-table th { background: #333; color: var(--accent-blue); text-align: left; padding: 12px; font-size: 14px; }
-        .tech-table td { border-bottom: 1px solid #333; padding: 15px 12px; font-size: 14px; }
-
-        .highlight-card {
-            background: linear-gradient(145deg, #252525, #1a1a1a);
-            padding: 30px;
-            border-radius: 15px;
-            border-left: 5px solid var(--accent-green);
+        .process-item p {
+            margin: 0;
+            font-size: 15px;
+            color: #424245;
         }
 
-        .data-tag {
-            background: #333;
-            color: var(--accent-blue);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 12px;
+        /* 反向反馈机制 */
+        .feedback-loop {
+            border: 2px dashed var(--success);
+            padding: 20px;
+            border-radius: 16px;
+            margin-top: 30px;
+            background: rgba(52, 199, 89, 0.05);
+        }
+
+        .feedback-loop h4 { color: var(--success); margin: 0 0 10px 0; }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--apple-gray);
+            font-size: 13px;
         }
 
     </style>
 </head>
 <body>
 
-<div class="report-wrapper">
+<div class="container">
     <header>
-        <h1>数字化全链路实时闭环架构白皮书</h1>
-        <div class="status-bar">
-            <span>● 核心架构版本 2.0</span>
-            <span>● 实时数据镜像协议: REST/WEBHOOK</span>
-            <span>● 状态: 生产就绪</span>
-        </div>
+        <h1>企业业务运营闭环白皮书</h1>
+        <p>构建从销售、仓配到财务结算的全链路数字化协作体系</p>
     </header>
 
-    <h2>一、 核心系统闭环交互引擎 (Visual Engine)</h2>
-    <div class="engine-container">
-        <svg class="flow-svg">
-            <!-- 定义闭环轨迹 -->
-            <path id="circlePath" class="path-loop" d="M600,100 L600,200 M600,300 L250,420 L600,250 L950,420 L600,250 L600,100" />
-            <!-- 数据光点动画 -->
-            <circle r="4" class="data-particle">
-                <animateMotion dur="6s" repeatCount="indefinite">
-                    <mpath href="#circlePath"/>
-                </animateMotion>
-            </circle>
-        </svg>
-
-        <div class="node top">
-            <strong>🌐 官网门户</strong><br>
-            <small>Storefront API</small>
+    <!-- 动态业务环图 -->
+    <div class="business-loop">
+        <div class="loop-step">
+            <div class="step-icon">🛒</div>
+            <span class="step-label">前端销售</span>
+            <span class="step-desc">官网订单捕获</span>
         </div>
-        <div class="node center">
-            <strong>⚙️ OMP 管理中台</strong><br>
-            <small>SSOT 数据真相源</small>
+        <div class="connector"></div>
+        <div class="loop-step">
+            <div class="step-icon">📦</div>
+            <span class="step-label">中台调度</span>
+            <span class="step-desc">库存/分拨中心</span>
         </div>
-        <div class="node bottom-left">
-            <strong>🚚 物流云</strong><br>
-            <small>TMS/Last-mile</small>
+        <div class="connector"></div>
+        <div class="loop-step">
+            <div class="step-icon">🚚</div>
+            <span class="step-label">履约配送</span>
+            <span class="step-desc">仓配与最后1公里</span>
         </div>
-        <div class="node bottom-right">
-            <strong>📊 QBO 财务中心</strong><br>
-            <small>Fiscal Ledger</small>
+        <div class="connector"></div>
+        <div class="loop-step">
+            <div class="step-icon">💰</div>
+            <span class="step-label">财务确认</span>
+            <span class="step-desc">QBO 账务闭环</span>
         </div>
     </div>
 
-    <h2>二、 关键环节深度解析</h2>
-    <div class="grid-content">
-        <div class="highlight-card">
-            <h3 style="color:var(--accent-green)">1. 订单与库存双向镜像</h3>
-            <p><strong>正向：</strong> 官网捕捉订单 <span class="data-tag">Payload: OrderJSON</span>，立即下发至 OMP-OMS。</p>
-            <p><strong>逆向：</strong> OMP 实时计算虚拟库存（物理库 - 占用库），通过 Webhook 镜像回官网，确保前端销售永不超卖。</p>
-        </div>
-        <div class="highlight-card" style="border-left-color: var(--accent-blue)">
-            <h3 style="color:var(--accent-blue)">2. 物流反馈与财务联动</h3>
-            <p><strong>闭环触发：</strong> WMS 完成扫码出库，系统通过 API 自动在 QBO 生成 <span class="data-tag">Invoice</span>。</p>
-            <p><strong>终态确认为：</strong> 物流系统通过 Webhook 推送“已签收”，OMP 自动触发官网订单归档，并同步更新 QBO 账款核销。</p>
+    <!-- 详细业务板块 -->
+    <div class="business-section">
+        <h2>一、 前端销售与中台调度：无缝对接</h2>
+        <div class="process-grid">
+            <div class="process-item">
+                <h4>1. 订单实时镜像</h4>
+                <p>当客户在官网完成支付，订单信息实时同步至管理中台，系统自动锁库，确保业务前端“看得见”库存，后台“拿得准”订单。</p>
+            </div>
+            <div class="process-item">
+                <h4>2. 库存自动平衡</h4>
+                <p>无论订单来自官网还是线下，中台作为“中央大脑”，实时重新计算可用库存，动态反馈给前端，彻底告别超卖风险。</p>
+            </div>
         </div>
     </div>
 
-    <h2>三、 技术栈与数据对象矩阵</h2>
-    <table class="tech-table">
-        <thead>
-            <tr>
-                <th>维度</th>
-                <th>数据对象 (Data Objects)</th>
-                <th>同步机制</th>
-                <th>业务逻辑 (Business Logic)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><b>商品与库存</b></td>
-                <td><span class="data-tag">SKU_Master</span>, <span class="data-tag">Qty_Mirror</span></td>
-                <td>实时双向 (Bi-directional)</td>
-                <td>中台作为库存全局大脑，控制所有销售渠道的可见深度。</td>
-            </tr>
-            <tr>
-                <td><b>订单执行</b></td>
-                <td><span class="data-tag">Order_Header</span>, <span class="data-tag">Payment_Log</span></td>
-                <td>异步保证 (Retry Logic)</td>
-                <td>支付成功触发，支持多币种转换及跨地区税务计算。[cite: 1, 2]</td>
-            </tr>
-            <tr>
-                <td><b>仓储物流</b></td>
-                <td><span class="data-tag">AWB_Tracking</span>, <span class="data-tag">Carrier_ID</span></td>
-                <td>事件驱动 (Event-driven)</td>
-                <td>自动分配承运商，物流轨迹实时推送至终端用户 App。[cite: 1, 2]</td>
-            </tr>
-            <tr>
-                <td><b>财务合规</b></td>
-                <td><span class="data-tag">COGS</span>, <span class="data-tag">AR_Invoice</span></td>
-                <td>事务级同步 (Acid Sync)</td>
-                <td>基于权责发生制，出库即记账，签收即确认收入。[cite: 1, 2]</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="business-section">
+        <h2>二、 仓配履约与物流追踪：过程透明</h2>
+        <div class="process-grid">
+            <div class="process-item">
+                <h4>1. 智能指令下发</h4>
+                <p>中台根据库存分布与客户坐标，自动触发仓库拣货。同时，系统联动生成物流单据，减少人工二次录入造成的漏单、错单。</p>
+            </div>
+            <div class="process-item">
+                <h4>2. 全程链路监控</h4>
+                <p>包裹发出后，物流轨迹实时回传。这不仅是提供给客户的“物流进度条”，更是中台进行“交付分析”的数据核心。</p>
+            </div>
+        </div>
+    </div>
 
-    <h2>四、 核心战略价值</h2>
-    <ul style="columns: 2; gap: 40px; padding: 0 20px;">
-        <li style="margin-bottom:15px"><strong>消除信息孤岛：</strong> 官网、物流、财务数据 100% 同步，管理层可随时调取全业务生命周期报告。[cite: 1, 2]</li>
-        <li style="margin-bottom:15px"><strong>降低运营成本：</strong> 自动化记账与面单生成，预计可减少 40% 以上的行政人力投入。[cite: 1, 2]</li>
-        <li style="margin-bottom:15px"><strong>客户体验升级：</strong> 实时透明的订单追踪与精准的库存预告，显著降低退换货率。[cite: 1, 2]</li>
-        <li style="margin-bottom:15px"><strong>敏捷决策能力：</strong> 动态的财务 KPI 看板（如实时毛利分析），助力企业在瞬息万变的市场中快速响应。[cite: 1, 2]</li>
-    </ul>
+    <div class="business-section">
+        <h2>三、 财务清结算与业务反馈：闭环终点</h2>
+        <div class="process-grid">
+            <div class="process-item">
+                <h4>1. 出库即生成账务</h4>
+                <p>不再等待月底核对。货物一旦离开仓库，QBO 系统实时同步生成销售发票，确保成本与收入在同一周期内精准匹配[cite: 1, 2]。</p>
+            </div>
+            <div class="process-item">
+                <h4>2. 签收即确认收入</h4>
+                <p>物流“已签收”信号是闭环的关键按钮。该信号实时回传财务中心，自动完成销账与现金流预测[cite: 1, 2]。</p>
+            </div>
+        </div>
 
-    <footer style="margin-top: 80px; text-align: center; font-size: 12px; color: #666; border-top: 1px solid #333; padding-top: 30px;">
-        CONFIDENTIAL - INTERNAL USE ONLY | 数字化架构项目组 2026
+        <div class="feedback-loop">
+            <h4>🔄 特别设计的“反向闭环”机制</h4>
+            <p><strong>异常反馈：</strong> 如果物流出现拒收，信号会立即反流回中台，系统自动同步更新库存并触发财务红字发票。这种“反向冲抵”确保了业务闭环在任何异常情况下都能逻辑自洽[cite: 1, 2]。</p>
+        </div>
+    </div>
+
+    <footer>
+        内部机密资料 · DodoWheels & Ruby Wang Financial Services · 2026 战略规划
     </footer>
 </div>
 
