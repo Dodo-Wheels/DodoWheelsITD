@@ -39,18 +39,18 @@
         .member { display: flex; align-items: center; justify-content: space-between; }
         .member .role { color: var(--text-dim); font-size: 14px; }
         .member .name { font-size: 18px; font-weight: 600; }
-        .member .name.highlight { color: var(--accent); font-size: 22px; }
+        .member .name.highlight { color: var(--accent); font-size: 24px; }
 
-        /* Progress Section */
+        /* Synchronized Progress Section */
         .progress-group { display: flex; flex-direction: column; gap: 15px; }
         .progress-item { margin-bottom: 5px; }
         .progress-meta { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; }
         .progress-bar-bg { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
-        .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 1s ease-in-out; }
+        .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; box-shadow: 0 0 10px rgba(10,132,255,0.5); }
         .sys-title { font-weight: 600; font-size: 14px; }
-        .sys-sub { font-size: 11px; color: var(--text-dim); margin-left: 8px; font-weight: normal; }
+        .sys-sub { font-size: 11px; color: var(--text-dim); margin-left: 8px; }
 
-        /* Stats & Focus */
+        /* Stats & Dates */
         .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
         .stat-item { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 25px; text-align: center; }
         .stat-num { font-size: 28px; font-weight: 700; color: var(--accent); display: block; }
@@ -62,15 +62,6 @@
         }
         .badge { background: var(--accent); color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 6px; margin-right: 10px; font-weight: 800; }
 
-        /* Modal */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); backdrop-filter: blur(20px);
-            display: none; justify-content: center; align-items: center; z-index: 1000;
-        }
-        .modal-content { background: var(--card); width: 85%; max-width: 500px; padding: 40px; border-radius: 32px; border: 1px solid var(--border); }
-        .close-btn { background: var(--accent); border: none; color: white; padding: 12px; border-radius: 14px; width: 100%; cursor: pointer; font-weight: 600; margin-top: 25px; }
-
         footer { text-align: center; color: var(--text-dim); font-size: 11px; margin-top: 20px; opacity: 0.5; }
     </style>
 </head>
@@ -78,8 +69,8 @@
 
 <div class="container">
     <div class="project-header">
-        <p>Strategic Infrastructure 2026</p>
-        <h1>构建从销售、仓配到财务结算的<br>全链路数字化协作体系</h1>
+        <p>Project Roadmap: May 10 - Dec 31[cite: 1]</p>
+        <h1>DodoWheels 全链路数字化协作体系<br>同步迭代与系统集成看板</h1>
     </div>
 
     <div class="overview-grid">
@@ -92,7 +83,7 @@
                     <span class="name highlight">Frank</span>
                 </div>
                 <div class="member">
-                    <span class="role">系统实施</span>
+                    <span class="role">项目实施</span>
                     <span class="name">Tim</span>
                 </div>
                 <div class="member">
@@ -102,34 +93,34 @@
             </div>
         </div>
 
-        <!-- 涉及系统进度 -->
+        <!-- 同步迭代进度 -->
         <div class="overview-card">
-            <span class="section-label">系统交付进度 / System Roadmap</span>
+            <span class="section-label">全系统同步迭代进度 / Syncing & Polishing</span>
             <div class="progress-group">
-                <!-- 销售系统 -->
                 <div class="progress-item">
                     <div class="progress-meta">
-                        <span class="sys-title">销售系统 <span class="sys-sub">公司官网</span></span>
-                        <span style="color:var(--accent)">15%</span>
-                    </div>
-                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 15%"></div></div>
-                </div>
-                <!-- 核心系统 -->
-                <div class="progress-item">
-                    <div class="progress-meta">
-                        <span class="sys-title">核心系统 <span class="sys-sub">OMS + WMS</span></span>
-                        <span style="color:var(--accent)">8%</span>
-                    </div>
-                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 8%"></div></div>
-                </div>
-                <!-- 财务系统 -->
-                <div class="progress-item">
-                    <div class="progress-meta">
-                        <span class="sys-title">财务系统 <span class="sys-sub">QBO 集成</span></span>
+                        <span class="sys-title">销售：<span class="sys-sub">官网系统</span></span>
                         <span style="color:var(--accent)">12%</span>
                     </div>
                     <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 12%"></div></div>
                 </div>
+                <div class="progress-item">
+                    <div class="progress-meta">
+                        <span class="sys-title">核心：<span class="sys-sub">WMS + OMS</span></span>
+                        <span style="color:var(--accent)">10%</span>
+                    </div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 10%"></div></div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-meta">
+                        <span class="sys-title">财务：<span class="sys-sub">QBO 集成系统</span></span>
+                        <span style="color:var(--accent)">15%</span>
+                    </div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 15%"></div></div>
+                </div>
+            </div>
+            <div style="margin-top: 15px; font-size: 10px; color: var(--text-dim); text-align: center; font-style: italic;">
+                * 所有模块正在根据业务反馈进行同步打磨[cite: 1]
             </div>
         </div>
     </div>
@@ -137,72 +128,29 @@
     <!-- 关键指标 -->
     <div class="stat-row">
         <div class="stat-item">
-            <span class="stat-num">230</span>
-            <span class="stat-label">交付倒计时 (DAYS)</span>
+            <span class="stat-num">05.10</span>
+            <span class="stat-label">项目启动日期[cite: 1]</span>
         </div>
         <div class="stat-item">
-            <span class="stat-num">W01</span>
-            <span class="stat-label">当前迭代周期</span>
+            <span class="stat-num">230</span>
+            <span class="stat-label">交付总工期 (DAYS)</span>
         </div>
         <div class="stat-item">
             <span class="stat-num">12.31</span>
-            <span class="stat-label">开发交付终点[cite: 1]</span>
+            <span class="stat-label">项目完成日期[cite: 1]</span>
         </div>
     </div>
 
     <!-- 本周重点 -->
-    <div class="week-focus" onclick="openModal('week01')">
-        <h3 style="margin:0 0 15px 0;"><span class="badge">WEEK 01</span> 本周核心进展 (May 10-15)</h3>
+    <div class="week-focus">
+        <h3 style="margin:0 0 15px 0;"><span class="badge">W01 PROGRESS</span> 本周同步进展 (截至 5月15日)</h3>
         <p style="font-size: 15px; line-height: 1.7; color: #e5e5ea; margin: 0;">
-            顺利完成数字化体系启动会[cite: 1]。本周重点完成了 QBO 财务系统接口环境的授权联调，并在核心系统中确立了 OMS 与 WMS 的数据同步协议[cite: 1, 2]。全链路技术蓝图已正式进入研发实施阶段。
+            项目自 5月10日 启动以来，已进入首个同步迭代周期[cite: 1]。目前财务系统的 QBO 接口已率先完成技术对接，同时销售官网与核心仓配系统的底层架构正在同步优化，确保数据流转的高一致性[cite: 1, 2]。
         </p>
     </div>
 
-    <div style="padding: 0 10px;">
-        <span class="section-label">关键里程碑回顾</span>
-        <div style="border-left: 2px solid var(--accent); padding-left: 20px; margin-top: 10px; font-size: 14px;">
-            <div style="display: flex; justify-content: space-between;">
-                <span>● 全链路数字化项目启动会</span>
-                <span style="color: var(--text-dim); font-size: 12px;">2026.05.10</span>
-            </div>
-        </div>
-    </div>
-
-    <footer>DodoWheels Digital Office © 2026</footer>
+    <footer>DodoWheels Digital Transformation Office © 2026</footer>
 </div>
-
-<div id="modalOverlay" class="modal-overlay" onclick="closeModal()">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <div id="modalBody"></div>
-        <button class="close-btn" onclick="closeModal()">确认并关闭</button>
-    </div>
-</div>
-
-<script>
-    const reports = {
-        week01: {
-            content: `
-                <h2 style="margin-top:0; color:var(--accent);">W01 详细交付报告</h2>
-                <ul style="padding-left:20px; color:#d1d1d6; line-height:1.8;">
-                    <li><b>管理规范：</b> 确定以 Frank 为核心的决策链路，锁定 12.31 开发交付红线[cite: 1]。</li>
-                    <li><b>财务联调：</b> Tim 完成了 QBO 系统的生产级连接测试，数据通路已就绪[cite: 1]。</li>
-                    <li><b>核心评审：</b> Shuman 与 Pan 提交了 OMS 订单流向 WMS 仓配端的首份逻辑文档[cite: 1]。</li>
-                </ul>
-            `
-        }
-    };
-
-    function openModal(id) {
-        document.getElementById('modalBody').innerHTML = reports[id].content;
-        document.getElementById('modalOverlay').style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-        document.getElementById('modalOverlay').style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
-</script>
 
 </body>
 </html>
