@@ -1,178 +1,302 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels | 2026 全链路数字化看板</title>
-    <style>
-        :root {
-            --bg: #f5f5f7;
-            --card: #ffffff;
-            --accent: #0071e3;
-            --text: #1d1d1f;
-            --text-dim: #86868b;
-            --border: rgba(0, 0, 0, 0.1);
-            --highlight-bg: rgba(0, 113, 227, 0.05);
-            --success: #34c759;
-        }
 
-        body {
-            background-color: var(--bg); color: var(--text);
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-            margin: 0; padding: 40px 20px; display: flex; justify-content: center;
-        }
+<style>
+  .dw-root { padding: 1.5rem; font-family: var(--font-sans); background: #f5f5f7; border-radius: var(--border-radius-lg); color: #1d1d1f; }
+  .dw-eyebrow { font-size: 11px; color: #6e6e73; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 500; margin-bottom: 6px; }
+  .dw-title { font-size: 22px; font-weight: 500; margin: 0 0 6px; color: #1d1d1f; }
+  .dw-tagline { font-size: 13px; color: #6e6e73; margin: 0 0 4px; }
+  .dw-chain { display: flex; align-items: center; gap: 6px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .chain-node { font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 8px; }
+  .cn-sales { background: #dbeafe; color: #1e40af; }
+  .cn-ops   { background: #d1fae5; color: #065f46; }
+  .cn-fin   { background: #fef3c7; color: #92400e; }
+  .chain-arrow { font-size: 12px; color: #9ca3af; }
+  .dw-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px; }
+  .dw-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .dw-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 14px; padding: 1rem 1.25rem; }
+  .dw-card-accent { border-left: 3px solid #2563eb; }
+  .dw-label { font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; font-weight: 500; margin-bottom: 12px; display: block; }
+  .dw-metric { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1rem; text-align: center; }
+  .dw-metric-val { font-size: 15px; font-weight: 500; display: block; margin-bottom: 4px; color: #1d1d1f; }
+  .dw-metric-val.blue { color: #1d4ed8; }
+  .dw-metric-val.green { color: #15803d; }
+  .dw-metric-lbl { font-size: 11px; color: #9ca3af; }
+  .member-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f3f4f6; }
+  .member-row:last-child { border-bottom: none; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+  .av-director { background: #ede9fe; color: #5b21b6; }
+  .av-blue  { background: #dbeafe; color: #1e40af; }
+  .av-green { background: #d1fae5; color: #065f46; }
+  .member-name { font-size: 14px; font-weight: 500; color: #1d1d1f; }
+  .member-role { font-size: 12px; color: #6e6e73; }
+  .tag { font-size: 10px; padding: 2px 8px; border-radius: 6px; font-weight: 500; margin-left: auto; white-space: nowrap; }
+  .tag-director { background: #ede9fe; color: #5b21b6; }
+  .tag-impl     { background: #dbeafe; color: #1e40af; }
+  .tag-support  { background: #d1fae5; color: #065f46; }
+  .prog-row { margin-bottom: 12px; }
+  .prog-top { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; align-items: center; }
+  .prog-name { font-weight: 500; color: #1d1d1f; }
+  .prog-pct { color: #9ca3af; font-size: 12px; }
+  .prog-bg { height: 5px; background: #f3f4f6; border-radius: 10px; }
+  .prog-fill { height: 100%; border-radius: 10px; }
+  .fill-blue  { background: #3b82f6; }
+  .fill-teal  { background: #10b981; }
+  .fill-amber { background: #f59e0b; }
+  .prog-tag { font-size: 10px; padding: 1px 6px; border-radius: 4px; margin-left: 6px; font-weight: 500; vertical-align: middle; }
+  .pt-sales { background: #dbeafe; color: #1e40af; }
+  .pt-ops   { background: #d1fae5; color: #065f46; }
+  .pt-fin   { background: #fef3c7; color: #92400e; }
+  .overall-block { margin-top: 14px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 12px 14px; }
+  .overall-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .overall-label { font-size: 12px; font-weight: 500; color: #1e40af; }
+  .overall-pct { font-size: 22px; font-weight: 500; color: #1d4ed8; line-height: 1; }
+  .overall-bg { height: 7px; background: #bfdbfe; border-radius: 10px; }
+  .overall-fill { height: 100%; border-radius: 10px; background: #3b82f6; }
+  .overall-sub { font-size: 11px; color: #60a5fa; margin-top: 6px; }
+  .task-block { padding: 10px 12px; border-radius: 10px; background: #f9fafb; margin-bottom: 8px; font-size: 13px; line-height: 1.6; border-left: 3px solid #3b82f6; color: #374151; }
+  .task-block:last-child { margin-bottom: 0; }
+  .task-block.next { border-left-color: #d1d5db; }
+  .task-block b { font-weight: 500; color: #111827; }
+  .card-title { font-size: 15px; font-weight: 500; margin-bottom: 12px; color: #1d1d1f; }
+  .badge-active { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; background: #dbeafe; color: #1e40af; padding: 3px 9px; border-radius: 6px; font-weight: 500; margin-bottom: 10px; }
+  .badge-next   { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; background: #f3f4f6; color: #9ca3af; padding: 3px 9px; border-radius: 6px; font-weight: 500; margin-bottom: 10px; }
+  .dot-pulse { width: 6px; height: 6px; background: #3b82f6; border-radius: 50%; }
+  .dot-gray  { width: 6px; height: 6px; background: #d1d5db; border-radius: 50%; }
+  .tl-wrap { position: relative; padding: 0.5rem 0; }
+  .tl-spine    { position: absolute; top: 22px; left: 20px; right: 20px; height: 1px; background: #e5e7eb; }
+  .tl-progress { position: absolute; top: 22px; left: 20px; height: 1px; background: #3b82f6; }
+  .tl-nodes { display: flex; justify-content: space-between; position: relative; }
+  .tl-node { display: flex; flex-direction: column; align-items: center; width: 80px; }
+  .tl-dot-wrap { width: 14px; height: 14px; border-radius: 50%; margin-bottom: 10px; }
+  .tl-dot-done   { background: #3b82f6; }
+  .tl-dot-now    { background: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.2); }
+  .tl-dot-future { background: #ffffff; border: 1.5px solid #d1d5db; }
+  .tl-dot-end    { background: #10b981; }
+  .tl-date { font-size: 12px; font-weight: 500; text-align: center; white-space: nowrap; color: #374151; }
+  .tl-date.blue  { color: #1d4ed8; }
+  .tl-date.green { color: #15803d; }
+  .tl-lbl  { font-size: 11px; color: #9ca3af; text-align: center; margin-top: 3px; white-space: nowrap; }
+  .tl-today { font-size: 10px; color: #1d4ed8; background: #dbeafe; padding: 2px 6px; border-radius: 4px; margin-top: 4px; }
+  .tl-summary { display: flex; justify-content: space-between; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid #f3f4f6; font-size: 12px; color: #9ca3af; }
+  .tl-summary span { font-weight: 500; color: #374151; }
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
+  .stat-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
+  .stat-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .si-purple { background: #ede9fe; color: #5b21b6; }
+  .si-green  { background: #d1fae5; color: #065f46; }
+  .si-amber  { background: #fef3c7; color: #92400e; }
+  .stat-val  { font-size: 16px; font-weight: 500; color: #1d1d1f; line-height: 1.2; }
+  .stat-lbl  { font-size: 11px; color: #9ca3af; margin-top: 2px; }
+  .footer { font-size: 11px; color: #9ca3af; text-align: center; padding-top: 1rem; border-top: 1px solid #e5e7eb; margin-top: 4px; }
+</style>
 
-        .container { width: 100%; max-width: 920px; }
+<div class="dw-root">
+  <h2 class="sr-only">DodoWheels 全链路数字化协作系统项目看板</h2>
 
-        /* 顶部汇总 */
-        .executive-summary {
-            background: var(--card); border-radius: 28px; padding: 35px;
-            margin-bottom: 30px; border: 1px solid var(--border);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-        }
-        .project-header h1 { font-size: 30px; margin: 0; letter-spacing: -1.2px; font-weight: 800; }
-        .project-header p { color: var(--accent); font-weight: 700; font-size: 13px; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 2px; }
+  <p class="dw-eyebrow">Montreal, QC · Project Portfolio 2026–2027</p>
+  <h1 class="dw-title">DodoWheels 全链路数字化协作系统</h1>
+  <p class="dw-tagline">构建从销售 · 核心系统 · 财务的全链路数字化协作体系</p>
+  <div class="dw-chain">
+    <span class="chain-node cn-sales"><i class="ti ti-shopping-cart" aria-hidden="true"></i> 销售官网</span>
+    <span class="chain-arrow">→</span>
+    <span class="chain-node cn-ops"><i class="ti ti-building-warehouse" aria-hidden="true"></i> 核心系统</span>
+    <span class="chain-arrow">→</span>
+    <span class="chain-node cn-fin"><i class="ti ti-report-money" aria-hidden="true"></i> 财务 QBO</span>
+  </div>
 
-        /* 团队与进度 */
-        .overview-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px; margin-bottom: 30px; }
-        .overview-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 28px; }
-        .section-label { font-size: 11px; color: var(--text-dim); font-weight: 700; text-transform: uppercase; margin-bottom: 18px; display: block; }
-        
-        .member { display: flex; justify-content: space-between; margin-bottom: 14px; font-size: 15px; }
-        .member .name { font-weight: 600; }
-        .member .name.highlight { color: var(--accent); font-size: 20px; }
+  <div class="dw-grid-4">
+    <div class="dw-metric">
+      <span class="dw-metric-val blue">2026.05.10</span>
+      <div class="dw-metric-lbl">项目启动</div>
+    </div>
+    <div class="dw-metric">
+      <span class="dw-metric-val" id="elapsed">—</span>
+      <div class="dw-metric-lbl">已过工期</div>
+    </div>
+    <div class="dw-metric">
+      <span class="dw-metric-val">160 天</span>
+      <div class="dw-metric-lbl">有效总工期</div>
+    </div>
+    <div class="dw-metric">
+      <span class="dw-metric-val green">2027.01.01</span>
+      <div class="dw-metric-lbl">试运行</div>
+    </div>
+  </div>
 
-        .progress-item { margin-bottom: 18px; }
-        .progress-bar-bg { height: 6px; background: #eee; border-radius: 10px; margin-top: 8px; }
-        .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 10px; }
-
-        /* 核心计划：重点突出区域 */
-        .focus-section { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 35px; }
-        
-        .focus-card {
-            background: var(--card); border: 2px solid transparent; border-radius: 28px; padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.06); position: relative;
-        }
-        .focus-card.current { border-color: var(--accent); }
-        .focus-card.next { border-color: #e8e8ed; background: #fafafa; }
-
-        .focus-header { display: flex; align-items: center; margin-bottom: 22px; }
-        .focus-title { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
-        .status-badge { 
-            font-size: 10px; padding: 4px 10px; border-radius: 8px; font-weight: 800;
-            margin-right: 12px; text-transform: uppercase;
-        }
-        .badge-active { background: var(--accent); color: white; }
-        .badge-plan { background: #e8e8ed; color: var(--text-dim); }
-
-        .task-list { list-style: none; padding: 0; margin: 0; }
-        .task-item { 
-            padding: 15px; border-radius: 16px; background: var(--highlight-bg); 
-            margin-bottom: 12px; font-size: 14px; line-height: 1.6; border-left: 5px solid var(--accent);
-        }
-        .next .task-item { background: #fff; border-left-color: #d2d2d7; color: #424245; border-left-width: 5px; }
-
-        /* 里程碑数据指标 */
-        .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 35px; }
-        .stat-item { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 22px; text-align: center; }
-        .stat-num { font-size: 18px; font-weight: 700; color: var(--accent); display: block; }
-        .stat-num.success { color: var(--success); }
-        .stat-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-top: 6px; font-weight: 600; }
-
-        footer { text-align: center; color: var(--text-dim); font-size: 12px; padding: 25px; border-top: 1px solid var(--border); }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <div class="executive-summary">
-        <div class="project-header">
-            <p>Montreal, QC | Project Portfolio 2026-2027</p>
-            <h1>DodoWheels 全链路数字化协作体系看板</h1>
-        </div>
+  <div class="dw-grid-2">
+    <div class="dw-card">
+      <span class="dw-label">核心资源</span>
+      <div class="member-row">
+        <div class="avatar av-director">FF</div>
+        <div><div class="member-name">Frank</div><div class="member-role">项目总监</div></div>
+        <span class="tag tag-director">Director</span>
+      </div>
+      <div class="member-row">
+        <div class="avatar av-blue">TM</div>
+        <div><div class="member-name">Tim</div><div class="member-role">项目实施</div></div>
+        <span class="tag tag-impl">Impl.</span>
+      </div>
+      <div class="member-row">
+        <div class="avatar av-green">P</div>
+        <div><div class="member-name">Pan</div><div class="member-role">项目支持 · 仓储</div></div>
+        <span class="tag tag-support">Support</span>
+      </div>
+      <div class="member-row">
+        <div class="avatar av-green">SH</div>
+        <div><div class="member-name">Shuman</div><div class="member-role">项目支持 · 客服</div></div>
+        <span class="tag tag-support">Support</span>
+      </div>
+      <div class="member-row">
+        <div class="avatar av-green">SU</div>
+        <div><div class="member-name">Susan</div><div class="member-role">项目支持 · 财务</div></div>
+        <span class="tag tag-support">Support</span>
+      </div>
     </div>
 
-    <div class="overview-grid">
-        <div class="overview-card">
-            <span class="section-label">核心资源 / Resources</span>
-            <div class="member"><span class="role">项目总监</span><span class="name highlight">Frank</span></div>
-            <div class="member"><span class="role">项目实施</span><span class="name">Tim</span></div>
-            <div class="member"><span class="role">项目支持</span><span class="name">Pan / Shuman</span></div>
+    <div class="dw-card">
+      <span class="dw-label">全链路系统迭代进度</span>
+      <div class="prog-row">
+        <div class="prog-top">
+          <span class="prog-name">销售官网迭代 <span class="prog-tag pt-sales">销售</span></span>
+          <span class="prog-pct">12%</span>
         </div>
-        <div class="overview-card">
-            <span class="section-label">全系统同步迭代进度 / Syncing</span>
-            <div class="progress-item">
-                <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:600;"><span>销售官网迭代</span><span>12%</span></div>
-                <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:12%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:600;"><span>核心仓库 & 订单系统</span><span>10%</span></div>
-                <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:10%"></div></div>
-            </div>
-            <div class="progress-item">
-                <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:600;"><span>财务 QBO 集成系统</span><span>15%</span></div>
-                <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:15%"></div></div>
-            </div>
+        <div class="prog-bg"><div class="prog-fill fill-blue" style="width:12%"></div></div>
+      </div>
+      <div class="prog-row">
+        <div class="prog-top">
+          <span class="prog-name">核心仓库 &amp; 订单系统 <span class="prog-tag pt-ops">核心系统</span></span>
+          <span class="prog-pct">10%</span>
         </div>
+        <div class="prog-bg"><div class="prog-fill fill-teal" style="width:10%"></div></div>
+      </div>
+      <div class="prog-row" style="margin-bottom:0">
+        <div class="prog-top">
+          <span class="prog-name">财务 QBO 集成系统 <span class="prog-tag pt-fin">财务</span></span>
+          <span class="prog-pct">15%</span>
+        </div>
+        <div class="prog-bg"><div class="prog-fill fill-amber" style="width:15%"></div></div>
+      </div>
+      <div class="overall-block">
+        <div class="overall-top">
+          <span class="overall-label"><i class="ti ti-chart-pie" aria-hidden="true"></i> 整体进度</span>
+          <span class="overall-pct">12%</span>
+        </div>
+        <div class="overall-bg"><div class="overall-fill" style="width:12%"></div></div>
+        <div class="overall-sub">项目启动第 5 天 · 预计 2026.12.31 完成交付</div>
+      </div>
     </div>
+  </div>
 
-    <!-- 重点工作计划 -->
-    <div class="focus-section">
-        <div class="focus-card current">
-            <div class="focus-header">
-                <span class="status-badge badge-active">Active</span>
-                <div class="focus-title">本周工作重点</div>
-            </div>
-            <div class="task-list">
-                <div class="task-item">
-                    与 <b>Pan 和 Shuman</b> 针对仓储和客服模块业务流程进行初步沟通与交流。
-                </div>
-                <div class="task-item">
-                    同步推进<b>系统架构设计</b>，确保技术底座支撑业务逻辑。
-                </div>
-            </div>
-        </div>
-
-        <div class="focus-card next">
-            <div class="focus-header">
-                <span class="status-badge badge-plan">Next</span>
-                <div class="focus-title">下周计划展望</div>
-            </div>
-            <div class="task-list">
-                <div class="task-item">
-                    继续与 <b>Pan 和 Shuman</b> 深入交流仓库和客服模块的业务细则。
-                </div>
-                <div class="task-item">
-                    深化<b>系统架构设计</b>，重点攻克模块集成技术难点。
-                </div>
-            </div>
-        </div>
+  <div class="dw-grid-2" style="margin-bottom:10px">
+    <div class="dw-card dw-card-accent">
+      <div class="badge-active"><div class="dot-pulse"></div> Active</div>
+      <div class="card-title">本周工作重点</div>
+      <div class="task-block">与 <b>Pan 和 Shuman</b> 针对仓储和客服模块业务流程进行初步沟通与交流。</div>
+      <div class="task-block">同步推进<b>系统架构设计</b>，确保技术底座支撑业务逻辑。</div>
     </div>
-
-    <!-- 关键里程碑 -->
-    <div class="stat-row">
-        <div class="stat-item">
-            <span class="stat-num">2026.05.10</span>
-            <span class="stat-label">项目启动</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-num">160 Days</span>
-            <span class="stat-label">有效工期 (精算)</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-num">2026.12.31</span>
-            <span class="stat-label">项目完成</span>
-        </div>
-        <div class="stat-item" style="background: var(--highlight-bg); border-color: var(--success);">
-            <span class="stat-num success">2027.01.01</span>
-            <span class="stat-label">系统试运行</span>
-        </div>
+    <div class="dw-card">
+      <div class="badge-next"><div class="dot-gray"></div> Next</div>
+      <div class="card-title">下周计划展望</div>
+      <div class="task-block next">继续与 <b>Pan 和 Shuman</b> 深入交流仓库和客服模块业务细则。</div>
+      <div class="task-block next">深化<b>系统架构设计</b>，重点攻克模块集成技术难点。</div>
     </div>
+  </div>
 
-    <footer>
-        DodoWheels Digital Transformation Office | Last Updated: 2026.05.15 EDT
-    </footer>
+  <div class="dw-card" style="margin-bottom:10px">
+    <span class="dw-label">项目里程碑</span>
+    <div class="tl-wrap">
+      <div class="tl-spine"></div>
+      <div class="tl-progress" id="tl-prog"></div>
+      <div class="tl-nodes">
+        <div class="tl-node">
+          <div class="tl-dot-wrap tl-dot-done"></div>
+          <div class="tl-date blue">2026.05.10</div>
+          <div class="tl-lbl">项目启动</div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot-wrap tl-dot-now"></div>
+          <div class="tl-date blue">2026.05.15</div>
+          <div class="tl-lbl">今日</div>
+          <div class="tl-today">进行中</div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot-wrap tl-dot-future"></div>
+          <div class="tl-date">2026.07.31</div>
+          <div class="tl-lbl">需求沟通</div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot-wrap tl-dot-future"></div>
+          <div class="tl-date">2026.09.30</div>
+          <div class="tl-lbl">架构完成</div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot-wrap tl-dot-future"></div>
+          <div class="tl-date">2026.11.30</div>
+          <div class="tl-lbl">集成测试</div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot-wrap tl-dot-future"></div>
+          <div class="tl-date">2026.12.31</div>
+          <div class="tl-lbl">项目交付</div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot-wrap tl-dot-end"></div>
+          <div class="tl-date green">2027.01.01</div>
+          <div class="tl-lbl">系统试运行</div>
+        </div>
+      </div>
+    </div>
+    <div class="tl-summary">
+      <div>已过工期 <span id="tl-elapsed">—</span> 天 / 160 天</div>
+      <div>距试运行 <span id="tl-left">—</span> 天</div>
+      <div>整体完成率 <span id="tl-pct">—</span></div>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-icon si-purple"><i class="ti ti-users" aria-hidden="true"></i></div>
+      <div>
+        <div class="stat-val">5 人</div>
+        <div class="stat-lbl">核心团队规模</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon si-green"><i class="ti ti-layout-grid" aria-hidden="true"></i></div>
+      <div>
+        <div class="stat-val">3 系统</div>
+        <div class="stat-lbl">并行推进模块</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon si-amber"><i class="ti ti-flag" aria-hidden="true"></i></div>
+      <div>
+        <div class="stat-val" id="days-left-stat">—</div>
+        <div class="stat-lbl">距系统试运行</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    DodoWheels Digital Transformation Office · Last updated 2026.05.15 EDT
+  </div>
 </div>
 
-</body>
-</html>
+<script>
+  const start = new Date('2026-05-10');
+  const end = new Date('2026-12-31');
+  const go = new Date('2027-01-01');
+  const now = new Date('2026-05-15');
+  const totalMs = end - start;
+  const elapsedMs = now - start;
+  const pct = Math.min(100, Math.max(0, Math.round(elapsedMs / totalMs * 100)));
+  const elapsedDays = Math.round(elapsedMs / 86400000);
+  const leftDays = Math.round((go - now) / 86400000);
+  document.getElementById('elapsed').textContent = elapsedDays + ' 天';
+  document.getElementById('tl-elapsed').textContent = elapsedDays;
+  document.getElementById('tl-left').textContent = leftDays;
+  document.getElementById('tl-pct').textContent = pct + '%';
+  document.getElementById('days-left-stat').textContent = leftDays + ' 天';
+  const spine = document.querySelector('.tl-spine');
+  const prog = document.getElementById('tl-prog');
+  if (spine && prog) prog.style.width = (pct / 100 * spine.offsetWidth) + 'px';
+</script>
