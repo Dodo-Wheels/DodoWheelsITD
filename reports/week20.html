@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 20 - DodoWheels Report</title>
+    <style>
+        :root { --bg: #0a0a0c; --accent: #007aff; --card: #1c1c1e; }
+        body { background: var(--bg); color: #fff; font-family: sans-serif; padding: 40px; }
+        .nav-back { color: var(--accent); text-decoration: none; font-size: 14px; margin-bottom: 30px; display: block; }
+        .main-card { background: var(--card); padding: 40px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); }
+        h1 { font-size: 28px; margin-bottom: 20px; }
+        .tag { background: rgba(0,122,255,0.2); color: var(--accent); padding: 4px 12px; border-radius: 6px; font-size: 12px; }
+        .content { line-height: 1.8; color: #d1d1d6; margin-top: 30px; }
+        .progress-bar { height: 4px; background: #333; margin: 20px 0; border-radius: 2px; }
+        .fill { height: 100%; background: var(--accent); border-radius: 2px; }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="nav-back">← 返回项目中心</a>
+    <div class="main-card">
+        <span class="tag">MAY 11 - MAY 15, 2026</span>
+        <h1>本周进度汇总 (Week 20)</h1>
+        
+        <div class="content">
+            <h3>核心成就：</h3>
+            <ul>
+                <li><b>WMS & OMS 联调：</b> 实现了入库单审核后库存自动同步，解决了异步延时问题[cite: 1]。</li>
+                <li><b>QBO 集成：</b> 财务接口权限已重新配置，支持高频率数据轮询[cite: 1]。</li>
+            </ul>
+            
+            <h3>模块进度详情：</h3>
+            <p>官网进度：85%</p>
+            <div class="progress-bar"><div class="fill" style="width: 85%;"></div></div>
+            <p>核心系统：55%</p>
+            <div class="progress-bar"><div class="fill" style="width: 55%;"></div></div>
+        </div>
+    </div>
+</body>
+</html>
