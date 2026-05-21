@@ -1,1 +1,1130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DodoWheels-Core-System 系统功能介绍</title>
+  <style>
+    :root {
+      --primary:       #3b82f6;
+      --primary-light: #eff6ff;
+      --primary-mid:   #dbeafe;
+      --accent:        #6366f1;
+      --bg:            #f8fafc;
+      --surface:       #ffffff;
+      --surface2:      #f1f5f9;
+      --border:        #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text:          #0f172a;
+      --text-2:        #334155;
+      --text-muted:    #64748b;
+      --green:  #10b981; --green-bg:  #ecfdf5; --green-border:  #a7f3d0;
+      --amber:  #f59e0b; --amber-bg:  #fffbeb; --amber-border:  #fde68a;
+      --rose:   #f43f5e; --rose-bg:   #fff1f2; --rose-border:   #fecdd3;
+      --violet: #8b5cf6; --violet-bg: #f5f3ff; --violet-border: #ddd6fe;
+      --cyan:   #06b6d4; --cyan-bg:   #ecfeff; --cyan-border:   #a5f3fc;
+      --sky:    #0ea5e9; --sky-bg:    #f0f9ff; --sky-border:    #bae6fd;
+    }
 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+        'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--surface2); }
+    ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(160deg, #ffffff 0%, #eff6ff 50%, #f5f3ff 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 96px 40px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 700px; height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99,102,241,.08) 0%, transparent 70%);
+      top: -200px; left: 50%; transform: translateX(-50%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px; border-radius: 999px;
+      border: 1px solid #c7d2fe;
+      background: #eef2ff;
+      font-size: 12px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: #4f46e5; margin-bottom: 28px;
+    }
+    .hero-badge .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #6366f1; animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.5)} }
+
+    .hero h1 {
+      font-size: clamp(38px, 6vw, 72px);
+      font-weight: 900; letter-spacing: -.03em;
+      background: linear-gradient(135deg, #1e3a8a 0%, #4f46e5 45%, #0ea5e9 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 18px;
+    }
+    .hero-sub {
+      font-size: 18px; color: var(--text-muted);
+      max-width: 620px; margin: 0 auto 52px;
+    }
+    .hero-stats {
+      display: flex; justify-content: center;
+      gap: 0; flex-wrap: wrap;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,.06);
+      overflow: hidden;
+      max-width: 680px; margin: 0 auto;
+    }
+    .stat {
+      flex: 1; min-width: 120px;
+      padding: 28px 20px; text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-value {
+      font-size: 36px; font-weight: 900;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+    /* ── Layout ── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+    section { padding: 80px 0; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--primary);
+      margin-bottom: 14px;
+    }
+    .section-label::before {
+      content: ''; display: block;
+      width: 16px; height: 2px; background: var(--primary); border-radius: 1px;
+    }
+    .section-title {
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 800; letter-spacing: -.02em;
+      color: var(--text); margin-bottom: 12px;
+    }
+    .section-subtitle { color: var(--text-muted); font-size: 16px; margin-bottom: 56px; }
+    .divider { height: 1px; background: var(--border); }
+
+    /* ── Module Cards ── */
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 24px; margin-top: 48px;
+    }
+    .module-card {
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: #fff;
+      box-shadow: 0 2px 12px rgba(0,0,0,.04);
+      overflow: hidden;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+    .module-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,.1);
+      border-color: var(--card-color, #3b82f6);
+    }
+    .card-header {
+      padding: 24px 24px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .card-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
+      background: var(--card-icon-bg, #eff6ff);
+      border: 1px solid var(--card-icon-border, #bfdbfe);
+    }
+    .card-header-text h3 {
+      font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px;
+    }
+    .card-header-text .card-module-id {
+      font-size: 11px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--card-color, #3b82f6);
+    }
+    .card-body { padding: 20px 24px; }
+    .card-desc { font-size: 14px; color: var(--text-2); line-height: 1.75; margin-bottom: 18px; }
+
+    /* Detail list inside card */
+    .detail-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+    .detail-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 13px; color: var(--text-2);
+    }
+    .detail-list li::before {
+      content: '▸';
+      color: var(--card-color, #3b82f6);
+      font-size: 11px; margin-top: 3px; flex-shrink: 0;
+    }
+    .detail-list li strong { color: var(--text); font-weight: 600; }
+
+    /* Status pills row */
+    .status-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .status-pill {
+      padding: 3px 10px; border-radius: 6px;
+      font-size: 11px; font-weight: 600;
+      border: 1px solid transparent;
+    }
+
+    /* Feature tags */
+    .feature-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      padding: 4px 10px; border-radius: 8px;
+      font-size: 12px; font-weight: 500;
+      background: var(--surface2); color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    /* ── Highlight row ── */
+    .highlight-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px; margin-top: 48px;
+    }
+    .highlight-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 20px; border-radius: 16px;
+      border: 1px solid var(--border); background: #fff;
+      box-shadow: 0 1px 6px rgba(0,0,0,.03);
+      transition: box-shadow .2s, border-color .2s;
+    }
+    .highlight-item:hover { box-shadow: 0 8px 24px rgba(0,0,0,.08); border-color: var(--border-strong); }
+    .hi-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .hi-text h4 { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+    .hi-text p  { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+
+    /* ── Permission table ── */
+    .table-wrap { border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-top: 48px; }
+    .perm-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .perm-table th {
+      text-align: left; padding: 13px 18px;
+      background: var(--surface2); color: var(--text-muted);
+      font-weight: 700; font-size: 12px;
+      letter-spacing: .06em; text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+    .perm-table td {
+      padding: 13px 18px; border-bottom: 1px solid var(--border);
+      vertical-align: top; color: var(--text-2);
+    }
+    .perm-table tr:last-child td { border-bottom: none; }
+    .perm-table tr:hover td { background: var(--surface2); }
+    .perm-table td:first-child { font-weight: 600; color: var(--text); white-space: nowrap; }
+    .perm-badge {
+      display: inline-block; padding: 2px 9px; border-radius: 6px;
+      font-size: 11px; font-weight: 700; margin: 2px; font-family: monospace;
+    }
+    .b-blue   { background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; }
+    .b-green  { background:#ecfdf5; color:#065f46; border:1px solid #6ee7b7; }
+    .b-violet { background:#f5f3ff; color:#5b21b6; border:1px solid #c4b5fd; }
+    .b-amber  { background:#fffbeb; color:#92400e; border:1px solid #fcd34d; }
+    .b-rose   { background:#fff1f2; color:#9f1239; border:1px solid #fda4af; }
+    .b-cyan   { background:#ecfeff; color:#164e63; border:1px solid #67e8f9; }
+
+    /* ── Status pills by color ── */
+    .sp-gray   { background:#f1f5f9; color:#475569; border-color:#e2e8f0; }
+    .sp-amber  { background:#fffbeb; color:#92400e; border-color:#fde68a; }
+    .sp-blue   { background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; }
+    .sp-green  { background:#ecfdf5; color:#065f46; border-color:#a7f3d0; }
+    .sp-indigo { background:#eef2ff; color:#3730a3; border-color:#c7d2fe; }
+
+    /* ── Tech Grid ── */
+    .tech-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 48px; }
+    .tech-chip {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 18px; border-radius: 999px;
+      border: 1px solid var(--border); background: #fff;
+      font-size: 14px; font-weight: 600; color: var(--text-2);
+      box-shadow: 0 1px 4px rgba(0,0,0,.04);
+    }
+    .tech-chip .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* ── Deploy cards ── */
+    .deploy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px; margin-top: 48px;
+    }
+    .deploy-card {
+      border-radius: 20px; border: 1px solid var(--border);
+      background: #fff; padding: 28px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.04);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .deploy-card:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(0,0,0,.09); }
+    .deploy-icon { font-size: 32px; margin-bottom: 16px; }
+    .deploy-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+    .deploy-card p  { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 16px; }
+    .rec-badge {
+      display: inline-block; padding: 3px 10px;
+      border-radius: 6px; font-size: 11px; font-weight: 700;
+      background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0;
+      margin-bottom: 14px;
+    }
+
+    /* ── CTA / Footer ── */
+    .cta {
+      background: linear-gradient(160deg, #eff6ff 0%, #f5f3ff 100%);
+      border-top: 1px solid var(--border);
+      padding: 96px 40px; text-align: center;
+    }
+    .cta h2 { font-size: 40px; font-weight: 800; color: var(--text); margin-bottom: 14px; }
+    .cta p  { color: var(--text-muted); font-size: 17px; max-width: 520px; margin: 0 auto; }
+
+    footer {
+      text-align: center; padding: 32px;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted); font-size: 13px;
+      background: #fff;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .hero { padding: 60px 20px; }
+      .container { padding: 0 20px; }
+      section { padding: 56px 0; }
+      .module-grid, .highlight-grid, .deploy-grid { grid-template-columns: 1fr; }
+      .hero-stats { flex-direction: column; border-radius: 16px; }
+      .stat { border-right: none; border-bottom: 1px solid var(--border); }
+      .stat:last-child { border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ HERO ═══════════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-badge"><span class="dot"></span>DodoWheels核心系统</div>
+  <h1>DodoWheels-Core-System</h1>
+  <p class="hero-sub">覆盖入库 · 仓储 · 出库 · 运输 · 客服全链路的一体化数字化管理系统<br>支持云端实时协作与本地离线双模式运行</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-value">12</div><div class="stat-label">功能模块</div></div>
+    <div class="stat"><div class="stat-value">35+</div><div class="stat-label">子功能页面</div></div>
+    <div class="stat"><div class="stat-value">30+</div><div class="stat-label">细粒度权限码</div></div>
+    <div class="stat"><div class="stat-value">3</div><div class="stat-label">多语言支持</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════ 核心功能模块 ══════════════════════════════════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">功能模块</div>
+    <div class="section-title">全链路业务覆盖</div>
+    <div class="section-subtitle">从海外发货到客户提货，每个环节均有对应的数字化管理工具</div>
+
+    <div class="module-grid">
+
+      <!-- ① 系统看板 -->
+      <div class="module-card" style="--card-color:#6366f1">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#eef2ff;--card-icon-border:#c7d2fe">🖥️</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 01</div>
+            <h3>系统看板</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">实时总览大屏，汇聚所有业务模块的核心数据，管理者无需切换页面即可掌握全局运营状态。</p>
+          <ul class="detail-list">
+            <li><strong>多维统计</strong>：订单量、容器数、批次数、司机 / 车辆 / 叉车状态一屏呈现</li>
+            <li><strong>快速导航</strong>：点击看板中任意模块卡片，直接跳转至对应功能页面</li>
+            <li><strong>实时刷新</strong>：数据来源于云端或本地，反映当前最新状态</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">实时数据</span><span class="tag">快速导航</span><span class="tag">多维概览</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ② 订单管理 -->
+      <div class="module-card" style="--card-color:#3b82f6">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#eff6ff;--card-icon-border:#bfdbfe">📋</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 02</div>
+            <h3>订单管理</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">统一处理业务订单的校验、查询与状态管理，支持云端实时同步与本地 Excel 文件两种数据源。</p>
+          <ul class="detail-list">
+            <li><strong>订单校验器</strong>：逐条核验订单合法性，异常订单即时标红提示，支持批量导入</li>
+            <li><strong>订单查询</strong>：只读模式快速检索，按单号、状态、司机、车辆、时间多维筛选</li>
+            <li><strong>订单撤销</strong>：专属撤单视图，撤单操作有独立权限控制，避免误操作</li>
+            <li><strong>自动保存</strong>：编辑后通过 File System Access API 实时写回本地 Excel 文件</li>
+            <li><strong>全局搜索</strong>：顶栏 300ms 防抖搜索，快速定位任意单号</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">订单校验</span><span class="tag">只读查询</span>
+            <span class="tag">撤单处理</span><span class="tag">批量导入</span><span class="tag">云端/本地</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ 入库管理（集装箱） -->
+      <div class="module-card" style="--card-color:#8b5cf6">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#f5f3ff;--card-icon-border:#ddd6fe">🚢</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 03</div>
+            <h3>集装箱管理</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">管理每一个集装箱从海外发出到入库完成的完整生命周期，支持多仓库并行操作。</p>
+          <div class="status-row">
+            <span class="status-pill sp-blue">海运中</span>
+            <span class="status-pill sp-amber">已到港</span>
+            <span class="status-pill sp-amber">卸货中</span>
+            <span class="status-pill sp-green">已完成</span>
+            <span class="status-pill sp-indigo">已退柜</span>
+          </div>
+          <ul class="detail-list">
+            <li><strong>多仓库支持</strong>：MT、GT、QC 仓同时管理，按仓筛选查看</li>
+            <li><strong>ETA 区间筛选</strong>：可按预计到港日期范围过滤柜次，精准规划卸货计划</li>
+            <li><strong>货品明细</strong>：每个集装箱下挂载 SKU / 品牌 / 描述 / 实收数量，支持逐项核对</li>
+            <li><strong>实收数量同步</strong>：实收与预收对比，差异自动高亮，云端即时更新</li>
+            <li><strong>Excel 导出</strong>：一键导出柜次明细至 Excel，便于对账归档</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">5种状态流转</span><span class="tag">多仓并行</span>
+            <span class="tag">ETA筛选</span><span class="tag">实收核对</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ④ 到货预报 -->
+      <div class="module-card" style="--card-color:#8b5cf6">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#f5f3ff;--card-icon-border:#ddd6fe">📡</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 04</div>
+            <h3>到货预报</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">基于集装箱数据自动生成到货预报视图，让仓库提前安排人力与卸货位，减少压港等待。</p>
+          <ul class="detail-list">
+            <li><strong>预报汇总</strong>：按 ETA 日期聚合展示即将到港的柜次及货品清单</li>
+            <li><strong>库存联动</strong>：自动关联在途货品的 SKU，与现有库存进行对比预测</li>
+            <li><strong>云端实时</strong>：数据直接来源于集装箱模块，无需重复录入</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">预报汇总</span><span class="tag">SKU联动</span><span class="tag">仓库预排</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑤ 入库单管理 -->
+      <div class="module-card" style="--card-color:#8b5cf6">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#f5f3ff;--card-icon-border:#ddd6fe">📥</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 05</div>
+            <h3>入库单创建</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">为每次实际入库行为创建标准化入库单，涵盖四种入库类型，覆盖所有入库来源场景。</p>
+          <div class="status-row">
+            <span class="status-pill sp-gray">待收货</span>
+            <span class="status-pill sp-amber">收货中</span>
+            <span class="status-pill sp-blue">已完成</span>
+            <span class="status-pill sp-green">已上架</span>
+          </div>
+          <ul class="detail-list">
+            <li><strong>四种入库类型</strong>：集装箱入库 / 采购入库 / 调拨入库 / 退货入库，场景全覆盖</li>
+            <li><strong>货品行管理</strong>：每单下可添加多条 SKU 明细，含预计数量与实际收货数量</li>
+            <li><strong>关联集装箱</strong>：集装箱入库类型可直接选择已有柜次，数据自动带入</li>
+            <li><strong>状态流转</strong>：待收货 → 收货中 → 已完成 → 已上架，全程可追溯</li>
+            <li><strong>打印功能</strong>：一键打印入库单，现场收货凭证可纸质留存</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">4种入库类型</span><span class="tag">多SKU明细</span>
+            <span class="tag">柜次关联</span><span class="tag">打印支持</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑥ 上架管理 -->
+      <div class="module-card" style="--card-color:#8b5cf6">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#f5f3ff;--card-icon-border:#ddd6fe">📌</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 06</div>
+            <h3>上架管理</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">承接已完成收货的入库单，将货品精准分配至仓库的具体货位，完成最后一公里入库动作。</p>
+          <ul class="detail-list">
+            <li><strong>货位分配</strong>：从已有货位库中选择目标位置，为每件商品指定存放货架</li>
+            <li><strong>入库单联动</strong>：自动拉取"已完成"状态的入库单及其 SKU 明细</li>
+            <li><strong>上架记录</strong>：每次上架操作均生成带时间戳的记录，可追溯历史</li>
+            <li><strong>多仓位支持</strong>：支持同一 SKU 分散存放在多个货位，按位置分别记录数量</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">货位指定</span><span class="tag">入库单联动</span><span class="tag">操作记录</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑦ 出库单创建 -->
+      <div class="module-card" style="--card-color:#f43f5e">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#fff1f2;--card-icon-border:#fecdd3">📤</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 07</div>
+            <h3>出库单创建</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">创建标准出库订单，指定司机、车辆、客户及出库货品明细，系统自动生成唯一出库单号。</p>
+          <div class="status-row">
+            <span class="status-pill sp-amber">待拣货</span>
+            <span class="status-pill sp-blue">已拣货</span>
+            <span class="status-pill sp-green">出库完成</span>
+          </div>
+          <ul class="detail-list">
+            <li><strong>自动编号</strong>：按日期自动生成 OB+日期+序号格式的唯一出库单号</li>
+            <li><strong>关键要素</strong>：出库日期、时段、客户名、仓库、司机、车辆、备注一单录入</li>
+            <li><strong>多货品行</strong>：每单可添加多条 SKU 行（SKU / 商品名 / 数量），动态增减</li>
+            <li><strong>状态驱动</strong>：待拣货 → 已拣货 → 出库完成，与下架环节联动</li>
+            <li><strong>打印 & 撤回</strong>：支持打印出库单，已完成单据可撤回重新处理</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">自动单号</span><span class="tag">司机/车辆</span>
+            <span class="tag">多SKU行</span><span class="tag">打印</span><span class="tag">撤回</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑧ 下架管理 -->
+      <div class="module-card" style="--card-color:#f43f5e">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#fff1f2;--card-icon-border:#fecdd3">📦</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 08</div>
+            <h3>下架管理</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">承接出库单，仓库员工按单从货架上取货，完成实物下架操作并更新订单状态。</p>
+          <ul class="detail-list">
+            <li><strong>待拣货列表</strong>：自动聚合当日所有待拣货出库单，按订单分组展示</li>
+            <li><strong>逐单操作</strong>：点击确认拣货，状态即时更新为"已拣货"</li>
+            <li><strong>完成确认</strong>：已拣货后再次确认完成，订单进入"出库完成"终态</li>
+            <li><strong>打印拣货单</strong>：支持打印拣货单，仓库现场操作的纸质凭证</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">待拣聚合</span><span class="tag">逐单确认</span><span class="tag">打印拣货单</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑨ 订单派单 -->
+      <div class="module-card" style="--card-color:#f43f5e">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#fff1f2;--card-icon-border:#fecdd3">🗺️</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 09</div>
+            <h3>订单派单分配</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">将已接受的订单按区域、仓库批量分配给指定司机和车辆，生成每日配送计划清单。</p>
+          <ul class="detail-list">
+            <li><strong>四维筛选</strong>：按方向（东/南/西/北）、仓库、司机、车辆组合过滤订单</li>
+            <li><strong>批量指派</strong>：勾选多条订单，一次性分配给同一司机/车辆</li>
+            <li><strong>派单查询</strong>：查询视图支持按司机/车辆查看历史派单记录</li>
+            <li><strong>汇总报表</strong>：自动汇总每次派单的总件数、分区占比，便于调度分析</li>
+            <li><strong>明细视图</strong>：逐条展示每笔订单的出库详情，支持 Excel 导出</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">4个维度筛选</span><span class="tag">批量分配</span>
+            <span class="tag">汇总报表</span><span class="tag">Excel导出</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑩ 客户自提 -->
+      <div class="module-card" style="--card-color:#f43f5e">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#fff1f2;--card-icon-border:#fecdd3">🏪</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 10</div>
+            <h3>客户自提记录</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">记录客户自行来仓提货的操作，支持确认提货及查询历史自提记录。</p>
+          <ul class="detail-list">
+            <li><strong>自提确认</strong>：客户到仓后，操作员按单号确认提货，状态自动更新</li>
+            <li><strong>提货记录</strong>：保留完整的自提时间、单号、客户信息，便于纠纷追溯</li>
+            <li><strong>日期筛选</strong>：按提货日期快速查询历史记录</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">提货确认</span><span class="tag">历史记录</span><span class="tag">日期筛选</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑪ 批次管理 -->
+      <div class="module-card" style="--card-color:#10b981">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#ecfdf5;--card-icon-border:#a7f3d0">📊</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 11</div>
+            <h3>批次管理</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">管理出库批次数据，支持批量导入 QBO 系统导出的 Excel 文件，生成批次汇总与 PDF 报表。</p>
+          <ul class="detail-list">
+            <li><strong>Excel 导入</strong>：直接读取 QBO 导出的 Excel 文件（从第6行起解析），自动建立批次记录</li>
+            <li><strong>双视图模式</strong>：原始数据视图与聚合汇总视图切换，满足不同分析需求</li>
+            <li><strong>批量选择操作</strong>：勾选多条批次，一键标记为已出库或取消标记</li>
+            <li><strong>PDF 导出</strong>：通过 jsPDF + AutoTable 生成专业格式批次报表</li>
+            <li><strong>搜索过滤</strong>：按客户、单号、SKU 实时过滤批次列表</li>
+            <li><strong>云端同步</strong>：批次数据支持 Supabase 持久化，多端共享</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">Excel导入</span><span class="tag">双视图</span>
+            <span class="tag">批量操作</span><span class="tag">PDF报表</span><span class="tag">云端同步</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑫ 库存盘点 -->
+      <div class="module-card" style="--card-color:#10b981">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#ecfdf5;--card-icon-border:#a7f3d0">🔍</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 12</div>
+            <h3>库存盘点</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">基于实物盘点需求，逐货位核对实际库存与系统账面数量，生成盘差报告。</p>
+          <ul class="detail-list">
+            <li><strong>货位盘点</strong>：按货架位置逐一盘点，实际数量直接录入对比</li>
+            <li><strong>差异高亮</strong>：系统账面与实盘数量不符时自动标红提示</li>
+            <li><strong>盘点报告</strong>：汇总所有差异，可导出盘差明细</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">货位盘点</span><span class="tag">差异对比</span><span class="tag">盘差报告</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑬ 货位布局 -->
+      <div class="module-card" style="--card-color:#10b981">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#ecfdf5;--card-icon-border:#a7f3d0">🗂️</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 13</div>
+            <h3>货位布局管理</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">可视化管理仓库货位编码体系，为上架、盘点、下架提供统一的货位数据源。</p>
+          <ul class="detail-list">
+            <li><strong>货位编码维护</strong>：新增、编辑、删除仓库货位编码，支持多仓库</li>
+            <li><strong>布局可视化</strong>：以网格方式直观呈现货架位置结构</li>
+            <li><strong>全局共享</strong>：货位数据供上架管理、盘点模块统一调用</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">货位编码</span><span class="tag">可视布局</span><span class="tag">多仓管理</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑭ 运输管理 -->
+      <div class="module-card" style="--card-color:#f59e0b">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#fffbeb;--card-icon-border:#fde68a">🚛</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 14</div>
+            <h3>运输资源管理</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">统一管理司机、车辆、叉车等运输资源档案，为派单分配提供准确的基础数据支撑。</p>
+          <ul class="detail-list">
+            <li><strong>司机管理</strong>：司机姓名、联系方式、执照、状态（在职/离职）档案管理</li>
+            <li><strong>车辆管理</strong>：车牌、车型、承重、状态（正常/维修/闲置）全程追踪</li>
+            <li><strong>叉车管理</strong>：叉车编号、型号、工作状态独立台账</li>
+            <li><strong>车型适配</strong>：维护车辆与商品的适配关系，辅助配货决策</li>
+            <li><strong>车型级联数据</strong>：管理品牌/车系/车型三级联动基础数据，供前台使用</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">司机档案</span><span class="tag">车辆台账</span>
+            <span class="tag">叉车管理</span><span class="tag">车型适配</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑮ 客服中心 -->
+      <div class="module-card" style="--card-color:#06b6d4">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#ecfeff;--card-icon-border:#a5f3fc">🎧</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 15</div>
+            <h3>客服库存查询</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">专为客服岗位设计的库存实时查询工具，支持多仓、多尺码查询及库存预警，提升客服应答效率。</p>
+          <ul class="detail-list">
+            <li><strong>多仓库视图</strong>：LS、GT、QC、LLS04 等多个仓库库存分标签展示</li>
+            <li><strong>智能搜索建议</strong>：输入 SKU / 品名时自动提示匹配项，减少拼写错误</li>
+            <li><strong>库存预警</strong>：可配置低库存阈值，零库存与低库存高亮提示，支持 zero / low / all 三档过滤</li>
+            <li><strong>尺码报表</strong>：生成按尺码汇总的库存分布报表，快速识别断货规格</li>
+            <li><strong>仓库报表</strong>：按仓库分类汇总，与客户沟通时精准报出货位库存</li>
+            <li><strong>同尺码预警</strong>：检测同尺码不同 SKU 的替代品，帮助客服推荐替代商品</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">多仓查询</span><span class="tag">库存预警</span>
+            <span class="tag">尺码报表</span><span class="tag">仓库报表</span><span class="tag">搜索建议</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑯ AI 推荐 -->
+      <div class="module-card" style="--card-color:#8b5cf6">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#f5f3ff;--card-icon-border:#ddd6fe">🤖</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 16</div>
+            <h3>AI 智能推荐</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">结合库存数据与客户购买历史，通过 AI 分析为客服提供个性化商品推荐，提升成交率。</p>
+          <ul class="detail-list">
+            <li><strong>智能分析</strong>：根据客户偏好和当前库存，自动生成推荐商品列表</li>
+            <li><strong>库存联动</strong>：推荐结果实时关联库存数量，确保推荐商品有货</li>
+            <li><strong>客服辅助</strong>：推荐结果可直接在客服通话中引用，提高转化</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">AI推荐</span><span class="tag">库存联动</span><span class="tag">客服辅助</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑰ 商品配置 -->
+      <div class="module-card" style="--card-color:#6366f1">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#eef2ff;--card-icon-border:#c7d2fe">🛍️</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 17</div>
+            <h3>商品配置</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">管理前台商城和出库业务所需的全部基础商品数据，包括 SKU 档案、分类体系和品牌信息。</p>
+          <ul class="detail-list">
+            <li><strong>商品管理</strong>：SKU、商品名、规格、图片、价格等完整商品档案</li>
+            <li><strong>分类管理</strong>：多级商品分类树，支持新增、编辑、排序</li>
+            <li><strong>品牌管理</strong>：品牌 Logo、介绍、状态的统一维护</li>
+            <li><strong>用户组管理</strong>：定义客户分组规则，对应不同价格策略或权限</li>
+            <li><strong>车型级联</strong>：品牌→车系→车型三级联动数据，供前台选车场景使用</li>
+            <li><strong>级联基础数据</strong>：维护年份、排量等辅助选车筛选项</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">SKU档案</span><span class="tag">多级分类</span>
+            <span class="tag">品牌维护</span><span class="tag">用户组</span><span class="tag">三级车型</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑱ 网站配置 -->
+      <div class="module-card" style="--card-color:#ec4899">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#fdf2f8;--card-icon-border:#f9a8d4">🌐</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 18</div>
+            <h3>网站内容配置</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">无需开发介入，后台直接管理官网的轮播图、热销榜单和产品手册等展示内容。</p>
+          <ul class="detail-list">
+            <li><strong>轮播图管理</strong>：上传 / 编辑 / 排序首页 Banner 图，支持跳转链接配置</li>
+            <li><strong>热销展示</strong>：配置前台热销商品榜单，手动干预推荐顺序</li>
+            <li><strong>产品手册</strong>：上传产品 PDF 手册，供客户在线查阅下载</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">Banner管理</span><span class="tag">热销榜单</span><span class="tag">PDF手册</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑲ 数据分析 -->
+      <div class="module-card" style="--card-color:#14b8a6">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#f0fdfa;--card-icon-border:#99f6e4">📈</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 19</div>
+            <h3>KPI 数据分析</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">多维度 KPI 看板，将订单、仓储、运输等业务数据图表化呈现，支撑管理层决策分析。</p>
+          <ul class="detail-list">
+            <li><strong>订单状态分布</strong>：饼图展示各状态订单占比（共 29 种状态色）</li>
+            <li><strong>集装箱统计</strong>：在途/到港/卸货/完成状态各柜次数量图表</li>
+            <li><strong>批次分析</strong>：已出库与新建批次对比，评估出库效率</li>
+            <li><strong>车辆 / 司机状态</strong>：正常/维修/闲置车辆占比，在职/离职司机统计</li>
+            <li><strong>销售统计</strong>：销售金额趋势折线图，周期对比分析</li>
+            <li><strong>收益分析</strong>：按类别、区域、时段分析营收来源</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">订单看板</span><span class="tag">仓储统计</span>
+            <span class="tag">运输状态</span><span class="tag">销售趋势</span><span class="tag">收益分析</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑳ 权限管理 -->
+      <div class="module-card" style="--card-color:#f43f5e">
+        <div class="card-header">
+          <div class="card-icon" style="--card-icon-bg:#fff1f2;--card-icon-border:#fecdd3">🔐</div>
+          <div class="card-header-text">
+            <div class="card-module-id">模块 20</div>
+            <h3>权限 & 用户管理</h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">基于角色的访问控制体系（RBAC），菜单级细粒度授权，满足仓库、客服、管理等不同岗位的权限需求。</p>
+          <ul class="detail-list">
+            <li><strong>角色管理</strong>：自由创建角色（如仓管员、客服、主管），为角色勾选菜单权限</li>
+            <li><strong>用户管理</strong>：系统内部账号的新增、停用、角色分配</li>
+            <li><strong>网站用户审批</strong>：前台商城注册用户的审批上线流程，防止未授权访问</li>
+            <li><strong>权限树可视化</strong>：所有菜单权限以树形结构展示，勾选即授权</li>
+            <li><strong>动态生效</strong>：权限修改后无需重启，下次登录即生效</li>
+            <li><strong>超级管理员</strong>：admin 账号在本地模式下拥有全部权限，云端模式通过角色控制</li>
+          </ul>
+          <div class="feature-tags">
+            <span class="tag">RBAC</span><span class="tag">菜单级权限</span>
+            <span class="tag">用户审批</span><span class="tag">权限树</span><span class="tag">动态生效</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════ 系统特色 ═══════════════════════════════════════ -->
+<section style="background:#fff">
+  <div class="container">
+    <div class="section-label">系统特色</div>
+    <div class="section-title">差异化核心能力</div>
+    <div class="section-subtitle">超越传统 WMS 的现代化设计与用户体验</div>
+
+    <div class="highlight-grid">
+      <div class="highlight-item">
+        <div class="hi-icon" style="background:#eff6ff">☁️</div>
+        <div class="hi-text">
+          <h4>云端 / 本地双模式</h4>
+          <p>Supabase 云端实时同步与本地 Excel 文件两种模式可独立配置，订单模块和仓储模块各自独立选择，平滑迁移上云</p>
+        </div>
+      </div>
+      <div class="highlight-item">
+        <div class="hi-icon" style="background:#f5f3ff">🎨</div>
+        <div class="hi-text">
+          <h4>macOS 风格桌面 UI</h4>
+          <p>仿原生桌面体验，磨砂玻璃效果，流畅动效，深色/浅色双主题，8 种主题色 + 自定义色，自定义桌面壁纸</p>
+        </div>
+      </div>
+      <div class="highlight-item">
+        <div class="hi-icon" style="background:#ecfeff">📞</div>
+        <div class="hi-text">
+          <h4>电话助手</h4>
+          <p>客服通话期间可在侧边栏快速查询订单与库存，无需切换页面，提升客服通话响应速度</p>
+        </div>
+      </div>
+      <div class="highlight-item">
+        <div class="hi-icon" style="background:#fffbeb">🌏</div>
+        <div class="hi-text">
+          <h4>三语言实时切换</h4>
+          <p>内置中文（zh）、English（en）、Français（fr）三种语言，界面文字即时切换，满足跨国团队使用需求</p>
+        </div>
+      </div>
+      <div class="highlight-item">
+        <div class="hi-icon" style="background:#ecfdf5">📤</div>
+        <div class="hi-text">
+          <h4>Excel / PDF 双格式导出</h4>
+          <p>批次报表、派单明细、出库单等均支持 Excel（SheetJS）和 PDF（jsPDF）双格式导出，满足不同场景归档需求</p>
+        </div>
+      </div>
+      <div class="highlight-item">
+        <div class="hi-icon" style="background:#fff1f2">⚡</div>
+        <div class="hi-text">
+          <h4>全局智能搜索</h4>
+          <p>顶栏搜索框 300ms 防抖查询，云端直连数据库或本地过滤，快速定位任意订单、客户或货品信息</p>
+        </div>
+      </div>
+      <div class="highlight-item">
+        <div class="hi-icon" style="background:#f0f9ff">🖨️</div>
+        <div class="hi-text">
+          <h4>全流程打印支持</h4>
+          <p>入库单、出库单、拣货单均可一键打印，现场操作有纸质凭证，数据与实物双重核对</p>
+        </div>
+      </div>
+      <div class="highlight-item">
+        <div class="hi-icon" style="background:#f5f3ff">🔗</div>
+        <div class="hi-text">
+          <h4>外部系统集成</h4>
+          <p>内嵌常用外部平台链接（如 QBO、ERP 等），无需切换浏览器即可快速访问关联系统</p>
+        </div>
+      </div>
+      <div class="highlight-item">
+        <div class="hi-icon" style="background:#ecfdf5">🔄</div>
+        <div class="hi-text">
+          <h4>自动保存 & 实时同步</h4>
+          <p>本地模式通过 File System Access API 编辑后自动写回 Excel；云端模式变更即时同步至 Supabase，多端数据一致</p>
+        </div>
+      </div>
+      <div class="highlight-item">
+        <div class="hi-icon" style="background:#fffbeb">📱</div>
+        <div class="hi-text">
+          <h4>路线规划集成</h4>
+          <p>集成 Leaflet 地图，可视化配送路线规划，优化末端配送效率，降低运输成本</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════ 权限体系 ═══════════════════════════════════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">访问控制</div>
+    <div class="section-title">菜单级权限体系</div>
+    <div class="section-subtitle">基于角色（RBAC），11 个功能域，30+ 细粒度权限码，灵活授权</div>
+
+    <div class="table-wrap">
+      <table class="perm-table">
+        <thead>
+          <tr>
+            <th>功能域</th>
+            <th>包含子菜单</th>
+            <th>权限代码</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>系统看板</td>
+            <td>数据总览大屏</td>
+            <td><span class="perm-badge b-blue">menu.dashboard</span></td>
+          </tr>
+          <tr>
+            <td>订单管理</td>
+            <td>订单校验 · 订单查询 · 订单撤销</td>
+            <td>
+              <span class="perm-badge b-blue">menu.validator</span>
+              <span class="perm-badge b-blue">menu.orderQuery</span>
+              <span class="perm-badge b-rose">menu.orderCancel</span>
+            </td>
+          </tr>
+          <tr>
+            <td>出库管理</td>
+            <td>出库单创建 · 下架管理 · 派单分配 · 客户自提</td>
+            <td>
+              <span class="perm-badge b-rose">menu.outboundOrder</span>
+              <span class="perm-badge b-rose">menu.unstocking</span>
+              <span class="perm-badge b-rose">menu.orderAssignment</span>
+              <span class="perm-badge b-rose">menu.customerPickup</span>
+            </td>
+          </tr>
+          <tr>
+            <td>入库管理</td>
+            <td>集装箱管理 · 到货预报 · 入库单 · 上架管理</td>
+            <td>
+              <span class="perm-badge b-violet">menu.container</span>
+              <span class="perm-badge b-violet">menu.inbound</span>
+              <span class="perm-badge b-violet">menu.inboundOrder</span>
+              <span class="perm-badge b-violet">menu.putaway</span>
+            </td>
+          </tr>
+          <tr>
+            <td>仓储管理</td>
+            <td>批次管理 · 库存盘点 · 货位布局</td>
+            <td>
+              <span class="perm-badge b-green">menu.batch</span>
+              <span class="perm-badge b-green">menu.inventory</span>
+              <span class="perm-badge b-green">menu.layout</span>
+            </td>
+          </tr>
+          <tr>
+            <td>运输管理</td>
+            <td>司机管理 · 车辆管理</td>
+            <td>
+              <span class="perm-badge b-amber">menu.driver</span>
+              <span class="perm-badge b-amber">menu.vehicle</span>
+            </td>
+          </tr>
+          <tr>
+            <td>客服中心</td>
+            <td>库存查询 · AI 推荐 · 用户审批 · 客户管理</td>
+            <td>
+              <span class="perm-badge b-cyan">menu.customerService</span>
+              <span class="perm-badge b-cyan">menu.aiRecommend</span>
+              <span class="perm-badge b-cyan">menu.userApproval</span>
+              <span class="perm-badge b-cyan">menu.customerMgmt</span>
+            </td>
+          </tr>
+          <tr>
+            <td>商品配置</td>
+            <td>商品 · 分类 · 品牌 · 用户组 · 车型级联 · 级联基础数据</td>
+            <td>
+              <span class="perm-badge b-violet">menu.productConfig</span>
+              <span class="perm-badge b-violet">menu.categoryMgmt</span>
+              <span class="perm-badge b-violet">menu.brandMgmt</span>
+              <span class="perm-badge b-violet">menu.userGroupMgmt</span>
+              <span class="perm-badge b-violet">menu.cascadeMgmt</span>
+              <span class="perm-badge b-violet">menu.cascadeBaseData</span>
+            </td>
+          </tr>
+          <tr>
+            <td>网站配置</td>
+            <td>轮播图 · 热销展示 · 产品手册</td>
+            <td>
+              <span class="perm-badge b-rose">menu.rollingImage</span>
+              <span class="perm-badge b-rose">menu.hotSelling</span>
+              <span class="perm-badge b-rose">menu.productManual</span>
+            </td>
+          </tr>
+          <tr>
+            <td>数据分析</td>
+            <td>KPI 分析 · 销售统计</td>
+            <td>
+              <span class="perm-badge b-cyan">menu.kpi</span>
+              <span class="perm-badge b-cyan">menu.salesStats</span>
+            </td>
+          </tr>
+          <tr>
+            <td>系统设置</td>
+            <td>全局系统配置（仅超级管理员）</td>
+            <td><span class="perm-badge b-rose">system.settings</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════ 技术栈 ══════════════════════════════════════════ -->
+<section style="background:#fff">
+  <div class="container">
+    <div class="section-label">技术架构</div>
+    <div class="section-title">现代化技术栈</div>
+    <div class="section-subtitle">前端工程化 + 云原生数据层，兼顾性能与开发效率</div>
+
+    <div class="tech-grid">
+      <div class="tech-chip"><span class="dot" style="background:#61dafb"></span>React 18</div>
+      <div class="tech-chip"><span class="dot" style="background:#3178c6"></span>TypeScript</div>
+      <div class="tech-chip"><span class="dot" style="background:#38bdf8"></span>Tailwind CSS</div>
+      <div class="tech-chip"><span class="dot" style="background:#646cff"></span>Vite</div>
+      <div class="tech-chip"><span class="dot" style="background:#3ecf8e"></span>Supabase</div>
+      <div class="tech-chip"><span class="dot" style="background:#f43f5e"></span>Lucide Icons</div>
+      <div class="tech-chip"><span class="dot" style="background:#10b981"></span>SheetJS（Excel 读写）</div>
+      <div class="tech-chip"><span class="dot" style="background:#f59e0b"></span>jsPDF + AutoTable</div>
+      <div class="tech-chip"><span class="dot" style="background:#818cf8"></span>Leaflet（地图）</div>
+      <div class="tech-chip"><span class="dot" style="background:#e879f9"></span>Redux Toolkit</div>
+      <div class="tech-chip"><span class="dot" style="background:#06b6d4"></span>File System Access API</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════ 部署模式 ══════════════════════════════════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">部署方式</div>
+    <div class="section-title">灵活的运行模式</div>
+    <div class="section-subtitle">按业务规模选择合适的数据层，支持渐进式迁移上云</div>
+
+    <div class="deploy-grid">
+      <div class="deploy-card">
+        <div class="deploy-icon">☁️</div>
+        <div class="rec-badge">推荐</div>
+        <h3>云端协作模式</h3>
+        <p>连接 Supabase 数据库，数据实时同步，多用户并发访问，完整的权限角色管理，适合 2 人以上团队协作使用。</p>
+        <div class="feature-tags">
+          <span class="tag">实时同步</span><span class="tag">多用户</span><span class="tag">权限管理</span><span class="tag">数据安全</span>
+        </div>
+      </div>
+      <div class="deploy-card">
+        <div class="deploy-icon">💾</div>
+        <h3>本地文件模式</h3>
+        <p>无需服务器，通过浏览器 File System Access API 直接读写本地 Excel 文件，数据存储在本机，适合单人或小团队离线使用。</p>
+        <div class="feature-tags">
+          <span class="tag">离线运行</span><span class="tag">Excel兼容</span><span class="tag">自动保存</span>
+        </div>
+      </div>
+      <div class="deploy-card">
+        <div class="deploy-icon">🔀</div>
+        <h3>混合模式</h3>
+        <p>订单模块与仓储模块可分别独立配置云端或本地，允许按业务优先级逐步迁移，兼顾过渡期的灵活性。</p>
+        <div class="feature-tags">
+          <span class="tag">模块独立</span><span class="tag">渐进迁移</span><span class="tag">灵活配置</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ Footer CTA ══════════════════════════════════ -->
+<div class="cta">
+  <h2>DodoWheels-Core-System — 让仓储更智能</h2>
+  <p>覆盖入库、存储、出库、运输、客服全链路的一体化数字化管理平台</p>
+</div>
+
+<footer>
+  © 2025 DodoWheels-Core-System &nbsp;·&nbsp; 企业级仓储物流管理系统 &nbsp;·&nbsp; 保留所有权利
+</footer>
+
+</body>
+</html>
