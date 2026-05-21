@@ -46,18 +46,59 @@
   .pf-a { background: #f59e0b; }
   .branch-pct { font-size: 11px; color: #6e6e73; margin-top: 5px; }
 
+  /* ── 生态入口 ── */
   .eco { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-  .eco-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; padding: 14px 16px; transition: box-shadow 0.2s, border-color 0.2s; }
+  .eco-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; padding: 14px 16px; }
   .eco-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
   .eco-label-s { color: #1e40af; }
   .eco-label-c { color: #065f46; }
+  .eco-label-p { color: #6d28d9; }
   .eco-title { font-size: 14px; font-weight: 500; color: #1d1d1f; margin-bottom: 4px; }
   .eco-url { font-size: 11px; font-family: var(--font-mono); color: #2563eb; cursor: pointer; text-decoration: underline; display: block; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .eco-note { font-size: 11px; color: #6e6e73; line-height: 1.5; }
   .eco-cred { display: flex; gap: 8px; margin-top: 8px; }
   .cred { background: #f3f4f6; border-radius: 6px; padding: 3px 10px; font-size: 11px; color: #374151; font-family: var(--font-mono); }
 
-  /* 功能介绍按钮 */
+  /* ── 流程图入口卡片（独立一行，紫色系） ── */
+  .process-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .process-card:hover {
+    border-color: #c4b5fd;
+    box-shadow: 0 2px 10px rgba(109,40,217,0.08);
+  }
+  .process-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: #ede9fe; color: #6d28d9;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .process-info { flex: 1; min-width: 0; }
+  .process-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; color: #6d28d9; margin-bottom: 4px; }
+  .process-title { font-size: 14px; font-weight: 500; color: #1d1d1f; margin-bottom: 3px; }
+  .process-desc { font-size: 11px; color: #6e6e73; line-height: 1.5; }
+  .process-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .ptag { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 6px; background: #ede9fe; color: #6d28d9; }
+  .process-btn {
+    flex-shrink: 0;
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 7px 14px; border-radius: 8px; border: none; cursor: pointer;
+    font-size: 11px; font-weight: 500;
+    background: #ede9fe; color: #6d28d9;
+    transition: background 0.15s, opacity 0.15s;
+  }
+  .process-btn:hover { background: #ddd6fe; }
+
+  /* ── 功能按钮 ── */
   .feat-btn {
     display: inline-flex; align-items: center; gap: 5px;
     margin-top: 10px; padding: 5px 12px;
@@ -69,25 +110,29 @@
   .feat-btn-c { background: #d1fae5; color: #065f46; }
   .feat-btn svg { width: 12px; height: 12px; }
 
-  /* 模态框 */
+  /* ── 模态框 ── */
   .modal-backdrop {
     display: none; position: fixed; inset: 0; z-index: 1000;
     background: rgba(0,0,0,0.45); backdrop-filter: blur(4px);
     align-items: center; justify-content: center;
-    animation: fadeIn 0.18s ease;
   }
   .modal-backdrop.active { display: flex; }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
   .modal-box {
     background: #fff; border-radius: 18px;
     width: min(96vw, 1200px); height: min(92vh, 900px);
     box-shadow: 0 20px 60px rgba(0,0,0,0.2);
     display: flex; flex-direction: column;
-    animation: slideUp 0.22s cubic-bezier(0.34,1.56,0.64,1);
     overflow: hidden;
+    animation: slideUp 0.22s cubic-bezier(0.34,1.56,0.64,1);
   }
   @keyframes slideUp { from { transform: translateY(24px) scale(0.97); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  /* 流程图模态框宽一些 */
+  .modal-box.modal-wide {
+    width: min(98vw, 1400px);
+    height: min(95vh, 960px);
+  }
 
   .modal-header {
     display: flex; align-items: center; justify-content: space-between;
@@ -97,6 +142,7 @@
   .modal-badge { font-size: 10px; font-weight: 500; padding: 3px 10px; border-radius: 6px; }
   .badge-s { background: #dbeafe; color: #1e40af; }
   .badge-c { background: #d1fae5; color: #065f46; }
+  .badge-p { background: #ede9fe; color: #6d28d9; }
   .modal-title { font-size: 14px; font-weight: 500; color: #1d1d1f; }
   .modal-close {
     width: 28px; height: 28px; border-radius: 50%; background: #f3f4f6;
@@ -104,11 +150,8 @@
     font-size: 16px; color: #6e6e73; transition: background 0.15s;
   }
   .modal-close:hover { background: #e5e7eb; }
-
   .modal-body { flex: 1; overflow: hidden; position: relative; }
-  .modal-iframe {
-    width: 100%; height: 100%; border: none; display: block;
-  }
+  .modal-iframe { width: 100%; height: 100%; border: none; display: block; }
   .modal-loading {
     position: absolute; inset: 0; display: flex; flex-direction: column;
     align-items: center; justify-content: center; gap: 12px;
@@ -122,7 +165,7 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .modal-error { color: #ef4444; font-size: 12px; text-align: center; padding: 0 20px; }
 
-  /* 6-project progress rows */
+  /* ── 进度条 ── */
   .pr { margin-bottom: 11px; }
   .pr:last-child { margin-bottom: 0; }
   .pr-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
@@ -145,6 +188,7 @@
   .of { height: 100%; border-radius: 10px; background: #3b82f6; }
   .os { font-size: 11px; color: #60a5fa; margin-top: 6px; }
 
+  /* ── 时间轴 ── */
   .tl-wrap { overflow-x: auto; }
   .tl-inner { min-width: 500px; position: relative; padding: 0.5rem 10px 0.25rem; }
   .tl-spine { position: absolute; top: 22px; left: 10px; right: 10px; height: 1px; background: #e5e7eb; }
@@ -175,12 +219,13 @@
     .grid2 { grid-template-columns: 1fr; }
     .branches { grid-template-columns: repeat(2, minmax(0,1fr)); }
     .eco { grid-template-columns: 1fr; }
+    .process-card { flex-wrap: wrap; }
   }
 </style>
 
-<!-- 模态框 -->
+<!-- 模态框（通用） -->
 <div class="modal-backdrop" id="modal-backdrop" onclick="closeModalOnBackdrop(event)">
-  <div class="modal-box">
+  <div class="modal-box" id="modal-box">
     <div class="modal-header">
       <div class="modal-header-left">
         <span class="modal-badge" id="modal-badge"></span>
@@ -277,7 +322,7 @@
       <div class="eco-title">DodoWheels 客户端</div>
       <a class="eco-url" href="https://dodo-eshop.vercel.app/" target="_blank">dodo-eshop.vercel.app</a>
       <div class="eco-note">面向客户 · 所有网站后台操作已迁移至核心系统，与客户端完全分离，确保客户使用体验不受影响。</div>
-      <button class="feat-btn feat-btn-s" onclick="openModal('web', '公司官网 WEB', 'WEB', 'badge-s', 'web.html')">
+      <button class="feat-btn feat-btn-s" onclick="openModal('web', '公司官网 WEB', 'WEB', 'badge-s', 'web.html', false)">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M8 2v12M2 8h12"/></svg>
         功能介绍
       </button>
@@ -291,11 +336,32 @@
         <span class="cred">user: Frank</span>
         <span class="cred">pw: 2555</span>
       </div>
-      <button class="feat-btn feat-btn-c" onclick="openModal('core', '核心系统 Core', 'CORE', 'badge-c', 'core.html')">
+      <button class="feat-btn feat-btn-c" onclick="openModal('core', '核心系统 Core', 'CORE', 'badge-c', 'core.html', false)">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M8 5v6"/></svg>
         功能介绍
       </button>
     </div>
+  </div>
+
+  <!-- ── 系统业务流程图入口 ── -->
+  <div class="lbl" style="margin-bottom:8px">系统业务流程</div>
+  <div class="process-card" onclick="openModal('process', '系统业务流程图', 'PROCESS', 'badge-p', 'process.html', true)">
+    <div class="process-icon">🗺️</div>
+    <div class="process-info">
+      <div class="process-label">业务流程文档 · PROCESS</div>
+      <div class="process-title">全链路业务流程图</div>
+      <div class="process-desc">客户下单流程 · 新客注册审核 · 订单处理履行 · 三大核心业务流程可视化</div>
+      <div class="process-tags">
+        <span class="ptag">客户下单</span>
+        <span class="ptag">新客注册</span>
+        <span class="ptag">订单履行</span>
+        <span class="ptag">process.html</span>
+      </div>
+    </div>
+    <button class="process-btn" onclick="event.stopPropagation(); openModal('process', '系统业务流程图', 'PROCESS', 'badge-p', 'process.html', true)">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h12M9 3l5 5-5 5"/></svg>
+      查看流程图
+    </button>
   </div>
 
   <div class="grid2">
@@ -310,55 +376,30 @@
 
     <div class="card">
       <div class="lbl">整体进度汇总</div>
-
       <div class="pr">
-        <div class="pr-head">
-          <div class="pr-left"><div class="pr-dot pd-b"></div><span class="pr-name">公司官网</span><span class="pr-code">WEB</span></div>
-          <span class="pr-pct">12%</span>
-        </div>
+        <div class="pr-head"><div class="pr-left"><div class="pr-dot pd-b"></div><span class="pr-name">公司官网</span><span class="pr-code">WEB</span></div><span class="pr-pct">12%</span></div>
         <div class="pb2"><div class="pf2 pf-b" style="width:12%"></div></div>
       </div>
-
       <div class="pr">
-        <div class="pr-head">
-          <div class="pr-left"><div class="pr-dot pd-g"></div><span class="pr-name">订单管理</span><span class="pr-code">CORE-OMS</span></div>
-          <span class="pr-pct">10%</span>
-        </div>
+        <div class="pr-head"><div class="pr-left"><div class="pr-dot pd-g"></div><span class="pr-name">订单管理</span><span class="pr-code">CORE-OMS</span></div><span class="pr-pct">10%</span></div>
         <div class="pb2"><div class="pf2 pf-g" style="width:10%"></div></div>
       </div>
-
       <div class="pr">
-        <div class="pr-head">
-          <div class="pr-left"><div class="pr-dot pd-g"></div><span class="pr-name">仓储管理</span><span class="pr-code">CORE-WMS</span></div>
-          <span class="pr-pct">10%</span>
-        </div>
+        <div class="pr-head"><div class="pr-left"><div class="pr-dot pd-g"></div><span class="pr-name">仓储管理</span><span class="pr-code">CORE-WMS</span></div><span class="pr-pct">10%</span></div>
         <div class="pb2"><div class="pf2 pf-g" style="width:10%"></div></div>
       </div>
-
       <div class="pr">
-        <div class="pr-head">
-          <div class="pr-left"><div class="pr-dot pd-g"></div><span class="pr-name">网站管理</span><span class="pr-code">CORE-WEBADMIN</span></div>
-          <span class="pr-pct">8%</span>
-        </div>
+        <div class="pr-head"><div class="pr-left"><div class="pr-dot pd-g"></div><span class="pr-name">网站管理</span><span class="pr-code">CORE-WEBADMIN</span></div><span class="pr-pct">8%</span></div>
         <div class="pb2"><div class="pf2 pf-g" style="width:8%"></div></div>
       </div>
-
       <div class="pr">
-        <div class="pr-head">
-          <div class="pr-left"><div class="pr-dot pd-g"></div><span class="pr-name">信息管理</span><span class="pr-code">CORE-INFO</span></div>
-          <span class="pr-pct">8%</span>
-        </div>
+        <div class="pr-head"><div class="pr-left"><div class="pr-dot pd-g"></div><span class="pr-name">信息管理</span><span class="pr-code">CORE-INFO</span></div><span class="pr-pct">8%</span></div>
         <div class="pb2"><div class="pf2 pf-g" style="width:8%"></div></div>
       </div>
-
       <div class="pr">
-        <div class="pr-head">
-          <div class="pr-left"><div class="pr-dot pd-a"></div><span class="pr-name">QBO 集成</span><span class="pr-code">CORE-LINK-QBO</span></div>
-          <span class="pr-pct">15%</span>
-        </div>
+        <div class="pr-head"><div class="pr-left"><div class="pr-dot pd-a"></div><span class="pr-name">QBO 集成</span><span class="pr-code">CORE-LINK-QBO</span></div><span class="pr-pct">15%</span></div>
         <div class="pb2"><div class="pf2 pf-a" style="width:15%"></div></div>
       </div>
-
       <div class="ob">
         <div class="ot"><span class="ol">📊 整体进度</span><span class="op">11%</span></div>
         <div class="og"><div class="of" style="width:11%"></div></div>
@@ -395,7 +436,7 @@
 </div>
 
 <script>
-  /* ── 时间计算 ── */
+  /* 时间计算 */
   const start = new Date('2026-05-10');
   const end   = new Date('2026-12-31');
   const go    = new Date('2027-01-01');
@@ -411,19 +452,21 @@
   const prog  = document.getElementById('tl-prog');
   if (spine && prog) prog.style.width = (pct/100 * spine.offsetWidth) + 'px';
 
-  /* ── 模态框逻辑 ── */
-  function openModal(type, title, badgeText, badgeClass, src) {
+  /* 模态框逻辑 — wide 参数控制是否用宽版 */
+  function openModal(type, title, badgeText, badgeClass, src, wide) {
     const backdrop = document.getElementById('modal-backdrop');
+    const box      = document.getElementById('modal-box');
     const badge    = document.getElementById('modal-badge');
     const titleEl  = document.getElementById('modal-title');
     const loading  = document.getElementById('modal-loading');
     const iframe   = document.getElementById('modal-iframe');
 
-    badge.textContent = badgeText;
-    badge.className   = 'modal-badge ' + badgeClass;
-    titleEl.textContent = title + ' · 功能介绍';
+    badge.textContent   = badgeText;
+    badge.className     = 'modal-badge ' + badgeClass;
+    titleEl.textContent = title + ' · 查看';
 
-    // 重置状态
+    box.className = wide ? 'modal-box modal-wide' : 'modal-box';
+
     loading.style.display = 'flex';
     loading.innerHTML = '<div class="spinner"></div><span>加载中…</span>';
     iframe.style.display  = 'none';
@@ -431,8 +474,6 @@
 
     backdrop.classList.add('active');
     document.body.style.overflow = 'hidden';
-
-    // 延迟加载防止闪烁
     setTimeout(() => { iframe.src = src; }, 80);
   }
 
@@ -440,22 +481,17 @@
     const loading = document.getElementById('modal-loading');
     const iframe  = document.getElementById('modal-iframe');
     try {
-      // 检查 iframe 内容是否可访问（同源）
       const doc = iframe.contentDocument || iframe.contentWindow.document;
-      if (!doc || !doc.body || doc.body.innerHTML.trim() === '') {
-        throw new Error('empty');
-      }
+      if (!doc || !doc.body || doc.body.innerHTML.trim() === '') throw new Error('empty');
       loading.style.display = 'none';
       iframe.style.display  = 'block';
     } catch(e) {
-      // 跨域或文件不存在时的友好提示
       loading.innerHTML = '<div style="font-size:32px">📄</div><div class="modal-error">文件加载失败<br>请确认 <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-size:11px">' + iframe.src.split('/').pop() + '</code> 与本文件位于同一目录</div>';
     }
   }
 
   function onIframeError() {
-    const loading = document.getElementById('modal-loading');
-    loading.innerHTML = '<div style="font-size:32px">⚠️</div><div class="modal-error">无法加载文件</div>';
+    document.getElementById('modal-loading').innerHTML = '<div style="font-size:32px">⚠️</div><div class="modal-error">无法加载文件</div>';
   }
 
   function closeModal() {
@@ -472,6 +508,5 @@
     if (e.target === document.getElementById('modal-backdrop')) closeModal();
   }
 
-  // ESC 键关闭
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 </script>
