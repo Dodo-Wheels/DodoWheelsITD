@@ -432,154 +432,114 @@ function show(id, el) {
     客服电联处理流程
   </div>
 
-  <!-- Start -->
   <div class="flow">
     <div class="node n-purple node-pill" style="min-width:160px">客人电联</div>
     <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
   </div>
 
-  <!-- 7 branches -->
-  <div style="display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:6px; margin-bottom:8px">
+  <!-- 8 branches grid -->
+  <div style="display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;margin-bottom:8px">
 
-    <!-- B1 询问订单 -->
+    <!-- B1 询问订单动向 -->
     <div style="display:flex;flex-direction:column;align-items:center;gap:0">
-      <div class="node n-purple" style="min-width:0;width:100%;font-size:11px;padding:8px 6px;text-align:center">
-        询问订单动向<br>/ 派送时间
-      </div>
+      <div class="node n-purple" style="min-width:0;width:100%;font-size:11px;padding:8px 6px;text-align:center">询问订单动向<br>/大致派送时间</div>
       <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
-      <div class="node n-gray" style="min-width:0;width:100%;font-size:11px;padding:8px 6px;text-align:center">
-        查询出库记录
-      </div>
+      <div class="node n-gray" style="min-width:0;width:100%;font-size:11px;padding:8px 6px;text-align:center">查询出库记录</div>
       <div class="arrow"><div class="arrow-line arrow-line-gray"></div><div class="arrow-head arrow-head-gray"></div></div>
-      <!-- decision -->
-      <div class="diamond d-purple" style="width:100%;height:60px">
-        <svg viewBox="0 0 130 60" style="position:absolute;inset:0;width:100%;height:100%"><polygon points="65,4 126,30 65,56 4,30" fill="#EEEDFE" stroke="#C8C4F5" stroke-width="1.5"/></svg>
+      <div class="diamond d-purple" style="width:100%;height:58px;position:relative">
+        <svg viewBox="0 0 130 58" style="position:absolute;inset:0;width:100%;height:100%"><polygon points="65,4 126,29 65,54 4,29" fill="#EEEDFE" stroke="#C8C4F5" stroke-width="1.5"/></svg>
         <div class="diamond-text" style="font-size:10px">需精确时间<br>/加急？</div>
       </div>
       <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
-      <div class="node n-teal" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">
-        联系司机<br>询问ETA<br>加急订单
-      </div>
+      <div class="node n-teal" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">联系司机<br>询问ETA<br>加急订单</div>
     </div>
 
     <!-- B2 电询报价 -->
     <div style="display:flex;flex-direction:column;align-items:center;gap:0">
-      <div class="node n-purple" style="min-width:0;width:100%;font-size:11px;padding:8px 6px;text-align:center">
-        电询报价
-      </div>
+      <div class="node n-purple" style="min-width:0;width:100%;font-size:11px;padding:8px 6px;text-align:center">电询报价</div>
       <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
-      <div class="node n-gray" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">
-        查询库存<br>/ 价格<br>/ 现金价
-      </div>
+      <div class="node n-gray" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">查询库存<br>/价格<br>/?现金价</div>
     </div>
 
     <!-- B3 电话下单 -->
     <div style="display:flex;flex-direction:column;align-items:center;gap:0">
-      <div class="node n-purple" style="min-width:0;width:100%;font-size:11px;padding:8px 6px;text-align:center">
-        电话下单
-      </div>
+      <div class="node n-purple" style="min-width:0;width:100%;font-size:11px;padding:8px 6px;text-align:center">电话下单</div>
       <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
-      <div class="node n-teal" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">
-        锁定客人账户
-      </div>
+      <div class="node n-teal" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">锁定客人账户</div>
       <div class="arrow"><div class="arrow-line arrow-line-teal"></div><div class="arrow-head arrow-head-teal"></div></div>
-      <div class="node n-teal" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">
-        电话做单<br><span style="font-size:10px;opacity:.8">流程同网单<br>无折扣</span>
-      </div>
+      <div class="node n-teal" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">电话做单<br><span style="font-size:9.5px;opacity:.8">流程同网单<br>无折扣</span></div>
       <div class="arrow"><div class="arrow-line arrow-line-teal"></div><div class="arrow-head arrow-head-teal"></div></div>
-      <!-- decision: 缺货 -->
-      <div class="diamond d-teal" style="width:100%;height:60px">
-        <svg viewBox="0 0 130 60" style="position:absolute;inset:0;width:100%;height:100%"><polygon points="65,4 126,30 65,56 4,30" fill="#E1F5EE" stroke="#9FE1CB" stroke-width="1.5"/></svg>
+      <div class="diamond d-teal" style="width:100%;height:58px;position:relative">
+        <svg viewBox="0 0 130 58" style="position:absolute;inset:0;width:100%;height:100%"><polygon points="65,4 126,29 65,54 4,29" fill="#E1F5EE" stroke="#9FE1CB" stroke-width="1.5"/></svg>
         <div class="diamond-text" style="font-size:10px;color:#0A5740">缺货？</div>
       </div>
-      <!-- 否 branch -->
-      <div style="display:flex;width:100%;justify-content:space-between;margin-top:4px;gap:4px">
+      <div style="display:flex;width:100%;justify-content:space-between;margin-top:4px;gap:3px">
         <div style="display:flex;flex-direction:column;align-items:center;flex:1">
-          <div class="branch-label bl-teal" style="font-size:9px;padding:1px 6px">否·可换货</div>
-          <div class="node n-gray" style="min-width:0;width:100%;font-size:10px;padding:6px 4px;text-align:center">
-            推荐 equivalent<br>size / universal fit
-          </div>
+          <div class="branch-label bl-teal" style="font-size:9px;padding:1px 4px">否·换货</div>
+          <div class="node n-gray" style="min-width:0;width:100%;font-size:9.5px;padding:5px 3px;text-align:center">推荐 equivalent<br>size /<br>universal fit</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;flex:1">
-          <div class="branch-label bl-amber" style="font-size:9px;padding:1px 6px">是·调货</div>
-          <div class="node n-amber" style="min-width:0;width:100%;font-size:10px;padding:6px 4px;text-align:center">
-            调货 QC/ON
-          </div>
+          <div class="branch-label bl-amber" style="font-size:9px;padding:1px 4px">是·调货</div>
+          <div class="node n-amber" style="min-width:0;width:100%;font-size:9.5px;padding:5px 3px;text-align:center">调货<br>QC/ON</div>
           <div class="arrow"><div class="arrow-line" style="background:#FAD48B"></div><div class="arrow-head" style="border-top-color:#FAD48B"></div></div>
-          <div class="node n-amber" style="min-width:0;width:100%;font-size:10px;padding:6px 4px;text-align:center">
-            建立调货单<br>通知分部装车<br>调货日期
-          </div>
+          <div class="node n-amber" style="min-width:0;width:100%;font-size:9.5px;padding:5px 3px;text-align:center">建立调货单<br>通知分部装车<br>调货日期</div>
         </div>
       </div>
     </div>
 
     <!-- B4 取消/修改订单 -->
     <div style="display:flex;flex-direction:column;align-items:center;gap:0">
-      <div class="node n-purple" style="min-width:0;width:100%;font-size:11px;padding:8px 6px;text-align:center">
-        取消 / 修改订单
-      </div>
+      <div class="node n-purple" style="min-width:0;width:100%;font-size:11px;padding:8px 6px;text-align:center">取消 / 修改订单</div>
       <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
-      <!-- decision: 库房已出库 -->
-      <div class="diamond d-purple" style="width:100%;height:60px">
-        <svg viewBox="0 0 130 60" style="position:absolute;inset:0;width:100%;height:100%"><polygon points="65,4 126,30 65,56 4,30" fill="#EEEDFE" stroke="#C8C4F5" stroke-width="1.5"/></svg>
+      <div class="diamond d-purple" style="width:100%;height:58px;position:relative">
+        <svg viewBox="0 0 130 58" style="position:absolute;inset:0;width:100%;height:100%"><polygon points="65,4 126,29 65,54 4,29" fill="#EEEDFE" stroke="#C8C4F5" stroke-width="1.5"/></svg>
         <div class="diamond-text" style="font-size:10px">库房<br>已出库？</div>
       </div>
-      <!-- 否 / 是 -->
-      <div style="display:flex;width:100%;justify-content:space-between;margin-top:4px;gap:4px">
+      <div style="display:flex;width:100%;justify-content:space-between;margin-top:4px;gap:3px">
         <div style="display:flex;flex-direction:column;align-items:center;flex:1">
-          <div class="branch-label bl-purple" style="font-size:9px;padding:1px 6px">否</div>
-          <div class="node n-gray" style="min-width:0;width:100%;font-size:10px;padding:6px 4px;text-align:center">
-            取消改0<br>VOID
-          </div>
+          <div class="branch-label bl-purple" style="font-size:9px;padding:1px 4px">否</div>
+          <div class="node n-gray" style="min-width:0;width:100%;font-size:9.5px;padding:5px 3px;text-align:center">取消改0<br>VOID</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;flex:1">
-          <div class="branch-label bl-teal" style="font-size:9px;padding:1px 6px">是</div>
-          <div class="node n-teal" style="min-width:0;width:100%;font-size:10px;padding:6px 4px;text-align:center">
-            做退单<br>对应归库
-          </div>
+          <div class="branch-label bl-teal" style="font-size:9px;padding:1px 4px">是</div>
+          <div class="node n-teal" style="min-width:0;width:100%;font-size:9.5px;padding:5px 3px;text-align:center">做退单<br>对应归库</div>
         </div>
       </div>
     </div>
 
     <!-- B5 支付账单/联系财务 -->
     <div style="display:flex;flex-direction:column;align-items:center;gap:0">
-      <div class="node n-purple" style="min-width:0;width:100%;font-size:11px;padding:8px 6px;text-align:center">
-        支付账单<br>/ 联系财务
-      </div>
+      <div class="node n-purple" style="min-width:0;width:100%;font-size:11px;padding:8px 6px;text-align:center">支付账单<br>/联系财务</div>
       <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
-      <div class="node n-gray" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">
-        询问细节<br>转告财务
-      </div>
+      <div class="node n-gray" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">询问细节<br>转告财务</div>
     </div>
 
     <!-- B6 紧急加单 -->
     <div style="display:flex;flex-direction:column;align-items:center;gap:0">
-      <div class="node n-purple" style="min-width:0;width:100%;font-size:11px;padding:8px 6px;text-align:center">
-        紧急加单
-      </div>
+      <div class="node n-purple" style="min-width:0;width:100%;font-size:11px;padding:8px 6px;text-align:center">紧急加单</div>
       <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
-      <div class="node n-teal" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">
-        联系车队<br>安排司机加送
-      </div>
+      <div class="node n-teal" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">联系车队<br>安排司机加送</div>
     </div>
 
     <!-- B7 退货 -->
     <div style="display:flex;flex-direction:column;align-items:center;gap:0">
-      <div class="node n-purple" style="min-width:0;width:100%;font-size:11px;padding:8px 6px;text-align:center">
-        退货
-      </div>
+      <div class="node n-purple" style="min-width:0;width:100%;font-size:11px;padding:8px 6px;text-align:center">退货</div>
       <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
-      <div class="node n-gray" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">
-        查询原订单<br>对应
-      </div>
+      <div class="node n-gray" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">查询原订单<br>对应</div>
       <div class="arrow"><div class="arrow-line arrow-line-gray"></div><div class="arrow-head arrow-head-gray"></div></div>
-      <div class="node n-teal" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">
-        出单<br>交给司机
-      </div>
+      <div class="node n-teal" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">出单<br>交给司机</div>
+    </div>
+
+    <!-- B8 换货 (新增) -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+      <div class="node n-purple" style="min-width:0;width:100%;font-size:11px;padding:8px 6px;text-align:center">换货</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-gray" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">打印 estimate×2<br>不再收钱</div>
+      <div class="arrow"><div class="arrow-line arrow-line-gray"></div><div class="arrow-head arrow-head-gray"></div></div>
+      <div class="node n-teal" style="min-width:0;width:100%;font-size:10.5px;padding:8px 6px;text-align:center">交给仓库<br>安排送货</div>
     </div>
 
   </div><!-- end grid -->
 </div>
-
 </body>
 </html>
