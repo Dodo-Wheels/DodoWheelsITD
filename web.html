@@ -1,1 +1,742 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DodoWheels Web System — 功能简介</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --bg:        #f5f5f7;
+      --card:      #ffffff;
+      --border:    rgba(0,0,0,.08);
+      --text:      #1d1d1f;
+      --gray:      #6e6e73;
+      --brand:     #e63224;
+      --brand-dim: rgba(230,50,36,.08);
+      --radius:    14px;
+      --shadow:    0 2px 12px rgba(0,0,0,.07);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 40px 20px 80px;
+    }
+
+    /* ── Layout ── */
+    .container { max-width: 960px; margin: 0 auto; }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      padding: 60px 20px 48px;
+    }
+    .header .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--brand);
+      background: var(--brand-dim);
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 18px;
+    }
+    .header h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -.03em;
+      color: var(--text);
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    .header h1 span { color: var(--brand); }
+    .header p {
+      font-size: 1.05rem;
+      color: var(--gray);
+      max-width: 560px;
+      margin: 0 auto 10px;
+    }
+    .header .meta {
+      font-size: .78rem;
+      color: #aaa;
+      letter-spacing: .05em;
+    }
+
+    /* ── Stat strip ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 48px;
+      box-shadow: var(--shadow);
+    }
+    .stat {
+      text-align: center;
+      padding: 22px 12px;
+      border-right: 1px solid var(--border);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-value { font-size: 1.5rem; font-weight: 900; letter-spacing: -.03em; }
+    .stat-label { font-size: .7rem; text-transform: uppercase; letter-spacing: .15em; color: var(--gray); margin-top: 2px; }
+
+    /* ── Section titles ── */
+    .section { margin-bottom: 56px; }
+    .section-head { margin-bottom: 22px; }
+    .section-head .eyebrow {
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--brand);
+      opacity: .85;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .section-head h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -.025em;
+    }
+
+    /* ── Card grid ── */
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+    @media (max-width: 700px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 701px) and (max-width: 900px) {
+      .grid-3 { grid-template-columns: repeat(2, 1fr); }
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ── Feature card ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+      box-shadow: var(--shadow);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,.10); }
+
+    .card-icon {
+      width: 36px; height: 36px;
+      background: var(--brand-dim);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+      font-size: 18px;
+    }
+    .card h3 {
+      font-size: .92rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: -.01em;
+    }
+    .card p {
+      font-size: .8rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    /* ── Tag pills ── */
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .tag {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 100px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--gray);
+    }
+    .tag.brand { background: var(--brand-dim); color: var(--brand); border-color: transparent; }
+
+    /* ── Wide feature row ── */
+    .feature-row {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 26px;
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+    .feature-row .icon-wrap {
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: var(--brand-dim);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .feature-row h3 { font-size: 1rem; font-weight: 700; margin-bottom: 5px; }
+    .feature-row p { font-size: .82rem; color: var(--gray); }
+
+    /* ── Tier table ── */
+    .tier-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      font-size: .83rem;
+    }
+    .tier-table thead tr { background: var(--bg); }
+    .tier-table th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-weight: 800;
+      color: var(--gray);
+      border-bottom: 1px solid var(--border);
+    }
+    .tier-table td {
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .tier-table tr:last-child td { border-bottom: none; }
+    .tier-table .tier-name { font-weight: 700; }
+    .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+
+    /* ── Page breakdown ── */
+    .page-list { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    @media (max-width: 600px) { .page-list { grid-template-columns: 1fr; } }
+    .page-list li {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: .85rem;
+      font-weight: 500;
+      box-shadow: var(--shadow);
+    }
+    .page-list li .page-icon { font-size: 18px; flex-shrink: 0; }
+    .page-list li .page-path {
+      font-size: .7rem;
+      color: var(--brand);
+      font-weight: 700;
+      letter-spacing: .05em;
+      font-family: "SF Mono", monospace;
+      margin-top: 1px;
+    }
+
+    /* ── Tech stack ── */
+    .stack-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+    .stack-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: .8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow);
+    }
+    .stack-item .stack-icon { font-size: 16px; }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      padding-top: 48px;
+      border-top: 1px solid var(--border);
+      font-size: .78rem;
+      color: var(--gray);
+    }
+    .footer strong { color: var(--brand); }
+    .divider { height: 1px; background: var(--border); margin: 52px 0; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ── Header ── -->
+  <div class="header">
+    <div class="badge">Authorized Wholesale Portal — Canada</div>
+    <h1>DodoWheels <span>Web System</span><br>功能简介</h1>
+    <p>面向加拿大汽配经销商的 B2B 批发电商平台，集产品管理、配件查询、可视化工具与智能助手于一体。</p>
+    <p class="meta">版本快照 · 2026-05-20</p>
+  </div>
+
+  <!-- ── Stats ── -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-value" style="color:var(--brand)">2,500+</div>
+      <div class="stat-label">产品 SKU</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">60+</div>
+      <div class="stat-label">合作品牌</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">3</div>
+      <div class="stat-label">加拿大仓库</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" style="color:var(--brand)">当日</div>
+      <div class="stat-label">库存发货</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- 1. 核心购物功能 -->
+  <!-- ════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-head">
+      <span class="eyebrow">Core Shopping</span>
+      <h2>核心购物功能</h2>
+    </div>
+    <div class="grid-3">
+
+      <div class="card">
+        <div class="card-icon">🛒</div>
+        <h3>产品目录 / Shop</h3>
+        <p>支持分类、品牌、价格区间多维筛选；网格 / 列表双视图切换；按特色、价格、最新排序；每页 12 条分页加载。</p>
+        <div class="tags">
+          <span class="tag brand">实时同步</span>
+          <span class="tag">Supabase</span>
+          <span class="tag">分页</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🔍</div>
+        <h3>快速搜索工具</h3>
+        <p>顶栏常驻搜索栏，支持按轮胎规格（宽度 / 扁平比 / 直径）、轮毂参数（PCD / Offset / CB）及关键词即时检索，结果直达商品列表。</p>
+        <div class="tags">
+          <span class="tag">轮胎尺寸</span>
+          <span class="tag">轮毂参数</span>
+          <span class="tag">关键词</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">📋</div>
+        <h3>产品详情页</h3>
+        <p>展示完整规格参数、库存状态（Montreal / Gatineau / Quebec 三仓）、适配车型列表，支持加入购物车与对比列表。</p>
+        <div class="tags">
+          <span class="tag">三仓库存</span>
+          <span class="tag brand">实时库存</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🛍️</div>
+        <h3>购物车 / Cart</h3>
+        <p>多产品汇总、数量调整、费用小计，根据用户账户等级自动应用批发价格层级，支持结账流程。</p>
+        <div class="tags">
+          <span class="tag brand">分层定价</span>
+          <span class="tag">结账</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">⚖️</div>
+        <h3>产品对比</h3>
+        <p>最多同时对比多个 SKU，参数并排展示，帮助经销商快速向客户推荐最合适的方案。</p>
+        <div class="tags">
+          <span class="tag">参数对比</span>
+          <span class="tag">ComparisonContext</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">⭐</div>
+        <h3>Featured 产品</h3>
+        <p>首页轮播精选产品，管理员可在后台标记 <code>is_featured</code>，自动出现在首页推荐区域，数据库变更实时推送。</p>
+        <div class="tags">
+          <span class="tag brand">首页轮播</span>
+          <span class="tag">实时推送</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- 2. 车辆适配 & 工具 -->
+  <!-- ════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-head">
+      <span class="eyebrow">Fitment & Tools</span>
+      <h2>车辆适配 &amp; 专业工具</h2>
+    </div>
+
+    <div class="feature-row">
+      <div class="icon-wrap">🚗</div>
+      <div>
+        <h3>车辆适配查询 (VehicleSelector / FitmentContext)</h3>
+        <p>通过年份 → 品牌 → 车型三级联动选择车辆，系统从数据库匹配对应的轮胎 / 轮毂规格，商品列表自动过滤兼容产品，帮助经销商快速锁定适配型号，减少退货。</p>
+        <div class="tags" style="margin-top:10px">
+          <span class="tag brand">Year / Make / Model</span>
+          <span class="tag">兼容过滤</span>
+          <span class="tag">FitmentBar 常驻显示</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="icon-wrap">🎨</div>
+      <div>
+        <h3>轮毂可视化器 (Wheel Visualizer)</h3>
+        <p>SVG 矢量车身剪影（轿车 / SUV / 跑车 / 皮卡），实时替换轮毂样式与颜色；支持车漆颜色调整、多视角（侧视 / 俯视）、全屏模式及截图导出，让客户直观预览上车效果。</p>
+        <div class="tags" style="margin-top:10px">
+          <span class="tag brand">Sedan / SUV / Sports / Truck</span>
+          <span class="tag">车漆颜色</span>
+          <span class="tag">截图导出</span>
+          <span class="tag">全屏</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:16px">
+      <div class="card">
+        <div class="card-icon">📐</div>
+        <h3>轮胎尺寸计算器</h3>
+        <p>输入新旧两组轮胎规格（宽度 / 扁平比 / 钢圈），即时计算并对比侧壁高度、直径、周长，直观显示差异百分比，辅助经销商推荐替换方案。</p>
+        <div class="tags">
+          <span class="tag">胎壁高度</span>
+          <span class="tag">直径对比</span>
+          <span class="tag">周长偏差</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔩</div>
+        <h3>轮毂计算器</h3>
+        <p>根据车辆参数计算偏距（Offset）、中心孔（CB）等轮毂安装关键数据，确保选配正确，避免干涉问题。</p>
+        <div class="tags">
+          <span class="tag">Offset 计算</span>
+          <span class="tag">CB 匹配</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- 3. B2B 批发账户体系 -->
+  <!-- ════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-head">
+      <span class="eyebrow">B2B Pricing</span>
+      <h2>批发账户 &amp; 分层定价</h2>
+    </div>
+
+    <p style="font-size:.85rem;color:var(--gray);margin-bottom:20px">
+      经销商注册后由管理员审批，账户等级自动解锁对应批发价。所有价格在前端实时计算，无需手动报价。
+    </p>
+
+    <table class="tier-table">
+      <thead>
+        <tr>
+          <th>账户等级</th>
+          <th>说明</th>
+          <th>价格层级</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tier-name"><span class="dot" style="background:#e63224"></span>Co-Partner</td>
+          <td style="color:var(--gray)">最高级合作伙伴，享受最低批发价</td>
+          <td><span class="tag brand">Co-Partner Price</span></td>
+        </tr>
+        <tr>
+          <td class="tier-name"><span class="dot" style="background:#ff9500"></span>VIP</td>
+          <td style="color:var(--gray)">VIP 经销商，次级批发价</td>
+          <td><span class="tag">VIP Price</span></td>
+        </tr>
+        <tr>
+          <td class="tier-name"><span class="dot" style="background:#34c759"></span>Distributor</td>
+          <td style="color:var(--gray)">分销商等级批发价</td>
+          <td><span class="tag">Distributor Price</span></td>
+        </tr>
+        <tr>
+          <td class="tier-name"><span class="dot" style="background:#8e8e93"></span>MSRP</td>
+          <td style="color:var(--gray)">未审批账户 / 公开建议零售价</td>
+          <td><span class="tag">MSRP</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- 4. 后台管理 Admin -->
+  <!-- ════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-head">
+      <span class="eyebrow">Admin Dashboard</span>
+      <h2>后台管理系统</h2>
+    </div>
+    <div class="grid-2">
+
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h3>数据仪表板</h3>
+        <p>实时展示总销售额、订单数、用户数及库存概况；内置折线图（AreaChart）与柱状图（BarChart）可视化趋势，基于 Recharts。</p>
+        <div class="tags"><span class="tag brand">Recharts</span><span class="tag">实时</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">📦</div>
+        <h3>产品管理 (CRUD)</h3>
+        <p>新建 / 编辑 / 删除产品；支持 JSON 规格字段、图片上传、Featured 标记、库存调整；CSV / Excel 批量导入（PapaParse + SheetJS）。</p>
+        <div class="tags"><span class="tag">CSV 导入</span><span class="tag">Excel 导入</span><span class="tag brand">批量操作</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🧾</div>
+        <h3>订单管理</h3>
+        <p>查看订单详情、更新状态；支持退款操作；一键推送至 QuickBooks Online（QBO）进行财务对账。</p>
+        <div class="tags"><span class="tag brand">QuickBooks Online</span><span class="tag">退款</span><span class="tag">状态管理</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">👥</div>
+        <h3>用户管理</h3>
+        <p>查看注册用户列表、账户等级；审批批发申请；修改用户价格层级（Co-Partner / VIP / Distributor）。</p>
+        <div class="tags"><span class="tag">等级审批</span><span class="tag">用户列表</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🖼️</div>
+        <h3>Banner &amp; 目录管理</h3>
+        <p>上传 / 排序首页轮播 Banner；管理 PDF 产品目录（手册），支持封面图、分类标注，前台提供内嵌 PDF 预览。</p>
+        <div class="tags"><span class="tag">Banner 排序</span><span class="tag">PDF 目录</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🏷️</div>
+        <h3>折扣 &amp; 特价管理</h3>
+        <p>创建限时折扣（Discounts）和特价活动（Specials），自动应用到前台购物车，支持百分比或固定金额减免。</p>
+        <div class="tags"><span class="tag brand">限时折扣</span><span class="tag">满减</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- 5. AI 助手 -->
+  <!-- ════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-head">
+      <span class="eyebrow">AI Features</span>
+      <h2>AI 智能助手</h2>
+    </div>
+    <div class="feature-row">
+      <div class="icon-wrap">🤖</div>
+      <div>
+        <h3>DODO WHEELS AI 助手（Google Gemini 驱动）</h3>
+        <p>
+          悬浮于所有页面右下角，随时可唤起的对话窗口。基于 <strong>@google/genai</strong> SDK 接入 Gemini 大模型，
+          支持中英文问答，可回答产品咨询、轮胎知识、配件推荐等业务问题。消息支持 Markdown 格式渲染（ReactMarkdown），
+          自动滚动到最新消息。
+        </p>
+        <div class="tags" style="margin-top:10px">
+          <span class="tag brand">Google Gemini</span>
+          <span class="tag">Markdown 渲染</span>
+          <span class="tag">中英文</span>
+          <span class="tag">悬浮对话</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- 6. 用户账户 & 物流 -->
+  <!-- ════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-head">
+      <span class="eyebrow">Account & Delivery</span>
+      <h2>用户账户 &amp; 物流</h2>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-icon">🔐</div>
+        <h3>账户注册 / 登录</h3>
+        <p>邮箱注册 + Supabase Auth；新用户默认 MSRP 价格，申请批发账户后等待管理员审批升级。</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">👤</div>
+        <h3>个人中心 (Profile)</h3>
+        <p>查看订单历史、账户等级、个人信息编辑，实时显示当前价格层级。</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🚚</div>
+        <h3>配送说明 (Delivery)</h3>
+        <p>展示三仓库（Montreal / Gatineau / Quebec）配送时效、运费政策及当日发货截止时间说明。</p>
+        <div class="tags"><span class="tag">3 仓库</span><span class="tag brand">当日发货</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- 7. 页面导航总览 -->
+  <!-- ════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-head">
+      <span class="eyebrow">Page Map</span>
+      <h2>页面导航总览</h2>
+    </div>
+    <ul class="page-list">
+      <li>
+        <span class="page-icon">🏠</span>
+        <div>
+          <div>首页</div>
+          <div class="page-path">/</div>
+        </div>
+      </li>
+      <li>
+        <span class="page-icon">🛒</span>
+        <div>
+          <div>产品目录</div>
+          <div class="page-path">/shop</div>
+        </div>
+      </li>
+      <li>
+        <span class="page-icon">📄</span>
+        <div>
+          <div>产品详情</div>
+          <div class="page-path">/product/:id</div>
+        </div>
+      </li>
+      <li>
+        <span class="page-icon">🛍️</span>
+        <div>
+          <div>购物车</div>
+          <div class="page-path">/cart</div>
+        </div>
+      </li>
+      <li>
+        <span class="page-icon">🎨</span>
+        <div>
+          <div>轮毂可视化器</div>
+          <div class="page-path">/visualizer</div>
+        </div>
+      </li>
+      <li>
+        <span class="page-icon">📐</span>
+        <div>
+          <div>轮胎计算器</div>
+          <div class="page-path">/tools/calculator</div>
+        </div>
+      </li>
+      <li>
+        <span class="page-icon">🔩</span>
+        <div>
+          <div>轮毂计算器</div>
+          <div class="page-path">/tools/wheel-calculator</div>
+        </div>
+      </li>
+      <li>
+        <span class="page-icon">👤</span>
+        <div>
+          <div>个人中心</div>
+          <div class="page-path">/profile</div>
+        </div>
+      </li>
+      <li>
+        <span class="page-icon">🔐</span>
+        <div>
+          <div>注册 / 登录</div>
+          <div class="page-path">/auth</div>
+        </div>
+      </li>
+      <li>
+        <span class="page-icon">🚚</span>
+        <div>
+          <div>配送说明</div>
+          <div class="page-path">/delivery</div>
+        </div>
+      </li>
+      <li>
+        <span class="page-icon">📞</span>
+        <div>
+          <div>联系我们</div>
+          <div class="page-path">/contact</div>
+        </div>
+      </li>
+      <li>
+        <span class="page-icon">⚙️</span>
+        <div>
+          <div>管理后台</div>
+          <div class="page-path">/admin</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- 8. 技术栈 -->
+  <!-- ════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-head">
+      <span class="eyebrow">Tech Stack</span>
+      <h2>技术栈</h2>
+    </div>
+    <div class="stack-grid">
+      <div class="stack-item"><span class="stack-icon">⚛️</span> React 18</div>
+      <div class="stack-item"><span class="stack-icon">🔷</span> TypeScript</div>
+      <div class="stack-item"><span class="stack-icon">⚡</span> Vite</div>
+      <div class="stack-item"><span class="stack-icon">🎨</span> Tailwind CSS</div>
+      <div class="stack-item"><span class="stack-icon">🗄️</span> Supabase (PostgreSQL)</div>
+      <div class="stack-item"><span class="stack-icon">🔄</span> Supabase Realtime</div>
+      <div class="stack-item"><span class="stack-icon">🚀</span> Motion / Framer Motion</div>
+      <div class="stack-item"><span class="stack-icon">🌐</span> React Router v6</div>
+      <div class="stack-item"><span class="stack-icon">🌍</span> i18next (多语言)</div>
+      <div class="stack-item"><span class="stack-icon">📊</span> Recharts</div>
+      <div class="stack-item"><span class="stack-icon">🤖</span> Google Gemini AI</div>
+      <div class="stack-item"><span class="stack-icon">📑</span> PapaParse + SheetJS</div>
+      <div class="stack-item"><span class="stack-icon">🧾</span> QuickBooks Online API</div>
+      <div class="stack-item"><span class="stack-icon">🔔</span> Sonner (Toast)</div>
+    </div>
+  </div>
+
+  <!-- ── Footer ── -->
+  <div class="footer">
+    <p><strong>DodoWheels Web System</strong> — Authorized Wholesale Portal · Canada</p>
+    <p style="margin-top:6px">Montreal · Gatineau · Quebec · 三仓实时库存</p>
+    <p style="margin-top:10px; font-size:.72rem; color:#bbb">本文档由 Claude Code 自动生成 · 2026-05-20</p>
+  </div>
+
+</div>
+</body>
+</html>
