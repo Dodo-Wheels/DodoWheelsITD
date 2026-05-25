@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>专业工时计算系统</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    .glass {
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.75);
+    }
+
+    .dark .glass {
+      background: rgba(30,41,59,0.8);
+    }
+
+    textarea::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    textarea::-webkit-scrollbar-thumb {
+      background: #94a3b8;
+      border-radius: 999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 min-h-screen transition-all duration-300">
+
+<div class="max-w-7xl mx-auto p-4 md:p-8">
+
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+    <div>
+      <h1 class="text-3xl md:text-4xl font-bold text-slate-800 dark:text-white">
+        专业工时计算系统
+      </h1>
+      <p class="text-slate-500 dark:text-slate-300 mt-2">
+        自动计算现场工时、远程工时、法定假日与周末加班
+      </p>
+    </div>
+
+    <button
+      onclick="toggleDarkMode()"
+      class="px-5 py-3 rounded-2xl bg-slate-800 text-white hover:scale-105 transition"
+    >
+      🌙 深色模式
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+    <div class="xl:col-span-2 glass rounded-3xl shadow-xl p-6 border border-white/30">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-bold text-slate-800 dark:text-white">工时录入</h2>
+
+        <button
+          onclick="addRow()"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl"
+        >
+          + 添加记录
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm min-w-[1000px]">
+          <thead>
+            <tr class="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white">
+              <th class="p-3 rounded-l-xl">日期</th>
+              <th class="p-3">现场开始</th>
+              <th class="p-3">现场结束</th>
+              <th class="p-3">远程工时</th>
+              <th class="p-3">远程说明</th>
+              <th class="p-3">法定假日</th>
+              <th class="p-3">周末</th>
+              <th class="p-3 rounded-r-xl">操作</th>
+            </tr>
+          </thead>
+          <tbody id="workTable" class="text-slate-700 dark:text-slate-200">
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex flex-wrap gap-3 mt-6">
+        <button
+          onclick="generateReport()"
+          class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded-2xl font-semibold"
+        >
+          生成工时报告
+        </button>
+
+        <button
+          onclick="copyReport()"
+          class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-2xl font-semibold"
+        >
+          一键复制
+        </button>
+
+        <button
+          onclick="downloadReport()"
+          class="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-2xl font-semibold"
+        >
+          导出TXT
+        </button>
+
+        <button
+          onclick="saveData()"
+          class="bg-slate-700 hover:bg-slate-800 text-white px-5 py-3 rounded-2xl font-semibold"
+        >
+          保存数据
+        </button>
+      </div>
+    </div>
+
+    <div class="glass rounded-3xl shadow-xl p-6 border border-white/30">
+      <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-4">
+        工时汇总
+      </h2>
+
+      <div class="space-y-4">
+        <div class="bg-slate-100 dark:bg-slate-800 rounded-2xl p-4">
+          <div class="text-slate-500 dark:text-slate-300 text-sm">现场工时</div>
+          <div id="onsiteHours" class="text-2xl font-bold text-slate-800 dark:text-white">0小时</div>
+        </div>
+
+        <div class="bg-slate-100 dark:bg-slate-800 rounded-2xl p-4">
+          <div class="text-slate-500 dark:text-slate-300 text-sm">远程工时</div>
+          <div id="remoteHours" class="text-2xl font-bold text-slate-800 dark:text-white">0小时</div>
+        </div>
+
+        <div class="bg-emerald-100 dark:bg-emerald-900 rounded-2xl p-4">
+          <div class="text-emerald-700 dark:text-emerald-200 text-sm">总工时</div>
+          <div id="totalHours" class="text-3xl font-bold text-emerald-700 dark:text-emerald-200">0小时</div>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-3">
+          自动生成报告
+        </h3>
+
+        <textarea
+          id="report"
+          class="w-full h-[450px] rounded-2xl p-4 bg-slate-100 dark:bg-slate-800 dark:text-white outline-none resize-none"
+          placeholder="点击【生成工时报告】后自动输出..."
+        ></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+const table = document.getElementById('workTable');
+
+function addRow(data = {}) {
+  const row = document.createElement('tr');
+  row.className = 'border-b border-slate-200 dark:border-slate-700';
+
+  row.innerHTML = `
+    <td class="p-2">
+      <input type="date" class="w-full p-2 rounded-xl bg-slate-100 dark:bg-slate-800 dark:text-white" value="${data.date || ''}">
+    </td>
+
+    <td class="p-2">
+      <input type="text" placeholder="08:00" class="w-full p-2 rounded-xl bg-slate-100 dark:bg-slate-800 dark:text-white start" value="${data.start || ''}">
+    </td>
+
+    <td class="p-2">
+      <input type="text" placeholder="17:00" class="w-full p-2 rounded-xl bg-slate-100 dark:bg-slate-800 dark:text-white end" value="${data.end || ''}">
+    </td>
+
+    <td class="p-2">
+      <input type="number" step="0.5" placeholder="2" class="w-full p-2 rounded-xl bg-slate-100 dark:bg-slate-800 dark:text-white remote" value="${data.remote || ''}">
+    </td>
+
+    <td class="p-2">
+      <input type="text" placeholder="公司系统升级项目" class="w-full p-2 rounded-xl bg-slate-100 dark:bg-slate-800 dark:text-white desc" value="${data.desc || ''}">
+    </td>
+
+    <td class="p-2 text-center">
+      <input type="checkbox" class="holiday scale-125" ${data.holiday ? 'checked' : ''}>
+    </td>
+
+    <td class="p-2 text-center">
+      <input type="checkbox" class="weekend scale-125" ${data.weekend ? 'checked' : ''}>
+    </td>
+
+    <td class="p-2 text-center">
+      <button onclick="this.closest('tr').remove()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-xl">
+        删除
+      </button>
+    </td>
+  `;
+
+  table.appendChild(row);
+}
+
+function normalizeTime(t) {
+  if (!t) return '';
+  return t.replace(/\./g, ':').replace(/：/g, ':');
+}
+
+function timeToMinutes(t) {
+  t = normalizeTime(t);
+
+  const parts = t.split(':');
+
+  if (parts.length !== 2) return 0;
+
+  return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+}
+
+function formatMinutes(mins) {
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return `${h}小时${m}分`;
+}
+
+function generateReport() {
+  const rows = [...table.querySelectorAll('tr')];
+
+  let report = '';
+
+  let onsiteTotal = 0;
+  let remoteTotal = 0;
+
+  rows.forEach(row => {
+
+    const date = row.querySelector('input[type=date]').value;
+    const start = normalizeTime(row.querySelector('.start').value);
+    const end = normalizeTime(row.querySelector('.end').value);
+    const remote = parseFloat(row.querySelector('.remote').value || 0);
+    const desc = row.querySelector('.desc').value || '远程工作';
+    const holiday = row.querySelector('.holiday').checked;
+    const weekend = row.querySelector('.weekend').checked;
+
+    let dailyTotal = 0;
+
+    const formattedDate = date
+      ? new Date(date).toLocaleDateString('zh-CN', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        }).replace(/\//g, '年').replace(/年(\d+)$/, '月$1日')
+      : '未填写日期';
+
+    report += `${formattedDate}\n`;
+
+    if (holiday) {
+      report += `【法定假期】=8小时\n`;
+      dailyTotal += 480;
+      onsiteTotal += 480;
+    }
+
+    if (start && end) {
+      const startMin = timeToMinutes(start);
+      const endMin = timeToMinutes(end);
+
+      let diff = endMin - startMin;
+
+      const raw = diff;
+
+      diff -= 30;
+
+      onsiteTotal += diff;
+      dailyTotal += diff;
+
+      report += `【现场工作】=${start}-${end}：原始 ${formatMinutes(raw)} → 减30分后 ${formatMinutes(diff)}\n`;
+    }
+
+    if (remote > 0) {
+      const remoteMin = remote * 60;
+      remoteTotal += remoteMin;
+      dailyTotal += remoteMin;
+
+      if (weekend) {
+        report += `【周末远程工作】=${desc}${remote}小时\n`;
+      } else {
+        report += `【远程工作】=${desc}${remote}小时\n`;
+      }
+    }
+
+    report += `当天合计：${formatMinutes(dailyTotal)}\n\n`;
+  });
+
+  const grandTotal = onsiteTotal + remoteTotal;
+
+  report += `总计：${formatMinutes(grandTotal)}`;
+
+  document.getElementById('report').value = report;
+  document.getElementById('onsiteHours').innerText = formatMinutes(onsiteTotal);
+  document.getElementById('remoteHours').innerText = formatMinutes(remoteTotal);
+  document.getElementById('totalHours').innerText = formatMinutes(grandTotal);
+}
+
+function copyReport() {
+  const text = document.getElementById('report');
+
+  text.select();
+  document.execCommand('copy');
+
+  alert('工时报告已复制');
+}
+
+function downloadReport() {
+  const text = document.getElementById('report').value;
+
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '工时报告.txt';
+  a.click();
+}
+
+function saveData() {
+  const rows = [...table.querySelectorAll('tr')];
+
+  const data = rows.map(row => ({
+    date: row.querySelector('input[type=date]').value,
+    start: row.querySelector('.start').value,
+    end: row.querySelector('.end').value,
+    remote: row.querySelector('.remote').value,
+    desc: row.querySelector('.desc').value,
+    holiday: row.querySelector('.holiday').checked,
+    weekend: row.querySelector('.weekend').checked,
+  }));
+
+  localStorage.setItem('work-hours-data', JSON.stringify(data));
+
+  alert('数据已保存');
+}
+
+function loadData() {
+  const saved = localStorage.getItem('work-hours-data');
+
+  if (!saved) {
+    for (let i = 0; i < 5; i++) {
+      addRow();
+    }
+    return;
+  }
+
+  const data = JSON.parse(saved);
+
+  data.forEach(d => addRow(d));
+}
+
+function toggleDarkMode() {
+  document.documentElement.classList.toggle('dark');
+}
+
+loadData();
+
+</script>
+
+</body>
+</html>
