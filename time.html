@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>工时报告（多周期TAB版）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 min-h-screen p-6">
+
+<div class="max-w-6xl mx-auto bg-white shadow-2xl rounded-3xl overflow-hidden">
+
+  <div class="bg-slate-900 text-white p-6">
+    <h1 class="text-3xl font-bold">工时报告系统（多周期TAB版）</h1>
+    <p class="text-slate-300 mt-2">支持每两周自动归档为一个统计周期</p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="flex gap-2 p-4 bg-slate-50 border-b overflow-x-auto">
+    <button class="tab-btn px-4 py-2 rounded-xl bg-slate-900 text-white" onclick="switchTab('t1')">2026-05-11 ~ 05-24</button>
+    <button class="tab-btn px-4 py-2 rounded-xl bg-slate-200" onclick="switchTab('t2')">未来周期1</button>
+    <button class="tab-btn px-4 py-2 rounded-xl bg-slate-200" onclick="switchTab('t3')">未来周期2</button>
+  </div>
+
+  <div class="p-6">
+
+    <!-- TAB 1 -->
+    <div id="t1" class="tab-content">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-blue-50 p-4 rounded-xl">周期：2026/05/11 - 05/24</div>
+        <div class="bg-emerald-50 p-4 rounded-xl text-2xl font-bold">总工时：109小时01分</div>
+        <div class="bg-orange-50 p-4 rounded-xl">系统升级 / 远程支持</div>
+      </div>
+
+      <table class="w-full text-sm border rounded-xl overflow-hidden">
+        <thead class="bg-slate-800 text-white">
+          <tr>
+            <th class="p-3">日期</th>
+            <th class="p-3">内容</th>
+            <th class="p-3">明细</th>
+            <th class="p-3">合计</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b"><td class="p-3">05-11</td><td>现场+远程</td><td>8h52 + 2h</td><td>10h52</td></tr>
+          <tr class="border-b"><td class="p-3">05-12</td><td>现场+远程</td><td>8h50 + 2h</td><td>10h50</td></tr>
+          <tr class="border-b"><td class="p-3">05-13</td><td>现场+远程</td><td>8h34 + 2h</td><td>10h34</td></tr>
+          <tr class="border-b"><td class="p-3">05-14</td><td>现场+远程</td><td>8h24 + 2h</td><td>10h24</td></tr>
+          <tr class="border-b"><td class="p-3">05-15</td><td>现场+远程</td><td>8h40 + 2h</td><td>10h40</td></tr>
+          <tr class="border-b"><td class="p-3">05-16</td><td>周末</td><td>3h</td><td>3h</td></tr>
+          <tr class="border-b"><td class="p-3">05-17</td><td>周末</td><td>3h</td><td>3h</td></tr>
+          <tr class="border-b"><td class="p-3">05-18</td><td>法定假期</td><td>8h</td><td>8h</td></tr>
+          <tr class="border-b"><td class="p-3">05-19</td><td>远程</td><td>6h</td><td>6h</td></tr>
+          <tr class="border-b"><td class="p-3">05-20</td><td>现场+远程</td><td>8h22 + 2h</td><td>10h22</td></tr>
+          <tr class="border-b"><td class="p-3">05-21</td><td>现场+远程</td><td>8h10 + 2h</td><td>10h10</td></tr>
+          <tr class="border-b"><td class="p-3">05-22</td><td>远程</td><td>9h</td><td>9h</td></tr>
+          <tr class="border-b"><td class="p-3">05-23</td><td>周末</td><td>5h</td><td>5h</td></tr>
+          <tr class="border-b"><td class="p-3">05-24</td><td>周末</td><td>3h</td><td>3h</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TAB 2 -->
+    <div id="t2" class="tab-content hidden text-slate-500">未来周期数据待接入</div>
+
+    <!-- TAB 3 -->
+    <div id="t3" class="tab-content hidden text-slate-500">未来周期数据待接入</div>
+
+  </div>
+</div>
+
+<script>
+function switchTab(id){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.classList.remove('bg-slate-900','text-white');
+    btn.classList.add('bg-slate-200');
+  });
+
+  event.target.classList.add('bg-slate-900','text-white');
+  event.target.classList.remove('bg-slate-200');
+}
+</script>
+
+</body>
+</html>
