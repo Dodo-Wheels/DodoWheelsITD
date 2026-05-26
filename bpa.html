@@ -182,13 +182,9 @@
         }
 
         .sgi {
-            display: flex;
+            display: none;
             flex-direction: column;
             gap: 6px
-        }
-
-        .sg.collapse .sgi {
-            display: none
         }
 
         .sg.open .sgi {
@@ -730,7 +726,7 @@
                             <button class="sb on" data-s="all" onclick="go('all',this)">🌐 全景总览</button>
                         </div>
                     </div>
-                    <div class="sg open" id="group-web">
+                    <div class="sg" id="group-web">
                         <button class="sgt" type="button" onclick="toggleGroup('group-web')">网站</button>
                         <div class="sgi">
                             <button class="sb" data-s="s1" onclick="go('s1',this)">🆕 ① 新客注册开户</button>
@@ -738,7 +734,7 @@
                             <button class="sb" data-s="s8" onclick="go('s8',this)">🛍️ ⑧ 零售 WALK-IN</button>
                         </div>
                     </div>
-                    <div class="sg open" id="group-core">
+                    <div class="sg" id="group-core">
                         <button class="sgt" type="button" onclick="toggleGroup('group-core')">核心系统</button>
                         <div class="sgi">
                             <button class="sb" data-s="s3" onclick="go('s3',this)">📞 ③ 电话下单</button>
@@ -749,7 +745,7 @@
                             <button class="sb" data-s="s9" onclick="go('s9',this)">🚚 ⑨ 调货</button>
                         </div>
                     </div>
-                    <div class="sg open" id="group-qbo">
+                    <div class="sg" id="group-qbo">
                         <button class="sgt" type="button" onclick="toggleGroup('group-qbo')">QBO</button>
                         <div class="sgi">
                             <button class="sb" data-s="s2" onclick="go('s2',this)">🧾 发票生成</button>
@@ -1153,8 +1149,8 @@
                         marker-end="url(#ar)" />
                     <path id="E5b" class="eg" data-scenes="s2 s8" d="M414 95 L513 95 L513 255" stroke="#A5D6A7"
                         marker-end="url(#ar)" fill="none" />
-                    <line id="E6" class="eg" data-scenes="s3 s4 s7" x1="160" y1="149" x2="160" y2="255" stroke="#A5D6A7"
-                        marker-end="url(#ar)" />
+                    <path id="E6" class="eg" data-scenes="s3 s4 s7" d="M160 149 L160 160 L73 160 L73 230 L160 230 L160 255" stroke="#A5D6A7"
+                        marker-end="url(#ar)" fill="none" />
                     <line id="E7" class="eg" data-scenes="s3" x1="244" y1="270" x2="252" y2="273" stroke="#A5D6A7"
                         marker-end="url(#ar)" />
                     <line id="E7b" class="eg" data-scenes="s3" x1="333" y1="291" x2="333" y2="305" stroke="#A5D6A7"
@@ -1163,12 +1159,12 @@
                         marker-end="url(#ar)" />
                     <line id="E9" class="eg" data-scenes="s2 s3 s8" x1="513" y1="291" x2="513" y2="305" stroke="#A5D6A7"
                         marker-end="url(#ar)" />
-                    <path id="E26" class="eg" data-scenes="s4" d="M244 270 L513 270 L513 355" stroke="#A5D6A7"
+                    <path id="E26" class="eg" data-scenes="s4" d="M160 285 L160 298 L418 298 L418 348 L513 348 L513 355" stroke="#A5D6A7"
                         marker-end="url(#ar)" fill="none" />
-                    <line id="E11" class="eg" data-scenes="s2 s3 s8" x1="513" y1="341" x2="513" y2="515"
-                        stroke="#FFCC80" marker-end="url(#ar)" />
-                    <line id="E11b" class="eg" data-scenes="s5" x1="513" y1="291" x2="513" y2="515" stroke="#FFCC80"
-                        marker-end="url(#ar)" />
+                    <path id="E11" class="eg" data-scenes="s2 s3 s8" d="M513 341 L513 348 L418 348 L418 508 L513 508 L513 515" stroke="#FFCC80"
+                        marker-end="url(#ar)" fill="none" />
+                    <path id="E11b" class="eg" data-scenes="s5" d="M513 291 L513 298 L418 298 L418 508 L513 508 L513 515" stroke="#FFCC80"
+                        marker-end="url(#ar)" fill="none" />
                     <line id="E12" class="eg" data-scenes="s2 s3 s5 s8" x1="513" y1="551" x2="513" y2="565"
                         stroke="#FFCC80" marker-end="url(#ar)" />
                     <line id="E13a" class="eg" data-scenes="s2 s3 s5" x1="465" y1="601" x2="465" y2="615"
@@ -1191,7 +1187,7 @@
                         stroke-dasharray="3 2" marker-end="url(#ar)" fill="none" />
                     <path id="E25" class="eg" data-scenes="s9" d="M414 740 L414 768 L800 768 L800 495 L703 495 L703 485" stroke="#CE93D8"
                         stroke-dasharray="4 3" marker-end="url(#ar)" fill="none" />
-                    <path id="E21" class="eg" data-scenes="s2 s3 s5 s6 s8" d="M422 740 L422 768 L160 768 L160 149"
+                    <path id="E21" class="eg" data-scenes="s2 s3 s5 s6 s8" d="M422 740 L422 768 L73 768 L73 156 L160 156 L160 149"
                         stroke="#90CAF9" stroke-dasharray="4 3" marker-end="url(#ar)" fill="none" />
                     <line id="E21b" class="eg" data-scenes="s2 s3 s5 s8" x1="513" y1="758" x2="513" y2="795"
                         stroke="#EF9A9A" stroke-dasharray="4 3" marker-end="url(#ar)" />
@@ -1350,6 +1346,90 @@
 
         enhanceNodes();
         renderDetail('all');
+
+        // Hover Highlight Interactivity
+        const adjMap = {
+            'N01': { lines: ['E01'], nodes: ['N04'] },
+            'N04': { lines: ['E01', 'E1b'], nodes: ['N01', 'N05'] },
+            'N05': { lines: ['E1b', 'E1c'], nodes: ['N04', 'N02'] },
+            'N02': { lines: ['E1c', 'E5a', 'E21'], nodes: ['N05', 'N06', 'N26'] },
+            'N06': { lines: ['E5a', 'E5b'], nodes: ['N02', 'N11'] },
+            'N11': { lines: ['E5b', 'E9', 'E11b'], nodes: ['N06', 'N12', 'N14'] },
+            'N12': { lines: ['E9', 'E8', 'E11'], nodes: ['N11', 'N08', 'N14'] },
+            'N03': { lines: ['E6', 'E21'], nodes: ['N10', 'N26'] },
+            'N10': { lines: ['E6', 'E7', 'E26'], nodes: ['N03', 'N07', 'N13'] },
+            'N07': { lines: ['E7', 'E7b'], nodes: ['N10', 'N08'] },
+            'N08': { lines: ['E7b', 'E8'], nodes: ['N07', 'N12'] },
+            'N13': { lines: ['E26', 'E28'], nodes: ['N10', 'N28'] },
+            'N14': { lines: ['E11', 'E11b', 'E24', 'E12'], nodes: ['N12', 'N11', 'N23', 'N15'] },
+            'N15': { lines: ['E12', 'E13a', 'E13b'], nodes: ['N14', 'N16', 'N17'] },
+            'N16': { lines: ['E13a', 'E16'], nodes: ['N15', 'N26'] },
+            'N17': { lines: ['E13b', 'E16'], nodes: ['N15', 'N26'] },
+            'N26': { lines: ['E16', 'E20', 'E23b', 'E21', 'E21b', 'E29'], nodes: ['N16', 'N17', 'N20', 'Nret', 'N03', 'N02', 'N27', 'N29'] },
+            'N18': { lines: ['E17'], nodes: ['N19'] },
+            'N19': { lines: ['E17', 'E18'], nodes: ['N18', 'N20'] },
+            'N20': { lines: ['E18', 'E20'], nodes: ['N19', 'N26'] },
+            'N21': { lines: ['E23'], nodes: ['Nret'] },
+            'Nret': { lines: ['E23', 'E23b'], nodes: ['N21', 'N26'] },
+            'N23': { lines: ['E24', 'E24b'], nodes: ['N14', 'Nqe'] },
+            'N09': { lines: ['E25'], nodes: ['N25'] },
+            'N25': { lines: ['E25'], nodes: ['N09'] },
+            'N27': { lines: ['E21b'], nodes: ['N26'] },
+            'N29': { lines: ['E29'], nodes: ['N26'] },
+            'N28': { lines: ['E28', 'E28_s7'], nodes: ['N13', 'N22'] },
+            'N22': { lines: ['E28_s7'], nodes: ['N28'] },
+            'Nqe': { lines: ['E24b'], nodes: ['N23'] }
+        };
+
+        document.querySelectorAll('.nd').forEach(node => {
+            node.addEventListener('mouseenter', () => {
+                const activeSc = document.querySelector('.sb.on').getAttribute('data-s');
+                const nodeId = node.id;
+                const adj = adjMap[nodeId];
+                if (!adj) return;
+
+                document.querySelectorAll('.nd').forEach(n => {
+                    if (n.id !== nodeId && !adj.nodes.includes(n.id)) {
+                        n.classList.add('dim');
+                        n.classList.remove('lit');
+                    } else {
+                        n.classList.remove('dim');
+                        n.classList.add('lit');
+                    }
+                });
+
+                document.querySelectorAll('.eg').forEach(e => {
+                    if (!adj.lines.includes(e.id)) {
+                        e.classList.add('dim');
+                        e.classList.remove('lit');
+                        e.style.stroke = '';
+                    } else {
+                        e.classList.remove('dim');
+                        e.classList.add('lit');
+                        const systemClass = Array.from(node.classList).find(c => c.startsWith('nd-'));
+                        let col = '#1a73e8';
+                        if (systemClass) {
+                            const sysColors = {
+                                'nd-web': '#0d5ab9',
+                                'nd-webadmin': '#028074',
+                                'nd-oms': '#1b7a43',
+                                'nd-wms': '#b45309',
+                                'nd-csm': '#7e22ce',
+                                'nd-qbo': '#be123c',
+                                'nd-contact': '#475569'
+                            };
+                            col = sysColors[systemClass] || col;
+                        }
+                        e.style.stroke = col;
+                    }
+                });
+            });
+
+            node.addEventListener('mouseleave', () => {
+                const activeSc = document.querySelector('.sb.on').getAttribute('data-s');
+                go(activeSc, document.querySelector('.sb.on'));
+            });
+        });
 
         // Zoom & Pan Interactivity Implementation
         let scale = 1;
