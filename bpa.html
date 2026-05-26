@@ -1,656 +1,1432 @@
 <!doctype html>
 <html lang="zh-CN">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>公司整体业务流程全景图</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#eef3f8;
-  --card:#ffffff;
-  --line:#d6deea;
-  --text:#172033;
-  --muted:#65718a;
-  --shadow:0 24px 60px rgba(20,33,61,.12);
-  --shadow-soft:0 12px 28px rgba(20,33,61,.09);
-}
-body{
-  background:
-    radial-gradient(circle at top left, rgba(255,255,255,.98), rgba(234,242,250,.9) 28%, rgba(238,243,248,1) 70%),
-    linear-gradient(180deg,#f8fbff 0%,#eef3f8 46%,#e9eef5 100%);
-  color:var(--text);
-  font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-}
-.page{
-  width:min(100%,1920px);
-  margin:0 auto;
-  padding:12px 14px 16px;
-}
-.header{margin-bottom:12px}
-.title{
-  font-size:30px;
-  font-weight:800;
-  letter-spacing:.03em;
-  text-align:center;
-  color:#11203f;
-  text-shadow:0 1px 0 rgba(255,255,255,.8);
-}
-.legend{
-  display:grid;
-  gap:7px;
-  margin-top:12px;
-  padding-top:12px;
-  border-top:1px solid #ece8dc;
-}
-.legend-title{
-  font-size:11px;
-  font-weight:700;
-  color:#777;
-  letter-spacing:.04em;
-  text-transform:uppercase;
-}
-.li{display:flex;align-items:center;gap:6px;font-size:11px;color:#555;line-height:1.4}
-.lc{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>公司整体业务流程全景图</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
 
-.layout{
-  display:grid;
-  grid-template-columns:182px minmax(0,1fr) 296px;
-  gap:10px;
-  align-items:stretch;
-}
-.side,.chart-wrap,.detail{
-  background:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(249,252,255,.88) 100%);
-  border:1px solid rgba(201,214,231,.8);
-  border-radius:22px;
-  box-shadow:var(--shadow);
-}
-.side{
-  padding:12px;
-  position:sticky;
-  top:12px;
-  min-height:calc(100vh - 126px);
-  display:flex;
-  flex-direction:column;
-}
-.side h2{
-  font-size:13px;
-  margin-bottom:10px;
-  color:#42516f;
-  font-weight:800;
-  letter-spacing:.08em;
-}
-.sbar{display:flex;flex-direction:column;gap:10px}
-.sg{display:flex;flex-direction:column;gap:7px}
-.sgt{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  width:100%;
-  border:0;
-  background:transparent;
-  cursor:pointer;
-  font-size:11px;
-  font-weight:700;
-  color:#7a869d;
-  letter-spacing:.04em;
-  text-transform:uppercase;
-  padding:0 2px;
-}
-.sgt::after{
-  content:"+";
-  font-size:14px;
-  line-height:1;
-  color:#8a98b1;
-}
-.sg.open .sgt::after{
-  content:"−";
-}
-.sgi{display:flex;flex-direction:column;gap:7px}
-.sg.collapse .sgi{display:none}
-.sg.open .sgi{display:flex}
-.sb{
-  width:100%;
-  padding:10px 11px;
-  border-radius:14px;
-  border:1px solid #d8e1ee;
-  background:linear-gradient(180deg,#ffffff 0%,#f7faff 100%);
-  font-size:12px;
-  line-height:1.35;
-  cursor:pointer;
-  color:#4b5870;
-  text-align:left;
-  transition:.18s ease
-}
-.sb:hover{
-  transform:translateY(-1px);
-  box-shadow:var(--shadow-soft);
-  border-color:#bdd0ea;
-}
-.sb.on{color:#fff;border-color:transparent;font-weight:600}
-.sb[data-s=all].on{background:linear-gradient(135deg,#1f2d4d 0%,#344f87 100%)}
-.sb[data-s=s1].on{background:linear-gradient(135deg,#1565C0 0%,#4FA3FF 100%)}
-.sb[data-s=s2].on{background:linear-gradient(135deg,#2E7D32 0%,#5ACB7A 100%)}
-.sb[data-s=s3].on{background:linear-gradient(135deg,#E65100 0%,#FF9A52 100%)}
-.sb[data-s=s4].on{background:linear-gradient(135deg,#AD1457 0%,#F06292 100%)}
-.sb[data-s=s5].on{background:linear-gradient(135deg,#00695C 0%,#28B7A3 100%)}
-.sb[data-s=s6].on{background:linear-gradient(135deg,#4527A0 0%,#8164F6 100%)}
-.sb[data-s=s7].on{background:linear-gradient(135deg,#B71C1C 0%,#FF6A6A 100%)}
-.sb[data-s=s8].on{background:linear-gradient(135deg,#F57F17 0%,#FFCB52 100%)}
-.sb[data-s=s9].on{background:linear-gradient(135deg,#00838F 0%,#40C9D6 100%)}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
 
-.chart-wrap{
-  padding:10px;
-  overflow:hidden;
-  min-height:calc(100vh - 126px);
-  background:
-    radial-gradient(circle at top, rgba(255,255,255,.86), rgba(255,255,255,0) 32%),
-    linear-gradient(180deg,rgba(246,250,255,.98) 0%,rgba(236,243,251,.94) 100%);
-}
-svg{
-  display:block;
-  width:100%;
-  height:auto;
-  min-width:0;
-  border-radius:18px;
-  background:#ffffff;
-  box-shadow:
-    inset 0 0 0 1px rgba(214,224,238,.9),
-    0 20px 40px rgba(28,42,70,.08);
-}
-.node-shell{
-  fill:rgba(255,255,255,.96);
-  stroke:rgba(201,214,231,.9);
-  stroke-width:1;
-  filter:url(#cardShadow);
-}
-.node-gloss{
-  fill:url(#glossFill);
-  opacity:.0;
-  pointer-events:none;
-}
-.node-accent{
-  fill:none;
-  stroke:url(#accentStroke);
-  stroke-width:1.4;
-  opacity:0;
-  pointer-events:none;
-}
-.nd rect{
-  stroke-width:1.1;
-}
-.nd text{
-  letter-spacing:.01em;
-}
-.nd{transition:opacity .18s ease,transform .18s ease}
-.nd.dim{opacity:.12}
-.nd.lit .node-shell{filter:url(#cardGlow)}
-.nd.lit .node-gloss{opacity:.95}
-.nd.lit .node-accent{opacity:1}
-.nd.lit rect{filter:url(#nodeGlow)}
-.eg{fill:none;stroke-width:1px;transition:stroke .15s,opacity .15s,stroke-width .15s}
-.eg.dim{opacity:.08}
-.eg.lit{
-  stroke-width:3.2px;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-  filter:url(#flowGlow);
-  stroke-dasharray:8 9;
-  animation:flowMove 2.2s linear infinite;
-}
+        :root {
+            --bg: #eef3f8;
+            --card: #ffffff;
+            --line: #d6deea;
+            --text: #172033;
+            --muted: #65718a;
+            --shadow: 0 24px 60px rgba(20, 33, 61, .12);
+            --shadow-soft: 0 12px 28px rgba(20, 33, 61, .09);
+        }
 
-@keyframes flowMove{
-  from{stroke-dashoffset:34}
-  to{stroke-dashoffset:0}
-}
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(255, 255, 255, .98), rgba(234, 242, 250, .9) 28%, rgba(238, 243, 248, 1) 70%),
+                linear-gradient(180deg, #f8fbff 0%, #eef3f8 46%, #e9eef5 100%);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', 'Noto Sans SC', "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
 
-.detail{
-  padding:10px 10px 12px;
-  position:sticky;
-  top:12px;
-  align-self:start;
-  max-height:calc(100vh - 24px);
-  overflow:auto;
-}
-.detail-head{
-  position:sticky;
-  top:-10px;
-  z-index:2;
-  background:linear-gradient(180deg,rgba(255,255,255,.985) 0%,rgba(246,250,255,.96) 100%);
-  padding:2px 2px 10px;
-  border-bottom:1px solid #e3eaf5;
-  margin-bottom:10px;
-}
-.colorbar{
-  height:6px;
-  border-radius:999px;
-  margin-bottom:10px;
-  background:linear-gradient(90deg,#16305f 0%,#4d8bff 100%);
-  box-shadow:0 6px 16px rgba(77,139,255,.25);
-}
-.detail-title{font-size:17px;font-weight:700;line-height:1.35}
-.detail-sub{margin-top:5px;color:#6f7c93;font-size:12px;line-height:1.65}
-.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}
-.metric{
-  border:1px solid #dfe8f4;
-  background:linear-gradient(180deg,#ffffff 0%,#f6faff 100%);
-  border-radius:12px;
-  padding:8px 9px;
-}
-.metric .k{font-size:10px;color:#7a869d;margin-bottom:4px}
-.metric .v{font-size:14px;font-weight:700;color:#24334f;line-height:1.35}
-.section-title{
-  font-size:11px;
-  font-weight:700;
-  margin:12px 0 7px;
-  color:#7d899f;
-  letter-spacing:.04em;
-  text-transform:uppercase;
-}
-.timeline{display:flex;flex-direction:column;gap:7px}
-.step{
-  display:flex;
-  gap:8px;
-  align-items:flex-start;
-  padding:8px 8px 9px;
-  border:1px solid #dfe8f4;
-  border-left:3px solid #bfd1ea;
-  border-radius:12px;
-  background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);
-}
-.no{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;flex-shrink:0}
-.step-main{min-width:0;flex:1}
-.step-text{font-size:11.5px;line-height:1.6;color:#333}
-.badge{display:inline-block;margin-top:5px;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:600}
-.notes{display:grid;gap:7px}
-.note{
-  padding:8px 9px;
-  border-radius:12px;
-  background:linear-gradient(180deg,#fbfdff 0%,#f4f8fd 100%);
-  border:1px solid #dfe8f4;
-  font-size:11.5px;
-  line-height:1.62;
-  color:#52627d;
-}
+        .page {
+            width: min(100%, 1920px);
+            margin: 0 auto;
+            padding: 12px 14px 16px;
+        }
 
-@media (max-width:1360px){
-  .layout{grid-template-columns:182px 1fr 278px}
-}
-@media (max-width:1220px){
-  .layout{grid-template-columns:182px 1fr}
-  .side{min-height:auto}
-  .chart-wrap{min-height:auto}
-  .detail{grid-column:1 / -1;position:static;max-height:none}
-}
-@media (max-width:900px){
-  .layout{grid-template-columns:1fr}
-  .side,.detail{position:static}
-  .sbar{gap:12px}
-  .sg{gap:6px}
-  .sgi{flex-direction:row;flex-wrap:wrap;gap:7px}
-  .sb{width:auto;white-space:nowrap}
-  .summary-grid{grid-template-columns:1fr 1fr}
-  .legend{grid-template-columns:1fr 1fr}
-}
-@media (max-width:640px){
-  .page{padding:10px}
-  .title{font-size:20px}
-  .summary-grid{grid-template-columns:1fr}
-  .legend{grid-template-columns:1fr}
-}
-</style>
+        .header {
+            margin-bottom: 12px
+        }
+
+        .title {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: .02em;
+            text-align: center;
+            color: #11203f;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, .8);
+        }
+
+        .legend {
+            display: grid;
+            gap: 7px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .legend-title {
+            font-size: 11px;
+            font-weight: 800;
+            color: #475569;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+        }
+
+        .li {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #555;
+            line-height: 1.4
+        }
+
+        .lc {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            flex-shrink: 0
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 210px minmax(0, 1fr) 296px;
+            gap: 10px;
+            align-items: stretch;
+        }
+
+        .side,
+        .detail {
+            background: rgba(255, 255, 255, 0.76) !important;
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.45) !important;
+            border-radius: 22px;
+            box-shadow: 0 8px 32px 0 rgba(20, 33, 61, 0.08) !important;
+        }
+
+        .chart-wrap {
+            background: linear-gradient(180deg, rgba(255, 255, 255, .92) 0%, rgba(249, 252, 255, .88) 100%);
+            border: 1px solid rgba(201, 214, 231, .8);
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            min-height: calc(100vh - 126px);
+        }
+
+        .side {
+            padding: 12px;
+            position: sticky;
+            top: 12px;
+            min-height: calc(100vh - 126px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .side h2 {
+            font-size: 13px;
+            margin-bottom: 10px;
+            color: #42516f;
+            font-weight: 800;
+            letter-spacing: .08em;
+        }
+
+        .sbar {
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        .sg {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+            padding-bottom: 10px;
+        }
+
+        .sg:last-of-type {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .sgt {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            border: 0;
+            background: rgba(241, 245, 249, 0.5);
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 700;
+            color: #475569;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            padding: 8px 10px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .sgt:hover {
+            background: rgba(241, 245, 249, 0.9);
+            color: #1e293b;
+        }
+
+        .sgt::after {
+            content: "▼";
+            font-size: 8px;
+            transition: transform 0.2s ease;
+            color: #8a98b1;
+        }
+
+        .sg.open .sgt::after {
+            transform: rotate(-180deg);
+        }
+
+        .sgi {
+            display: flex;
+            flex-direction: column;
+            gap: 6px
+        }
+
+        .sg.collapse .sgi {
+            display: none
+        }
+
+        .sg.open .sgi {
+            display: flex
+        }
+
+        .sb {
+            width: 100%;
+            padding: 9px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(201, 214, 231, 0.5);
+            background: rgba(255, 255, 255, 0.6);
+            font-size: 11.5px;
+            font-weight: 500;
+            line-height: 1.4;
+            cursor: pointer;
+            color: #3b485f;
+            text-align: left;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sb:hover {
+            transform: translateY(-1px);
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(20, 33, 61, 0.06);
+            border-color: #a3bde0;
+            color: #111d33;
+        }
+
+        .sb.on {
+            color: #fff !important;
+            border-color: transparent !important;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+        }
+
+        .sb[data-s=all].on {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%)
+        }
+
+        .sb[data-s=s1].on {
+            background: linear-gradient(135deg, #1a73e8 0%, #4285f4 100%)
+        }
+
+        .sb[data-s=s2].on {
+            background: linear-gradient(135deg, #1b7a43 0%, #2e7d32 100%)
+        }
+
+        .sb[data-s=s3].on {
+            background: linear-gradient(135deg, #b45309 0%, #d97706 100%)
+        }
+
+        .sb[data-s=s4].on {
+            background: linear-gradient(135deg, #c026d3 0%, #d946ef 100%)
+        }
+
+        .sb[data-s=s5].on {
+            background: linear-gradient(135deg, #028074 0%, #0d9488 100%)
+        }
+
+        .sb[data-s=s6].on {
+            background: linear-gradient(135deg, #7e22ce 0%, #9333ea 100%)
+        }
+
+        .sb[data-s=s7].on {
+            background: linear-gradient(135deg, #be123c 0%, #e11d48 100%)
+        }
+
+        .sb[data-s=s8].on {
+            background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%)
+        }
+
+        .sb[data-s=s9].on {
+            background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%)
+        }
+
+        svg {
+            display: block;
+            width: 100%;
+            height: auto;
+            min-width: 0;
+            border-radius: 18px;
+            background: #ffffff;
+            box-shadow:
+                inset 0 0 0 1px rgba(214, 224, 238, .9),
+                0 20px 40px rgba(28, 42, 70, .08);
+            transform-origin: 0 0;
+            user-select: none;
+        }
+
+        /* Miro Card Styles */
+        .nd rect {
+            rx: 6px;
+            ry: 6px;
+            transition: fill 0.2s ease, stroke 0.2s ease;
+        }
+
+        /* Node Categories styling */
+        .nd-web rect {
+            fill: #edf6ff !important;
+            stroke: #a3d0fc !important;
+        }
+        .nd-web text {
+            fill: #0d5ab9 !important;
+        }
+        .nd-web .icon {
+            stroke: #0d5ab9;
+            fill: none;
+        }
+        
+        .nd-webadmin rect {
+            fill: #e6fcf5 !important;
+            stroke: #9be4d7 !important;
+        }
+        .nd-webadmin text {
+            fill: #028074 !important;
+        }
+        .nd-webadmin .icon {
+            stroke: #028074;
+            fill: none;
+        }
+
+        .nd-oms rect {
+            fill: #edfcf2 !important;
+            stroke: #a5e8c4 !important;
+        }
+        .nd-oms text {
+            fill: #1b7a43 !important;
+        }
+        .nd-oms .icon {
+            stroke: #1b7a43;
+            fill: none;
+        }
+
+        .nd-wms rect {
+            fill: #fef7ed !important;
+            stroke: #fcd39e !important;
+        }
+        .nd-wms text {
+            fill: #b45309 !important;
+        }
+        .nd-wms .icon {
+            stroke: #b45309;
+            fill: none;
+        }
+
+        .nd-csm rect {
+            fill: #faf5ff !important;
+            stroke: #e9d5ff !important;
+        }
+        .nd-csm text {
+            fill: #7e22ce !important;
+        }
+        .nd-csm .icon {
+            stroke: #7e22ce;
+            fill: none;
+        }
+
+        .nd-qbo rect {
+            fill: #fff1f2 !important;
+            stroke: #fecdd3 !important;
+        }
+        .nd-qbo text {
+            fill: #be123c !important;
+        }
+        .nd-qbo .icon {
+            stroke: #be123c;
+            fill: none;
+        }
+
+        .nd-contact rect {
+            fill: #f8fafc !important;
+            stroke: #cbd5e1 !important;
+        }
+        .nd-contact text {
+            fill: #475569 !important;
+        }
+        .nd-contact .icon {
+            stroke: #475569;
+            fill: none;
+        }
+
+        .node-shell {
+            fill: rgba(255, 255, 255, .96);
+            stroke: rgba(201, 214, 231, .9);
+            stroke-width: 1;
+            filter: url(#cardShadow);
+        }
+
+        .node-gloss {
+            fill: url(#glossFill);
+            opacity: .0;
+            pointer-events: none;
+        }
+
+        .node-accent {
+            fill: none;
+            stroke: url(#accentStroke);
+            stroke-width: 1.4;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .nd text {
+            letter-spacing: .01em;
+        }
+
+        .nd {
+            transition: opacity .18s ease, transform .18s ease
+        }
+
+        .nd.dim {
+            opacity: .12
+        }
+
+        .nd.lit .node-shell {
+            filter: url(#cardGlow)
+        }
+
+        .nd.lit .node-gloss {
+            opacity: .95
+        }
+
+        .nd.lit .node-accent {
+            opacity: 1
+        }
+
+        .nd.lit rect {
+            filter: url(#nodeGlow)
+        }
+
+        .eg {
+            fill: none;
+            stroke-width: 1.2px;
+            transition: stroke .15s, opacity .15s, stroke-width .15s
+        }
+
+        .eg.dim {
+            opacity: .08
+        }
+
+        .eg.lit {
+            stroke-width: 3.2px;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: url(#flowGlow);
+            stroke-dasharray: 8 9;
+            animation: flowMove 2.2s linear infinite;
+        }
+
+        @keyframes flowMove {
+            from {
+                stroke-dashoffset: 34
+            }
+
+            to {
+                stroke-dashoffset: 0
+            }
+        }
+
+        .detail {
+            padding: 10px 10px 12px;
+            position: sticky;
+            top: 12px;
+            align-self: start;
+            max-height: calc(100vh - 24px);
+            overflow: auto;
+        }
+
+        .detail-head {
+            position: sticky;
+            top: -10px;
+            z-index: 2;
+            background: linear-gradient(180deg, rgba(255, 255, 255, .985) 0%, rgba(246, 250, 255, .96) 100%);
+            padding: 2px 2px 10px;
+            border-bottom: 1px solid #e3eaf5;
+            margin-bottom: 10px;
+        }
+
+        .colorbar {
+            height: 6px;
+            border-radius: 999px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #16305f 0%, #4d8bff 100%);
+            box-shadow: 0 6px 16px rgba(77, 139, 255, .25);
+        }
+
+        .detail-title {
+            font-size: 17px;
+            font-weight: 700;
+            line-height: 1.35
+        }
+
+        .detail-sub {
+            margin-top: 5px;
+            color: #6f7c93;
+            font-size: 12px;
+            line-height: 1.65
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 7px;
+            margin-bottom: 12px
+        }
+
+        .metric {
+            border: 1px solid #dfe8f4;
+            background: linear-gradient(180deg, #ffffff 0%, #f6faff 100%);
+            border-radius: 12px;
+            padding: 8px 9px;
+        }
+
+        .metric .k {
+            font-size: 10px;
+            color: #7a869d;
+            margin-bottom: 4px
+        }
+
+        .metric .v {
+            font-size: 14px;
+            font-weight: 700;
+            color: #24334f;
+            line-height: 1.35
+        }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: 700;
+            margin: 12px 0 7px;
+            color: #7d899f;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 7px
+        }
+
+        .step {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            padding: 8px 8px 9px;
+            border: 1px solid #dfe8f4;
+            border-left: 3px solid #bfd1ea;
+            border-radius: 12px;
+            background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+        }
+
+        .no {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            flex-shrink: 0
+        }
+
+        .step-main {
+            min-width: 0;
+            flex: 1
+        }
+
+        .step-text {
+            font-size: 11.5px;
+            line-height: 1.6;
+            color: #333
+        }
+
+        .badge {
+            display: inline-block;
+            margin-top: 5px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 600
+        }
+
+        .notes {
+            display: grid;
+            gap: 7px
+        }
+
+        .note {
+            padding: 8px 9px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, #fbfdff 0%, #f4f8fd 100%);
+            border: 1px solid #dfe8f4;
+            font-size: 11.5px;
+            line-height: 1.62;
+            color: #52627d;
+        }
+
+        /* Zoom & Pan floating controls */
+        .zoom-controls {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 10;
+        }
+
+        .zoom-controls button {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid rgba(201, 214, 231, .6);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: #475569;
+            box-shadow: 0 4px 12px rgba(20, 33, 61, 0.06);
+            transition: all 0.15s ease;
+        }
+
+        .zoom-controls button:hover {
+            background: #ffffff;
+            color: #1a73e8;
+            border-color: #a3bde0;
+            transform: scale(1.05);
+        }
+
+        @media (max-width:1360px) {
+            .layout {
+                grid-template-columns: 200px 1fr 278px
+            }
+        }
+
+        @media (max-width:1220px) {
+            .layout {
+                grid-template-columns: 200px 1fr
+            }
+
+            .side {
+                min-height: auto
+            }
+
+            .chart-wrap {
+                min-height: auto
+            }
+
+            .detail {
+                grid-column: 1 / -1;
+                position: static;
+                max-height: none
+            }
+        }
+
+        @media (max-width:900px) {
+            .layout {
+                grid-template-columns: 1fr
+            }
+
+            .side,
+            .detail {
+                position: static
+            }
+
+            .sbar {
+                gap: 12px
+            }
+
+            .sg {
+                gap: 6px
+            }
+
+            .sgi {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 7px
+            }
+
+            .sb {
+                width: auto;
+                white-space: nowrap
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .legend {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        @media (max-width:640px) {
+            .page {
+                padding: 10px
+            }
+
+            .title {
+                font-size: 20px
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr
+            }
+
+            .legend {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
 </head>
+
 <body>
-<div class="page">
-  <div class="header">
-    <div class="title">DodoWheels全链路业务流程图</div>
-  </div>
-
-  <div class="layout">
-    <aside class="side">
-      <h2>业务场景</h2>
-      <div class="sbar">
-        <div class="sg">
-          <div class="sgt">总览</div>
-          <div class="sgi">
-            <button class="sb on" data-s="all" onclick="go('all',this)">全景总览</button>
-          </div>
+    <div class="page">
+        <div class="header">
+            <div class="title">DodoWheels全链路业务流程图</div>
         </div>
-        <div class="sg collapse" id="group-web">
-          <button class="sgt" type="button" onclick="toggleGroup('group-web')">网站</button>
-          <div class="sgi">
-            <button class="sb" data-s="s1" onclick="go('s1',this)">① 新客注册开户</button>
-            <button class="sb" data-s="s2" onclick="go('s2',this)">② 线上下单</button>
-            <button class="sb" data-s="s8" onclick="go('s8',this)">⑧ 零售 WALK-IN</button>
-          </div>
+
+        <div class="layout">
+            <aside class="side">
+                <h2>业务场景</h2>
+                <div class="sbar">
+                    <div class="sg open">
+                        <div class="sgt">总览</div>
+                        <div class="sgi">
+                            <button class="sb on" data-s="all" onclick="go('all',this)">🌐 全景总览</button>
+                        </div>
+                    </div>
+                    <div class="sg open" id="group-web">
+                        <button class="sgt" type="button" onclick="toggleGroup('group-web')">网站</button>
+                        <div class="sgi">
+                            <button class="sb" data-s="s1" onclick="go('s1',this)">🆕 ① 新客注册开户</button>
+                            <button class="sb" data-s="s2" onclick="go('s2',this)">🛒 ② 线上下单</button>
+                            <button class="sb" data-s="s8" onclick="go('s8',this)">🛍️ ⑧ 零售 WALK-IN</button>
+                        </div>
+                    </div>
+                    <div class="sg open" id="group-core">
+                        <button class="sgt" type="button" onclick="toggleGroup('group-core')">核心系统</button>
+                        <div class="sgi">
+                            <button class="sb" data-s="s3" onclick="go('s3',this)">📞 ③ 电话下单</button>
+                            <button class="sb" data-s="s4" onclick="go('s4',this)">🚫 ④ 取消/修改</button>
+                            <button class="sb" data-s="s5" onclick="go('s5',this)">📦 ⑤ 仓储出库</button>
+                            <button class="sb" data-s="s6" onclick="go('s6',this)">📥 ⑥ 仓储入库</button>
+                            <button class="sb" data-s="s7" onclick="go('s7',this)">🔄 ⑦ 退货/换货</button>
+                            <button class="sb" data-s="s9" onclick="go('s9',this)">🚚 ⑨ 调货</button>
+                        </div>
+                    </div>
+                    <div class="sg open" id="group-qbo">
+                        <button class="sgt" type="button" onclick="toggleGroup('group-qbo')">QBO</button>
+                        <div class="sgi">
+                            <button class="sb" data-s="s2" onclick="go('s2',this)">🧾 发票生成</button>
+                            <button class="sb" data-s="s4" onclick="go('s4',this)">💸 冲销 / 退款</button>
+                            <button class="sb" data-s="s6" onclick="go('s6',this)">📊 库存成本同步</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="legend">
+                    <div class="legend-title">系统图例</div>
+                    <div class="li">
+                        <div class="lc" style="background:#edf6ff;border:1px solid #a3d0fc"></div>【官网系统】WEB
+                    </div>
+                    <div class="li">
+                        <div class="lc" style="background:#e6fcf5;border:1px solid #9be4d7"></div>
+                        【核心系统-网站管理】CORE-WEBADMIN
+                    </div>
+                    <div class="li">
+                        <div class="lc" style="background:#edfcf2;border:1px solid #a5e8c4"></div>【核心系统-订单管理】CORE-OMS
+                    </div>
+                    <div class="li">
+                        <div class="lc" style="background:#fef7ed;border:1px solid #fcd39e"></div>【核心系统-仓储管理】CORE-WMS
+                    </div>
+                    <div class="li">
+                        <div class="lc" style="background:#faf5ff;border:1px solid #e9d5ff"></div>【核心系统-客服管理】CORE-CSM
+                    </div>
+                    <div class="li">
+                        <div class="lc" style="background:#fff1f2;border:1px solid #fecdd3"></div>【财务系统】QBO
+                    </div>
+                </div>
+            </aside>
+
+            <div class="chart-wrap">
+                <div class="zoom-controls">
+                    <button onclick="zoomIn()" title="放大">＋</button>
+                    <button onclick="zoomOut()" title="缩小">－</button>
+                    <button onclick="resetZoom()" title="重置">⟲</button>
+                </div>
+                <svg viewBox="0 0 1000 900" role="img" aria-label="公司整体业务流程全景图">
+                    <title>公司整体业务流程全景图</title>
+                    <defs>
+                        <linearGradient id="glossFill" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#ffffff" stop-opacity=".82" />
+                            <stop offset="42%" stop-color="#ffffff" stop-opacity=".18" />
+                            <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+                        </linearGradient>
+                        <linearGradient id="accentStroke" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#ffffff" stop-opacity=".95" />
+                            <stop offset="45%" stop-color="#7fc1ff" stop-opacity=".95" />
+                            <stop offset="100%" stop-color="#4f7cff" stop-opacity=".78" />
+                        </linearGradient>
+                        <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5"
+                            orient="auto-start-reverse">
+                            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.6"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </marker>
+                        <filter id="cardShadow" x="-20%" y="-30%" width="140%" height="170%">
+                            <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#16305f" flood-opacity=".08" />
+                        </filter>
+                        <filter id="cardGlow" x="-30%" y="-40%" width="160%" height="190%">
+                            <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#4d8bff" flood-opacity=".18" />
+                            <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#4d8bff" flood-opacity=".12" />
+                        </filter>
+                        <filter id="nodeGlow" x="-30%" y="-40%" width="160%" height="190%">
+                            <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#3a7cff" flood-opacity=".22" />
+                        </filter>
+                        <filter id="flowGlow" x="-40%" y="-40%" width="180%" height="180%">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="blur" />
+                            <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -6"
+                                result="glow" />
+                            <feMerge>
+                                <feMergeNode in="glow" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                    </defs>
+
+                    <rect x="0" y="26" width="1000" height="134" fill="#edf6ff" opacity=".44" />
+                    <rect x="0" y="160" width="1000" height="80" fill="#e6fcf5" opacity=".38" />
+                    <rect x="0" y="240" width="1000" height="260" fill="#edfcf2" opacity=".38" />
+                    <rect x="0" y="500" width="1000" height="200" fill="#fef7ed" opacity=".42" />
+                    <rect x="0" y="700" width="1000" height="80" fill="#faf5ff" opacity=".38" />
+                    <rect x="0" y="780" width="1000" height="120" fill="#fff1f2" opacity=".4" />
+
+                    <rect x="0" y="26" width="70" height="134" fill="#CFE6FF" opacity=".92" />
+                    <rect x="0" y="160" width="70" height="80" fill="#CBEDE4" opacity=".9" />
+                    <rect x="0" y="240" width="70" height="260" fill="#D7EDD8" opacity=".9" />
+                    <rect x="0" y="500" width="70" height="200" fill="#FFE8C7" opacity=".92" />
+                    <rect x="0" y="700" width="70" height="80" fill="#EAD3F2" opacity=".9" />
+                    <rect x="0" y="780" width="70" height="120" fill="#FFD9DE" opacity=".9" />
+
+                    <line x1="0" y1="26" x2="1000" y2="26" stroke="#bbb" stroke-width=".8" />
+                    <line x1="0" y1="160" x2="1000" y2="160" stroke="#ccc" stroke-width=".5" stroke-dasharray="3 3" />
+                    <line x1="0" y1="240" x2="1000" y2="240" stroke="#ccc" stroke-width=".5" stroke-dasharray="3 3" />
+                    <line x1="0" y1="500" x2="1000" y2="500" stroke="#ccc" stroke-width=".5" stroke-dasharray="3 3" />
+                    <line x1="0" y1="700" x2="1000" y2="700" stroke="#ccc" stroke-width=".5" stroke-dasharray="3 3" />
+                    <line x1="0" y1="780" x2="1000" y2="780" stroke="#ccc" stroke-width=".5" stroke-dasharray="3 3" />
+
+                    <line x1="70" y1="0" x2="70" y2="900" stroke="#bbb" stroke-width=".8" />
+                    <line x1="248" y1="26" x2="248" y2="900" stroke="#ddd" stroke-width=".4" stroke-dasharray="3 3" />
+                    <line x1="418" y1="26" x2="418" y2="900" stroke="#ddd" stroke-width=".4" stroke-dasharray="3 3" />
+                    <line x1="608" y1="26" x2="608" y2="900" stroke="#ddd" stroke-width=".4" stroke-dasharray="3 3" />
+                    <line x1="798" y1="26" x2="798" y2="900" stroke="#ddd" stroke-width=".4" stroke-dasharray="3 3" />
+
+                    <rect x="0" y="0" width="1000" height="26" fill="#EEF3FA" />
+                    <text font-size="9" font-weight="700" fill="#475569" x="160" y="13" text-anchor="middle"
+                        dominant-baseline="central">客户入口 &amp; 注册</text>
+                    <text font-size="9" font-weight="700" fill="#475569" x="333" y="13" text-anchor="middle"
+                        dominant-baseline="central">下单 &amp; 报价</text>
+                    <text font-size="9" font-weight="700" fill="#475569" x="513" y="13" text-anchor="middle"
+                        dominant-baseline="central">订单确认 &amp; 出库</text>
+                    <text font-size="9" font-weight="700" fill="#475569" x="703" y="13" text-anchor="middle"
+                        dominant-baseline="central">入库 &amp; 特殊场景</text>
+                    <text font-size="9" font-weight="700" fill="#475569" x="898" y="13" text-anchor="middle"
+                        dominant-baseline="central">财务同步</text>
+
+                    <text font-size="8" font-weight="700" fill="#0d5ab9" x="35" y="86"
+                        text-anchor="middle">【官网系统】</text>
+                    <text font-size="9" font-weight="700" fill="#0d5ab9" x="35" y="100" text-anchor="middle">WEB</text>
+                    
+                    <text font-size="7" font-weight="700" fill="#028074" x="35" y="190"
+                        text-anchor="middle">【核心系统】</text>
+                    <text font-size="7" font-weight="700" fill="#028074" x="35" y="201" text-anchor="middle">网站管理</text>
+                    <text font-size="8" font-weight="700" fill="#028074" x="35" y="214"
+                        text-anchor="middle">WEBADMIN</text>
+                    
+                    <text font-size="7" font-weight="700" fill="#1b7a43" x="35" y="355"
+                        text-anchor="middle">【核心系统】</text>
+                    <text font-size="7" font-weight="700" fill="#1b7a43" x="35" y="366" text-anchor="middle">订单管理</text>
+                    <text font-size="8" font-weight="700" fill="#1b7a43" x="35" y="379"
+                        text-anchor="middle">CORE-OMS</text>
+                    
+                    <text font-size="7" font-weight="700" fill="#b45309" x="35" y="585"
+                        text-anchor="middle">【核心系统】</text>
+                    <text font-size="7" font-weight="700" fill="#b45309" x="35" y="596" text-anchor="middle">仓储管理</text>
+                    <text font-size="8" font-weight="700" fill="#b45309" x="35" y="609"
+                        text-anchor="middle">CORE-WMS</text>
+                    
+                    <text font-size="7" font-weight="700" fill="#7e22ce" x="35" y="725"
+                        text-anchor="middle">【核心系统】</text>
+                    <text font-size="7" font-weight="700" fill="#7e22ce" x="35" y="736" text-anchor="middle">客服管理</text>
+                    <text font-size="8" font-weight="700" fill="#7e22ce" x="35" y="749"
+                        text-anchor="middle">CORE-CSM</text>
+                    
+                    <text font-size="7" font-weight="700" fill="#be123c" x="35" y="833"
+                        text-anchor="middle">【财务系统】</text>
+                    <text font-size="8" font-weight="700" fill="#be123c" x="35" y="846" text-anchor="middle">QBO</text>
+
+                    <g class="nd nd-web" id="N01" data-scenes="s1">
+                        <rect x="76" y="35" width="168" height="36" rx="6" />
+                        <g class="icon" transform="translate(84, 45)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 13a4 4 0 0 1 8 0m-4-4a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="106" y="47" text-anchor="start" dominant-baseline="central">新客访问 WEB</text>
+                        <text font-size="8.5" x="106" y="59" text-anchor="start" dominant-baseline="central">注册申请</text>
+                    </g>
+                    <g class="nd nd-web" id="N02" data-scenes="s2 s8">
+                        <rect x="76" y="77" width="168" height="36" rx="6" />
+                        <g class="icon" transform="translate(84, 87)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 9a4 4 0 1 1 8 0m-8 0v4h2v-2h2v2h4V9" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="106" y="89" text-anchor="start" dominant-baseline="central">老客登录 WEB</text>
+                        <text font-size="8.5" x="106" y="101" text-anchor="start" dominant-baseline="central">浏览下单</text>
+                    </g>
+                    <g class="nd nd-contact" id="N03" data-scenes="s3 s4 s7 s8">
+                        <rect x="76" y="119" width="168" height="30" rx="6" />
+                        <g class="icon" transform="translate(84, 126)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 3a1 1 0 0 1 1-1h1.5a1 1 0 0 1 1 .8l.7 3.5a1 1 0 0 1-.6 1.1L5 9.5a6 6 0 0 0 3.5 3.5l1.1-1.6a1 1 0 0 1 1.1-.6l3.5.7a1 1 0 0 1 .8 1V14a1 1 0 0 1-1 1A12 12 0 0 1 3 3z" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="106" y="134" text-anchor="start" dominant-baseline="central">客人电联 / 到店</text>
+                    </g>
+                    <g class="nd nd-web" id="N06" data-scenes="s2 s8">
+                        <rect x="252" y="77" width="162" height="36" rx="6" />
+                        <g class="icon" transform="translate(260, 87)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 1h2l2.5 8h7.5l2-6H4" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="282" y="89" text-anchor="start" dominant-baseline="central">WEB 线上下单</text>
+                        <text font-size="8.5" x="282" y="101" text-anchor="start" dominant-baseline="central">选品 / 数量 / PO</text>
+                    </g>
+                    <g class="nd nd-web" id="N_ws" data-scenes="s2 s3 s5 s6 s8">
+                        <rect x="422" y="35" width="182" height="30" rx="6" />
+                        <g class="icon" transform="translate(430, 42)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 8s3-6 7-6 7 6 7 6-3 6-7 6-7-6-7-6zm7 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                        </g>
+                        <text font-size="9.5" font-weight="700" x="452" y="50" text-anchor="start" dominant-baseline="central">WEB 实时展示库存</text>
+                    </g>
+                    <g class="nd nd-webadmin" id="N04" data-scenes="s1">
+                        <rect x="76" y="177" width="168" height="36" rx="6" />
+                        <g class="icon" transform="translate(84, 187)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 1L1 3.5v5c0 4.4 3.6 8 8 8s8-3.6 8-8v-5L8 1zm-1 9.5l-3-3 1.4-1.4 1.6 1.6 4.6-4.6L13 6.5l-6 6z" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="106" y="189" text-anchor="start" dominant-baseline="central">核实公司信息</text>
+                        <text font-size="8.5" x="106" y="201" text-anchor="start" dominant-baseline="central">GoogleMap / QC Reg</text>
+                    </g>
+                    <g class="nd nd-webadmin" id="N05" data-scenes="s1">
+                        <rect x="252" y="177" width="162" height="36" rx="6" />
+                        <g class="icon" transform="translate(260, 187)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 8a6 6 0 1 1 12 0A6 6 0 0 1 2 8zm8-2L6.5 9.5 5 8" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="282" y="189" text-anchor="start" dominant-baseline="central">修改类别，同意开户</text>
+                        <text font-size="8.5" x="282" y="201" text-anchor="start" dominant-baseline="central">distributor 权限激活</text>
+                    </g>
+                    <g class="nd nd-oms" id="N10" data-scenes="s3 s4 s7">
+                        <rect x="76" y="255" width="168" height="30" rx="6" />
+                        <g class="icon" transform="translate(84, 262)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 7h10v8H3zm2 0V4a3 3 0 1 1 6 0v3" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="106" y="270" text-anchor="start" dominant-baseline="central">CORE-OMS 锁定账户</text>
+                    </g>
+                    <g class="nd nd-oms" id="N07" data-scenes="s3">
+                        <rect x="252" y="255" width="162" height="36" rx="6" />
+                        <g class="icon" transform="translate(260, 265)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 3a1 1 0 0 1 1-1h1.5a1 1 0 0 1 1 .8l.7 3.5a1 1 0 0 1-.6 1.1L5 9.5a6 6 0 0 0 3.5 3.5l1.1-1.6" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="282" y="267" text-anchor="start" dominant-baseline="central">电话报价 / 查库存</text>
+                        <text font-size="8.5" x="282" y="279" text-anchor="start" dominant-baseline="central">价格 / 现金价确认</text>
+                    </g>
+                    <g class="nd nd-oms" id="N08" data-scenes="s3">
+                        <rect x="252" y="305" width="162" height="36" rx="6" />
+                        <g class="icon" transform="translate(260, 315)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 2h8l4 4v8H2zm8 0v4h4M4 8h8M4 11h6" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="282" y="317" text-anchor="start" dominant-baseline="central">CORE-OMS 电话做单</text>
+                        <text font-size="8.5" x="282" y="329" text-anchor="start" dominant-baseline="central">流程同网单，无折扣</text>
+                    </g>
+                    <g class="nd nd-oms" id="N11" data-scenes="s2 s3 s8">
+                        <rect x="422" y="255" width="182" height="36" rx="6" />
+                        <g class="icon" transform="translate(430, 265)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 2h8v12H4zm2 5l2 2 4-4" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="452" y="267" text-anchor="start" dominant-baseline="central">客服审核订单</text>
+                        <text font-size="8.5" x="452" y="279" text-anchor="start" dominant-baseline="central">折扣 / VIP / 轮胎税</text>
+                    </g>
+                    <g class="nd nd-oms" id="N12" data-scenes="s2 s3 s8">
+                        <rect x="422" y="305" width="182" height="36" rx="6" />
+                        <g class="icon" transform="translate(430, 315)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 2h12v12H2zm2 4h8M4 9h8M4 12h5" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="452" y="317" text-anchor="start" dominant-baseline="central">加客户备注</text>
+                        <text font-size="8.5" x="452" y="329" text-anchor="start" dominant-baseline="central">检查特殊要求</text>
+                    </g>
+                    <g class="nd nd-oms" id="N13" data-scenes="s4">
+                        <rect x="422" y="355" width="182" height="36" rx="6" />
+                        <g class="icon" transform="translate(430, 365)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 3h10M4 3v10a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3M6 3V1h4v2" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="452" y="367" text-anchor="start" dominant-baseline="central">CORE-OMS VOID / 取消</text>
+                        <text font-size="8.5" x="452" y="379" text-anchor="start" dominant-baseline="central">未出库直接作废</text>
+                    </g>
+                    <g class="nd nd-oms" id="N21" data-scenes="s7">
+                        <rect x="612" y="255" width="182" height="36" rx="6" />
+                        <g class="icon" transform="translate(620, 265)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M7 1L2 6l5 5M2 6h9a4 4 0 0 1 0 8H8" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="642" y="267" text-anchor="start" dominant-baseline="central">CORE-OMS 出退单</text>
+                        <text font-size="8.5" x="642" y="279" text-anchor="start" dominant-baseline="central">核查原订单</text>
+                    </g>
+                    <g class="nd nd-oms" id="N24" data-scenes="s9">
+                        <rect x="612" y="305" width="182" height="36" rx="6" />
+                        <g class="icon" transform="translate(620, 315)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 2h8l4 4v8H2zm8 0v4h4M4 9h8m-3-3l3 3-3 3" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="642" y="317" text-anchor="start" dominant-baseline="central">CORE-OMS 建调货单</text>
+                        <text font-size="8.5" x="642" y="329" text-anchor="start" dominant-baseline="central">通知分部装车</text>
+                    </g>
+                    <g class="nd nd-oms" id="N22" data-scenes="s7">
+                        <rect x="612" y="355" width="182" height="30" rx="6" />
+                        <g class="icon" transform="translate(620, 362)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 6V2h10v4M1 6h14v6H1zm2 6v2h10v-2" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="642" y="370" text-anchor="start" dominant-baseline="central">打印 estimate ×2，不收款</text>
+                    </g>
+                    <g class="nd nd-oms" id="N23" data-scenes="s8">
+                        <rect x="612" y="405" width="182" height="36" rx="6" />
+                        <g class="icon" transform="translate(620, 415)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 4h12v8H2zm3 4a3 3 0 1 0 6 0 3 3 0 0 0-6 0" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="642" y="417" text-anchor="start" dominant-baseline="central">CORE-OMS 现金单</text>
+                        <text font-size="8.5" x="642" y="429" text-anchor="start" dominant-baseline="central">13% + 零售价</text>
+                    </g>
+                    <g class="nd nd-oms" id="N25" data-scenes="s3 s9">
+                        <rect x="612" y="455" width="182" height="30" rx="6" />
+                        <g class="icon" transform="translate(620, 462)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 1L1 7.5l5 2.5 2.5 5L14 1z" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="642" y="470" text-anchor="start" dominant-baseline="central">调货 QC/ON</text>
+                    </g>
+                    <g class="nd nd-wms" id="N14" data-scenes="s2 s3 s5 s8">
+                        <rect x="422" y="515" width="182" height="36" rx="6" />
+                        <g class="icon" transform="translate(430, 525)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 6V2h10v4M1 6h14v6H1zm2 6v2h10v-2" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="452" y="527" text-anchor="start" dominant-baseline="central">打印拣货单</text>
+                        <text font-size="8.5" x="452" y="539" text-anchor="start" dominant-baseline="central">安排拣货人员</text>
+                    </g>
+                    <g class="nd nd-wms" id="N15" data-scenes="s2 s3 s5 s8">
+                        <rect x="422" y="565" width="182" height="36" rx="6" />
+                        <g class="icon" transform="translate(430, 575)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 1L1 4.5v7L8 15l7-3.5v-7L8 1zm0 3.5v6m-2-2l2 2 2-2" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="452" y="577" text-anchor="start" dominant-baseline="central">拣货 / 下架</text>
+                        <text font-size="8.5" x="452" y="589" text-anchor="start" dominant-baseline="central">扫码确认</text>
+                    </g>
+                    <g class="nd nd-wms" id="N16" data-scenes="s2 s3 s5">
+                        <rect x="422" y="615" width="86" height="36" rx="6" />
+                        <text font-size="9.5" font-weight="700" x="465" y="627" text-anchor="middle" dominant-baseline="central">直接配送</text>
+                        <text font-size="8" x="465" y="639" text-anchor="middle" dominant-baseline="central">录出库记录</text>
+                    </g>
+                    <g class="nd nd-wms" id="N17" data-scenes="s2 s5 s8">
+                        <rect x="516" y="615" width="88" height="36" rx="6" />
+                        <text font-size="9.5" font-weight="700" x="560" y="627" text-anchor="middle" dominant-baseline="central">客户自取</text>
+                        <text font-size="8" x="560" y="639" text-anchor="middle" dominant-baseline="central">录自取记录</text>
+                    </g>
+                    <g class="nd nd-wms" id="N18" data-scenes="s6">
+                        <rect x="612" y="515" width="182" height="30" rx="6" />
+                        <g class="icon" transform="translate(620, 522)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 3h14v8H1zm2 3h4v2H3zm6 0h4v2H9" />
+                        </g>
+                        <text font-size="9.5" font-weight="700" x="642" y="530" text-anchor="start" dominant-baseline="central">集装箱/采购/退货到货</text>
+                    </g>
+                    <g class="nd nd-wms" id="Nret" data-scenes="s7">
+                        <rect x="612" y="555" width="182" height="36" rx="6" />
+                        <g class="icon" transform="translate(620, 565)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2L7 7l5 5M2 7h10" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="642" y="567" text-anchor="start" dominant-baseline="central">安排退货回仓</text>
+                        <text font-size="8.5" x="642" y="579" text-anchor="start" dominant-baseline="central">WMS 入库处理</text>
+                    </g>
+                    <g class="nd nd-wms" id="N19" data-scenes="s6">
+                        <rect x="612" y="605" width="182" height="36" rx="6" />
+                        <g class="icon" transform="translate(620, 615)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 2h12v12H2zm3 4h6M5 9h6M5 12h4" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="642" y="617" text-anchor="start" dominant-baseline="central">WMS 收货核对</text>
+                        <text font-size="8.5" x="642" y="629" text-anchor="start" dominant-baseline="central">核对 PO / 数量 / 品质</text>
+                    </g>
+                    <g class="nd nd-wms" id="N20" data-scenes="s6">
+                        <rect x="612" y="655" width="182" height="36" rx="6" />
+                        <g class="icon" transform="translate(620, 665)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 15V5M5 8l3-3 3 3M1 4h14" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="642" y="667" text-anchor="start" dominant-baseline="central">上架操作</text>
+                        <text font-size="8.5" x="642" y="679" text-anchor="start" dominant-baseline="central">扫码录入货位</text>
+                    </g>
+                    <g class="nd nd-csm" id="N26" data-scenes="s2 s3 s5 s6 s7 s8 s9">
+                        <rect x="422" y="722" width="370" height="36" rx="6" />
+                        <g class="icon" transform="translate(430, 732)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 8a6 6 0 0 1 10.5-3.5L14 6M14 8V2M14 8a6 6 0 0 1-10.5 3.5L2 10M2 8v6" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="452" y="734" text-anchor="start" dominant-baseline="central">库存实时更新 — CORE-CSM → WEB 同步</text>
+                        <text font-size="8.5" x="452" y="746" text-anchor="start" dominant-baseline="central">出库扣减 / 入库增加 / 退货归还</text>
+                    </g>
+                    <g class="nd nd-csm" id="N09" data-scenes="s9">
+                        <rect x="252" y="722" width="162" height="36" rx="6" />
+                        <g class="icon" transform="translate(260, 732)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 2h12v12H2zm3 4h6M5 9h6M5 12h4" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="282" y="734" text-anchor="start" dominant-baseline="central">查库存价位</text>
+                        <text font-size="8.5" x="282" y="746" text-anchor="start" dominant-baseline="central">CORE-CSM 调货报价</text>
+                    </g>
+                    <g class="nd nd-qbo" id="N27" data-scenes="s2 s3 s5 s7 s8">
+                        <rect x="422" y="795" width="182" height="36" rx="6" />
+                        <g class="icon" transform="translate(430, 805)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 2h10v12H3zm2 4h6M5 9h6M5 12h3" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="452" y="807" text-anchor="start" dominant-baseline="central">QBO 生成发票</text>
+                        <text font-size="8.5" x="452" y="819" text-anchor="start" dominant-baseline="central">出库自动触发</text>
+                    </g>
+                    <g class="nd nd-qbo" id="N28" data-scenes="s4 s7">
+                        <rect x="612" y="795" width="182" height="36" rx="6" />
+                        <g class="icon" transform="translate(620, 805)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 8h10M4 5L1 8l3 3M14 11V8a4 4 0 0 0-4-4" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="642" y="807" text-anchor="start" dominant-baseline="central">QBO 冲销 / 退款</text>
+                        <text font-size="8.5" x="642" y="819" text-anchor="start" dominant-baseline="central">更新财务记录</text>
+                    </g>
+                    <g class="nd nd-qbo" id="N29" data-scenes="s6">
+                        <rect x="612" y="845" width="182" height="36" rx="6" />
+                        <g class="icon" transform="translate(620, 855)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 13l4-4 3 3 7-7m0 0h-4m4 0v4" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="642" y="857" text-anchor="start" dominant-baseline="central">更新库存成本</text>
+                        <text font-size="8.5" x="642" y="869" text-anchor="start" dominant-baseline="central">QBO 自动同步</text>
+                    </g>
+                    <g class="nd nd-qbo" id="Nqe" data-scenes="s8">
+                        <rect x="802" y="795" width="190" height="36" rx="6" />
+                        <g class="icon" transform="translate(812, 805)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 2h10v12H3zm2 4h6M5 9h6M5 12h3M7 8v4" />
+                        </g>
+                        <text font-size="10" font-weight="700" x="832" y="807" text-anchor="start" dominant-baseline="central">QBO 生成现金发票</text>
+                        <text font-size="8.5" x="832" y="819" text-anchor="start" dominant-baseline="central">当场收款</text>
+                    </g>
+                    <!-- Connections -->
+                    <line id="E01" class="eg" data-scenes="s1" x1="160" y1="71" x2="160" y2="177" stroke="#80CBC4"
+                        marker-end="url(#ar)" />
+                    <line id="E1b" class="eg" data-scenes="s1" x1="244" y1="195" x2="252" y2="195" stroke="#80CBC4"
+                        marker-end="url(#ar)" />
+                    <path id="E1c" class="eg" data-scenes="s1" d="M333 177 L333 145 L160 145 L160 113" stroke="#80CBC4"
+                        stroke-dasharray="3 2" marker-end="url(#ar)" fill="none" />
+                    <line id="E5a" class="eg" data-scenes="s2 s8" x1="244" y1="95" x2="252" y2="95" stroke="#90CAF9"
+                        marker-end="url(#ar)" />
+                    <path id="E5b" class="eg" data-scenes="s2 s8" d="M414 95 L513 95 L513 255" stroke="#A5D6A7"
+                        marker-end="url(#ar)" fill="none" />
+                    <line id="E6" class="eg" data-scenes="s3 s4 s7" x1="160" y1="149" x2="160" y2="255" stroke="#A5D6A7"
+                        marker-end="url(#ar)" />
+                    <line id="E7" class="eg" data-scenes="s3" x1="244" y1="270" x2="252" y2="273" stroke="#A5D6A7"
+                        marker-end="url(#ar)" />
+                    <line id="E7b" class="eg" data-scenes="s3" x1="333" y1="291" x2="333" y2="305" stroke="#A5D6A7"
+                        marker-end="url(#ar)" />
+                    <line id="E8" class="eg" data-scenes="s3" x1="414" y1="323" x2="422" y2="323" stroke="#A5D6A7"
+                        marker-end="url(#ar)" />
+                    <line id="E9" class="eg" data-scenes="s2 s3 s8" x1="513" y1="291" x2="513" y2="305" stroke="#A5D6A7"
+                        marker-end="url(#ar)" />
+                    <path id="E26" class="eg" data-scenes="s4" d="M244 270 L513 270 L513 355" stroke="#A5D6A7"
+                        marker-end="url(#ar)" fill="none" />
+                    <line id="E11" class="eg" data-scenes="s2 s3 s8" x1="513" y1="341" x2="513" y2="515"
+                        stroke="#FFCC80" marker-end="url(#ar)" />
+                    <line id="E11b" class="eg" data-scenes="s5" x1="513" y1="291" x2="513" y2="515" stroke="#FFCC80"
+                        marker-end="url(#ar)" />
+                    <line id="E12" class="eg" data-scenes="s2 s3 s5 s8" x1="513" y1="551" x2="513" y2="565"
+                        stroke="#FFCC80" marker-end="url(#ar)" />
+                    <line id="E13a" class="eg" data-scenes="s2 s3 s5" x1="465" y1="601" x2="465" y2="615"
+                        stroke="#FFCC80" marker-end="url(#ar)" />
+                    <line id="E13b" class="eg" data-scenes="s2 s5 s8" x1="560" y1="601" x2="560" y2="615"
+                        stroke="#FFCC80" marker-end="url(#ar)" />
+                    <line id="E16" class="eg" data-scenes="s2 s3 s5 s8" x1="513" y1="651" x2="513" y2="722"
+                        stroke="#CE93D8" stroke-dasharray="4 3" marker-end="url(#ar)" />
+                    <path id="E17" class="eg" data-scenes="s6" d="M703 545 L703 550 L798 550 L798 600 L703 600 L703 605" stroke="#FFCC80"
+                        marker-end="url(#ar)" fill="none" />
+                    <line id="E18" class="eg" data-scenes="s6" x1="703" y1="641" x2="703" y2="655" stroke="#FFCC80"
+                        marker-end="url(#ar)" />
+                    <line id="E20" class="eg" data-scenes="s6" x1="703" y1="691" x2="703" y2="722" stroke="#CE93D8"
+                        stroke-dasharray="4 3" marker-end="url(#ar)" />
+                    <path id="E23" class="eg" data-scenes="s7" d="M703 291 L798 291 L798 550 L703 550 L703 555" stroke="#FFCC80"
+                        marker-end="url(#ar)" fill="none" />
+                    <path id="E23b" class="eg" data-scenes="s7" d="M703 591 L798 591 L798 718 L703 718 L703 722" stroke="#CE93D8"
+                        stroke-dasharray="4 3" marker-end="url(#ar)" fill="none" />
+                    <path id="E24" class="eg" data-scenes="s8" d="M612 423 L513 423 L513 515" stroke="#FFCC80"
+                        stroke-dasharray="3 2" marker-end="url(#ar)" fill="none" />
+                    <path id="E25" class="eg" data-scenes="s9" d="M414 740 L414 768 L800 768 L800 495 L703 495 L703 485" stroke="#CE93D8"
+                        stroke-dasharray="4 3" marker-end="url(#ar)" fill="none" />
+                    <path id="E21" class="eg" data-scenes="s2 s3 s5 s6 s8" d="M422 740 L422 768 L160 768 L160 149"
+                        stroke="#90CAF9" stroke-dasharray="4 3" marker-end="url(#ar)" fill="none" />
+                    <line id="E21b" class="eg" data-scenes="s2 s3 s5 s8" x1="513" y1="758" x2="513" y2="795"
+                        stroke="#EF9A9A" stroke-dasharray="4 3" marker-end="url(#ar)" />
+                    <path id="E29" class="eg" data-scenes="s6" d="M703 758 L798 758 L798 840 L703 840 L703 845" stroke="#EF9A9A"
+                        stroke-dasharray="4 3" marker-end="url(#ar)" fill="none" />
+                    <path id="E28" class="eg" data-scenes="s4" d="M604 373 L798 373 L798 790 L794 790"
+                        stroke="#EF9A9A" stroke-dasharray="4 3" marker-end="url(#ar)" fill="none" />
+                    <path id="E28_s7" class="eg" data-scenes="s7" d="M703 385 L798 385 L798 790 L794 790"
+                        stroke="#EF9A9A" stroke-dasharray="4 3" marker-end="url(#ar)" fill="none" />
+                    <path id="E24b" class="eg" data-scenes="s8" d="M794 423 L897 423 L897 795" stroke="#EF9A9A"
+                        stroke-dasharray="4 3" marker-end="url(#ar)" fill="none" />
+                </svg>
+            </div>
+
+            <aside class="detail">
+                <div class="detail-head">
+                    <div class="colorbar" id="colorbar"></div>
+                    <div class="detail-title" id="detailTitle">全景总览</div>
+                    <div class="detail-sub" id="detailSub">查看所有系统与全部业务场景之间的完整关系。选择左侧任一场景后，这里会直接显示对应说明。</div>
+                </div>
+                <div class="summary-grid" id="summaryGrid"></div>
+                <div class="section-title">流程步骤</div>
+                <div class="timeline" id="timeline"></div>
+                <div class="section-title">关键说明</div>
+                <div class="notes" id="notes"></div>
+            </aside>
         </div>
-        <div class="sg collapse" id="group-core">
-          <button class="sgt" type="button" onclick="toggleGroup('group-core')">核心系统</button>
-          <div class="sgi">
-            <button class="sb" data-s="s3" onclick="go('s3',this)">③ 电话下单</button>
-            <button class="sb" data-s="s4" onclick="go('s4',this)">④ 取消/修改</button>
-            <button class="sb" data-s="s5" onclick="go('s5',this)">⑤ 仓储出库</button>
-            <button class="sb" data-s="s6" onclick="go('s6',this)">⑥ 仓储入库</button>
-            <button class="sb" data-s="s7" onclick="go('s7',this)">⑦ 退货/换货</button>
-            <button class="sb" data-s="s9" onclick="go('s9',this)">⑨ 调货</button>
-          </div>
-        </div>
-        <div class="sg collapse" id="group-qbo">
-          <button class="sgt" type="button" onclick="toggleGroup('group-qbo')">QBO</button>
-          <div class="sgi">
-            <button class="sb" data-s="s2" onclick="go('s2',this)">发票生成</button>
-            <button class="sb" data-s="s4" onclick="go('s4',this)">冲销 / 退款</button>
-            <button class="sb" data-s="s6" onclick="go('s6',this)">库存成本同步</button>
-          </div>
-        </div>
-      </div>
-      <div class="legend">
-        <div class="legend-title">系统图例</div>
-        <div class="li"><div class="lc" style="background:#E3F2FD;border:1px solid #90CAF9"></div>【官网系统】WEB</div>
-        <div class="li"><div class="lc" style="background:#E0F2F1;border:1px solid #80CBC4"></div>【核心系统-网站管理】CORE-WEBADMIN</div>
-        <div class="li"><div class="lc" style="background:#E8F5E9;border:1px solid #A5D6A7"></div>【核心系统-订单管理】CORE-OMS</div>
-        <div class="li"><div class="lc" style="background:#FFF3E0;border:1px solid #FFCC80"></div>【核心系统-仓储管理】CORE-WMS</div>
-        <div class="li"><div class="lc" style="background:#F3E5F5;border:1px solid #CE93D8"></div>【核心系统-客服管理】CORE-CSM</div>
-        <div class="li"><div class="lc" style="background:#FFEBEE;border:1px solid #EF9A9A"></div>【财务系统】QBO</div>
-      </div>
-    </aside>
-
-    <div class="chart-wrap">
-      <svg viewBox="0 0 1000 636" role="img" aria-label="公司整体业务流程全景图">
-        <title>公司整体业务流程全景图</title>
-        <defs>
-          <linearGradient id="glossFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#ffffff" stop-opacity=".82"/>
-            <stop offset="42%" stop-color="#ffffff" stop-opacity=".18"/>
-            <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-          </linearGradient>
-          <linearGradient id="accentStroke" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#ffffff" stop-opacity=".95"/>
-            <stop offset="45%" stop-color="#7fc1ff" stop-opacity=".95"/>
-            <stop offset="100%" stop-color="#4f7cff" stop-opacity=".78"/>
-          </linearGradient>
-          <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </marker>
-          <filter id="cardShadow" x="-20%" y="-30%" width="140%" height="170%">
-            <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#16305f" flood-opacity=".08"/>
-          </filter>
-          <filter id="cardGlow" x="-30%" y="-40%" width="160%" height="190%">
-            <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#4d8bff" flood-opacity=".18"/>
-            <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#4d8bff" flood-opacity=".12"/>
-          </filter>
-          <filter id="nodeGlow" x="-30%" y="-40%" width="160%" height="190%">
-            <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#3a7cff" flood-opacity=".22"/>
-          </filter>
-          <filter id="flowGlow" x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="blur"/>
-            <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -6" result="glow"/>
-            <feMerge>
-              <feMergeNode in="glow"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
-
-        <rect x="0" y="26" width="1000" height="120" fill="#E9F4FF" opacity=".44"/>
-        <rect x="0" y="146" width="1000" height="70" fill="#E8F8F4" opacity=".38"/>
-        <rect x="0" y="216" width="1000" height="140" fill="#EDF8EF" opacity=".38"/>
-        <rect x="0" y="356" width="1000" height="128" fill="#FFF6E8" opacity=".42"/>
-        <rect x="0" y="484" width="1000" height="70" fill="#F7EEFB" opacity=".38"/>
-        <rect x="0" y="554" width="1000" height="82" fill="#FFF0F2" opacity=".4"/>
-
-        <rect x="0" y="26" width="70" height="120" fill="#CFE6FF" opacity=".92"/>
-        <rect x="0" y="146" width="70" height="70" fill="#CBEDE4" opacity=".9"/>
-        <rect x="0" y="216" width="70" height="140" fill="#D7EDD8" opacity=".9"/>
-        <rect x="0" y="356" width="70" height="128" fill="#FFE8C7" opacity=".92"/>
-        <rect x="0" y="484" width="70" height="70" fill="#EAD3F2" opacity=".9"/>
-        <rect x="0" y="554" width="70" height="82" fill="#FFD9DE" opacity=".9"/>
-
-        <line x1="0" y1="26" x2="1000" y2="26" stroke="#bbb" stroke-width=".8"/>
-        <line x1="0" y1="146" x2="1000" y2="146" stroke="#ccc" stroke-width=".5" stroke-dasharray="3 3"/>
-        <line x1="0" y1="216" x2="1000" y2="216" stroke="#ccc" stroke-width=".5" stroke-dasharray="3 3"/>
-        <line x1="0" y1="356" x2="1000" y2="356" stroke="#ccc" stroke-width=".5" stroke-dasharray="3 3"/>
-        <line x1="0" y1="484" x2="1000" y2="484" stroke="#ccc" stroke-width=".5" stroke-dasharray="3 3"/>
-        <line x1="0" y1="554" x2="1000" y2="554" stroke="#ccc" stroke-width=".5" stroke-dasharray="3 3"/>
-
-        <line x1="70" y1="0" x2="70" y2="636" stroke="#bbb" stroke-width=".8"/>
-        <line x1="248" y1="26" x2="248" y2="636" stroke="#ddd" stroke-width=".4" stroke-dasharray="3 3"/>
-        <line x1="418" y1="26" x2="418" y2="636" stroke="#ddd" stroke-width=".4" stroke-dasharray="3 3"/>
-        <line x1="608" y1="26" x2="608" y2="636" stroke="#ddd" stroke-width=".4" stroke-dasharray="3 3"/>
-        <line x1="798" y1="26" x2="798" y2="636" stroke="#ddd" stroke-width=".4" stroke-dasharray="3 3"/>
-
-        <rect x="0" y="0" width="1000" height="26" fill="#EEF3FA"/>
-        <text font-size="9" font-weight="500" fill="#666" x="160" y="13" text-anchor="middle" dominant-baseline="central">客户入口 &amp; 注册</text>
-        <text font-size="9" font-weight="500" fill="#666" x="333" y="13" text-anchor="middle" dominant-baseline="central">下单 &amp; 报价</text>
-        <text font-size="9" font-weight="500" fill="#666" x="513" y="13" text-anchor="middle" dominant-baseline="central">订单确认 &amp; 出库</text>
-        <text font-size="9" font-weight="500" fill="#666" x="703" y="13" text-anchor="middle" dominant-baseline="central">入库 &amp; 特殊场景</text>
-        <text font-size="9" font-weight="500" fill="#666" x="898" y="13" text-anchor="middle" dominant-baseline="central">财务同步</text>
-
-        <text font-size="8" font-weight="500" fill="#0D47A1" x="35" y="74" text-anchor="middle">【官网系统】</text>
-        <text font-size="9" font-weight="500" fill="#0D47A1" x="35" y="88" text-anchor="middle">WEB</text>
-        <text font-size="7" font-weight="500" fill="#004D40" x="35" y="169" text-anchor="middle">【核心系统】</text>
-        <text font-size="7" font-weight="500" fill="#004D40" x="35" y="180" text-anchor="middle">网站管理</text>
-        <text font-size="8" font-weight="500" fill="#004D40" x="35" y="193" text-anchor="middle">WEBADMIN</text>
-        <text font-size="7" font-weight="500" fill="#1B5E20" x="35" y="272" text-anchor="middle">【核心系统】</text>
-        <text font-size="7" font-weight="500" fill="#1B5E20" x="35" y="283" text-anchor="middle">订单管理</text>
-        <text font-size="8" font-weight="500" fill="#1B5E20" x="35" y="296" text-anchor="middle">CORE-OMS</text>
-        <text font-size="7" font-weight="500" fill="#BF360C" x="35" y="406" text-anchor="middle">【核心系统】</text>
-        <text font-size="7" font-weight="500" fill="#BF360C" x="35" y="417" text-anchor="middle">仓储管理</text>
-        <text font-size="8" font-weight="500" fill="#BF360C" x="35" y="430" text-anchor="middle">CORE-WMS</text>
-        <text font-size="7" font-weight="500" fill="#4A148C" x="35" y="508" text-anchor="middle">【核心系统】</text>
-        <text font-size="7" font-weight="500" fill="#4A148C" x="35" y="519" text-anchor="middle">客服管理</text>
-        <text font-size="8" font-weight="500" fill="#4A148C" x="35" y="532" text-anchor="middle">CORE-CSM</text>
-        <text font-size="7" font-weight="500" fill="#7F0000" x="35" y="579" text-anchor="middle">【财务系统】</text>
-        <text font-size="8" font-weight="500" fill="#7F0000" x="35" y="592" text-anchor="middle">QBO</text>
-
-        <g class="nd" id="N01" data-scenes="s1"><rect x="76" y="35" width="168" height="34" rx="4" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1"/><text font-size="10" font-weight="500" fill="#1565C0" x="160" y="49" text-anchor="middle" dominant-baseline="central">新客访问 WEB</text><text font-size="9" fill="#1976D2" x="160" y="62" text-anchor="middle" dominant-baseline="central">注册申请</text></g>
-        <g class="nd" id="N02" data-scenes="s2 s8"><rect x="76" y="76" width="168" height="34" rx="4" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1"/><text font-size="10" font-weight="500" fill="#1565C0" x="160" y="90" text-anchor="middle" dominant-baseline="central">老客登录 WEB</text><text font-size="9" fill="#1976D2" x="160" y="103" text-anchor="middle" dominant-baseline="central">浏览下单</text></g>
-        <g class="nd" id="N03" data-scenes="s3 s4 s7 s8"><rect x="76" y="112" width="168" height="28" rx="4" fill="#ECEFF1" stroke="#B0BEC5" stroke-width="1"/><text font-size="10" font-weight="500" fill="#37474F" x="160" y="126" text-anchor="middle" dominant-baseline="central">客人电联 / 到店</text></g>
-        <g class="nd" id="N06" data-scenes="s2 s8"><rect x="252" y="76" width="162" height="34" rx="4" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1"/><text font-size="10" font-weight="500" fill="#1565C0" x="333" y="90" text-anchor="middle" dominant-baseline="central">WEB 线上下单</text><text font-size="9" fill="#1976D2" x="333" y="103" text-anchor="middle" dominant-baseline="central">选品 / 数量 / PO</text></g>
-        <g class="nd" id="N_ws" data-scenes="s2 s3 s5 s6 s8"><rect x="422" y="35" width="182" height="28" rx="4" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1"/><text font-size="9" font-weight="500" fill="#1565C0" x="513" y="49" text-anchor="middle" dominant-baseline="central">WEB 实时展示库存</text></g>
-        <g class="nd" id="N04" data-scenes="s1"><rect x="76" y="152" width="168" height="34" rx="4" fill="#E0F2F1" stroke="#80CBC4" stroke-width="1"/><text font-size="10" font-weight="500" fill="#00695C" x="160" y="166" text-anchor="middle" dominant-baseline="central">核实公司信息</text><text font-size="9" fill="#00897B" x="160" y="179" text-anchor="middle" dominant-baseline="central">GoogleMap / QC Registry</text></g>
-        <g class="nd" id="N05" data-scenes="s1"><rect x="252" y="152" width="162" height="34" rx="4" fill="#E0F2F1" stroke="#80CBC4" stroke-width="1"/><text font-size="10" font-weight="500" fill="#00695C" x="333" y="166" text-anchor="middle" dominant-baseline="central">修改类别，同意开户</text><text font-size="9" fill="#00897B" x="333" y="179" text-anchor="middle" dominant-baseline="central">distributor 权限激活</text></g>
-        <g class="nd" id="N10" data-scenes="s3 s4 s7"><rect x="76" y="224" width="168" height="30" rx="4" fill="#E8F5E9" stroke="#A5D6A7" stroke-width="1"/><text font-size="10" font-weight="500" fill="#2E7D32" x="160" y="239" text-anchor="middle" dominant-baseline="central">CORE-OMS 锁定账户</text></g>
-        <g class="nd" id="N07" data-scenes="s3"><rect x="252" y="224" width="162" height="34" rx="4" fill="#E8F5E9" stroke="#A5D6A7" stroke-width="1"/><text font-size="10" font-weight="500" fill="#2E7D32" x="333" y="238" text-anchor="middle" dominant-baseline="central">电话报价 / 查库存</text><text font-size="9" fill="#388E3C" x="333" y="251" text-anchor="middle" dominant-baseline="central">价格 / 现金价确认</text></g>
-        <g class="nd" id="N08" data-scenes="s3"><rect x="252" y="266" width="162" height="34" rx="4" fill="#E8F5E9" stroke="#A5D6A7" stroke-width="1"/><text font-size="10" font-weight="500" fill="#2E7D32" x="333" y="280" text-anchor="middle" dominant-baseline="central">CORE-OMS 电话做单</text><text font-size="9" fill="#388E3C" x="333" y="293" text-anchor="middle" dominant-baseline="central">流程同网单，无折扣</text></g>
-        <g class="nd" id="N11" data-scenes="s2 s3 s8"><rect x="422" y="224" width="182" height="34" rx="4" fill="#E8F5E9" stroke="#A5D6A7" stroke-width="1"/><text font-size="10" font-weight="500" fill="#2E7D32" x="513" y="238" text-anchor="middle" dominant-baseline="central">客服审核订单</text><text font-size="9" fill="#388E3C" x="513" y="251" text-anchor="middle" dominant-baseline="central">折扣 / VIP / 轮胎税</text></g>
-        <g class="nd" id="N12" data-scenes="s2 s3 s8"><rect x="422" y="266" width="182" height="34" rx="4" fill="#E8F5E9" stroke="#A5D6A7" stroke-width="1"/><text font-size="10" font-weight="500" fill="#2E7D32" x="513" y="280" text-anchor="middle" dominant-baseline="central">加客户备注</text><text font-size="9" fill="#388E3C" x="513" y="293" text-anchor="middle" dominant-baseline="central">检查特殊要求</text></g>
-        <g class="nd" id="N13" data-scenes="s4"><rect x="422" y="308" width="182" height="34" rx="4" fill="#E8F5E9" stroke="#A5D6A7" stroke-width="1"/><text font-size="10" font-weight="500" fill="#2E7D32" x="513" y="322" text-anchor="middle" dominant-baseline="central">CORE-OMS VOID / 取消</text><text font-size="9" fill="#388E3C" x="513" y="335" text-anchor="middle" dominant-baseline="central">未出库直接作废</text></g>
-        <g class="nd" id="N21" data-scenes="s7"><rect x="612" y="224" width="182" height="34" rx="4" fill="#E8F5E9" stroke="#A5D6A7" stroke-width="1"/><text font-size="10" font-weight="500" fill="#2E7D32" x="703" y="238" text-anchor="middle" dominant-baseline="central">CORE-OMS 出退单</text><text font-size="9" fill="#388E3C" x="703" y="251" text-anchor="middle" dominant-baseline="central">核查原订单</text></g>
-        <g class="nd" id="N22" data-scenes="s7"><rect x="612" y="266" width="182" height="30" rx="4" fill="#E8F5E9" stroke="#A5D6A7" stroke-width="1"/><text font-size="10" font-weight="500" fill="#2E7D32" x="703" y="281" text-anchor="middle" dominant-baseline="central">打印 estimate ×2，不再收款</text></g>
-        <g class="nd" id="N24" data-scenes="s9"><rect x="612" y="224" width="182" height="34" rx="4" fill="#E8F5E9" stroke="#A5D6A7" stroke-width="1"/><text font-size="10" font-weight="500" fill="#2E7D32" x="703" y="238" text-anchor="middle" dominant-baseline="central">CORE-OMS 建调货单</text><text font-size="9" fill="#388E3C" x="703" y="251" text-anchor="middle" dominant-baseline="central">通知分部装车</text></g>
-        <g class="nd" id="N23" data-scenes="s8"><rect x="612" y="266" width="182" height="34" rx="4" fill="#E8F5E9" stroke="#A5D6A7" stroke-width="1"/><text font-size="10" font-weight="500" fill="#2E7D32" x="703" y="280" text-anchor="middle" dominant-baseline="central">CORE-OMS 现金单</text><text font-size="9" fill="#388E3C" x="703" y="293" text-anchor="middle" dominant-baseline="central">13% + 零售价</text></g>
-        <g class="nd" id="N25" data-scenes="s3 s9"><rect x="612" y="308" width="182" height="30" rx="4" fill="#E8F5E9" stroke="#A5D6A7" stroke-width="1"/><text font-size="10" font-weight="500" fill="#2E7D32" x="703" y="323" text-anchor="middle" dominant-baseline="central">调货 QC/ON</text></g>
-        <g class="nd" id="N14" data-scenes="s2 s3 s5 s8"><rect x="422" y="364" width="182" height="34" rx="4" fill="#FFF3E0" stroke="#FFCC80" stroke-width="1"/><text font-size="10" font-weight="500" fill="#E65100" x="513" y="378" text-anchor="middle" dominant-baseline="central">打印拣货单</text><text font-size="9" fill="#EF6C00" x="513" y="391" text-anchor="middle" dominant-baseline="central">安排拣货人员</text></g>
-        <g class="nd" id="N15" data-scenes="s2 s3 s5 s8"><rect x="422" y="404" width="182" height="34" rx="4" fill="#FFF3E0" stroke="#FFCC80" stroke-width="1"/><text font-size="10" font-weight="500" fill="#E65100" x="513" y="418" text-anchor="middle" dominant-baseline="central">拣货 / 下架</text><text font-size="9" fill="#EF6C00" x="513" y="431" text-anchor="middle" dominant-baseline="central">扫码确认</text></g>
-        <g class="nd" id="N16" data-scenes="s2 s3 s5"><rect x="422" y="444" width="86" height="34" rx="4" fill="#FFF3E0" stroke="#FFCC80" stroke-width="1"/><text font-size="9" font-weight="500" fill="#E65100" x="465" y="458" text-anchor="middle" dominant-baseline="central">直接配送</text><text font-size="8" fill="#EF6C00" x="465" y="471" text-anchor="middle" dominant-baseline="central">录出库记录</text></g>
-        <g class="nd" id="N17" data-scenes="s2 s5 s8"><rect x="516" y="444" width="88" height="34" rx="4" fill="#FFF3E0" stroke="#FFCC80" stroke-width="1"/><text font-size="9" font-weight="500" fill="#E65100" x="560" y="458" text-anchor="middle" dominant-baseline="central">客户自取</text><text font-size="8" fill="#EF6C00" x="560" y="471" text-anchor="middle" dominant-baseline="central">录自取记录</text></g>
-        <g class="nd" id="N18" data-scenes="s6"><rect x="612" y="364" width="182" height="28" rx="4" fill="#FFF3E0" stroke="#FFCC80" stroke-width="1"/><text font-size="9" font-weight="500" fill="#E65100" x="703" y="378" text-anchor="middle" dominant-baseline="central">集装箱/采购/退货到货</text></g>
-        <g class="nd" id="N19" data-scenes="s6"><rect x="612" y="400" width="182" height="34" rx="4" fill="#FFF3E0" stroke="#FFCC80" stroke-width="1"/><text font-size="10" font-weight="500" fill="#E65100" x="703" y="414" text-anchor="middle" dominant-baseline="central">CORE-WMS 收货核对</text><text font-size="9" fill="#EF6C00" x="703" y="427" text-anchor="middle" dominant-baseline="central">核对 PO / 数量 / 品质</text></g>
-        <g class="nd" id="N20" data-scenes="s6"><rect x="612" y="442" width="182" height="34" rx="4" fill="#FFF3E0" stroke="#FFCC80" stroke-width="1"/><text font-size="10" font-weight="500" fill="#E65100" x="703" y="456" text-anchor="middle" dominant-baseline="central">上架操作</text><text font-size="9" fill="#EF6C00" x="703" y="469" text-anchor="middle" dominant-baseline="central">扫码录入货位</text></g>
-        <g class="nd" id="Nret" data-scenes="s7"><rect x="612" y="364" width="182" height="34" rx="4" fill="#FFF3E0" stroke="#FFCC80" stroke-width="1"/><text font-size="10" font-weight="500" fill="#E65100" x="703" y="378" text-anchor="middle" dominant-baseline="central">安排退货回仓</text><text font-size="9" fill="#EF6C00" x="703" y="391" text-anchor="middle" dominant-baseline="central">CORE-WMS 入库处理</text></g>
-        <g class="nd" id="N26" data-scenes="s2 s3 s5 s6 s7 s8 s9"><rect x="422" y="492" width="370" height="34" rx="4" fill="#F3E5F5" stroke="#CE93D8" stroke-width="1"/><text font-size="10" font-weight="500" fill="#6A1B9A" x="607" y="506" text-anchor="middle" dominant-baseline="central">库存实时更新 — CORE-CSM → WEB 同步</text><text font-size="9" fill="#7B1FA2" x="607" y="519" text-anchor="middle" dominant-baseline="central">出库扣减 / 入库增加 / 退货归还</text></g>
-        <g class="nd" id="N09" data-scenes="s9"><rect x="252" y="492" width="162" height="34" rx="4" fill="#F3E5F5" stroke="#CE93D8" stroke-width="1"/><text font-size="10" font-weight="500" fill="#6A1B9A" x="333" y="506" text-anchor="middle" dominant-baseline="central">查库存价位</text><text font-size="9" fill="#7B1FA2" x="333" y="519" text-anchor="middle" dominant-baseline="central">CORE-CSM 调货报价</text></g>
-        <g class="nd" id="N27" data-scenes="s2 s3 s5 s7 s8"><rect x="422" y="562" width="182" height="34" rx="4" fill="#FFEBEE" stroke="#EF9A9A" stroke-width="1"/><text font-size="10" font-weight="500" fill="#B71C1C" x="513" y="576" text-anchor="middle" dominant-baseline="central">QBO 生成发票</text><text font-size="9" fill="#C62828" x="513" y="589" text-anchor="middle" dominant-baseline="central">出库自动触发</text></g>
-        <g class="nd" id="N28" data-scenes="s4 s7"><rect x="612" y="562" width="182" height="34" rx="4" fill="#FFEBEE" stroke="#EF9A9A" stroke-width="1"/><text font-size="10" font-weight="500" fill="#B71C1C" x="703" y="576" text-anchor="middle" dominant-baseline="central">QBO 冲销 / 退款</text><text font-size="9" fill="#C62828" x="703" y="589" text-anchor="middle" dominant-baseline="central">更新财务记录</text></g>
-        <g class="nd" id="N29" data-scenes="s6"><rect x="612" y="562" width="182" height="34" rx="4" fill="#FFEBEE" stroke="#EF9A9A" stroke-width="1"/><text font-size="10" font-weight="500" fill="#B71C1C" x="703" y="576" text-anchor="middle" dominant-baseline="central">更新库存成本</text><text font-size="9" fill="#C62828" x="703" y="589" text-anchor="middle" dominant-baseline="central">QBO 自动同步</text></g>
-        <g class="nd" id="Nqe" data-scenes="s8"><rect x="802" y="562" width="190" height="34" rx="4" fill="#FFEBEE" stroke="#EF9A9A" stroke-width="1"/><text font-size="10" font-weight="500" fill="#B71C1C" x="897" y="576" text-anchor="middle" dominant-baseline="central">QBO 生成现金发票</text><text font-size="9" fill="#C62828" x="897" y="589" text-anchor="middle" dominant-baseline="central">当场收款</text></g>
-        <line id="E01" class="eg" data-scenes="s1" x1="160" y1="69" x2="160" y2="152" stroke="#80CBC4" marker-end="url(#ar)"/>
-        <line id="E1b" class="eg" data-scenes="s1" x1="244" y1="169" x2="252" y2="169" stroke="#80CBC4" marker-end="url(#ar)"/>
-        <path id="E1c" class="eg" data-scenes="s1" d="M333 152 L333 130 L160 130 L160 112" stroke="#80CBC4" stroke-dasharray="3 2" marker-end="url(#ar)"/>
-        <line id="E5a" class="eg" data-scenes="s2 s8" x1="244" y1="93" x2="252" y2="93" stroke="#90CAF9" marker-end="url(#ar)"/>
-        <path id="E5b" class="eg" data-scenes="s2 s8" d="M414 93 L513 93 L513 224" stroke="#A5D6A7" marker-end="url(#ar)"/>
-        <line id="E6" class="eg" data-scenes="s3 s4 s7" x1="160" y1="140" x2="160" y2="224" stroke="#A5D6A7" marker-end="url(#ar)"/>
-        <line id="E7" class="eg" data-scenes="s3" x1="244" y1="239" x2="252" y2="239" stroke="#A5D6A7" marker-end="url(#ar)"/>
-        <line id="E7b" class="eg" data-scenes="s3" x1="333" y1="258" x2="333" y2="266" stroke="#A5D6A7" marker-end="url(#ar)"/>
-        <line id="E8" class="eg" data-scenes="s3" x1="414" y1="283" x2="422" y2="283" stroke="#A5D6A7" marker-end="url(#ar)"/>
-        <line id="E9" class="eg" data-scenes="s2 s3 s8" x1="513" y1="258" x2="513" y2="266" stroke="#A5D6A7" marker-end="url(#ar)"/>
-        <path id="E26" class="eg" data-scenes="s4" d="M244 239 L513 239 L513 308" stroke="#A5D6A7" marker-end="url(#ar)"/>
-        <line id="E11" class="eg" data-scenes="s2 s3 s8" x1="513" y1="300" x2="513" y2="364" stroke="#FFCC80" marker-end="url(#ar)"/>
-        <line id="E11b" class="eg" data-scenes="s5" x1="513" y1="258" x2="513" y2="364" stroke="#FFCC80" marker-end="url(#ar)"/>
-        <line id="E12" class="eg" data-scenes="s2 s3 s5 s8" x1="513" y1="398" x2="513" y2="404" stroke="#FFCC80" marker-end="url(#ar)"/>
-        <line id="E13a" class="eg" data-scenes="s2 s3 s5" x1="465" y1="438" x2="465" y2="444" stroke="#FFCC80" marker-end="url(#ar)"/>
-        <line id="E13b" class="eg" data-scenes="s2 s5 s8" x1="560" y1="438" x2="560" y2="444" stroke="#FFCC80" marker-end="url(#ar)"/>
-        <line id="E16" class="eg" data-scenes="s2 s3 s5 s8" x1="513" y1="478" x2="513" y2="492" stroke="#CE93D8" stroke-dasharray="4 3" marker-end="url(#ar)"/>
-        <line id="E17" class="eg" data-scenes="s6" x1="703" y1="392" x2="703" y2="400" stroke="#FFCC80" marker-end="url(#ar)"/>
-        <line id="E18" class="eg" data-scenes="s6" x1="703" y1="434" x2="703" y2="442" stroke="#FFCC80" marker-end="url(#ar)"/>
-        <line id="E20" class="eg" data-scenes="s6" x1="703" y1="476" x2="703" y2="492" stroke="#CE93D8" stroke-dasharray="4 3" marker-end="url(#ar)"/>
-        <line id="E23" class="eg" data-scenes="s7" x1="703" y1="258" x2="703" y2="364" stroke="#FFCC80" marker-end="url(#ar)"/>
-        <line id="E23b" class="eg" data-scenes="s7" x1="703" y1="398" x2="703" y2="492" stroke="#CE93D8" stroke-dasharray="4 3" marker-end="url(#ar)"/>
-        <path id="E24" class="eg" data-scenes="s8" d="M612 283 L513 283 L513 364" stroke="#FFCC80" stroke-dasharray="3 2" marker-end="url(#ar)" fill="none"/>
-        <path id="E25" class="eg" data-scenes="s9" d="M414 509 L703 509 L703 338" stroke="#CE93D8" stroke-dasharray="4 3" marker-end="url(#ar)" fill="none"/>
-        <path id="E21" class="eg" data-scenes="s2 s3 s5 s6 s8" d="M422 509 L160 509 L160 140" stroke="#90CAF9" stroke-dasharray="4 3" marker-end="url(#ar)" fill="none"/>
-        <line id="E21b" class="eg" data-scenes="s2 s3 s5 s8" x1="513" y1="526" x2="513" y2="562" stroke="#EF9A9A" stroke-dasharray="4 3" marker-end="url(#ar)"/>
-        <line id="E29" class="eg" data-scenes="s6" x1="703" y1="526" x2="703" y2="562" stroke="#EF9A9A" stroke-dasharray="4 3" marker-end="url(#ar)"/>
-        <path id="E28" class="eg" data-scenes="s4 s7" d="M703 338 L798 338 L798 579 L794 579" stroke="#EF9A9A" stroke-dasharray="4 3" marker-end="url(#ar)" fill="none"/>
-        <path id="E24b" class="eg" data-scenes="s8" d="M794 280 L897 280 L897 562" stroke="#EF9A9A" stroke-dasharray="4 3" marker-end="url(#ar)" fill="none"/>
-      </svg>
     </div>
 
-    <aside class="detail">
-      <div class="detail-head">
-        <div class="colorbar" id="colorbar"></div>
-        <div class="detail-title" id="detailTitle">全景总览</div>
-        <div class="detail-sub" id="detailSub">查看所有系统与全部业务场景之间的完整关系。选择左侧任一场景后，这里会直接显示对应说明。</div>
-      </div>
-      <div class="summary-grid" id="summaryGrid"></div>
-      <div class="section-title">流程步骤</div>
-      <div class="timeline" id="timeline"></div>
-      <div class="section-title">关键说明</div>
-      <div class="notes" id="notes"></div>
-    </aside>
-  </div>
-</div>
+    <script>
+        const D = {
+            all: { c: '#444', t: '全景总览', sub: '展示公司从客户入口、下单审核、仓储作业、库存同步到财务记录的完整闭环。', metrics: [['业务场景', '9 个'], ['涉及系统', '6 套'], ['流程节点', '29 个'], ['核心目标', '销售与库存财务联动']], steps: [['客户通过 WEB、电联、到店等入口进入业务流程', '总入口', '#F5F5F5', '#666'], ['订单由 CORE-OMS / WEBADMIN 等系统审核、确认或处理特殊情况', '订单管控', '#E8F5E9', '#2E7D32'], ['仓储由 CORE-WMS 执行拣货、出库、入库、退货等动作', '仓储执行', '#FFF3E0', '#E65100'], ['库存变动通过 CORE-CSM 同步回 WEB，保证前端库存展示实时更新', '库存同步', '#F3E5F5', '#6A1B9A'], ['QBO 根据出库、取消、退货等动作生成发票、冲销或更新成本', '财务闭环', '#FFEBEE', '#B71C1C']], notes: ['该图适合用于梳理系统边界、跨部门协作和培训新员工。', '左侧选择具体场景后，可以快速定位该场景相关节点与连线。', '全景模式下不隐藏任何节点，便于从整体角度理解业务架构。'] },
+            s1: { c: '#1565C0', t: '① 新客注册开户', sub: '新客户通过官网提交注册申请，后台完成资质核实与权限激活，最终开通 distributor 账户。', metrics: [['涉及系统', 'WEB / WEBADMIN'], ['关键动作', '资质核实'], ['完成结果', '激活登录权限'], ['流程类型', '开户准入']], steps: [['新客访问 WEB，填写公司信息并提交注册申请', 'WEB', '#E3F2FD', '#1565C0'], ['CORE-WEBADMIN 对照 GoogleMap / QC Registry 核实公司真实性与资料完整性', 'CORE-WEBADMIN', '#E0F2F1', '#00695C'], ['核实通过后，修改客户类别并同意开户', 'CORE-WEBADMIN', '#E0F2F1', '#00695C'], ['为客户激活 distributor 权限，使其具备后续登录与下单资格', 'CORE-WEBADMIN', '#E0F2F1', '#00695C'], ['客户收到通知，回到 WEB 登录并开始使用线上业务功能', 'WEB', '#E3F2FD', '#1565C0']], notes: ['若信息不符或资料不足，可暂缓处理并等待客户补充资料。', '该流程的重点是准入控制，确保后续订单交易建立在真实、可核验的客户基础上。', '建议将常见驳回原因整理成标准模板，减少重复沟通成本。'] },
+            s2: { c: '#2E7D32', t: '② 线上下单（老客）', sub: '老客户在官网自助下单，订单进入审核、备注、仓储出库与财务开票联动流程。', metrics: [['涉及系统', 'WEB / CORE-OMS / CORE-WMS / CORE-CSM / QBO'], ['关键动作', '审核后出库'], ['完成结果', '开票并同步库存'], ['流程类型', '标准销售']], steps: [['老客登录 WEB，选择商品、数量、配送时间并提交订单', 'WEB', '#E3F2FD', '#1565C0'], ['客服在 CORE-OMS 审核折扣、VIP、轮胎税等规则，确认订单有效性', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['在订单中补充客户备注和特殊要求，避免出库或交付偏差', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['CORE-WMS 打印拣货单，安排人员拣货、扫码下架', 'CORE-WMS', '#FFF3E0', '#E65100'], ['订单按配送或自取方式完成出库，库存实时扣减', 'CORE-WMS', '#FFF3E0', '#E65100'], ['CORE-CSM 将库存变化同步到 WEB，QBO 自动生成发票', 'CORE-CSM / QBO', '#F3E5F5', '#6A1B9A']], notes: ['这是最完整、最标准的闭环场景，涉及销售、仓储、库存与财务全链路。', '若备注不完整，最容易在出库和配送环节出现执行偏差。', '建议在明细页加入税费和折扣校验规则，减少人工审核压力。'] },
+            s3: { c: '#E65100', t: '③ 电话下单', sub: '客户通过电话询价、查库存、确认价格后，由客服在 OMS 中代为下单并推进仓储执行。', metrics: [['涉及系统', 'CORE-OMS / CORE-WMS'], ['关键动作', '人工报价'], ['完成结果', '代客做单出库'], ['流程类型', '人工接单']], steps: [['客户来电后，客服先在 CORE-OMS 锁定账户，确保操作对象准确', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['根据库存和价格进行电话报价，并确认是否适用现金价', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['客服在 CORE-OMS 代客做单，整体流程与网单相同，但通常不走折扣逻辑', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['若缺货，可推荐替代品；若仍无法满足，则进入 QC / ON 调货判断', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['确认有货后，将订单提交给 CORE-WMS 执行拣货、下架和出库', 'CORE-WMS', '#FFF3E0', '#E65100']], notes: ['电话下单的核心风险点在于口头信息遗漏，建议沉淀统一的话术与确认清单。', '与线上下单相比，该场景更依赖客服经验与即时沟通能力。', '如后续量大，可考虑沉淀半自动录单模板。'] },
+            s4: { c: '#AD1457', t: '④ 取消 / 修改订单', sub: '根据订单是否已经出库，分别走 VOID 作废或退单冲销路径。', metrics: [['涉及系统', 'CORE-OMS / CORE-WMS / QBO'], ['关键动作', '判断出库状态'], ['完成结果', '库存与财务一致'], ['流程类型', '异常调整']], steps: [['客户提出取消或修改需求后，先在 CORE-OMS 查询订单当前状态', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['若仓库尚未出库，可直接 VOID / 取消，库存自动归还', 'CORE-OMS / CORE-WMS', '#FFF3E0', '#E65100'], ['若已出库，则需进一步了解物流与收货情况，并同步财务处理', 'QBO', '#FFEBEE', '#B71C1C'], ['涉及退货回仓时，需补做退单归库，并在 QBO 执行冲销或退款', 'QBO', '#FFEBEE', '#B71C1C']], notes: ['取消/修改流程的关键是先判断出库状态，再决定走库存回退还是财务冲销。', '这类场景若处理不及时，最容易造成库存与发票状态不一致。', '建议增加“已出库 / 未出库”醒目标识，方便客服快速判断。'] },
+            s5: { c: '#00695C', t: '⑤ 仓储出库', sub: '聚焦仓储执行环节，从订单确认到拣货、下架、配送或自取，再到库存同步。', metrics: [['涉及系统', 'CORE-OMS / CORE-WMS / CORE-CSM'], ['关键动作', '拣货下架'], ['完成结果', '库存扣减同步'], ['流程类型', '仓储执行']], steps: [['CORE-OMS 审核确认订单后，将其提交到仓储执行', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['CORE-WMS 打印拣货单并安排拣货人员开始作业', 'CORE-WMS', '#FFF3E0', '#E65100'], ['拣货人员按照单据扫码下架，确保商品与数量准确', 'CORE-WMS', '#FFF3E0', '#E65100'], ['根据交付方式，进入直接配送或客户自取两条支线', 'CORE-WMS', '#FFF3E0', '#E65100'], ['完成出库记录后，库存实时扣减，并通过 CORE-CSM 回写 WEB', 'CORE-CSM', '#F3E5F5', '#6A1B9A']], notes: ['这是影响客户体验最直接的环节，出库准确率和时效都很重要。', '扫码确认是降低错拣、漏拣风险的关键控制点。', '如果配送和自取规则不同，可以进一步拆分两套执行 SOP。'] },
+            s6: { c: '#4527A0', t: '⑥ 仓储入库', sub: '适用于集装箱到货、采购收货、退货回仓等入库场景，重点在核对、上架与成本同步。', metrics: [['涉及系统', 'CORE-WMS / CORE-CSM / QBO'], ['关键动作', '收货核对'], ['完成结果', '上架并更新成本'], ['流程类型', '补货入库']], steps: [['集装箱、采购 PO 或退货回仓触发入库流程', 'CORE-WMS', '#FFF3E0', '#E65100'], ['CORE-WMS 对照 PO、数量和品质执行收货核对', 'CORE-WMS', '#FFF3E0', '#E65100'], ['若发现异常，则记录差异并通知采购或相关责任人跟进', '异常处理', '#F5F5F5', '#777'], ['核对通过后扫码上架，录入具体货位信息', 'CORE-WMS', '#FFF3E0', '#E65100'], ['库存增加后由 CORE-CSM 回写 WEB，QBO 同步更新库存成本', 'CORE-CSM / QBO', '#F3E5F5', '#6A1B9A']], notes: ['入库流程直接影响库存准确性和成本准确性。', '异常差异最好形成台账，便于后续追责与供应商对账。', '若入库频繁，建议加入批次、质检结果和货位热区优化。'] },
+            s7: { c: '#B71C1C', t: '⑦ 退货 / 换货', sub: '处理客户退货与换货，覆盖原订单核查、回仓、估价单和发票冲销/重开。', metrics: [['涉及系统', 'CORE-OMS / CORE-WMS / QBO'], ['关键动作', '核查原订单'], ['完成结果', '退库与发票调整'], ['流程类型', '售后处理']], steps: [['客户来电后，在 CORE-OMS 查询原订单，确认历史交易与品项', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['退货时先出退单，再安排退货回仓并在 CORE-WMS 执行入库', 'CORE-WMS', '#FFF3E0', '#E65100'], ['换货时打印 estimate ×2，不再重复收款，并安排送货或换发货', 'CORE-WMS', '#FFF3E0', '#E65100'], ['QBO 对原发票执行冲销，必要时重新生成新发票', 'QBO', '#FFEBEE', '#B71C1C']], notes: ['退换货不仅影响库存，也会影响收入确认和客户关系。', '建议明确退换货的可接受条件、时效和责任归属。', '若换货量大，可在估价单环节增加标准模板减少人工输入。'] },
+            s8: { c: '#F57F17', t: '⑧ 零售 WALK-IN', sub: '客户到店现场购买，由客服开现金单、仓储即时拣货、财务现场收款。', metrics: [['涉及系统', 'CORE-OMS / CORE-WMS / QBO'], ['关键动作', '现场收款'], ['完成结果', '即买即取'], ['流程类型', '门店零售']], steps: [['客户到店或现场沟通需求，确认购买内容', '门店现场', '#F5F5F5', '#777'], ['CORE-OMS 开现金单，按 13% + 零售价规则计价', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['客服补充备注或特殊要求，并确认订单内容', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['CORE-WMS 现场拣货，客户当场取货', 'CORE-WMS', '#FFF3E0', '#E65100'], ['QBO 生成现金发票并完成现场收款', 'QBO', '#FFEBEE', '#B71C1C']], notes: ['零售 WALK-IN 对响应速度要求高，适合流程尽量短、动作尽量少。', '现场取货时仍建议保留扫码与单据记录，避免库存失真。', '如未来门店零售规模扩大，可进一步拆出 POS 风格界面。'] },
+            s9: { c: '#00838F', t: '⑨ 调货', sub: '用于跨地区或跨分部之间的库存协调、报价和装车安排。', metrics: [['涉及系统', 'CORE-CSM / CORE-OMS / CORE-WMS'], ['关键动作', '调货报价'], ['完成结果', '装车调拨'], ['流程类型', '库存协调']], steps: [['CORE-CSM 定期查看库存与价位信息，判断是否需要调货', 'CORE-CSM', '#F3E5F5', '#6A1B9A'], ['CORE-OMS 编辑 estimate，形成调货报价或调拨单据', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['在团队沟通群内确认调货内容、数量和接收方安排', '协同沟通', '#F5F5F5', '#777'], ['提前打印调货单，CORE-WMS 按计划安排装车与发运', 'CORE-WMS', '#FFF3E0', '#E65100']], notes: ['调货场景的难点主要在跨团队协同和时间安排。', '如果能把群消息确认沉淀为系统状态，会更方便追踪执行。', '建议后续把调货的发起、确认、装车、签收做成更完整的状态流。'] }
+        };
 
-<script>
-const D={
-  all:{c:'#444',t:'全景总览',sub:'展示公司从客户入口、下单审核、仓储作业、库存同步到财务记录的完整闭环。',metrics:[['业务场景','9 个'],['涉及系统','6 套'],['流程节点','29 个'],['核心目标','销售与库存财务联动']],steps:[['客户通过 WEB、电联、到店等入口进入业务流程','总入口','#F5F5F5','#666'],['订单由 CORE-OMS / WEBADMIN 等系统审核、确认或处理特殊情况','订单管控','#E8F5E9','#2E7D32'],['仓储由 CORE-WMS 执行拣货、出库、入库、退货等动作','仓储执行','#FFF3E0','#E65100'],['库存变动通过 CORE-CSM 同步回 WEB，保证前端库存展示实时更新','库存同步','#F3E5F5','#6A1B9A'],['QBO 根据出库、取消、退货等动作生成发票、冲销或更新成本','财务闭环','#FFEBEE','#B71C1C']],notes:['该图适合用于梳理系统边界、跨部门协作和培训新员工。','左侧选择具体场景后，可以快速定位该场景相关节点与连线。','全景模式下不隐藏任何节点，便于从整体角度理解业务架构。']},
-  s1:{c:'#1565C0',t:'① 新客注册开户',sub:'新客户通过官网提交注册申请，后台完成资质核实与权限激活，最终开通 distributor 账户。',metrics:[['涉及系统','WEB / WEBADMIN'],['关键动作','资质核实'],['完成结果','激活登录权限'],['流程类型','开户准入']],steps:[['新客访问 WEB，填写公司信息并提交注册申请','WEB','#E3F2FD','#1565C0'],['CORE-WEBADMIN 对照 GoogleMap / QC Registry 核实公司真实性与资料完整性','CORE-WEBADMIN','#E0F2F1','#00695C'],['核实通过后，修改客户类别并同意开户','CORE-WEBADMIN','#E0F2F1','#00695C'],['为客户激活 distributor 权限，使其具备后续登录与下单资格','CORE-WEBADMIN','#E0F2F1','#00695C'],['客户收到通知，回到 WEB 登录并开始使用线上业务功能','WEB','#E3F2FD','#1565C0']],notes:['若信息不符或资料不足，可暂缓处理并等待客户补充资料。','该流程的重点是准入控制，确保后续订单交易建立在真实、可核验的客户基础上。','建议将常见驳回原因整理成标准模板，减少重复沟通成本。']},
-  s2:{c:'#2E7D32',t:'② 线上下单（老客）',sub:'老客户在官网自助下单，订单进入审核、备注、仓储出库与财务开票联动流程。',metrics:[['涉及系统','WEB / CORE-OMS / CORE-WMS / CORE-CSM / QBO'],['关键动作','审核后出库'],['完成结果','开票并同步库存'],['流程类型','标准销售']],steps:[['老客登录 WEB，选择商品、数量、配送时间并提交订单','WEB','#E3F2FD','#1565C0'],['客服在 CORE-OMS 审核折扣、VIP、轮胎税等规则，确认订单有效性','CORE-OMS','#E8F5E9','#2E7D32'],['在订单中补充客户备注和特殊要求，避免出库或交付偏差','CORE-OMS','#E8F5E9','#2E7D32'],['CORE-WMS 打印拣货单，安排人员拣货、扫码下架','CORE-WMS','#FFF3E0','#E65100'],['订单按配送或自取方式完成出库，库存实时扣减','CORE-WMS','#FFF3E0','#E65100'],['CORE-CSM 将库存变化同步到 WEB，QBO 自动生成发票','CORE-CSM / QBO','#F3E5F5','#6A1B9A']],notes:['这是最完整、最标准的闭环场景，涉及销售、仓储、库存与财务全链路。','若备注不完整，最容易在出库和配送环节出现执行偏差。','建议在明细页加入税费和折扣校验规则，减少人工审核压力。']},
-  s3:{c:'#E65100',t:'③ 电话下单',sub:'客户通过电话询价、查库存、确认价格后，由客服在 OMS 中代为下单并推进仓储执行。',metrics:[['涉及系统','CORE-OMS / CORE-WMS'],['关键动作','人工报价'],['完成结果','代客做单出库'],['流程类型','人工接单']],steps:[['客户来电后，客服先在 CORE-OMS 锁定账户，确保操作对象准确','CORE-OMS','#E8F5E9','#2E7D32'],['根据库存和价格进行电话报价，并确认是否适用现金价','CORE-OMS','#E8F5E9','#2E7D32'],['客服在 CORE-OMS 代客做单，整体流程与网单相同，但通常不走折扣逻辑','CORE-OMS','#E8F5E9','#2E7D32'],['若缺货，可推荐替代品；若仍无法满足，则进入 QC / ON 调货判断','CORE-OMS','#E8F5E9','#2E7D32'],['确认有货后，将订单提交给 CORE-WMS 执行拣货、下架和出库','CORE-WMS','#FFF3E0','#E65100']],notes:['电话下单的核心风险点在于口头信息遗漏，建议沉淀统一的话术与确认清单。','与线上下单相比，该场景更依赖客服经验与即时沟通能力。','如后续量大，可考虑沉淀半自动录单模板。']},
-  s4:{c:'#AD1457',t:'④ 取消 / 修改订单',sub:'根据订单是否已经出库，分别走 VOID 作废或退单冲销路径。',metrics:[['涉及系统','CORE-OMS / CORE-WMS / QBO'],['关键动作','判断出库状态'],['完成结果','库存与财务一致'],['流程类型','异常调整']],steps:[['客户提出取消或修改需求后，先在 CORE-OMS 查询订单当前状态','CORE-OMS','#E8F5E9','#2E7D32'],['若仓库尚未出库，可直接 VOID / 取消，库存自动归还','CORE-OMS / CORE-WMS','#FFF3E0','#E65100'],['若已出库，则需进一步了解物流与收货情况，并同步财务处理','QBO','#FFEBEE','#B71C1C'],['涉及退货回仓时，需补做退单归库，并在 QBO 执行冲销或退款','QBO','#FFEBEE','#B71C1C']],notes:['取消/修改流程的关键是先判断出库状态，再决定走库存回退还是财务冲销。','这类场景若处理不及时，最容易造成库存与发票状态不一致。','建议增加“已出库 / 未出库”醒目标识，方便客服快速判断。']},
-  s5:{c:'#00695C',t:'⑤ 仓储出库',sub:'聚焦仓储执行环节，从订单确认到拣货、下架、配送或自取，再到库存同步。',metrics:[['涉及系统','CORE-OMS / CORE-WMS / CORE-CSM'],['关键动作','拣货下架'],['完成结果','库存扣减同步'],['流程类型','仓储执行']],steps:[['CORE-OMS 审核确认订单后，将其提交到仓储执行','CORE-OMS','#E8F5E9','#2E7D32'],['CORE-WMS 打印拣货单并安排拣货人员开始作业','CORE-WMS','#FFF3E0','#E65100'],['拣货人员按照单据扫码下架，确保商品与数量准确','CORE-WMS','#FFF3E0','#E65100'],['根据交付方式，进入直接配送或客户自取两条支线','CORE-WMS','#FFF3E0','#E65100'],['完成出库记录后，库存实时扣减，并通过 CORE-CSM 回写 WEB','CORE-CSM','#F3E5F5','#6A1B9A']],notes:['这是影响客户体验最直接的环节，出库准确率和时效都很重要。','扫码确认是降低错拣、漏拣风险的关键控制点。','如果配送和自取规则不同，可以进一步拆分两套执行 SOP。']},
-  s6:{c:'#4527A0',t:'⑥ 仓储入库',sub:'适用于集装箱到货、采购收货、退货回仓等入库场景，重点在核对、上架与成本同步。',metrics:[['涉及系统','CORE-WMS / CORE-CSM / QBO'],['关键动作','收货核对'],['完成结果','上架并更新成本'],['流程类型','补货入库']],steps:[['集装箱、采购 PO 或退货回仓触发入库流程','CORE-WMS','#FFF3E0','#E65100'],['CORE-WMS 对照 PO、数量和品质执行收货核对','CORE-WMS','#FFF3E0','#E65100'],['若发现异常，则记录差异并通知采购或相关责任人跟进','异常处理','#F5F5F5','#777'],['核对通过后扫码上架，录入具体货位信息','CORE-WMS','#FFF3E0','#E65100'],['库存增加后由 CORE-CSM 回写 WEB，QBO 同步更新库存成本','CORE-CSM / QBO','#F3E5F5','#6A1B9A']],notes:['入库流程直接影响库存准确性和成本准确性。','异常差异最好形成台账，便于后续追责与供应商对账。','若入库频繁，建议加入批次、质检结果和货位热区优化。']},
-  s7:{c:'#B71C1C',t:'⑦ 退货 / 换货',sub:'处理客户退货与换货，覆盖原订单核查、回仓、估价单和发票冲销/重开。',metrics:[['涉及系统','CORE-OMS / CORE-WMS / QBO'],['关键动作','核查原订单'],['完成结果','退库与发票调整'],['流程类型','售后处理']],steps:[['客户来电后，在 CORE-OMS 查询原订单，确认历史交易与品项','CORE-OMS','#E8F5E9','#2E7D32'],['退货时先出退单，再安排退货回仓并在 CORE-WMS 执行入库','CORE-WMS','#FFF3E0','#E65100'],['换货时打印 estimate ×2，不再重复收款，并安排送货或换发货','CORE-WMS','#FFF3E0','#E65100'],['QBO 对原发票执行冲销，必要时重新生成新发票','QBO','#FFEBEE','#B71C1C']],notes:['退换货不仅影响库存，也会影响收入确认和客户关系。','建议明确退换货的可接受条件、时效和责任归属。','若换货量大，可在估价单环节增加标准模板减少人工输入。']},
-  s8:{c:'#F57F17',t:'⑧ 零售 WALK-IN',sub:'客户到店现场购买，由客服开现金单、仓储即时拣货、财务现场收款。',metrics:[['涉及系统','CORE-OMS / CORE-WMS / QBO'],['关键动作','现场收款'],['完成结果','即买即取'],['流程类型','门店零售']],steps:[['客户到店或现场沟通需求，确认购买内容','门店现场','#F5F5F5','#777'],['CORE-OMS 开现金单，按 13% + 零售价规则计价','CORE-OMS','#E8F5E9','#2E7D32'],['客服补充备注或特殊要求，并确认订单内容','CORE-OMS','#E8F5E9','#2E7D32'],['CORE-WMS 现场拣货，客户当场取货','CORE-WMS','#FFF3E0','#E65100'],['QBO 生成现金发票并完成现场收款','QBO','#FFEBEE','#B71C1C']],notes:['零售 WALK-IN 对响应速度要求高，适合流程尽量短、动作尽量少。','现场取货时仍建议保留扫码与单据记录，避免库存失真。','如未来门店零售规模扩大，可进一步拆出 POS 风格界面。']},
-  s9:{c:'#00838F',t:'⑨ 调货',sub:'用于跨地区或跨分部之间的库存协调、报价和装车安排。',metrics:[['涉及系统','CORE-CSM / CORE-OMS / CORE-WMS'],['关键动作','调货报价'],['完成结果','装车调拨'],['流程类型','库存协调']],steps:[['CORE-CSM 定期查看库存与价位信息，判断是否需要调货','CORE-CSM','#F3E5F5','#6A1B9A'],['CORE-OMS 编辑 estimate，形成调货报价或调拨单据','CORE-OMS','#E8F5E9','#2E7D32'],['在团队沟通群内确认调货内容、数量和接收方安排','协同沟通','#F5F5F5','#777'],['提前打印调货单，CORE-WMS 按计划安排装车与发运','CORE-WMS','#FFF3E0','#E65100']],notes:['调货场景的难点主要在跨团队协同和时间安排。','如果能把群消息确认沉淀为系统状态，会更方便追踪执行。','建议后续把调货的发起、确认、装车、签收做成更完整的状态流。']}
-};
+        function renderDetail(sc) {
+            const d = D[sc];
+            document.getElementById('colorbar').style.background = d.c;
+            document.getElementById('detailTitle').textContent = d.t;
+            document.getElementById('detailSub').textContent = d.sub;
 
-function renderDetail(sc){
-  const d=D[sc];
-  document.getElementById('colorbar').style.background=d.c;
-  document.getElementById('detailTitle').textContent=d.t;
-  document.getElementById('detailSub').textContent=d.sub;
+            const sg = document.getElementById('summaryGrid');
+            sg.innerHTML = '';
+            d.metrics.forEach(([k, v]) => {
+                const el = document.createElement('div');
+                el.className = 'metric';
+                el.innerHTML = `<div class="k">${k}</div><div class="v">${v}</div>`;
+                sg.appendChild(el);
+            });
 
-  const sg=document.getElementById('summaryGrid');
-  sg.innerHTML='';
-  d.metrics.forEach(([k,v])=>{
-    const el=document.createElement('div');
-    el.className='metric';
-    el.innerHTML=`<div class="k">${k}</div><div class="v">${v}</div>`;
-    sg.appendChild(el);
-  });
+            const tl = document.getElementById('timeline');
+            tl.innerHTML = '';
+            d.steps.forEach((item, i) => {
+                const [text, label, bg, col] = item;
+                const step = document.createElement('div');
+                step.className = 'step';
+                step.innerHTML = `<div class="no" style="background:${d.c}">${i + 1}</div><div class="step-main"><div class="step-text">${text}</div><span class="badge" style="background:${bg};color:${col}">${label}</span></div>`;
+                tl.appendChild(step);
+            });
 
-  const tl=document.getElementById('timeline');
-  tl.innerHTML='';
-  d.steps.forEach((item,i)=>{
-    const [text,label,bg,col]=item;
-    const step=document.createElement('div');
-    step.className='step';
-    step.innerHTML=`<div class="no" style="background:${d.c}">${i+1}</div><div class="step-main"><div class="step-text">${text}</div><span class="badge" style="background:${bg};color:${col}">${label}</span></div>`;
-    tl.appendChild(step);
-  });
+            const notes = document.getElementById('notes');
+            notes.innerHTML = '';
+            d.notes.forEach(text => {
+                const el = document.createElement('div');
+                el.className = 'note';
+                el.textContent = text;
+                notes.appendChild(el);
+            });
+        }
 
-  const notes=document.getElementById('notes');
-  notes.innerHTML='';
-  d.notes.forEach(text=>{
-    const el=document.createElement('div');
-    el.className='note';
-    el.textContent=text;
-    notes.appendChild(el);
-  });
-}
+        function enhanceNodes() {
+            document.querySelectorAll('.nd').forEach(group => {
+                if (group.querySelector('.node-shell')) return;
+                const rect = group.querySelector('rect');
+                if (!rect) return;
+                const x = parseFloat(rect.getAttribute('x'));
+                const y = parseFloat(rect.getAttribute('y'));
+                const w = parseFloat(rect.getAttribute('width'));
+                const h = parseFloat(rect.getAttribute('height'));
+                const rx = parseFloat(rect.getAttribute('rx') || 4);
+                const shell = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                shell.setAttribute('class', 'node-shell');
+                shell.setAttribute('x', x - 3);
+                shell.setAttribute('y', y - 3);
+                shell.setAttribute('width', w + 6);
+                shell.setAttribute('height', h + 6);
+                shell.setAttribute('rx', rx + 4);
+                group.insertBefore(shell, rect);
 
-function enhanceNodes(){
-  document.querySelectorAll('.nd').forEach(group=>{
-    if(group.querySelector('.node-shell')) return;
-    const rect=group.querySelector('rect');
-    if(!rect) return;
-    const x=parseFloat(rect.getAttribute('x'));
-    const y=parseFloat(rect.getAttribute('y'));
-    const w=parseFloat(rect.getAttribute('width'));
-    const h=parseFloat(rect.getAttribute('height'));
-    const rx=parseFloat(rect.getAttribute('rx') || 4);
-    const shell=document.createElementNS('http://www.w3.org/2000/svg','rect');
-    shell.setAttribute('class','node-shell');
-    shell.setAttribute('x',x-3);
-    shell.setAttribute('y',y-3);
-    shell.setAttribute('width',w+6);
-    shell.setAttribute('height',h+6);
-    shell.setAttribute('rx',rx+4);
-    group.insertBefore(shell,rect);
+                const gloss = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                gloss.setAttribute('class', 'node-gloss');
+                gloss.setAttribute('x', x - 1);
+                gloss.setAttribute('y', y - 1);
+                gloss.setAttribute('width', w + 2);
+                gloss.setAttribute('height', Math.max(10, h * .48));
+                gloss.setAttribute('rx', rx + 2);
+                group.insertBefore(gloss, rect);
 
-    const gloss=document.createElementNS('http://www.w3.org/2000/svg','rect');
-    gloss.setAttribute('class','node-gloss');
-    gloss.setAttribute('x',x-1);
-    gloss.setAttribute('y',y-1);
-    gloss.setAttribute('width',w+2);
-    gloss.setAttribute('height',Math.max(10,h*.48));
-    gloss.setAttribute('rx',rx+2);
-    group.insertBefore(gloss,rect);
+                const accent = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                accent.setAttribute('class', 'node-accent');
+                accent.setAttribute('x', x - .5);
+                accent.setAttribute('y', y - .5);
+                accent.setAttribute('width', w + 1);
+                accent.setAttribute('height', h + 1);
+                accent.setAttribute('rx', rx + 2);
+                group.appendChild(accent);
+            });
+        }
 
-    const accent=document.createElementNS('http://www.w3.org/2000/svg','rect');
-    accent.setAttribute('class','node-accent');
-    accent.setAttribute('x',x-.5);
-    accent.setAttribute('y',y-.5);
-    accent.setAttribute('width',w+1);
-    accent.setAttribute('height',h+1);
-    accent.setAttribute('rx',rx+2);
-    group.appendChild(accent);
-  });
-}
+        function toggleGroup(id) {
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('open');
+        }
 
-function toggleGroup(id){
-  const el=document.getElementById(id);
-  if(el) el.classList.toggle('open');
-}
+        function go(sc, btn) {
+            document.querySelectorAll('.sb').forEach(b => b.classList.remove('on'));
+            btn.classList.add('on');
+            const ns = document.querySelectorAll('.nd');
+            const es = document.querySelectorAll('.eg');
 
-function go(sc,btn){
-  document.querySelectorAll('.sb').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  const ns=document.querySelectorAll('.nd');
-  const es=document.querySelectorAll('.eg');
+            if (sc === 'all') {
+                ns.forEach(n => n.classList.remove('dim', 'lit'));
+                es.forEach(e => { e.classList.remove('dim', 'lit'); e.style.stroke = ''; });
+                renderDetail('all');
+                return;
+            }
 
-  if(sc==='all'){
-    ns.forEach(n=>n.classList.remove('dim','lit'));
-    es.forEach(e=>{e.classList.remove('dim','lit');e.style.stroke='';});
-    renderDetail('all');
-    return;
-  }
+            const col = D[sc].c;
+            ns.forEach(n => {
+                const s = (n.dataset.scenes || '').split(' ');
+                n.classList.toggle('dim', !s.includes(sc));
+                n.classList.toggle('lit', s.includes(sc));
+            });
+            es.forEach(e => {
+                const s = (e.dataset.scenes || '').split(' ');
+                if (s.includes(sc)) {
+                    e.classList.remove('dim');
+                    e.classList.add('lit');
+                    e.style.stroke = col;
+                } else {
+                    e.classList.remove('lit');
+                    e.classList.add('dim');
+                    e.style.stroke = '';
+                }
+            });
+            renderDetail(sc);
+        }
 
-  const col=D[sc].c;
-  ns.forEach(n=>{
-    const s=(n.dataset.scenes||'').split(' ');
-    n.classList.toggle('dim',!s.includes(sc));
-    n.classList.toggle('lit',s.includes(sc));
-  });
-  es.forEach(e=>{
-    const s=(e.dataset.scenes||'').split(' ');
-    if(s.includes(sc)){
-      e.classList.remove('dim');
-      e.classList.add('lit');
-      e.style.stroke=col;
-    }else{
-      e.classList.remove('lit');
-      e.classList.add('dim');
-      e.style.stroke='';
-    }
-  });
-  renderDetail(sc);
-}
+        enhanceNodes();
+        renderDetail('all');
 
-enhanceNodes();
-renderDetail('all');
-</script>
+        // Zoom & Pan Interactivity Implementation
+        let scale = 1;
+        let translateX = 0;
+        let translateY = 0;
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+
+        const svg = document.querySelector('.chart-wrap svg');
+        const wrapper = document.querySelector('.chart-wrap');
+        svg.style.transformOrigin = '0 0';
+        svg.style.cursor = 'grab';
+
+        function updateTransform() {
+            svg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+        }
+
+        wrapper.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.nd') || e.target.closest('button')) return;
+            isDragging = true;
+            svg.style.cursor = 'grabbing';
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            translateX = e.clientX - startX;
+            translateY = e.clientY - startY;
+            updateTransform();
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+            svg.style.cursor = 'grab';
+        });
+
+        wrapper.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomFactor = 1.08;
+            const rect = wrapper.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            const svgMouseX = (mouseX - translateX) / scale;
+            const svgMouseY = (mouseY - translateY) / scale;
+
+            if (e.deltaY < 0) {
+                scale = Math.min(scale * zoomFactor, 4);
+            } else {
+                scale = Math.max(scale / zoomFactor, 0.4);
+            }
+
+            translateX = mouseX - svgMouseX * scale;
+            translateY = mouseY - svgMouseY * scale;
+
+            updateTransform();
+        }, { passive: false });
+
+        function zoomIn() {
+            scale = Math.min(scale * 1.15, 4);
+            updateTransform();
+        }
+
+        function zoomOut() {
+            scale = Math.max(scale / 1.15, 0.4);
+            updateTransform();
+        }
+
+        function resetZoom() {
+            scale = 1;
+            translateX = 0;
+            translateY = 0;
+            updateTransform();
+        }
+    </script>
 </body>
+
 </html>
