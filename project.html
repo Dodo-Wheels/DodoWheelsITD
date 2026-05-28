@@ -282,7 +282,6 @@
         margin-top: 5px;
     }
 
-    /* ── 生态入口 ── */
     .eco {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -358,7 +357,6 @@
         font-family: var(--font-mono);
     }
 
-    /* ── 流程图入口卡片（独立一行，紫色系） ── */
     .process-card {
         background: #fff;
         border: 1px solid #e5e7eb;
@@ -453,7 +451,6 @@
         background: #ddd6fe;
     }
 
-    /* ── 功能按钮 ── */
     .feat-btn {
         display: inline-flex;
         align-items: center;
@@ -487,7 +484,6 @@
         height: 12px;
     }
 
-    /* ── 模态框 ── */
     .modal-backdrop {
         display: none;
         position: fixed;
@@ -520,14 +516,12 @@
             transform: translateY(24px) scale(0.97);
             opacity: 0;
         }
-
         to {
             transform: none;
             opacity: 1;
         }
     }
 
-    /* 流程图模态框宽一些 */
     .modal-box.modal-wide {
         width: min(99vw, 1600px);
         height: min(98vh, 1080px);
@@ -643,7 +637,6 @@
         padding: 0 20px;
     }
 
-    /* ── 进度条 ── */
     .pr {
         margin-bottom: 11px;
     }
@@ -759,7 +752,6 @@
         margin-top: 6px;
     }
 
-    /* ── 时间轴 ── */
     .tl-wrap {
         overflow-x: auto;
     }
@@ -908,19 +900,15 @@
         .metrics {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
-
         .grid2 {
             grid-template-columns: 1fr;
         }
-
         .branches {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
-
         .eco {
             grid-template-columns: 1fr;
         }
-
         .process-card {
             flex-wrap: wrap;
         }
@@ -1031,10 +1019,10 @@
         </div>
         <div class="branch">
             <div class="branch-head">
-                <div class="branch-icon bi-c">🗄️</div>
+                <div class="branch-icon bi-c">🎧</div>
                 <div>
-                    <div class="branch-name">信息管理</div>
-                    <div class="branch-code">CORE-INFO</div>
+                    <div class="branch-name">客服管理</div>
+                    <div class="branch-code">CORE-CSM</div>
                 </div>
             </div>
             <div class="pb">
@@ -1077,7 +1065,7 @@
             <div class="eco-label eco-label-c">🛠️ 入口 2 · 核心系统 Core</div>
             <div class="eco-title">DodoWheels 核心系统</div>
             <a class="eco-url" href="https://dodo-tools.vercel.app/" target="_blank">dodo-tools.vercel.app</a>
-            <div class="eco-note">OMS · WMS · WEBADMIN · INFO · QBO 集成，统一后台入口。</div>
+            <div class="eco-note">OMS · WMS · WEBADMIN · CSM · QBO 集成，统一后台入口。</div>
             <div class="eco-cred">
                 <span class="cred">user: Frank</span>
                 <span class="cred">pw: 2555</span>
@@ -1148,8 +1136,7 @@
             <div class="pr">
                 <div class="pr-head">
                     <div class="pr-left">
-                        <div class="pr-dot pd-g"></div><span class="pr-name">订单管理</span><span
-                            class="pr-code">CORE-OMS</span>
+                        <div class="pr-dot pd-g"></div><span class="pr-name">订单管理</span><span class="pr-code">CORE-OMS</span>
                     </div><span class="pr-pct">—</span>
                 </div>
                 <div class="pb2">
@@ -1159,8 +1146,7 @@
             <div class="pr">
                 <div class="pr-head">
                     <div class="pr-left">
-                        <div class="pr-dot pd-g"></div><span class="pr-name">仓储管理</span><span
-                            class="pr-code">CORE-WMS</span>
+                        <div class="pr-dot pd-g"></div><span class="pr-name">仓储管理</span><span class="pr-code">CORE-WMS</span>
                     </div><span class="pr-pct">—</span>
                 </div>
                 <div class="pb2">
@@ -1170,8 +1156,7 @@
             <div class="pr">
                 <div class="pr-head">
                     <div class="pr-left">
-                        <div class="pr-dot pd-g"></div><span class="pr-name">网站管理</span><span
-                            class="pr-code">CORE-WEBADMIN</span>
+                        <div class="pr-dot pd-g"></div><span class="pr-name">网站管理</span><span class="pr-code">CORE-WEBADMIN</span>
                     </div><span class="pr-pct">—</span>
                 </div>
                 <div class="pb2">
@@ -1181,8 +1166,7 @@
             <div class="pr">
                 <div class="pr-head">
                     <div class="pr-left">
-                        <div class="pr-dot pd-g"></div><span class="pr-name">信息管理</span><span
-                            class="pr-code">CORE-INFO</span>
+                        <div class="pr-dot pd-g"></div><span class="pr-name">客服管理</span><span class="pr-code">CORE-CSM</span>
                     </div><span class="pr-pct">—</span>
                 </div>
                 <div class="pb2">
@@ -1192,8 +1176,7 @@
             <div class="pr">
                 <div class="pr-head">
                     <div class="pr-left">
-                        <div class="pr-dot pd-a"></div><span class="pr-name">QBO 集成</span><span
-                            class="pr-code">CORE-LINK-QBO</span>
+                        <div class="pr-dot pd-a"></div><span class="pr-name">QBO 集成</span><span class="pr-code">CORE-LINK-QBO</span>
                     </div><span class="pr-pct">—</span>
                 </div>
                 <div class="pb2">
@@ -1273,7 +1256,6 @@
 </div>
 
 <script>
-    /* 时间计算 */
     const projectStart = new Date(2026, 4, 10);
     const projectEnd = new Date(2026, 11, 31);
     const trialStart = new Date(2027, 0, 1);
@@ -1336,7 +1318,6 @@
     updateDateProgress();
     window.addEventListener('resize', updateDateProgress);
 
-    /* 模态框逻辑 — wide 参数控制是否用宽版 */
     function openModal(type, title, badgeText, badgeClass, src, wide) {
         const backdrop = document.getElementById('modal-backdrop');
         const box = document.getElementById('modal-box');
