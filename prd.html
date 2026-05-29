@@ -3,14 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>高级思维导图看板</title>
+    <title>DodoWheels System 架构蓝图</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+    
     <style>
-        /* 基础深色科技感背景 */
+        /* 1. 全局样式 - 采用经典 macOS 级暗黑视网膜背景与科技蓝渐变 */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        
         body {
             margin: 0;
             padding: 0;
-            background: radial-gradient(circle at 50% 50%, #1a1c29 0%, #0e1017 100%);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: radial-gradient(circle at 50% 50%, #161926 0%, #0b0d14 100%);
+            color: #f5f5f7;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro SC", "HanHei SC", sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -18,142 +26,325 @@
             overflow: hidden;
         }
 
-        /* 整个画布的包裹容器，带有霓虹渐变边框和毛玻璃效果 */
-        .container {
+        /* 2. 主看板容器 - 毛玻璃磨砂层析质感（Glassmorphism） */
+        .dashboard-container {
             position: relative;
-            width: 90vw;
-            max-width: 1200px;
-            height: 80vh;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 24px;
-            padding: 16px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            animation: fadeIn 1s ease-out;
+            width: 95vw;
+            max-width: 1400px;
+            height: 90vh;
+            background: rgba(30, 34, 51, 0.4);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            animation: appScaleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* 渐变流光外边框效果 */
-        .container::before {
+        /* 悬浮边缘流光微效 */
+        .dashboard-container::before {
             content: '';
             position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899, #3b82f6);
-            border-radius: 26px;
+            top: -1px; left: -1px; right: -1px; bottom: -1px;
+            background: linear-gradient(135deg, rgba(47, 128, 237, 0.4), rgba(155, 81, 224, 0.2), transparent);
+            border-radius: 21px;
             z-index: -1;
-            opacity: 0.3;
-            transition: opacity 0.5s ease;
+            pointer-events: none;
         }
 
-        .container:hover::before {
-            opacity: 0.7; /* 鼠标悬浮时边框变亮 */
-        }
-
-        /* 头部装饰栏 */
-        .header-bar {
+        /* 3. 头部工具栏（仿 Mac 顶栏设计） */
+        .mac-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
-            padding: 0 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 16px;
+            margin-bottom: 16px;
         }
 
-        /* 模拟 Mac 窗口的三个彩色圆点 */
-        .window-dots {
+        .window-controls {
             display: flex;
             gap: 8px;
         }
+
         .dot {
             width: 12px;
             height: 12px;
             border-radius: 50%;
+            opacity: 0.85;
         }
-        .dot-red { background: #ff5f56; }
-        .dot-yellow { background: #ffbd2e; }
-        .dot-green { background: #27c93f; }
+        .dot-close { background-color: #ff5f56; }
+        .dot-minimize { background-color: #ffbd2e; }
+        .dot-maximize { background-color: #27c93f; }
 
-        /* 标题样式 */
-        .title {
+        .app-title-group {
+            text-align: center;
+        }
+
+        .app-title {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
             color: #ffffff;
-            font-size: 16px;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-shadow: 0 2px 10px rgba(255,255,255,0.1);
-            opacity: 0.9;
+            background: linear-gradient(135deg, #ffffff 0%, #a2b4f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
         }
 
-        /* 全屏按钮 */
-        .fullscreen-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
-            padding: 6px 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.3s;
-            backdrop-filter: blur(5px);
+        .app-subtitle {
+            font-size: 11px;
+            color: #6e7694;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .fullscreen-btn:hover {
-            background: #ffffff;
-            color: #000;
-            box-shadow: 0 0 15px rgba(255,255,255,0.5);
+
+        .action-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* 4. 极致做工的高级按钮 */
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #d2d2d7;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(47, 128, 237, 0.25);
+            color: #ffffff;
+            border-color: rgba(47, 128, 237, 0.5);
+            box-shadow: 0 0 15px rgba(47, 128, 237, 0.3);
             transform: translateY(-1px);
         }
 
-        /* 内嵌 iframe 的容器 */
-        .iframe-wrapper {
-            position: relative;
-            width: 100%;
-            height: calc(100% - 45px);
-            border-radius: 14px;
-            overflow: hidden;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
-            background: #141414; /* 契合Miro加载前的黑屏 */
+        .nav-btn:active {
+            transform: translateY(0);
         }
 
-        /* 你的 Miro Iframe 核心样式重写 */
-        iframe {
+        /* 5. 地图渲染画布区域 */
+        .canvas-area {
+            flex: 1;
+            width: 100%;
+            background: rgba(10, 12, 19, 0.6);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+            cursor: grab;
+        }
+
+        .canvas-area:active {
+            cursor: grabbing;
+        }
+
+        /* 操作小贴士 */
+        .tip-overlay {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            background: rgba(15, 18, 28, 0.85);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 11px;
+            color: #86868b;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            pointer-events: none;
+            backdrop-filter: blur(5px);
+        }
+
+        /* 6. 覆写 Mermaid 导图内置的 SVG 节点样式，调配完美的高级蓝视觉轴线 */
+        .mermaid {
             width: 100%;
             height: 100%;
-            border: none;
-            display: block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* 入场动画 */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+        g.mindmap-node box {
+            fill: #1e2438 !important;
+            stroke: #2f80ed !important;
+            stroke-width: 1.5px !important;
+            rx: 8px !important;
+            ry: 8px !important;
+        }
+
+        g.mindmap-node--root box {
+            fill: linear-gradient(135deg, #2f80ed, #0056b3) !important;
+            stroke: #4fa1ff !important;
+            stroke-width: 2.5px !important;
+            rx: 12px !important;
+            ry: 12px !important;
+        }
+
+        g.mindmap-node--edge {
+            stroke: rgba(47, 128, 237, 0.35) !important;
+            stroke-width: 2px !important;
+        }
+
+        g.mindmap-node text {
+            fill: #e2e8f0 !important;
+            font-size: 13px !important;
+            font-weight: 500 !important;
+        }
+
+        g.mindmap-node--root text {
+            font-size: 16px !important;
+            font-weight: 700 !important;
+            fill: #ffffff !important;
+        }
+
+        /* 7. 炫酷入场动画 */
+        @keyframes appScaleIn {
+            from { opacity: 0; transform: scale(0.96) translateY(15px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <div class="container" id="mainContainer">
-        <div class="header-bar">
-            <div class="window-dots">
-                <div class="dot dot-red"></div>
-                <div class="dot dot-yellow"></div>
-                <div class="dot dot-green"></div>
+    <div class="dashboard-container" id="appFrame">
+        <div class="mac-header">
+            <div class="window-controls">
+                <div class="dot dot-close"></div>
+                <div class="dot dot-minimize"></div>
+                <div class="dot dot-maximize"></div>
             </div>
-            <div class="title">🪐 核心策略与架构思维导图</div>
-            <button class="fullscreen-btn" onclick="toggleFullscreen()">全屏沉浸</button>
+            
+            <div class="app-title-group">
+                <h1 class="app-title">DodoWheels System 数字化架构全景</h1>
+                <div class="app-subtitle">Miro 节点底层原生重构蓝图</div>
+            </div>
+            
+            <div class="action-controls">
+                <button class="nav-btn" onclick="resetZoom()">定位居中</button>
+                <button class="nav-btn" onclick="toggleFullscreen()">全屏沉浸</button>
+            </div>
         </div>
 
-        <div class="iframe-wrapper">
-            <iframe src="https://miro.com/app/live-embed/uXjVHMGgCqk=/?focusWidget=3458764644104425093&embedMode=view_only_without_ui&embedId=871661171248" allow="fullscreen; clipboard-read; clipboard-write" allowfullscreen></iframe>
+        <div class="canvas-area" id="canvasArea">
+            <pre class="mermaid" id="mermaidTree">
+            mindmap
+              root((DodoWheels System))
+                【网站系统】WEB
+                  用户中心
+                    注册信息
+                      客户注册
+                      注册审核
+                    客户登录
+                      登录成功
+                      登录失败
+                    密码安全
+                      找回密码
+                      修改密码
+                  客户看板
+                    基本信息
+                    客户信息
+                    订单信息
+                    购物车
+                  产品服务
+                    产品浏览
+                      轮胎展示信息
+                      轮毂展示信息
+                      配件展示信息
+                    产品查询
+                      轮胎查询
+                        按照尺寸查询
+                        按照车型查询
+                      轮毂查询
+                        按照尺寸查询
+                        按照车型查询
+                      配件查询
+                        按照车型查询
+                      Mounted Package查询
+                        按照车型查询
+                      特惠产品查询
+                  客户工具箱
+                    轮胎计算器
+                    轮毂计算器
+                    轮毂TryOn
+                  基础信息
+                    关于我们
+                    联系我们
+                    配送信息
+                    Privacy Policy
+                    Term of Service
+                【核心系统】CORE
+                【财务系统】QBO
+            </pre>
+            
+            <div class="tip-overlay">💡 提示：支持鼠标滚轮缩放、按住鼠标左键可任意拖拽平移看板</div>
         </div>
     </div>
 
     <script>
-        // 全屏切换高级交互 JS
+        // 初始化 Mermaid 配置（采用暗色系自适应匹配）
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            securityLevel: 'loose',
+            mindmap: {
+                useMaxWidth: false
+            }
+        });
+
+        let panZoomInstance = null;
+
+        // 等待 Mermaid 渲染完成之后，注入缩放和平移交互
+        mermaid.bindVideoElements;
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const svgElement = document.querySelector('#canvasArea svg');
+                if (svgElement) {
+                    // 清除固定宽高，使其能够百分百自适应容器
+                    svgElement.setAttribute('width', '100%');
+                    svgElement.setAttribute('height', '100%');
+                    
+                    // 绑定高级平移与无级缩放插件
+                    panZoomInstance = svgPanZoom(svgElement, {
+                        zoomEnabled: true,
+                        controlIconsEnabled: false,
+                        fit: true,
+                        center: true,
+                        minZoom: 0.2,
+                        maxZoom: 10,
+                        zoomScaleFactor: 0.15
+                    });
+                }
+            }, 800); // 延时等待SVG动态绘制完成
+        });
+
+        // 居中复位控制
+        function resetZoom() {
+            if (panZoomInstance) {
+                panZoomInstance.resetZoom();
+                panZoomInstance.center();
+                panZoomInstance.fit();
+            }
+        }
+
+        // 全屏沉浸式切换
         function toggleFullscreen() {
-            const container = document.getElementById('mainContainer');
+            const el = document.getElementById('appFrame');
             if (!document.fullscreenElement) {
-                container.requestFullscreen().catch(err => {
-                    alert(`无法全屏: ${err.message}`);
+                el.requestFullscreen().catch(err => {
+                    alert(`开启全屏失败: ${err.message}`);
                 });
             } else {
                 document.exitFullscreen();
