@@ -1,1 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高级思维导图看板</title>
+    <style>
+        /* 基础深色科技感背景 */
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at 50% 50%, #1a1c29 0%, #0e1017 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
 
+        /* 整个画布的包裹容器，带有霓虹渐变边框和毛玻璃效果 */
+        .container {
+            position: relative;
+            width: 90vw;
+            max-width: 1200px;
+            height: 80vh;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            padding: 16px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* 渐变流光外边框效果 */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899, #3b82f6);
+            border-radius: 26px;
+            z-index: -1;
+            opacity: 0.3;
+            transition: opacity 0.5s ease;
+        }
+
+        .container:hover::before {
+            opacity: 0.7; /* 鼠标悬浮时边框变亮 */
+        }
+
+        /* 头部装饰栏 */
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            padding: 0 8px;
+        }
+
+        /* 模拟 Mac 窗口的三个彩色圆点 */
+        .window-dots {
+            display: flex;
+            gap: 8px;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        /* 标题样式 */
+        .title {
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(255,255,255,0.1);
+            opacity: 0.9;
+        }
+
+        /* 全屏按钮 */
+        .fullscreen-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        .fullscreen-btn:hover {
+            background: #ffffff;
+            color: #000;
+            box-shadow: 0 0 15px rgba(255,255,255,0.5);
+            transform: translateY(-1px);
+        }
+
+        /* 内嵌 iframe 的容器 */
+        .iframe-wrapper {
+            position: relative;
+            width: 100%;
+            height: calc(100% - 45px);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+            background: #141414; /* 契合Miro加载前的黑屏 */
+        }
+
+        /* 你的 Miro Iframe 核心样式重写 */
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* 入场动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="mainContainer">
+        <div class="header-bar">
+            <div class="window-dots">
+                <div class="dot dot-red"></div>
+                <div class="dot dot-yellow"></div>
+                <div class="dot dot-green"></div>
+            </div>
+            <div class="title">🪐 核心策略与架构思维导图</div>
+            <button class="fullscreen-btn" onclick="toggleFullscreen()">全屏沉浸</button>
+        </div>
+
+        <div class="iframe-wrapper">
+            <iframe src="https://miro.com/app/live-embed/uXjVHMGgCqk=/?focusWidget=3458764644104425093&embedMode=view_only_without_ui&embedId=871661171248" allow="fullscreen; clipboard-read; clipboard-write" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        // 全屏切换高级交互 JS
+        function toggleFullscreen() {
+            const container = document.getElementById('mainContainer');
+            if (!document.fullscreenElement) {
+                container.requestFullscreen().catch(err => {
+                    alert(`无法全屏: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+    </script>
+</body>
+</html>
