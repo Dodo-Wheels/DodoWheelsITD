@@ -1,61 +1,848 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>DodoWheels System 功能架构汇总</title>
-<style>
-:root{
-  --bg:#f5f9ff;--panel:#ffffff;--ink:#14213d;--muted:#65758b;--line:#b9d8f4;
-  --l1:#173b78;--l2:#2369b3;--l3:#62a8df;--l4:#eaf6ff;--accent:#1677ff;
-  --shadow:0 18px 45px rgba(30,86,140,.12);--radius:22px;
-}
-*{box-sizing:border-box} html{scroll-behavior:smooth}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;background:radial-gradient(circle at top left,#eaf5ff 0,#f7fbff 38%,#ffffff 100%);color:var(--ink)}
-.app{display:grid;grid-template-columns:286px 1fr;min-height:100vh}
-.sidebar{position:sticky;top:0;height:100vh;padding:26px 20px;background:rgba(255,255,255,.78);backdrop-filter:blur(18px);border-right:1px solid #dcecff;box-shadow:8px 0 30px rgba(48,101,160,.08);overflow:auto}
-.brand{padding:18px;border-radius:24px;background:linear-gradient(135deg,#173b78,#2693ff);color:#fff;box-shadow:var(--shadow);margin-bottom:24px}.brand h1{font-size:20px;margin:0 0 8px}.brand p{font-size:12px;margin:0;opacity:.86}
-.nav-title{font-size:13px;font-weight:800;color:#70839a;margin:24px 8px 10px;letter-spacing:.08em}.nav a{display:flex;align-items:center;gap:10px;padding:12px 14px;margin:6px 0;border-radius:16px;text-decoration:none;color:#263b55;font-weight:650;font-size:14px}.nav a:hover{background:#edf7ff;color:#075bbf}.dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
-.main{padding:24px 34px 58px}.window{position:sticky;top:18px;z-index:10;background:rgba(255,255,255,.86);backdrop-filter:blur(20px);border:1px solid #dcebff;border-radius:26px;box-shadow:var(--shadow);padding:16px 18px;margin-bottom:26px;display:flex;align-items:center;justify-content:space-between;gap:16px}.lights{display:flex;gap:9px}.light{width:13px;height:13px;border-radius:50%}.red{background:#ff5f57}.yellow{background:#ffbd2e}.green{background:#28c840}.title{font-size:18px;font-weight:850}.subtitle{font-size:12px;color:var(--muted);margin-top:3px}.actions{display:flex;gap:10px;flex-wrap:wrap}button{border:0;border-radius:999px;padding:10px 16px;background:linear-gradient(135deg,#1c75ff,#4eb2ff);color:#fff;font-weight:750;box-shadow:0 10px 22px rgba(22,119,255,.2);cursor:pointer}button.secondary{background:#eef7ff;color:#155da4;box-shadow:none;border:1px solid #cfe7ff}
-.hero{padding:28px;border-radius:28px;background:linear-gradient(135deg,#ffffff,#eef8ff);border:1px solid #dcecff;box-shadow:var(--shadow);margin-bottom:26px}.hero h2{margin:0 0 10px;font-size:30px}.hero p{margin:0;color:var(--muted);line-height:1.7}.legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.tag{border-radius:999px;padding:8px 12px;font-size:12px;font-weight:750}.tag:nth-child(1){background:#e7efff;color:var(--l1)}.tag:nth-child(2){background:#e9f4ff;color:var(--l2)}.tag:nth-child(3){background:#eef9ff;color:#2574a9}.tag:nth-child(4){background:#f6fbff;color:#5b7690;border:1px solid #dbeeff}
-.grid{display:grid;gap:22px}.card{background:var(--panel);border:1px solid #dcecff;border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;scroll-margin-top:105px}.card-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e8f3ff;padding-bottom:14px;margin-bottom:18px}.card h3{margin:0;font-size:21px}.badge{font-size:12px;color:#1768b8;background:#eef7ff;border:1px solid #cfe6ff;border-radius:999px;padding:7px 10px;font-weight:800}
-.tree{--gap:22px}.node{position:relative;margin:10px 0 10px 26px}.node::before{content:"";position:absolute;left:-18px;top:-10px;width:1px;height:calc(100% + 20px);background:var(--line)}.node::after{content:"";position:absolute;left:-18px;top:18px;width:18px;height:1px;background:var(--line)}.node:first-child::before{top:18px}.node:last-child::before{height:28px}.pill{display:inline-flex;align-items:center;gap:8px;border-radius:15px;padding:10px 13px;font-size:14px;font-weight:760;border:1px solid transparent}.l2>.pill{background:linear-gradient(135deg,var(--l2),#4b99dd);color:#fff}.l3>.pill{background:#e8f5ff;color:#155f9c;border-color:#c6e4fb}.l4>.pill{background:var(--l4);color:#486276;border-color:#d9ecfb;font-weight:650}.children{margin-left:24px}.collapsed .children{display:none}.toggle{font-size:12px;background:#f3f9ff;color:#1b66ad;border:1px solid #d9edff;padding:4px 8px;border-radius:99px;cursor:pointer;box-shadow:none}.footer{text-align:center;color:#7d8fa3;font-size:12px;margin-top:28px}
-@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{position:relative;height:auto}.window{position:relative;top:auto}.main{padding:18px}.actions{width:100%}}@media print{.sidebar,.actions{display:none}.app{display:block}.main{padding:0}.window{position:relative;box-shadow:none}.card,.hero{box-shadow:none;break-inside:avoid}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DodoWheels 三大系统功能架构 PRD</title>
+    <style>
+        :root {
+            --bg: #f6f8fb;
+            --panel: #ffffff;
+            --ink: #172033;
+            --muted: #657287;
+            --line: #c7d8ee;
+            --primary: #2468d8;
+            --primary-dark: #173f8a;
+            --soft: #eef5ff;
+            --soft-2: #f6fbff;
+            --border: #dbe7f6;
+            --shadow: 0 16px 40px rgba(36, 104, 216, .11);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+            background:
+                linear-gradient(90deg, rgba(36, 104, 216, .035) 1px, transparent 1px),
+                linear-gradient(rgba(36, 104, 216, .035) 1px, transparent 1px),
+                var(--bg);
+            background-size: 22px 22px;
+            color: var(--ink);
+        }
+
+        .app {
+            display: grid;
+            grid-template-columns: 280px minmax(0, 1fr);
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 24px 18px;
+            background: rgba(255, 255, 255, .88);
+            border-right: 1px solid var(--border);
+            backdrop-filter: blur(16px);
+            overflow: auto;
+        }
+
+        .brand {
+            padding: 18px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: #fff;
+            box-shadow: var(--shadow);
+        }
+
+        .brand h1 {
+            margin: 0 0 8px;
+            font-size: 20px;
+            letter-spacing: 0;
+        }
+
+        .brand p {
+            margin: 0;
+            color: rgba(255, 255, 255, .82);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .nav-title {
+            margin: 24px 8px 8px;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .nav a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 4px 0;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: #26364d;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .nav a:hover {
+            background: var(--soft);
+            color: var(--primary-dark);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--primary);
+            flex: 0 0 auto;
+        }
+
+        .main {
+            padding: 24px 32px 56px;
+        }
+
+        .toolbar {
+            position: sticky;
+            top: 16px;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 22px;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .9);
+            backdrop-filter: blur(16px);
+            box-shadow: var(--shadow);
+        }
+
+        .window-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .lights {
+            display: flex;
+            gap: 8px;
+            flex: 0 0 auto;
+        }
+
+        .light {
+            width: 12px;
+            height: 12px;
+            border-radius: 999px;
+        }
+
+        .red {
+            background: #ff5f57;
+        }
+
+        .yellow {
+            background: #ffbd2e;
+        }
+
+        .green {
+            background: #28c840;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: 850;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .subtitle {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        button {
+            min-height: 38px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            padding: 8px 12px;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        button.secondary {
+            background: var(--soft);
+            border-color: #cfe0f6;
+            color: var(--primary-dark);
+        }
+
+        .hero {
+            margin-bottom: 22px;
+            padding: 26px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: linear-gradient(135deg, #fff, #f0f6ff);
+            box-shadow: var(--shadow);
+        }
+
+        .hero h2 {
+            margin: 0 0 10px;
+            font-size: 30px;
+            letter-spacing: 0;
+        }
+
+        .hero p {
+            max-width: 920px;
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.75;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .metric {
+            min-height: 78px;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .82);
+        }
+
+        .metric strong {
+            display: block;
+            font-size: 24px;
+            color: var(--primary-dark);
+        }
+
+        .metric span {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .grid {
+            display: grid;
+            gap: 18px;
+        }
+
+        .card {
+            scroll-margin-top: 104px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--panel);
+            box-shadow: var(--shadow);
+            padding: 20px;
+        }
+
+        .card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #e7eff9;
+        }
+
+        .card h3 {
+            margin: 0;
+            font-size: 21px;
+        }
+
+        .badge {
+            padding: 6px 10px;
+            border: 1px solid #cfe0f6;
+            border-radius: 999px;
+            background: var(--soft);
+            color: var(--primary-dark);
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .tree {
+            padding: 2px 0;
+        }
+
+        .compact-tree {
+            overflow-x: auto;
+            padding-bottom: 6px;
+        }
+
+        .node {
+            position: relative;
+            margin: 10px 0 10px 28px;
+        }
+
+        .node::before {
+            content: "";
+            position: absolute;
+            left: -18px;
+            top: -10px;
+            width: 1px;
+            height: calc(100% + 20px);
+            background: var(--line);
+        }
+
+        .node::after {
+            content: "";
+            position: absolute;
+            left: -18px;
+            top: 18px;
+            width: 18px;
+            height: 1px;
+            background: var(--line);
+        }
+
+        .node:first-child::before {
+            top: 18px;
+        }
+
+        .node:last-child::before {
+            height: 28px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            max-width: 100%;
+            min-height: 36px;
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            line-height: 1.35;
+            font-size: 14px;
+            font-weight: 760;
+            vertical-align: top;
+        }
+
+        .root>.pill {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: #fff;
+        }
+
+        .l2>.pill {
+            background: #e9f2ff;
+            border-color: #c7dcf8;
+            color: var(--primary-dark);
+        }
+
+        .l3>.pill {
+            background: var(--soft-2);
+            border-color: #d8e9f9;
+            color: #24445f;
+        }
+
+        .l4>.pill {
+            background: #fff;
+            border-color: #e1ebf5;
+            color: #526177;
+            font-weight: 650;
+        }
+
+        .children {
+            margin-left: 26px;
+        }
+
+        .collapsed>.children {
+            display: none;
+        }
+
+        .compact-tree>.root {
+            margin: 0;
+        }
+
+        .compact-tree>.root::before,
+        .compact-tree>.root::after {
+            display: none;
+        }
+
+        .compact-tree>.root>.pill {
+            margin-bottom: 14px;
+        }
+
+        .compact-tree>.root>.children {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(250px, 1fr));
+            gap: 14px;
+            margin-left: 0;
+            min-width: 820px;
+        }
+
+        .compact-tree>.root.collapsed>.children {
+            display: none;
+        }
+
+        .compact-tree>.root>.children>.node {
+            margin: 0;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #fbfdff;
+        }
+
+        .compact-tree>.root>.children>.node::before,
+        .compact-tree>.root>.children>.node::after {
+            display: none;
+        }
+
+        .compact-tree>.root>.children>.node>.pill {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .compact-tree>.root>.children>.node>.children {
+            margin-left: 6px;
+            padding-top: 8px;
+        }
+
+        .toggle {
+            display: inline-grid;
+            place-items: center;
+            width: 24px;
+            height: 24px;
+            min-height: 24px;
+            padding: 0;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, .72);
+            border-color: rgba(23, 63, 138, .2);
+            color: inherit;
+            box-shadow: none;
+            font-size: 15px;
+            line-height: 1;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .feature {
+            min-height: 86px;
+            padding: 14px;
+            border: 1px solid #e1ebf5;
+            border-radius: 8px;
+            background: #fbfdff;
+        }
+
+        .feature h4 {
+            margin: 0 0 8px;
+            font-size: 15px;
+        }
+
+        .feature p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .footer {
+            margin-top: 26px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+        }
+
+        @media (max-width: 980px) {
+            .app {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                height: auto;
+            }
+
+            .toolbar {
+                position: relative;
+                top: auto;
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .main {
+                padding: 18px;
+            }
+
+            .summary,
+            .feature-list {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .summary,
+            .feature-list {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h2 {
+                font-size: 24px;
+            }
+
+            .children {
+                margin-left: 16px;
+            }
+        }
+
+        @media print {
+            body {
+                background: #fff;
+            }
+
+            .sidebar,
+            .actions {
+                display: none;
+            }
+
+            .app {
+                display: block;
+            }
+
+            .main {
+                padding: 0;
+            }
+
+            .toolbar,
+            .hero,
+            .card {
+                box-shadow: none;
+                break-inside: avoid;
+            }
+
+            .toolbar {
+                position: relative;
+                top: auto;
+            }
+        }
+    </style>
 </head>
+
 <body>
-<div class="app">
-  <aside class="sidebar">
-    <div class="brand"><h1>DodoWheels System</h1><p>系统架构 · 功能模块 · 操作下钻</p></div>
-    <div class="nav-title">主系统</div><nav class="nav"><a href="#overview"><span class="dot"></span>系统总览</a><a href="#web"><span class="dot"></span>官网 / 门户</a><a href="#core"><span class="dot"></span>核心业务系统</a></nav>
-    <div class="nav-title">功能模块</div><nav class="nav"><a href="#admin"><span class="dot"></span>管理后台 ADMIN</a><a href="#oms"><span class="dot"></span>订单系统 OMS</a><a href="#csm"><span class="dot"></span>客服系统 CSM</a><a href="#wms"><span class="dot"></span>仓储系统 WMS</a><a href="#analytics"><span class="dot"></span>数据与分析</a><a href="#settings"><span class="dot"></span>系统设置</a></nav>
-  </aside>
-  <main class="main">
-    <section class="window"><div style="display:flex;align-items:center;gap:14px"><div class="lights"><span class="light red"></span><span class="light yellow"></span><span class="light green"></span></div><div><div class="title">DodoWheels 功能架构汇总</div><div class="subtitle">L1 主系统 → L2 模块 → L3 功能点 → L4 具体动作</div></div></div><div class="actions"><button onclick="window.print()">打印 / 导出 PDF</button><button class="secondary" onclick="toggleAll(false)">展开全部</button><button class="secondary" onclick="toggleAll(true)">收起全部</button><button class="secondary" onclick="document.documentElement.requestFullscreen?.()">全屏模式</button></div></section>
-    <section class="hero" id="overview"><h2>系统总览</h2><p>本页面基于思维导图整理为右侧树形卡片结构，左侧固定导航按“主系统”与“功能模块”分组，点击即可跳转。每张卡片使用 CSS 原生路径连线展示完整下钻层级，避免拓扑交织，适合内部汇报、方案说明与打印归档。</p><div class="legend"><span class="tag">一级：主系统</span><span class="tag">二级：模块</span><span class="tag">三级：功能点</span><span class="tag">四级：具体动作</span></div></section>
-    <div class="grid">
-      <section class="card" id="web"><div class="card-head"><h3>官网 / 门户</h3><span class="badge">Public Portal</span></div><div class="tree">
-        <div class="node l2"><span class="pill">官网主页</span><div class="children"><div class="node l3"><span class="pill">品牌展示</span></div><div class="node l3"><span class="pill">商品浏览</span></div><div class="node l3"><span class="pill">服务介绍</span></div></div></div>
-        <div class="node l2"><span class="pill">关于我们</span></div><div class="node l2"><span class="pill">联系我们</span></div><div class="node l2"><span class="pill">Privacy Policy</span></div><div class="node l2"><span class="pill">Term of Service</span></div>
-      </div></section>
-      <section class="card" id="core"><div class="card-head"><h3>核心业务系统 CORE</h3><span class="badge">Business Core</span></div><div class="tree">
-        <div class="node l2"><span class="pill">安全层</span><div class="children"><div class="node l3"><span class="pill">身份认证</span></div><div class="node l3"><span class="pill">权限控制</span></div></div></div>
-        <div class="node l2"><span class="pill">数据同步</span><div class="children"><div class="node l3"><span class="pill">全渠道库存同步</span></div><div class="node l3"><span class="pill">导入 / 导出任务</span></div></div></div>
-      </div></section>
-      <section class="card" id="admin"><div class="card-head"><h3>管理后台 ADMIN</h3><span class="badge">Admin Console</span></div><div class="tree">
-        <div class="node l2"><span class="pill">产品管理</span><div class="children"><div class="node l3"><span class="pill">产品资料</span><div class="children"><div class="node l4"><span class="pill">产品新增</span></div><div class="node l4"><span class="pill">类别管理</span></div><div class="node l4"><span class="pill">品牌管理</span></div><div class="node l4"><span class="pill">库存管理</span></div><div class="node l4"><span class="pill">价格策略</span></div></div></div><div class="node l3"><span class="pill">搜索与筛选</span></div></div></div>
-        <div class="node l2"><span class="pill">权限与角色</span><div class="children"><div class="node l3"><span class="pill">管理员账号维护</span></div><div class="node l3"><span class="pill">角色权限分配</span></div></div></div>
-      </div></section>
-      <section class="card" id="oms"><div class="card-head"><h3>订单系统 OMS</h3><span class="badge">Order Management</span></div><div class="tree"><div class="node l2"><span class="pill">订单管理</span><div class="children"><div class="node l3"><span class="pill">订单处理</span><div class="children"><div class="node l4"><span class="pill">订单检索</span></div><div class="node l4"><span class="pill">订单支付</span></div><div class="node l4"><span class="pill">拣货处理</span></div><div class="node l4"><span class="pill">发货与物流</span></div><div class="node l4"><span class="pill">退款 / 退货</span></div></div></div></div></div></div></section>
-      <section class="card" id="csm"><div class="card-head"><h3>客服系统 CSM</h3><span class="badge">Customer Service</span></div><div class="tree"><div class="node l2"><span class="pill">服务管理</span><div class="children"><div class="node l3"><span class="pill">客户支持</span><div class="children"><div class="node l4"><span class="pill">工单管理</span></div><div class="node l4"><span class="pill">审核待办</span></div><div class="node l4"><span class="pill">AI 辅助工具</span></div><div class="node l4"><span class="pill">站内消息</span></div><div class="node l4"><span class="pill">活动管理</span></div><div class="node l4"><span class="pill">退款管理</span></div></div></div><div class="node l3"><span class="pill">Websocket 集成</span><div class="children"><div class="node l4"><span class="pill">实时消息推送</span></div><div class="node l4"><span class="pill">客服在线状态</span></div></div></div></div></div></div></section>
-      <section class="card" id="wms"><div class="card-head"><h3>仓储系统 WMS</h3><span class="badge">Warehouse</span></div><div class="tree"><div class="node l2"><span class="pill">入库管理</span><div class="children"><div class="node l3"><span class="pill">入库预约</span></div><div class="node l3"><span class="pill">入库上架</span></div><div class="node l3"><span class="pill">上架确认</span></div></div></div><div class="node l2"><span class="pill">库存管理</span><div class="children"><div class="node l3"><span class="pill">库存查询</span></div><div class="node l3"><span class="pill">库存调整</span></div><div class="node l3"><span class="pill">仓位管理</span></div><div class="node l3"><span class="pill">库存预警</span></div></div></div><div class="node l2"><span class="pill">出库管理</span><div class="children"><div class="node l3"><span class="pill">下架拣货</span></div><div class="node l3"><span class="pill">出库交接</span></div><div class="node l3"><span class="pill">异常处理</span></div></div></div></div></section>
-      <section class="card" id="analytics"><div class="card-head"><h3>数据与分析</h3><span class="badge">Analytics</span></div><div class="tree"><div class="node l2"><span class="pill">KPI 数据分析</span><div class="children"><div class="node l3"><span class="pill">销售趋势</span></div><div class="node l3"><span class="pill">库存周转</span></div><div class="node l3"><span class="pill">订单履约</span></div></div></div><div class="node l2"><span class="pill">统计报表</span><div class="children"><div class="node l3"><span class="pill">日常报表</span></div><div class="node l3"><span class="pill">自定义导出</span></div></div></div></div></section>
-      <section class="card" id="settings"><div class="card-head"><h3>系统设置</h3><span class="badge">Settings</span></div><div class="tree"><div class="node l2"><span class="pill">基础配置</span><div class="children"><div class="node l3"><span class="pill">接口管理</span></div><div class="node l3"><span class="pill">角色管理</span></div><div class="node l3"><span class="pill">参数设置</span></div><div class="node l3"><span class="pill">日志管理</span></div></div></div></div></section>
-    </div><div class="footer">© DodoWheels System · Light Executive Summary</div>
-  </main>
-</div>
-<script>
-function toggleAll(close){document.querySelectorAll('.node').forEach(n=>{ if(n.querySelector('.children')) n.classList.toggle('collapsed', close);});}
-document.querySelectorAll('.node').forEach(n=>{ if(n.querySelector(':scope > .children')){ const b=document.createElement('button'); b.textContent='切换'; b.className='toggle'; b.onclick=(e)=>{e.stopPropagation();n.classList.toggle('collapsed')}; n.querySelector(':scope > .pill').appendChild(b); }});
-</script>
-</body></html>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="brand">
+                <h1>DodoWheels 系统架构</h1>
+                <p>三大系统：网站系统-WEB、核心系统-CORE、财务系统-QBO。仅按已提供功能截图整理。</p>
+            </div>
+            <div class="nav-title">页面导航</div>
+            <nav class="nav">
+                <a href="#mindmap"><span class="dot"></span>总体功能树</a>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <section class="toolbar">
+                <div class="window-left">
+                    <div class="lights">
+                        <span class="light red"></span>
+                        <span class="light yellow"></span>
+                        <span class="light green"></span>
+                    </div>
+                    <div>
+                        <div class="title">DodoWheels 三大系统功能架构 PRD</div>
+                        <div class="subtitle">L1 三大系统 -> L2 子系统 / 子模块 -> L3 功能模块 -> L4 功能节点</div>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button type="button" onclick="window.print()">打印 / 导出 PDF</button>
+                    <button type="button" class="secondary" onclick="toggleAll(false)">展开全部</button>
+                    <button type="button" class="secondary" onclick="toggleAll(true)">收起全部</button>
+                </div>
+            </section>
+
+            <div class="grid">
+                <section class="card" id="mindmap">
+                    <div class="card-head">
+                        <h3>总体功能树</h3>
+                        <span class="badge">System Architecture</span>
+                    </div>
+                    <div class="tree compact-tree">
+                        <div class="node root">
+                            <span class="pill">DodoWheels 系统</span>
+                            <div class="children">
+                                <div class="node l2">
+                                    <span class="pill">网站系统-WEB</span>
+                                    <div class="children">
+                                <div class="node l2">
+                                    <span class="pill">客户注册</span>
+                                    <div class="children">
+                                        <div class="node l3"><span class="pill">注册信息</span></div>
+                                        <div class="node l3"><span class="pill">注册审核</span></div>
+                                    </div>
+                                </div>
+                                <div class="node l2">
+                                    <span class="pill">客户登录</span>
+                                    <div class="children">
+                                        <div class="node l3"><span class="pill">登录成功</span></div>
+                                        <div class="node l3">
+                                            <span class="pill">登录失败</span>
+                                            <div class="children">
+                                                <div class="node l4"><span class="pill">找回密码</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="node l2">
+                                    <span class="pill">客户信息</span>
+                                    <div class="children">
+                                        <div class="node l3"><span class="pill">基本信息</span></div>
+                                        <div class="node l3"><span class="pill">订单信息</span></div>
+                                        <div class="node l3"><span class="pill">修改密码</span></div>
+                                    </div>
+                                </div>
+                                <div class="node l2"><span class="pill">购物车</span></div>
+                                <div class="node l2">
+                                    <span class="pill">产品浏览</span>
+                                    <div class="children">
+                                        <div class="node l3"><span class="pill">轮胎展示信息</span></div>
+                                        <div class="node l3"><span class="pill">轮毂展示信息</span></div>
+                                        <div class="node l3"><span class="pill">配件展示信息</span></div>
+                                    </div>
+                                </div>
+                                <div class="node l2">
+                                    <span class="pill">产品查询</span>
+                                    <div class="children">
+                                        <div class="node l3">
+                                            <span class="pill">Mounted Package 查询</span>
+                                            <div class="children">
+                                                <div class="node l4"><span class="pill">按照车型查询</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="node l3">
+                                            <span class="pill">轮胎查询</span>
+                                            <div class="children">
+                                                <div class="node l4"><span class="pill">按照车型查询</span></div>
+                                                <div class="node l4"><span class="pill">按照尺寸查询</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="node l3">
+                                            <span class="pill">轮毂查询</span>
+                                            <div class="children">
+                                                <div class="node l4"><span class="pill">按照车型查询</span></div>
+                                                <div class="node l4"><span class="pill">按照尺寸查询</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="node l3">
+                                            <span class="pill">配件查询</span>
+                                            <div class="children">
+                                                <div class="node l4"><span class="pill">按照车型查询</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="node l3"><span class="pill">特惠产品查询</span></div>
+                                    </div>
+                                </div>
+                                <div class="node l2">
+                                    <span class="pill">客户工具箱</span>
+                                    <div class="children">
+                                        <div class="node l3"><span class="pill">轮胎计算器</span></div>
+                                        <div class="node l3"><span class="pill">轮毂计算器</span></div>
+                                        <div class="node l3"><span class="pill">轮毂TryOn</span></div>
+                                    </div>
+                                </div>
+                                <div class="node l2"><span class="pill">关于我们</span></div>
+                                <div class="node l2"><span class="pill">联系我们</span></div>
+                                <div class="node l2"><span class="pill">配送信息</span></div>
+                                <div class="node l2"><span class="pill">Privacy Policy</span></div>
+                                <div class="node l2"><span class="pill">Term of Service</span></div>
+                                    </div>
+                                </div>
+                                <div class="node l2">
+                                    <span class="pill">核心系统-CORE</span>
+                                    <div class="children">
+                                        <div class="node l3">
+                                            <span class="pill">优惠码</span>
+                                        </div>
+                                        <div class="node l3">
+                                            <span class="pill">采购管理</span>
+                                            <div class="children">
+                                                <div class="node l4"><span class="pill">采购配置</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="node l3">
+                                            <span class="pill">网站管理-WEBADMIN</span>
+                                            <div class="children">
+                                                <div class="node l4">
+                                                    <span class="pill">产品配置</span>
+                                                    <div class="children">
+                                                        <div class="node l4"><span class="pill">产品管理</span></div>
+                                                        <div class="node l4"><span class="pill">类别管理</span></div>
+                                                        <div class="node l4"><span class="pill">品牌管理</span></div>
+                                                        <div class="node l4"><span class="pill">客户类别</span></div>
+                                                        <div class="node l4"><span class="pill">价格管理</span></div>
+                                                        <div class="node l4"><span class="pill">供应商库存配置</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="node l4"><span class="pill">管理员组织结构</span></div>
+                                                <div class="node l4"><span class="pill">管理员-企业子结构</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="node l3">
+                                            <span class="pill">订单管理-OMS</span>
+                                            <div class="children">
+                                                <div class="node l4">
+                                                    <span class="pill">订单管理</span>
+                                                    <div class="children">
+                                                        <div class="node l4"><span class="pill">订单处理</span></div>
+                                                        <div class="node l4"><span class="pill">订单查询</span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="node l3">
+                                            <span class="pill">客服管理-CSM</span>
+                                            <div class="children">
+                                                <div class="node l4">
+                                                    <span class="pill">客服管理</span>
+                                                    <div class="children">
+                                                        <div class="node l4"><span class="pill">预约处理</span></div>
+                                                        <div class="node l4"><span class="pill">站点菜单维护</span></div>
+                                                        <div class="node l4"><span class="pill">活动管理</span></div>
+                                                        <div class="node l4"><span class="pill">客户管理</span></div>
+                                                        <div class="node l4"><span class="pill">库存查询</span></div>
+                                                        <div class="node l4"><span class="pill">AI智能工具</span></div>
+                                                        <div class="node l4"><span class="pill">佣金查询</span></div>
+                                                        <div class="node l4"><span class="pill">调拨管理</span></div>
+                                                        <div class="node l4"><span class="pill">退货管理</span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="node l3"><span class="pill">客户管理</span></div>
+                                        <div class="node l3"><span class="pill">Webex集成</span></div>
+                                        <div class="node l3">
+                                            <span class="pill">仓储管理-WMS</span>
+                                            <div class="children">
+                                                <div class="node l4">
+                                                    <span class="pill">入库管理</span>
+                                                    <div class="children">
+                                                        <div class="node l4"><span class="pill">采购预约</span></div>
+                                                        <div class="node l4"><span class="pill">入库预约</span></div>
+                                                        <div class="node l4"><span class="pill">入库单创建</span></div>
+                                                        <div class="node l4"><span class="pill">上架管理</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="node l4">
+                                                    <span class="pill">库内管理</span>
+                                                    <div class="children">
+                                                        <div class="node l4"><span class="pill">盘点管理</span></div>
+                                                        <div class="node l4"><span class="pill">库存管理</span></div>
+                                                        <div class="node l4"><span class="pill">库存查询</span></div>
+                                                        <div class="node l4"><span class="pill">仓位管理</span></div>
+                                                        <div class="node l4"><span class="pill">库内调整</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="node l4">
+                                                    <span class="pill">出库管理</span>
+                                                    <div class="children">
+                                                        <div class="node l4"><span class="pill">下架管理</span></div>
+                                                        <div class="node l4"><span class="pill">拣货记录</span></div>
+                                                        <div class="node l4"><span class="pill">回收记录</span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="node l3">
+                                            <span class="pill">客户服务</span>
+                                            <div class="children">
+                                                <div class="node l4"><span class="pill">问题管理</span></div>
+                                                <div class="node l4"><span class="pill">车辆管理</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="node l3"><span class="pill">订单提醒分析</span></div>
+                                        <div class="node l3"><span class="pill">系统使用权限</span></div>
+                                        <div class="node l3">
+                                            <span class="pill">系统管理</span>
+                                            <div class="children">
+                                                <div class="node l4"><span class="pill">用户管理</span></div>
+                                                <div class="node l4"><span class="pill">角色配置</span></div>
+                                                <div class="node l4"><span class="pill">数据导入</span></div>
+                                                <div class="node l4"><span class="pill">仓库管理</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="node l2">
+                                    <span class="pill">财务系统-QBO</span>
+                                    <div class="children">
+                                        <div class="node l3"><span class="pill">产品信息同步</span></div>
+                                        <div class="node l3"><span class="pill">库存信息同步</span></div>
+                                        <div class="node l3"><span class="pill">创建 Invoice 单据</span></div>
+                                        <div class="node l3"><span class="pill">创建 Sales Receipt 单据</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <div class="footer">© DodoWheels System · WEB / CORE / QBO PRD</div>
+        </main>
+    </div>
+
+    <script>
+        function toggleAll(close) {
+            document.querySelectorAll(".node").forEach((node) => {
+                if (node.querySelector(":scope > .children")) {
+                    node.classList.toggle("collapsed", close);
+                    const toggle = node.querySelector(":scope > .pill > .toggle");
+                    if (toggle) toggle.textContent = close ? "+" : "-";
+                }
+            });
+        }
+
+        document.querySelectorAll(".node").forEach((node) => {
+            if (!node.querySelector(":scope > .children")) return;
+
+            const toggle = document.createElement("button");
+            toggle.type = "button";
+            toggle.className = "toggle";
+            toggle.textContent = "-";
+            toggle.setAttribute("aria-label", "展开或收起");
+            toggle.addEventListener("click", (event) => {
+                event.stopPropagation();
+                node.classList.toggle("collapsed");
+                toggle.textContent = node.classList.contains("collapsed") ? "+" : "-";
+            });
+
+            node.querySelector(":scope > .pill").appendChild(toggle);
+        });
+
+        toggleAll(true);
+    </script>
+</body>
+
+</html>
