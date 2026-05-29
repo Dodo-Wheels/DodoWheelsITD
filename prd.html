@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels System 架构蓝图</title>
+    <title>DodoWheels 数字化架构系统全景</title>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
     
     <style>
-        /* 1. 全局样式 - 采用经典 macOS 级暗黑视网膜背景与科技蓝渐变 */
+        /* 1. 全局样式 - 顶级原生 App 暗黑质感 */
         *, *::before, *::after {
             box-sizing: border-box;
         }
@@ -16,9 +16,9 @@
         body {
             margin: 0;
             padding: 0;
-            background: radial-gradient(circle at 50% 50%, #161926 0%, #0b0d14 100%);
+            background: radial-gradient(circle at 50% 50%, #121420 0%, #08090d 100%);
             color: #f5f5f7;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro SC", "HanHei SC", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro SC", sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -26,149 +26,146 @@
             overflow: hidden;
         }
 
-        /* 2. 主看板容器 - 毛玻璃磨砂层析质感（Glassmorphism） */
-        .dashboard-container {
+        /* 2. 独立控制台外壳 - 高级毛玻璃（Glassmorphism）与流光边界 */
+        .system-dashboard {
             position: relative;
-            width: 95vw;
-            max-width: 1400px;
-            height: 90vh;
-            background: rgba(30, 34, 51, 0.4);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6),
-                        inset 0 1px 1px rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            width: 96vw;
+            max-width: 1440px;
+            height: 92vh;
+            background: rgba(22, 25, 38, 0.5);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7),
+                        inset 0 1px 0px rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
             display: flex;
             flex-direction: column;
-            animation: appScaleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: systemLaunch 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* 悬浮边缘流光微效 */
-        .dashboard-container::before {
+        /* 极客蓝流光轮廓线 */
+        .system-dashboard::before {
             content: '';
             position: absolute;
             top: -1px; left: -1px; right: -1px; bottom: -1px;
-            background: linear-gradient(135deg, rgba(47, 128, 237, 0.4), rgba(155, 81, 224, 0.2), transparent);
-            border-radius: 21px;
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.4), rgba(153, 51, 255, 0.15), transparent);
+            border-radius: 25px;
             z-index: -1;
             pointer-events: none;
         }
 
-        /* 3. 头部工具栏（仿 Mac 顶栏设计） */
-        .mac-header {
+        /* 3. 仿 macOS 顶栏与交互控件 */
+        .panel-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            padding-bottom: 16px;
-            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 18px;
+            margin-bottom: 18px;
         }
 
-        .window-controls {
+        .window-indicator {
             display: flex;
             gap: 8px;
         }
 
-        .dot {
+        .indicator-dot {
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            opacity: 0.85;
         }
-        .dot-close { background-color: #ff5f56; }
-        .dot-minimize { background-color: #ffbd2e; }
-        .dot-maximize { background-color: #27c93f; }
+        .dot-1 { background-color: #ff5f56; }
+        .dot-2 { background-color: #ffbd2e; }
+        .dot-3 { background-color: #27c93f; }
 
-        .app-title-group {
+        .brand-meta {
             text-align: center;
         }
 
-        .app-title {
-            font-size: 18px;
+        .main-headline {
+            font-size: 20px;
             font-weight: 600;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
             color: #ffffff;
-            background: linear-gradient(135deg, #ffffff 0%, #a2b4f6 100%);
+            background: linear-gradient(135deg, #ffffff 30%, #8ca4f5 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin: 0;
         }
 
-        .app-subtitle {
+        .sub-headline {
             font-size: 11px;
-            color: #6e7694;
-            margin-top: 4px;
+            color: #515975;
+            margin-top: 5px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
 
-        .action-controls {
+        .control-group {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
-        /* 4. 极致做工的高级按钮 */
-        .nav-btn {
-            background: rgba(255, 255, 255, 0.05);
+        /* Apple 风格交互按钮 */
+        .action-button {
+            background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #d2d2d7;
-            padding: 8px 16px;
+            color: #e5e5ea;
+            padding: 8px 18px;
             border-radius: 30px;
             font-size: 12px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        .nav-btn:hover {
-            background: rgba(47, 128, 237, 0.25);
+        .action-button:hover {
+            background: rgba(0, 102, 204, 0.25);
             color: #ffffff;
-            border-color: rgba(47, 128, 237, 0.5);
-            box-shadow: 0 0 15px rgba(47, 128, 237, 0.3);
+            border-color: rgba(0, 102, 204, 0.5);
+            box-shadow: 0 0 18px rgba(0, 102, 204, 0.35);
             transform: translateY(-1px);
         }
 
-        .nav-btn:active {
+        .action-button:active {
             transform: translateY(0);
         }
 
-        /* 5. 地图渲染画布区域 */
-        .canvas-area {
+        /* 4. 无级变焦画布视区 */
+        .viewport-area {
             flex: 1;
             width: 100%;
-            background: rgba(10, 12, 19, 0.6);
-            border-radius: 12px;
-            border: 1px solid rgba(0, 0, 0, 0.3);
+            background: rgba(10, 11, 16, 0.75);
+            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.4);
             overflow: hidden;
             position: relative;
             cursor: grab;
         }
 
-        .canvas-area:active {
+        .viewport-area:active {
             cursor: grabbing;
         }
 
-        /* 操作小贴士 */
-        .tip-overlay {
+        /* 用户贴心微交互提示 */
+        .hud-hint {
             position: absolute;
-            bottom: 16px;
-            left: 16px;
-            background: rgba(15, 18, 28, 0.85);
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 11px;
-            color: #86868b;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            bottom: 20px;
+            left: 20px;
+            background: rgba(13, 15, 23, 0.9);
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #6e7694;
+            border: 1px solid rgba(255, 255, 255, 0.06);
             pointer-events: none;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* 6. 覆写 Mermaid 导图内置的 SVG 节点样式，调配完美的高级蓝视觉轴线 */
+        /* 5. 独家重绘专属架构树 SVG 渲染层（全面对齐 Mac 风格暗蓝高纯度滤镜） */
         .mermaid {
             width: 100%;
             height: 100%;
@@ -177,29 +174,33 @@
             align-items: center;
         }
 
-        g.mindmap-node box {
-            fill: #1e2438 !important;
-            stroke: #2f80ed !important;
-            stroke-width: 1.5px !important;
-            rx: 8px !important;
-            ry: 8px !important;
-        }
-
+        /* 核心树根 */
         g.mindmap-node--root box {
-            fill: linear-gradient(135deg, #2f80ed, #0056b3) !important;
-            stroke: #4fa1ff !important;
-            stroke-width: 2.5px !important;
-            rx: 12px !important;
-            ry: 12px !important;
+            fill: url(#blueGradient) !important;
+            stroke: #0071e3 !important;
+            stroke-width: 3px !important;
+            rx: 14px !important;
+            ry: 14px !important;
         }
 
+        /* 一级系统节点 */
+        g.mindmap-node box {
+            fill: #1b2136 !important;
+            stroke: #3a86ff !important;
+            stroke-width: 1.5px !important;
+            rx: 10px !important;
+            ry: 10px !important;
+        }
+
+        /* 连接主轴干细线 */
         g.mindmap-node--edge {
-            stroke: rgba(47, 128, 237, 0.35) !important;
-            stroke-width: 2px !important;
+            stroke: rgba(58, 134, 255, 0.4) !important;
+            stroke-width: 2.5px !important;
         }
 
+        /* 字体美化 */
         g.mindmap-node text {
-            fill: #e2e8f0 !important;
+            fill: #f5f5f7 !important;
             font-size: 13px !important;
             font-weight: 500 !important;
         }
@@ -210,36 +211,37 @@
             fill: #ffffff !important;
         }
 
-        /* 7. 炫酷入场动画 */
-        @keyframes appScaleIn {
-            from { opacity: 0; transform: scale(0.96) translateY(15px); }
+        /* 启动加载动画 */
+        @keyframes systemLaunch {
+            from { opacity: 0; transform: scale(0.97) translateY(20px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <div class="dashboard-container" id="appFrame">
-        <div class="mac-header">
-            <div class="window-controls">
-                <div class="dot dot-close"></div>
-                <div class="dot dot-minimize"></div>
-                <div class="dot dot-maximize"></div>
+    <div class="system-dashboard" id="mainDashboard">
+        <div class="panel-header">
+            <div class="window-indicator">
+                <div class="indicator-dot dot-1"></div>
+                <div class="indicator-dot dot-2"></div>
+                <div class="indicator-dot dot-3"></div>
             </div>
             
-            <div class="app-title-group">
-                <h1 class="app-title">DodoWheels System 数字化架构全景</h1>
-                <div class="app-subtitle">Miro 节点底层原生重构蓝图</div>
+            <div class="brand-meta">
+                <h1 class="main-headline">DodoWheels 数字化架构管理平台</h1>
+                <div class="sub-headline">Enterprise Digital System Blueprint</div>
             </div>
             
-            <div class="action-controls">
-                <button class="nav-btn" onclick="resetZoom()">定位居中</button>
-                <button class="nav-btn" onclick="toggleFullscreen()">全屏沉浸</button>
+            <div class="control-group">
+                <button class="action-button" onclick="handleReset()">视口复位</button>
+                <button class="action-button" onclick="handleFullscreen()">独立全屏</button>
             </div>
         </div>
 
-        <div class="canvas-area" id="canvasArea">
-            <pre class="mermaid" id="mermaidTree">
+        <div class="viewport-area" id="viewportArea">
+            
+            <pre class="mermaid" id="systemArchitectureTree">
             mindmap
               root((DodoWheels System))
                 【网站系统】WEB
@@ -289,12 +291,12 @@
                 【财务系统】QBO
             </pre>
             
-            <div class="tip-overlay">💡 提示：支持鼠标滚轮缩放、按住鼠标左键可任意拖拽平移看板</div>
+            <div class="hud-hint">🎛️ 物理操控栏：支持鼠标左键按住拖拽、鼠标滚轮任意无级放大/缩小</div>
         </div>
     </div>
 
     <script>
-        // 初始化 Mermaid 配置（采用暗色系自适应匹配）
+        // 初始化专属视觉渲染配置
         mermaid.initialize({
             startOnLoad: true,
             theme: 'dark',
@@ -304,47 +306,55 @@
             }
         });
 
-        let panZoomInstance = null;
+        let viewControllerInstance = null;
 
-        // 等待 Mermaid 渲染完成之后，注入缩放和平移交互
-        mermaid.bindVideoElements;
+        // 在节点树 SVG 渲染就绪后接管视口控制，打通平移与立体变焦
         window.addEventListener('load', function() {
             setTimeout(() => {
-                const svgElement = document.querySelector('#canvasArea svg');
-                if (svgElement) {
-                    // 清除固定宽高，使其能够百分百自适应容器
-                    svgElement.setAttribute('width', '100%');
-                    svgElement.setAttribute('height', '100%');
+                const rawSvg = document.querySelector('#viewportArea svg');
+                if (rawSvg) {
+                    // 格式化宽高以满足自适应网格
+                    rawSvg.setAttribute('width', '100%');
+                    rawSvg.setAttribute('height', '100%');
                     
-                    // 绑定高级平移与无级缩放插件
-                    panZoomInstance = svgPanZoom(svgElement, {
+                    // 植入专属的全局渐变定义
+                    const defs = rawSvg.querySelector('defs') || rawSvg.insertBefore(document.createElementNS('http://www.w3.org/2000/svg', 'defs'), rawSvg.firstChild);
+                    defs.innerHTML += `
+                        <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#0071e3" />
+                            <stop offset="100%" stop-color="#3a86ff" />
+                        </linearGradient>
+                    `;
+                    
+                    // 调用变焦控制内核
+                    viewControllerInstance = svgPanZoom(rawSvg, {
                         zoomEnabled: true,
                         controlIconsEnabled: false,
                         fit: true,
                         center: true,
-                        minZoom: 0.2,
-                        maxZoom: 10,
-                        zoomScaleFactor: 0.15
+                        minZoom: 0.1,
+                        maxZoom: 8,
+                        zoomScaleFactor: 0.12
                     });
                 }
-            }, 800); // 延时等待SVG动态绘制完成
+            }, 600);
         });
 
-        // 居中复位控制
-        function resetZoom() {
-            if (panZoomInstance) {
-                panZoomInstance.resetZoom();
-                panZoomInstance.center();
-                panZoomInstance.fit();
+        // 控制中心复位
+        function handleReset() {
+            if (viewControllerInstance) {
+                viewControllerInstance.resetZoom();
+                viewControllerInstance.center();
+                viewControllerInstance.fit();
             }
         }
 
         // 全屏沉浸式切换
-        function toggleFullscreen() {
-            const el = document.getElementById('appFrame');
+        function handleFullscreen() {
+            const dashboard = document.getElementById('mainDashboard');
             if (!document.fullscreenElement) {
-                el.requestFullscreen().catch(err => {
-                    alert(`开启全屏失败: ${err.message}`);
+                dashboard.requestFullscreen().catch(err => {
+                    console.error(`无法开启全屏: ${err.message}`);
                 });
             } else {
                 document.exitFullscreen();
