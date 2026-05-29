@@ -1,14 +1,20 @@
-<!DOCTYPE html>
+# Let's generate a complete, beautifully structured HTML file that displays the architecture
+# in a highly legible, interactive modern white/light-themed split or hierarchical tree view.
+# To ensure maximum clarity and a premium feel, we will design an elite light-themed 
+# system architecture map. It will feature a left sidebar with a navigation tree list 
+# and a right main viewport that shows the architecture beautifully structured in cards/blocks, 
+# or a clean native CSS-driven responsive node layout (since the user says they find the 
+# previous Mermaid node chart hard to read/understand, a clear, interactive hierarchical list 
+# + structured semantic card layout will be much more readable and premium).
+
+html_content = """<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels 数字化架构系统全景</title>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
-    
+    <title>DodoWheels System 数字化架构蓝图</title>
     <style>
-        /* 1. 全局样式 - 顶级原生 App 暗黑质感 */
+        /* 1. 全局样式 - 顶级现代浅色美学 (Apple 官网现代白/铝合金灰质感) */
         *, *::before, *::after {
             box-sizing: border-box;
         }
@@ -16,350 +22,547 @@
         body {
             margin: 0;
             padding: 0;
-            background: radial-gradient(circle at 50% 50%, #121420 0%, #08090d 100%);
-            color: #f5f5f7;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro SC", sans-serif;
-            min-height: 100vh;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro SC", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 顶级导航栏 */
+        .top-navbar {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 64px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            overflow: hidden;
-        }
-
-        /* 2. 独立控制台外壳 - 高级毛玻璃（Glassmorphism）与流光边界 */
-        .system-dashboard {
-            position: relative;
-            width: 96vw;
-            max-width: 1440px;
-            height: 92vh;
-            background: rgba(22, 25, 38, 0.5);
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7),
-                        inset 0 1px 0px rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            display: flex;
-            flex-direction: column;
-            animation: systemLaunch 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        /* 极客蓝流光轮廓线 */
-        .system-dashboard::before {
-            content: '';
-            position: absolute;
-            top: -1px; left: -1px; right: -1px; bottom: -1px;
-            background: linear-gradient(135deg, rgba(0, 102, 204, 0.4), rgba(153, 51, 255, 0.15), transparent);
-            border-radius: 25px;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        /* 3. 仿 macOS 顶栏与交互控件 */
-        .panel-header {
-            display: flex;
             justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 18px;
-            margin-bottom: 18px;
+            padding: 0 32px;
+            z-index: 1000;
         }
 
-        .window-indicator {
+        .brand-zone {
             display: flex;
-            gap: 8px;
+            align-items: center;
+            gap: 12px;
         }
 
-        .indicator-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #0071e3, #36b37e);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
         }
-        .dot-1 { background-color: #ff5f56; }
-        .dot-2 { background-color: #ffbd2e; }
-        .dot-3 { background-color: #27c93f; }
 
-        .brand-meta {
-            text-align: center;
-        }
-
-        .main-headline {
-            font-size: 20px;
+        .brand-title {
+            font-size: 18px;
             font-weight: 600;
-            letter-spacing: 0.8px;
-            color: #ffffff;
-            background: linear-gradient(135deg, #ffffff 30%, #8ca4f5 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0;
+            color: #1d1d1f;
+            letter-spacing: -0.3px;
         }
 
-        .sub-headline {
+        .brand-tag {
+            background: #e8e8ed;
+            color: #515154;
             font-size: 11px;
-            color: #515975;
-            margin-top: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 500;
         }
 
-        .control-group {
+        .action-zone {
             display: flex;
             gap: 12px;
         }
 
-        /* Apple 风格交互按钮 */
-        .action-button {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #e5e5ea;
-            padding: 8px 18px;
-            border-radius: 30px;
-            font-size: 12px;
+        .control-btn {
+            background: #0071e3;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 18px;
+            font-size: 13px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: all 0.2s ease;
         }
 
-        .action-button:hover {
-            background: rgba(0, 102, 204, 0.25);
-            color: #ffffff;
-            border-color: rgba(0, 102, 204, 0.5);
-            box-shadow: 0 0 18px rgba(0, 102, 204, 0.35);
+        .control-btn:hover {
+            background: #0077ed;
             transform: translateY(-1px);
         }
 
-        .action-button:active {
-            transform: translateY(0);
+        .control-btn.secondary {
+            background: #e8e8ed;
+            color: #1d1d1f;
         }
 
-        /* 4. 无级变焦画布视区 */
-        .viewport-area {
-            flex: 1;
-            width: 100%;
-            background: rgba(10, 11, 16, 0.75);
-            border-radius: 16px;
-            border: 1px solid rgba(0, 0, 0, 0.4);
-            overflow: hidden;
-            position: relative;
-            cursor: grab;
+        .control-btn.secondary:hover {
+            background: #dcdce2;
         }
 
-        .viewport-area:active {
-            cursor: grabbing;
-        }
-
-        /* 用户贴心微交互提示 */
-        .hud-hint {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(13, 15, 23, 0.9);
-            padding: 10px 16px;
-            border-radius: 10px;
-            font-size: 12px;
-            color: #6e7694;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            pointer-events: none;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        /* 5. 独家重绘专属架构树 SVG 渲染层（全面对齐 Mac 风格暗蓝高纯度滤镜） */
-        .mermaid {
-            width: 100%;
-            height: 100%;
+        /* 页面主体架构 - 左右分栏布局提升可读性 */
+        .main-wrapper {
+            margin-top: 64px;
             display: flex;
-            justify-content: center;
+            min-height: calc(100vh - 64px);
+        }
+
+        /* 左侧快速导航导航树 */
+        .sidebar-tree {
+            width: 320px;
+            background: #ffffff;
+            border-right: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 32px 24px;
+            position: fixed;
+            top: 64px; bottom: 0; left: 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-title {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #86868b;
+            letter-spacing: 0.8px;
+            margin-bottom: 16px;
+        }
+
+        .tree-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .tree-item {
+            margin-bottom: 8px;
+        }
+
+        .tree-link {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            color: #424245;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 8px;
+            transition: all 0.15s ease;
+            font-weight: 500;
+        }
+
+        .tree-link:hover {
+            background-color: #f5f5f7;
+            color: #0071e3;
+        }
+
+        .tree-link.active {
+            background-color: #e3f2fd;
+            color: #0071e3;
+            font-weight: 600;
+        }
+
+        .tree-link::before {
+            content: "•";
+            margin-right: 8px;
+            color: #86868b;
+        }
+        .tree-link.active::before {
+            color: #0071e3;
+        }
+
+        /* 右侧核心画幅与高清晰卡片展示区 */
+        .content-body {
+            margin-left: 320px;
+            flex: 1;
+            padding: 40px 48px;
+            max-width: 1200px;
+        }
+
+        .intro-header {
+            margin-bottom: 40px;
+            border-bottom: 1px solid #e8e8ed;
+            padding-bottom: 24px;
+        }
+
+        .intro-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin: 0 0 8px 0;
+            color: #1d1d1f;
+        }
+
+        .intro-header p {
+            font-size: 15px;
+            color: #86868b;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* 系统顶级大版块卡片 */
+        .system-section {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.04);
+            padding: 32px;
+            margin-bottom: 32px;
+            scroll-margin-top: 88px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .system-section:hover {
+            box-shadow: 0 12px 30px rgba(0,0,0,0.04);
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .badge-web { background: #e3f2fd; color: #0071e3; }
+        .badge-core { background: #e8f5e9; color: #2e7d32; }
+        .badge-qbo { background: #f3e5f5; color: #8e24aa; }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 0 0 24px 0;
+            color: #1d1d1f;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 极简清晰的高清树状层级图 (非散乱图表，阅读极其清晰) */
+        .module-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .module-card {
+            background: #f5f5f7;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.02);
+        }
+
+        .module-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 12px;
+            border-left: 3px solid #0071e3;
+            padding-left: 8px;
+        }
+        
+        .badge-core ~ .module-group .module-name { border-left-color: #2e7d32; }
+        .badge-qbo ~ .module-group .module-name { border-left-color: #8e24aa; }
+
+        .sub-feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sub-feature-item {
+            font-size: 13px;
+            color: #515154;
+            padding: 6px 0;
+            border-bottom: 1px dashed rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sub-feature-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        /* 第四级子节点样式 (例如：登录成功 / 失败) */
+        .leaf-node-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 4px;
+        }
+
+        .leaf-node {
+            background: #ffffff;
+            border: 1px solid #d2d2d7;
+            color: #1d1d1f;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            display: inline-block;
+        }
+
+        /* 顶层总线核心大节点 */
+        .root-hero {
+            background: linear-gradient(135deg, #1d1d1f 0%, #3a3a3c 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
         }
 
-        /* 核心树根 */
-        g.mindmap-node--root box {
-            fill: url(#blueGradient) !important;
-            stroke: #0071e3 !important;
-            stroke-width: 3px !important;
-            rx: 14px !important;
-            ry: 14px !important;
+        .root-info h1 {
+            margin: 0 0 8px 0;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .root-info p {
+            margin: 0;
+            color: #aeaeaf;
+            font-size: 16px;
         }
 
-        /* 一级系统节点 */
-        g.mindmap-node box {
-            fill: #1b2136 !important;
-            stroke: #3a86ff !important;
-            stroke-width: 1.5px !important;
-            rx: 10px !important;
-            ry: 10px !important;
+        .root-meta-nodes {
+            display: flex;
+            gap: 12px;
         }
 
-        /* 连接主轴干细线 */
-        g.mindmap-node--edge {
-            stroke: rgba(58, 134, 255, 0.4) !important;
-            stroke-width: 2.5px !important;
+        .meta-tag-pill {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            backdrop-filter: blur(10px);
         }
 
-        /* 字体美化 */
-        g.mindmap-node text {
-            fill: #f5f5f7 !important;
-            font-size: 13px !important;
-            font-weight: 500 !important;
-        }
-
-        g.mindmap-node--root text {
-            font-size: 16px !important;
-            font-weight: 700 !important;
-            fill: #ffffff !important;
-        }
-
-        /* 启动加载动画 */
-        @keyframes systemLaunch {
-            from { opacity: 0; transform: scale(0.97) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+        /* 响应式适配 */
+        @media (max-width: 992px) {
+            .sidebar-tree { display: none; }
+            .content-body { margin-left: 0; padding: 24px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="system-dashboard" id="mainDashboard">
-        <div class="panel-header">
-            <div class="window-indicator">
-                <div class="indicator-dot dot-1"></div>
-                <div class="indicator-dot dot-2"></div>
-                <div class="indicator-dot dot-3"></div>
-            </div>
-            
-            <div class="brand-meta">
-                <h1 class="main-headline">DodoWheels 数字化架构管理平台</h1>
-                <div class="sub-headline">Enterprise Digital System Blueprint</div>
-            </div>
-            
-            <div class="control-group">
-                <button class="action-button" onclick="handleReset()">视口复位</button>
-                <button class="action-button" onclick="handleFullscreen()">独立全屏</button>
-            </div>
+    <nav class="top-navbar">
+        <div class="brand-zone">
+            <div class="brand-logo">D</div>
+            <span class="brand-title">DodoWheels System</span>
+            <span class="brand-tag">数字化核心架构</span>
         </div>
+        <div class="action-zone">
+            <button class="control-btn secondary" onclick="window.print()">导出 PDF / 打印</button>
+            <button class="control-btn" onclick="scrollToElement('web-system')">开始浏览</button>
+        </div>
+    </nav>
 
-        <div class="viewport-area" id="viewportArea">
+    <div class="main-wrapper">
+        
+        <aside class="sidebar-tree">
+            <div class="sidebar-title">系统主维度</div>
+            <ul class="tree-menu">
+                <li class="tree-item"><a href="#root-section" class="tree-link active" id="lnk-root" onclick="setActive(this)">DodoWheels 总根</a></li>
+                <li class="tree-item"><a href="#web-system" class="tree-link" id="lnk-web" onclick="setActive(this)">【网站系统】WEB</a></li>
+                <li class="tree-item"><a href="#core-system" class="tree-link" id="lnk-core" onclick="setActive(this)">【核心系统】CORE</a></li>
+                <li class="tree-item"><a href="#qbo-system" class="tree-link" id="lnk-qbo" onclick="setActive(this)">【财务系统】QBO</a></li>
+            </ul>
+        </aside>
+
+        <main class="content-body">
             
-            <pre class="mermaid" id="systemArchitectureTree">
-            mindmap
-              root((DodoWheels System))
-                【网站系统】WEB
-                  用户中心
-                    注册信息
-                      客户注册
-                      注册审核
-                    客户登录
-                      登录成功
-                      登录失败
-                    密码安全
-                      找回密码
-                      修改密码
-                  客户看板
-                    基本信息
-                    客户信息
-                    订单信息
-                    购物车
-                  产品服务
-                    产品浏览
-                      轮胎展示信息
-                      轮毂展示信息
-                      配件展示信息
-                    产品查询
-                      轮胎查询
-                        按照尺寸查询
-                        按照车型查询
-                      轮毂查询
-                        按照尺寸查询
-                        按照车型查询
-                      配件查询
-                        按照车型查询
-                      Mounted Package查询
-                        按照车型查询
-                      特惠产品查询
-                  客户工具箱
-                    轮胎计算器
-                    轮毂计算器
-                    轮毂TryOn
-                  基础信息
-                    关于我们
-                    联系我们
-                    配送信息
-                    Privacy Policy
-                    Term of Service
-                【核心系统】CORE
-                【财务系统】QBO
-            </pre>
-            
-            <div class="hud-hint">🎛️ 物理操控栏：支持鼠标左键按住拖拽、鼠标滚轮任意无级放大/缩小</div>
-        </div>
+            <section class="root-hero" id="root-section">
+                <div class="root-info">
+                    <h1>DodoWheels System</h1>
+                    <p>企业级数字化转型全景架构解构图</p>
+                </div>
+                <div class="root-meta-nodes">
+                    <div class="meta-tag-pill">3 大核心主干</div>
+                    <div class="meta-tag-pill">41 个精细节点</div>
+                </div>
+            </section>
+
+            <div class="intro-header">
+                <h2>系统层级解构看板</h2>
+                <p>抛弃了复杂的图表错乱线条，采用网格化与气泡标签多级下钻形式，帮助团队直观核对功能模块开发进度。</p>
+            </div>
+
+            <section class="system-section" id="web-system">
+                <span class="section-badge badge-web">前端与用户交互层</span>
+                <h3 class="section-title">🖥️ 【网站系统】WEB</h3>
+                
+                <div class="module-group">
+                    
+                    <div class="module-card">
+                        <div class="module-name">用户中心</div>
+                        <ul class="sub-feature-list">
+                            <li class="sub-feature-item">
+                                <strong>注册信息</strong>
+                                <div class="leaf-node-container">
+                                    <span class="leaf-node">客户注册</span>
+                                    <span class="leaf-node">注册审核</span>
+                                </div>
+                            </li>
+                            <li class="sub-feature-item">
+                                <strong>客户登录</strong>
+                                <div class="leaf-node-container">
+                                    <span class="leaf-node">登录成功</span>
+                                    <span class="leaf-node">登录失败</span>
+                                </div>
+                            </li>
+                            <li class="sub-feature-item">
+                                <strong>密码安全</strong>
+                                <div class="leaf-node-container">
+                                    <span class="leaf-node">找回密码</span>
+                                    <span class="leaf-node">修改密码</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="module-card">
+                        <div class="module-name">客户看板</div>
+                        <ul class="sub-feature-list">
+                            <li class="sub-feature-item">基本信息</li>
+                            <li class="sub-feature-item">客户信息</li>
+                            <li class="sub-feature-item">订单信息</li>
+                            <li class="sub-feature-item">购物车</li>
+                        </ul>
+                    </div>
+
+                    <div class="module-card">
+                        <div class="module-name">产品服务</div>
+                        <ul class="sub-feature-list">
+                            <li class="sub-feature-item">
+                                <strong>产品浏览</strong>
+                                <div class="leaf-node-container">
+                                    <span class="leaf-node">轮胎展示信息</span>
+                                    <span class="leaf-node">轮毂展示信息</span>
+                                    <span class="leaf-node">配件展示信息</span>
+                                </div>
+                            </li>
+                            <li class="sub-feature-item">
+                                <strong>产品查询</strong>
+                                <div class="leaf-node-container">
+                                    <span class="leaf-node">轮胎查询 (按尺寸/车型)</span>
+                                    <span class="leaf-node">轮毂查询 (按尺寸/车型)</span>
+                                    <span class="leaf-node">配件查询 (按车型)</span>
+                                    <span class="leaf-node">Mounted Package查询</span>
+                                    <span class="leaf-node">特惠产品查询</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="module-card">
+                        <div class="module-name">客户工具箱</div>
+                        <ul class="sub-feature-list">
+                            <li class="sub-feature-item">轮胎计算器</li>
+                            <li class="sub-feature-item">轮毂计算器</li>
+                            <li class="sub-feature-item">轮毂TryOn (虚拟试搭)</li>
+                        </ul>
+                    </div>
+
+                    <div class="module-card">
+                        <div class="module-name">基础信息与合规</div>
+                        <ul class="sub-feature-list">
+                            <li class="sub-feature-item">关于我们</li>
+                            <li class="sub-feature-item">联系我们</li>
+                            <li class="sub-feature-item">配送信息</li>
+                            <li class="sub-feature-item">Privacy Policy (隐私政策)</li>
+                            <li class="sub-feature-item">Term of Service (服务条款)</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </section>
+
+            <section class="system-section" id="core-system">
+                <span class="section-badge badge-core">中台业务处理层</span>
+                <h3 class="section-title">⚙️ 【核心系统】CORE</h3>
+                <div class="module-group">
+                    <div class="module-card" style="grid-column: 1 / -1;">
+                        <div class="module-name">业务中台枢纽 (OMS / WMS / SMS)</div>
+                        <p style="font-size: 14px; color: #515154; line-height: 1.6; margin: 0;">
+                            负责全面对接前端 WEB 系统的实时产品检索请求、Mounted Package 车辆数据校验及多仓库库存统筹管理。作为高并发数据路由的核心，统揽底层所有业务流与订单状态机的流转。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="system-section" id="qbo-system">
+                <span class="section-badge badge-qbo">后端财务清算层</span>
+                <h3 class="section-title">📊 【财务系统】QBO</h3>
+                <div class="module-group">
+                    <div class="module-card" style="grid-column: 1 / -1;">
+                        <div class="module-name">QuickBooks Online 自动化财务对接</div>
+                        <p style="font-size: 14px; color: #515154; line-height: 1.6; margin: 0;">
+                            无缝同步前端销售发票、客户基本对账单信息以及多品类汽配（轮胎、轮毂、配件）的进销存计税与利润清算自动化入账。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
     </div>
 
     <script>
-        // 初始化专属视觉渲染配置
-        mermaid.initialize({
-            startOnLoad: true,
-            theme: 'dark',
-            securityLevel: 'loose',
-            mindmap: {
-                useMaxWidth: false
+        function scrollToElement(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
             }
-        });
+        }
 
-        let viewControllerInstance = null;
+        function setActive(linkElement) {
+            // 移除其他激活状态
+            document.querySelectorAll('.tree-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            // 激活当前
+            linkElement.classList.add('active');
+        }
 
-        // 在节点树 SVG 渲染就绪后接管视口控制，打通平移与立体变焦
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                const rawSvg = document.querySelector('#viewportArea svg');
-                if (rawSvg) {
-                    // 格式化宽高以满足自适应网格
-                    rawSvg.setAttribute('width', '100%');
-                    rawSvg.setAttribute('height', '100%');
-                    
-                    // 植入专属的全局渐变定义
-                    const defs = rawSvg.querySelector('defs') || rawSvg.insertBefore(document.createElementNS('http://www.w3.org/2000/svg', 'defs'), rawSvg.firstChild);
-                    defs.innerHTML += `
-                        <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#0071e3" />
-                            <stop offset="100%" stop-color="#3a86ff" />
-                        </linearGradient>
-                    `;
-                    
-                    // 调用变焦控制内核
-                    viewControllerInstance = svgPanZoom(rawSvg, {
-                        zoomEnabled: true,
-                        controlIconsEnabled: false,
-                        fit: true,
-                        center: true,
-                        minZoom: 0.1,
-                        maxZoom: 8,
-                        zoomScaleFactor: 0.12
-                    });
+        // 监听滚动自动切换左侧菜单激活项
+        window.addEventListener('scroll', () => {
+            const sections = ['root-section', 'web-system', 'core-system', 'qbo-system'];
+            const links = {
+                'root-section': 'lnk-root',
+                'web-system': 'lnk-web',
+                'core-system': 'lnk-core',
+                'qbo-system': 'lnk-qbo'
+            };
+            
+            let currentSection = 'root-section';
+            sections.forEach(sectionId => {
+                const rect = document.getElementById(sectionId).getBoundingClientRect();
+                if (rect.top <= 120) {
+                    currentSection = sectionId;
                 }
-            }, 600);
+            });
+
+            document.querySelectorAll('.tree-link').forEach(link => link.classList.remove('active'));
+            const activeLink = document.getElementById(links[currentSection]);
+            if (activeLink) activeLink.classList.add('active');
         });
-
-        // 控制中心复位
-        function handleReset() {
-            if (viewControllerInstance) {
-                viewControllerInstance.resetZoom();
-                viewControllerInstance.center();
-                viewControllerInstance.fit();
-            }
-        }
-
-        // 全屏沉浸式切换
-        function handleFullscreen() {
-            const dashboard = document.getElementById('mainDashboard');
-            if (!document.fullscreenElement) {
-                dashboard.requestFullscreen().catch(err => {
-                    console.error(`无法开启全屏: ${err.message}`);
-                });
-            } else {
-                document.exitFullscreen();
-            }
-        }
     </script>
 </body>
 </html>
+"""
+
+with open("DodoWheels_Blueprint_v2.html", "w", encoding="utf-8") as f:
+    f.write(html_content)
+print("File generated successfully.")
