@@ -1,383 +1,61 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels 数字化架构管理控制台</title>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
-    
-    <style>
-        /* 1. 全局样式 - 顶级原生 App 现代化浅色美学质感 */
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
-        
-        body {
-            margin: 0;
-            padding: 0;
-            background: radial-gradient(circle at 50% 50%, #f4f5f9 0%, #e2e5ee 100%);
-            color: #1d1d1f;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro SC", sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        /* 2. 控制台外壳 - 精美铝合金毛玻璃与立体微阴影 */
-        .system-dashboard {
-            position: relative;
-            width: 96vw;
-            max-width: 1440px;
-            height: 92vh;
-            background: rgba(255, 255, 255, 0.75);
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08),
-                        inset 0 1px 0px rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            display: flex;
-            flex-direction: column;
-            animation: systemLaunch 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        /* 3. 仿 macOS 顶栏与交互控件 */
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            padding-bottom: 18px;
-            margin-bottom: 18px;
-        }
-
-        .window-indicator {
-            display: flex;
-            gap: 8px;
-        }
-
-        .indicator-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-        .dot-1 { background-color: #ff5f56; }
-        .dot-2 { background-color: #ffbd2e; }
-        .dot-3 { background-color: #27c93f; }
-
-        .brand-meta {
-            text-align: center;
-        }
-
-        .main-headline {
-            font-size: 20px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            color: #1d1d1f;
-            margin: 0;
-        }
-
-        .sub-headline {
-            font-size: 11px;
-            color: #86868b;
-            margin-top: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-
-        .control-group {
-            display: flex;
-            gap: 12px;
-        }
-
-        /* Apple 风格纯净交互按钮 */
-        .action-button {
-            background: rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            color: #424245;
-            padding: 8px 18px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        .action-button:hover {
-            background: #0071e3;
-            color: #ffffff;
-            border-color: #0071e3;
-            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.25);
-            transform: translateY(-1px);
-        }
-
-        .action-button:active {
-            transform: translateY(0);
-        }
-
-        /* 4. 无级变焦画布视区（高视网膜白画布） */
-        .viewport-area {
-            flex: 1;
-            width: 100%;
-            background: #ffffff;
-            border-radius: 16px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-            position: relative;
-            cursor: grab;
-        }
-
-        .viewport-area:active {
-            cursor: grabbing;
-        }
-
-        /* 用户操控小贴士 */
-        .hud-hint {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px 16px;
-            border-radius: 10px;
-            font-size: 12px;
-            color: #86868b;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            pointer-events: none;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
-        }
-
-        /* 5. SVG 脑图渲染颜色重绘（完全契合优雅白色美学） */
-        .mermaid {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* 统领总根 */
-        g.mindmap-node--root box {
-            fill: url(#appleBlueGradient) !important;
-            stroke: #0071e3 !important;
-            stroke-width: 2px !important;
-            rx: 12px !important;
-            ry: 12px !important;
-        }
-
-        /* 一级模块外框（浅灰色卡片） */
-        g.mindmap-node box {
-            fill: #f5f5f7 !important;
-            stroke: #d2d2d7 !important;
-            stroke-width: 1px !important;
-            rx: 8px !important;
-            ry: 8px !important;
-        }
-
-        /* 关系连线颜色 */
-        g.mindmap-node--edge {
-            stroke: #86868b !important;
-            stroke-width: 1.5px !important;
-        }
-
-        /* 节点文字颜色 */
-        g.mindmap-node text {
-            fill: #1d1d1f !important;
-            font-size: 13px !important;
-            font-weight: 500 !important;
-        }
-
-        g.mindmap-node--root text {
-            font-size: 15px !important;
-            font-weight: 600 !important;
-            fill: #ffffff !important;
-        }
-
-        @keyframes systemLaunch {
-            from { opacity: 0; transform: scale(0.98) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DodoWheels System 功能架构汇总</title>
+<style>
+:root{
+  --bg:#f5f9ff;--panel:#ffffff;--ink:#14213d;--muted:#65758b;--line:#b9d8f4;
+  --l1:#173b78;--l2:#2369b3;--l3:#62a8df;--l4:#eaf6ff;--accent:#1677ff;
+  --shadow:0 18px 45px rgba(30,86,140,.12);--radius:22px;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;background:radial-gradient(circle at top left,#eaf5ff 0,#f7fbff 38%,#ffffff 100%);color:var(--ink)}
+.app{display:grid;grid-template-columns:286px 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;padding:26px 20px;background:rgba(255,255,255,.78);backdrop-filter:blur(18px);border-right:1px solid #dcecff;box-shadow:8px 0 30px rgba(48,101,160,.08);overflow:auto}
+.brand{padding:18px;border-radius:24px;background:linear-gradient(135deg,#173b78,#2693ff);color:#fff;box-shadow:var(--shadow);margin-bottom:24px}.brand h1{font-size:20px;margin:0 0 8px}.brand p{font-size:12px;margin:0;opacity:.86}
+.nav-title{font-size:13px;font-weight:800;color:#70839a;margin:24px 8px 10px;letter-spacing:.08em}.nav a{display:flex;align-items:center;gap:10px;padding:12px 14px;margin:6px 0;border-radius:16px;text-decoration:none;color:#263b55;font-weight:650;font-size:14px}.nav a:hover{background:#edf7ff;color:#075bbf}.dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.main{padding:24px 34px 58px}.window{position:sticky;top:18px;z-index:10;background:rgba(255,255,255,.86);backdrop-filter:blur(20px);border:1px solid #dcebff;border-radius:26px;box-shadow:var(--shadow);padding:16px 18px;margin-bottom:26px;display:flex;align-items:center;justify-content:space-between;gap:16px}.lights{display:flex;gap:9px}.light{width:13px;height:13px;border-radius:50%}.red{background:#ff5f57}.yellow{background:#ffbd2e}.green{background:#28c840}.title{font-size:18px;font-weight:850}.subtitle{font-size:12px;color:var(--muted);margin-top:3px}.actions{display:flex;gap:10px;flex-wrap:wrap}button{border:0;border-radius:999px;padding:10px 16px;background:linear-gradient(135deg,#1c75ff,#4eb2ff);color:#fff;font-weight:750;box-shadow:0 10px 22px rgba(22,119,255,.2);cursor:pointer}button.secondary{background:#eef7ff;color:#155da4;box-shadow:none;border:1px solid #cfe7ff}
+.hero{padding:28px;border-radius:28px;background:linear-gradient(135deg,#ffffff,#eef8ff);border:1px solid #dcecff;box-shadow:var(--shadow);margin-bottom:26px}.hero h2{margin:0 0 10px;font-size:30px}.hero p{margin:0;color:var(--muted);line-height:1.7}.legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.tag{border-radius:999px;padding:8px 12px;font-size:12px;font-weight:750}.tag:nth-child(1){background:#e7efff;color:var(--l1)}.tag:nth-child(2){background:#e9f4ff;color:var(--l2)}.tag:nth-child(3){background:#eef9ff;color:#2574a9}.tag:nth-child(4){background:#f6fbff;color:#5b7690;border:1px solid #dbeeff}
+.grid{display:grid;gap:22px}.card{background:var(--panel);border:1px solid #dcecff;border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;scroll-margin-top:105px}.card-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e8f3ff;padding-bottom:14px;margin-bottom:18px}.card h3{margin:0;font-size:21px}.badge{font-size:12px;color:#1768b8;background:#eef7ff;border:1px solid #cfe6ff;border-radius:999px;padding:7px 10px;font-weight:800}
+.tree{--gap:22px}.node{position:relative;margin:10px 0 10px 26px}.node::before{content:"";position:absolute;left:-18px;top:-10px;width:1px;height:calc(100% + 20px);background:var(--line)}.node::after{content:"";position:absolute;left:-18px;top:18px;width:18px;height:1px;background:var(--line)}.node:first-child::before{top:18px}.node:last-child::before{height:28px}.pill{display:inline-flex;align-items:center;gap:8px;border-radius:15px;padding:10px 13px;font-size:14px;font-weight:760;border:1px solid transparent}.l2>.pill{background:linear-gradient(135deg,var(--l2),#4b99dd);color:#fff}.l3>.pill{background:#e8f5ff;color:#155f9c;border-color:#c6e4fb}.l4>.pill{background:var(--l4);color:#486276;border-color:#d9ecfb;font-weight:650}.children{margin-left:24px}.collapsed .children{display:none}.toggle{font-size:12px;background:#f3f9ff;color:#1b66ad;border:1px solid #d9edff;padding:4px 8px;border-radius:99px;cursor:pointer;box-shadow:none}.footer{text-align:center;color:#7d8fa3;font-size:12px;margin-top:28px}
+@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{position:relative;height:auto}.window{position:relative;top:auto}.main{padding:18px}.actions{width:100%}}@media print{.sidebar,.actions{display:none}.app{display:block}.main{padding:0}.window{position:relative;box-shadow:none}.card,.hero{box-shadow:none;break-inside:avoid}}
+</style>
 </head>
 <body>
-
-    <div class="system-dashboard" id="mainDashboard">
-        <div class="panel-header">
-            <div class="window-indicator">
-                <div class="indicator-dot dot-1"></div>
-                <div class="indicator-dot dot-2"></div>
-                <div class="indicator-dot dot-3"></div>
-            </div>
-            
-            <div class="brand-meta">
-                <h1 class="main-headline">DodoWheels 数字化架构管理控制台</h1>
-                <div class="sub-headline">全量功能节点图形交互视图 (浅色版)</div>
-            </div>
-            
-            <div class="control-group">
-                <button class="action-button" onclick="handleReset()">视口复位</button>
-                <button class="action-button" onclick="handleFullscreen()">独立全屏</button>
-            </div>
-        </div>
-
-        <div class="viewport-area" id="viewportArea">
-            
-            <pre class="mermaid" id="systemArchitectureTree">
-            mindmap
-              root((DodoWheels System))
-                【网站系统】WEB
-                  用户中心
-                    注册信息
-                      客户注册
-                      注册审核
-                    客户登录
-                      登录成功
-                      登录失败
-                    密码安全
-                      找回密码
-                      修改密码
-                  客户看板
-                    基本信息
-                    客户信息
-                    订单信息
-                    购物车
-                  产品服务
-                    产品浏览
-                      轮胎展示信息
-                      轮毂展示信息
-                      配件展示信息
-                    产品查询
-                      轮胎查询
-                        按照尺寸查询
-                        按照车型查询
-                      轮毂查询
-                        按照尺寸查询
-                        按照车型查询
-                      配件查询
-                        按照车型查询
-                      Mounted Package查询
-                        按照车型查询
-                      特惠产品查询
-                  客户工具箱
-                    轮胎计算器
-                    轮毂计算器
-                    轮毂TryOn
-                  基础信息
-                    关于我们
-                    联系我们
-                    配送信息
-                    Privacy Policy
-                    Term of Service
-                【后端管理系统】BACKEND
-                  用户管理
-                    添加、修改、删除
-                    分配角色、分配权限
-                    重置密码、锁定账户
-                  产品管理
-                    发布产品、下架产品
-                    修改价格、修改图片
-                    同步ERP数据、设置促销
-                  订单管理
-                    查看订单列表、详情
-                    修改状态（待发货、已发货）
-                    取消订单、退款审核
-                    导出报表
-                  系统日志
-                    登录日志（时间、IP）
-                    操作日志（人员、动作）
-                    异常日志（报错、定位）
-                  佣金管理
-                    设置佣金比例、规则
-                    统计、结算佣金
-                    查看账单、流水
-                  测试管理
-                    模拟下单流程、跑通
-                    接口联调测试（WEB与CORE、QBO）
-                    压测、稳定性测试
-                  库存、采购、发货
-                    查看实时库存、预警
-                    创建采购单、入库
-                    打印快递单、发货
-                  供应商、仓库、客服
-                    管理供应商资质、合同
-                    多仓库分配、协同
-                    处理客户咨询、退换货
-                【核心系统】CORE
-                【财务系统】QBO
-            </pre>
-            
-            <div class="hud-hint">🎛️ 操控台：支持鼠标左键拖拽平移画布、鼠标滚轮任意无级放大/缩小</div>
-        </div>
-    </div>
-
-    <script>
-        // 初始化 Mermaid 浅色系自适应配置
-        mermaid.initialize({
-            startOnLoad: true,
-            theme: 'default',
-            securityLevel: 'loose',
-            mindmap: {
-                useMaxWidth: false
-            }
-        });
-
-        let viewControllerInstance = null;
-
-        // 等待 SVG 渲染就绪后接管控制，绑定物理变焦
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                const rawSvg = document.querySelector('#viewportArea svg');
-                if (rawSvg) {
-                    rawSvg.setAttribute('width', '100%');
-                    rawSvg.setAttribute('height', '100%');
-                    
-                    // 动态注入 Apple Premium 蓝渐变定义
-                    const defs = rawSvg.querySelector('defs') || rawSvg.insertBefore(document.createElementNS('http://www.w3.org/2000/svg', 'defs'), rawSvg.firstChild);
-                    defs.innerHTML += `
-                        <linearGradient id="appleBlueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#0071e3" />
-                            <stop offset="100%" stop-color="#147ce5" />
-                        </linearGradient>
-                    `;
-                    
-                    // 接管物理变焦内核
-                    viewControllerInstance = svgPanZoom(rawSvg, {
-                        zoomEnabled: true,
-                        controlIconsEnabled: false,
-                        fit: true,
-                        center: true,
-                        minZoom: 0.1,
-                        maxZoom: 8,
-                        zoomScaleFactor: 0.12
-                    });
-                }
-            }, 600);
-        });
-
-        // 视口复位
-        function handleReset() {
-            if (viewControllerInstance) {
-                viewControllerInstance.resetZoom();
-                viewControllerInstance.center();
-                viewControllerInstance.fit();
-            }
-        }
-
-        // 全屏控制
-        function handleFullscreen() {
-            const el = document.getElementById('mainDashboard');
-            if (!document.fullscreenElement) {
-                el.requestFullscreen().catch(err => {
-                    console.error(`全屏开启失败: ${err.message}`);
-                });
-            } else {
-                document.exitFullscreen();
-            }
-        }
-    </script>
-</body>
-</html>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><h1>DodoWheels System</h1><p>系统架构 · 功能模块 · 操作下钻</p></div>
+    <div class="nav-title">主系统</div><nav class="nav"><a href="#overview"><span class="dot"></span>系统总览</a><a href="#web"><span class="dot"></span>官网 / 门户</a><a href="#core"><span class="dot"></span>核心业务系统</a></nav>
+    <div class="nav-title">功能模块</div><nav class="nav"><a href="#admin"><span class="dot"></span>管理后台 ADMIN</a><a href="#oms"><span class="dot"></span>订单系统 OMS</a><a href="#csm"><span class="dot"></span>客服系统 CSM</a><a href="#wms"><span class="dot"></span>仓储系统 WMS</a><a href="#analytics"><span class="dot"></span>数据与分析</a><a href="#settings"><span class="dot"></span>系统设置</a></nav>
+  </aside>
+  <main class="main">
+    <section class="window"><div style="display:flex;align-items:center;gap:14px"><div class="lights"><span class="light red"></span><span class="light yellow"></span><span class="light green"></span></div><div><div class="title">DodoWheels 功能架构汇总</div><div class="subtitle">L1 主系统 → L2 模块 → L3 功能点 → L4 具体动作</div></div></div><div class="actions"><button onclick="window.print()">打印 / 导出 PDF</button><button class="secondary" onclick="toggleAll(false)">展开全部</button><button class="secondary" onclick="toggleAll(true)">收起全部</button><button class="secondary" onclick="document.documentElement.requestFullscreen?.()">全屏模式</button></div></section>
+    <section class="hero" id="overview"><h2>系统总览</h2><p>本页面基于思维导图整理为右侧树形卡片结构，左侧固定导航按“主系统”与“功能模块”分组，点击即可跳转。每张卡片使用 CSS 原生路径连线展示完整下钻层级，避免拓扑交织，适合内部汇报、方案说明与打印归档。</p><div class="legend"><span class="tag">一级：主系统</span><span class="tag">二级：模块</span><span class="tag">三级：功能点</span><span class="tag">四级：具体动作</span></div></section>
+    <div class="grid">
+      <section class="card" id="web"><div class="card-head"><h3>官网 / 门户</h3><span class="badge">Public Portal</span></div><div class="tree">
+        <div class="node l2"><span class="pill">官网主页</span><div class="children"><div class="node l3"><span class="pill">品牌展示</span></div><div class="node l3"><span class="pill">商品浏览</span></div><div class="node l3"><span class="pill">服务介绍</span></div></div></div>
+        <div class="node l2"><span class="pill">关于我们</span></div><div class="node l2"><span class="pill">联系我们</span></div><div class="node l2"><span class="pill">Privacy Policy</span></div><div class="node l2"><span class="pill">Term of Service</span></div>
+      </div></section>
+      <section class="card" id="core"><div class="card-head"><h3>核心业务系统 CORE</h3><span class="badge">Business Core</span></div><div class="tree">
+        <div class="node l2"><span class="pill">安全层</span><div class="children"><div class="node l3"><span class="pill">身份认证</span></div><div class="node l3"><span class="pill">权限控制</span></div></div></div>
+        <div class="node l2"><span class="pill">数据同步</span><div class="children"><div class="node l3"><span class="pill">全渠道库存同步</span></div><div class="node l3"><span class="pill">导入 / 导出任务</span></div></div></div>
+      </div></section>
+      <section class="card" id="admin"><div class="card-head"><h3>管理后台 ADMIN</h3><span class="badge">Admin Console</span></div><div class="tree">
+        <div class="node l2"><span class="pill">产品管理</span><div class="children"><div class="node l3"><span class="pill">产品资料</span><div class="children"><div class="node l4"><span class="pill">产品新增</span></div><div class="node l4"><span class="pill">类别管理</span></div><div class="node l4"><span class="pill">品牌管理</span></div><div class="node l4"><span class="pill">库存管理</span></div><div class="node l4"><span class="pill">价格策略</span></div></div></div><div class="node l3"><span class="pill">搜索与筛选</span></div></div></div>
+        <div class="node l2"><span class="pill">权限与角色</span><div class="children"><div class="node l3"><span class="pill">管理员账号维护</span></div><div class="node l3"><span class="pill">角色权限分配</span></div></div></div>
+      </div></section>
+      <section class="card" id="oms"><div class="card-head"><h3>订单系统 OMS</h3><span class="badge">Order Management</span></div><div class="tree"><div class="node l2"><span class="pill">订单管理</span><div class="children"><div class="node l3"><span class="pill">订单处理</span><div class="children"><div class="node l4"><span class="pill">订单检索</span></div><div class="node l4"><span class="pill">订单支付</span></div><div class="node l4"><span class="pill">拣货处理</span></div><div class="node l4"><span class="pill">发货与物流</span></div><div class="node l4"><span class="pill">退款 / 退货</span></div></div></div></div></div></div></section>
+      <section class="card" id="csm"><div class="card-head"><h3>客服系统 CSM</h3><span class="badge">Customer Service</span></div><div class="tree"><div class="node l2"><span class="pill">服务管理</span><div class="children"><div class="node l3"><span class="pill">客户支持</span><div class="children"><div class="node l4"><span class="pill">工单管理</span></div><div class="node l4"><span class="pill">审核待办</span></div><div class="node l4"><span class="pill">AI 辅助工具</span></div><div class="node l4"><span class="pill">站内消息</span></div><div class="node l4"><span class="pill">活动管理</span></div><div class="node l4"><span class="pill">退款管理</span></div></div></div><div class="node l3"><span class="pill">Websocket 集成</span><div class="children"><div class="node l4"><span class="pill">实时消息推送</span></div><div class="node l4"><span class="pill">客服在线状态</span></div></div></div></div></div></div></section>
+      <section class="card" id="wms"><div class="card-head"><h3>仓储系统 WMS</h3><span class="badge">Warehouse</span></div><div class="tree"><div class="node l2"><span class="pill">入库管理</span><div class="children"><div class="node l3"><span class="pill">入库预约</span></div><div class="node l3"><span class="pill">入库上架</span></div><div class="node l3"><span class="pill">上架确认</span></div></div></div><div class="node l2"><span class="pill">库存管理</span><div class="children"><div class="node l3"><span class="pill">库存查询</span></div><div class="node l3"><span class="pill">库存调整</span></div><div class="node l3"><span class="pill">仓位管理</span></div><div class="node l3"><span class="pill">库存预警</span></div></div></div><div class="node l2"><span class="pill">出库管理</span><div class="children"><div class="node l3"><span class="pill">下架拣货</span></div><div class="node l3"><span class="pill">出库交接</span></div><div class="node l3"><span class="pill">异常处理</span></div></div></div></div></section>
+      <section class="card" id="analytics"><div class="card-head"><h3>数据与分析</h3><span class="badge">Analytics</span></div><div class="tree"><div class="node l2"><span class="pill">KPI 数据分析</span><div class="children"><div class="node l3"><span class="pill">销售趋势</span></div><div class="node l3"><span class="pill">库存周转</span></div><div class="node l3"><span class="pill">订单履约</span></div></div></div><div class="node l2"><span class="pill">统计报表</span><div class="children"><div class="node l3"><span class="pill">日常报表</span></div><div class="node l3"><span class="pill">自定义导出</span></div></div></div></div></section>
+      <section class="card" id="settings"><div class="card-head"><h3>系统设置</h3><span class="badge">Settings</span></div><div class="tree"><div class="node l2"><span class="pill">基础配置</span><div class="children"><div class="node l3"><span class="pill">接口管理</span></div><div class="node l3"><span class="pill">角色管理</span></div><div class="node l3"><span class="pill">参数设置</span></div><div class="node l3"><span class="pill">日志管理</span></div></div></div></div></section>
+    </div><div class="footer">© DodoWheels System · Light Executive Summary</div>
+  </main>
+</div>
+<script>
+function toggleAll(close){document.querySelectorAll('.node').forEach(n=>{ if(n.querySelector('.children')) n.classList.toggle('collapsed', close);});}
+document.querySelectorAll('.node').forEach(n=>{ if(n.querySelector(':scope > .children')){ const b=document.createElement('button'); b.textContent='切换'; b.className='toggle'; b.onclick=(e)=>{e.stopPropagation();n.classList.toggle('collapsed')}; n.querySelector(':scope > .pill').appendChild(b); }});
+</script>
+</body></html>
