@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels 数字化架构层级树状图</title>
+    <title>DodoWheels 数字化全景架构层级树</title>
     <style>
         /* 1. 顶级现代浅色美学规范 */
         body {
             background-color: #f5f5f7;
             color: #1d1d1f;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0;
             padding: 40px;
             display: flex;
@@ -19,12 +19,12 @@
 
         .header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 35px;
             max-width: 800px;
         }
 
         .header h1 {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 600;
             margin: 0 0 10px 0;
             letter-spacing: -0.5px;
@@ -36,15 +36,15 @@
             margin: 0;
         }
 
-        /* 2. 核心架构树连线系统（纯 CSS 物理分支结构） */
+        /* 2. 核心架构树连线系统（纯 CSS 垂直+水平分支引导线） */
         .tree-container {
             background: #ffffff;
             padding: 40px 50px;
             border-radius: 16px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
             border: 1px solid rgba(0, 0, 0, 0.05);
-            min-width: 600px;
-            max-width: 1000px;
+            min-width: 700px;
+            max-width: 1050px;
             width: 100%;
         }
 
@@ -56,7 +56,7 @@
         }
 
         .tree ul {
-            margin-left: 36px; /* 控制子节点的缩进，保持清晰度 */
+            margin-left: 36px; 
             position: relative;
         }
 
@@ -95,12 +95,12 @@
             border-radius: 6px;
             font-size: 14px;
             font-weight: 500;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
             transition: all 0.2s;
             border: 1px solid transparent;
         }
 
-        /* 顶级根节点：DodoWheels System */
+        /* 顶级总根节点 */
         .node-root {
             background-color: #1d1d1f;
             color: #ffffff;
@@ -110,14 +110,13 @@
             border-radius: 8px;
         }
 
-        /* 一级系统级节点：WEB、CORE、QBO */
-        .node-level1 {
-            background-color: #0071e3;
-            color: #ffffff;
-            font-weight: 600;
-        }
+        /* 一级主干节点（WEB / BACKEND / CORE / QBO） */
+        .node-level1-frontend { background-color: #0071e3; color: #ffffff; font-weight: 600; }
+        .node-level1-backend { background-color: #ff9500; color: #ffffff; font-weight: 600; }
+        .node-level1-core { background-color: #34c759; color: #ffffff; font-weight: 600; }
+        .node-level1-qbo { background-color: #af52de; color: #ffffff; font-weight: 600; }
 
-        /* 二级功能组节点：用户中心、产品服务、客户工具箱等 */
+        /* 二级功能模块组节点 */
         .node-level2 {
             background-color: #e8e8ed;
             color: #1d1d1f;
@@ -125,28 +124,26 @@
             font-weight: 600;
         }
 
-        /* 三级细节节点：注册信息、基本信息、产品浏览等 */
+        /* 三级具体业务节点 */
         .node-level3 {
             background-color: #f5f5f7;
             color: #424245;
             border: 1px solid #e8e8ed;
         }
 
-        /* 四级最底层功能：客户注册、登录成功、轮胎查询等 */
+        /* 四级最底层末端功能 */
         .node-level4 {
             background-color: #ffffff;
-            color: #86868b;
+            color: #6e6e73;
             border: 1px solid #e8e8ed;
             font-size: 13px;
         }
 
-        /* 鼠标悬停时的微动效，方便追踪层级 */
         .node:hover {
-            transform: translateX(3px);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
-        /* 快捷打印控制 */
         .print-btn {
             background: #ffffff;
             border: 1px solid #d2d2d7;
@@ -159,28 +156,26 @@
             margin-bottom: 20px;
             transition: all 0.2s;
         }
-        .print-btn:hover {
-            background: #f5f5f7;
-            border-color: #86868b;
-        }
+        .print-btn:hover { background: #f5f5f7; border-color: #86868b; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>DodoWheels System 架构层级树</h1>
-        <p>通过左侧垂直引导线与多色阶色块，清晰呈现出系统从“总根 ➔ 核心大系统 ➔ 子模块 ➔ 底层具体功能”的上下隶属关系。</p>
+        <h1>DodoWheels System 全景架构层级树</h1>
+        <p>基于最新补充的后端管理功能进行全量重构，通过物理引导线精准体现“前台/后台/中台/财务”的上下级隶属关系。</p>
     </div>
 
-    <button class="print-btn" onclick="window.print()">🖨️ 打印 / 导出为 PDF 保存</button>
+    <button class="print-btn" onclick="window.print()">🖨️ 打印 / 导出为 PDF 高清面板</button>
 
     <div class="tree-container">
         <ul class="tree">
             <li>
                 <div class="node node-root">🎯 DodoWheels System (系统总根)</div>
                 <ul>
+                    
                     <li>
-                        <div class="node node-level1">【网站系统】WEB</div>
+                        <div class="node node-level1-frontend">【网站系统】WEB</div>
                         <ul>
                             <li>
                                 <div class="node node-level2">用户中心</div>
@@ -231,10 +226,10 @@
                                     <li>
                                         <div class="node node-level3">产品查询</div>
                                         <ul>
-                                            <li><div class="node node-level4">轮胎查询 ➔ 按照尺寸查询 / 按照车型查询</div></li>
-                                            <li><div class="node node-level4">轮毂查询 ➔ 按照尺寸查询 / 按照车型查询</div></li>
-                                            <li><div class="node node-level4">配件查询 ➔ 按照车型查询</div></li>
-                                            <li><div class="node node-level4">Mounted Package查询 ➔ 按照车型查询</div></li>
+                                            <li><div class="node node-level4">轮胎查询 ➔ 按尺寸 / 按车型</div></li>
+                                            <li><div class="node node-level4">轮毂查询 ➔ 按尺寸 / 按车型</div></li>
+                                            <li><div class="node node-level4">配件查询 ➔ 按车型</div></li>
+                                            <li><div class="node node-level4">Mounted Package查询 ➔ 按车型</div></li>
                                             <li><div class="node node-level4">特惠产品查询</div></li>
                                         </ul>
                                     </li>
@@ -262,12 +257,44 @@
                     </li>
                     
                     <li>
-                        <div class="node node-level1">【核心系统】CORE</div>
+                        <div class="node node-level1-backend">【后端管理系统】BACKEND</div>
+                        <ul>
+                            <li>
+                                <div class="node node-level2">基础支撑模块</div>
+                                <ul>
+                                    <li><div class="node node-level3">用户管理</div></li>
+                                    <li><div class="node node-level3">产品管理</div></li>
+                                    <li><div class="node node-level3">订单管理</div></li>
+                                    <li><div class="node node-level3">系统日志</div></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div class="node node-level2">业务及运营支撑</div>
+                                <ul>
+                                    <li><div class="node node-level3">佣金管理</div></li>
+                                    <li><div class="node node-level3">测试管理</div></li>
+                                    <li><div class="node node-level3">库存、采购、发货管理</div></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div class="node node-level2">多方协同联动</div>
+                                <ul>
+                                    <li><div class="node node-level3">供应商对接</div></li>
+                                    <li><div class="node node-level3">仓库协同</div></li>
+                                    <li><div class="node node-level3">客服中心</div></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <div class="node node-level1-core">【核心系统】CORE</div>
                     </li>
                     
                     <li>
-                        <div class="node node-level1">【财务系统】QBO</div>
+                        <div class="node node-level1-qbo">【财务系统】QBO</div>
                     </li>
+
                 </ul>
             </li>
         </ul>
