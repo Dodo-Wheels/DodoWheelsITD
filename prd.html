@@ -4,20 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels 三大系统功能架构 PRD</title>
+    <title>DodoWheels 功能架构汇报</title>
     <style>
         :root {
-            --bg: #f6f8fb;
+            --bg: #f3f6fa;
             --panel: #ffffff;
-            --ink: #172033;
-            --muted: #657287;
-            --line: #c7d8ee;
-            --primary: #2468d8;
-            --primary-dark: #173f8a;
-            --soft: #eef5ff;
-            --soft-2: #f6fbff;
-            --border: #dbe7f6;
-            --shadow: 0 16px 40px rgba(36, 104, 216, .11);
+            --ink: #111827;
+            --muted: #667085;
+            --line: #cbd5e1;
+            --primary: #1d4ed8;
+            --primary-dark: #0f172a;
+            --accent: #0f766e;
+            --gold: #b7791f;
+            --soft: #eff6ff;
+            --soft-2: #f8fafc;
+            --border: #d8e2ee;
+            --shadow: 0 20px 48px rgba(15, 23, 42, .12);
+            --shadow-soft: 0 8px 24px rgba(15, 23, 42, .08);
         }
 
         * {
@@ -32,103 +35,124 @@
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
             background:
-                linear-gradient(90deg, rgba(36, 104, 216, .035) 1px, transparent 1px),
-                linear-gradient(rgba(36, 104, 216, .035) 1px, transparent 1px),
+                linear-gradient(135deg, rgba(15, 23, 42, .05), transparent 32%),
+                linear-gradient(90deg, rgba(29, 78, 216, .04) 1px, transparent 1px),
+                linear-gradient(rgba(29, 78, 216, .035) 1px, transparent 1px),
                 var(--bg);
-            background-size: 22px 22px;
+            background-size: auto, 28px 28px, 28px 28px;
             color: var(--ink);
         }
 
         .app {
-            display: grid;
-            grid-template-columns: 280px minmax(0, 1fr);
             min-height: 100vh;
         }
 
-        .sidebar {
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            padding: 24px 18px;
-            background: rgba(255, 255, 255, .88);
-            border-right: 1px solid var(--border);
-            backdrop-filter: blur(16px);
-            overflow: auto;
+        .main {
+            width: min(1440px, 100%);
+            margin: 0 auto;
+            padding: 28px 34px 56px;
         }
 
-        .brand {
-            padding: 18px;
+        .executive-hero {
+            position: relative;
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) minmax(360px, .65fr);
+            gap: 28px;
+            align-items: end;
+            margin-bottom: 18px;
+            padding: 30px;
+            border: 1px solid rgba(148, 163, 184, .34);
             border-radius: 8px;
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            background:
+                linear-gradient(135deg, rgba(15, 23, 42, .96), rgba(30, 64, 175, .9)),
+                linear-gradient(90deg, rgba(255, 255, 255, .1) 1px, transparent 1px);
             color: #fff;
             box-shadow: var(--shadow);
+            overflow: hidden;
         }
 
-        .brand h1 {
-            margin: 0 0 8px;
-            font-size: 20px;
+        .executive-hero::after {
+            content: "";
+            position: absolute;
+            right: -90px;
+            top: -120px;
+            width: 360px;
+            height: 360px;
+            border: 1px solid rgba(255, 255, 255, .14);
+            border-radius: 50%;
+        }
+
+        .hero-copy {
+            position: relative;
+            z-index: 1;
+        }
+
+        .eyebrow {
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, .72);
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .executive-hero h1 {
+            margin: 0;
+            font-size: 36px;
+            line-height: 1.18;
             letter-spacing: 0;
         }
 
-        .brand p {
-            margin: 0;
-            color: rgba(255, 255, 255, .82);
-            font-size: 12px;
-            line-height: 1.6;
+        .executive-hero p {
+            max-width: 760px;
+            margin: 14px 0 0;
+            color: rgba(255, 255, 255, .76);
+            font-size: 15px;
+            line-height: 1.75;
         }
 
-        .nav-title {
-            margin: 24px 8px 8px;
-            color: var(--muted);
+        .hero-stats {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .hero-stat {
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, .18);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .1);
+            backdrop-filter: blur(12px);
+        }
+
+        .hero-stat strong {
+            display: block;
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .hero-stat span {
+            display: block;
+            margin-top: 4px;
+            color: rgba(255, 255, 255, .72);
             font-size: 12px;
             font-weight: 800;
         }
 
-        .nav a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 4px 0;
-            padding: 10px 12px;
-            border-radius: 8px;
-            color: #26364d;
-            font-size: 14px;
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        .nav a:hover {
-            background: var(--soft);
-            color: var(--primary-dark);
-        }
-
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 999px;
-            background: var(--primary);
-            flex: 0 0 auto;
-        }
-
-        .main {
-            padding: 24px 32px 56px;
-        }
-
         .toolbar {
-            position: sticky;
-            top: 16px;
+            position: relative;
             z-index: 5;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 16px;
-            margin-bottom: 22px;
-            padding: 14px 16px;
-            border: 1px solid var(--border);
+            margin-bottom: 18px;
+            padding: 16px 18px;
+            border: 1px solid rgba(203, 213, 225, .78);
             border-radius: 8px;
-            background: rgba(255, 255, 255, .9);
+            background: rgba(255, 255, 255, .92);
             backdrop-filter: blur(16px);
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-soft);
         }
 
         .window-left {
@@ -163,8 +187,8 @@
         }
 
         .title {
-            font-size: 18px;
-            font-weight: 850;
+            font-size: 20px;
+            font-weight: 900;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -186,17 +210,151 @@
             min-height: 38px;
             border: 1px solid transparent;
             border-radius: 8px;
-            padding: 8px 12px;
+            padding: 8px 14px;
             background: var(--primary);
             color: #fff;
             font-weight: 800;
             cursor: pointer;
+            box-shadow: 0 8px 18px rgba(29, 78, 216, .18);
         }
 
         button.secondary {
-            background: var(--soft);
-            border-color: #cfe0f6;
+            background: #fff;
+            border-color: #cbd5e1;
+            color: #1f2937;
+            box-shadow: none;
+        }
+
+        button.active {
+            background: #0f172a;
+            border-color: #0f172a;
+            color: #fff;
+        }
+
+        .report-summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .summary-item {
+            position: relative;
+            min-height: 118px;
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .92);
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+        }
+
+        .summary-item::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto;
+            height: 4px;
+            background: var(--primary);
+        }
+
+        .summary-item:nth-child(2)::before {
+            background: var(--accent);
+        }
+
+        .summary-item:nth-child(3)::before {
+            background: var(--gold);
+        }
+
+        .summary-item strong {
+            display: block;
+            margin-bottom: 8px;
             color: var(--primary-dark);
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .summary-item span {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.65;
+        }
+
+        .summary-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 12px;
+        }
+
+        .summary-tags em {
+            display: inline-flex;
+            align-items: center;
+            min-height: 26px;
+            padding: 5px 9px;
+            border: 1px solid #d7e2ef;
+            border-radius: 999px;
+            background: #f8fafc;
+            color: #334155;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 800;
+        }
+
+        .level-guide {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .level-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 58px;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .9);
+        }
+
+        .level-mark {
+            display: grid;
+            place-items: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: #0f172a;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 900;
+            flex: 0 0 auto;
+        }
+
+        .level-item:nth-child(2) .level-mark {
+            background: var(--primary);
+        }
+
+        .level-item:nth-child(3) .level-mark {
+            background: var(--accent);
+        }
+
+        .level-item:nth-child(4) .level-mark {
+            background: var(--gold);
+        }
+
+        .level-item strong {
+            display: block;
+            margin-bottom: 2px;
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .level-item span {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
         }
 
         .hero {
@@ -259,7 +417,7 @@
             border-radius: 8px;
             background: var(--panel);
             box-shadow: var(--shadow);
-            padding: 20px;
+            padding: 22px;
         }
 
         .card-head {
@@ -267,21 +425,30 @@
             align-items: center;
             justify-content: space-between;
             gap: 12px;
-            margin-bottom: 16px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid #e7eff9;
+            margin-bottom: 18px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e5edf7;
         }
 
         .card h3 {
             margin: 0;
-            font-size: 21px;
+            font-size: 23px;
+            font-weight: 900;
+        }
+
+        .card-note {
+            margin: -6px 0 18px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.7;
         }
 
         .badge {
             padding: 6px 10px;
-            border: 1px solid #cfe0f6;
+            border: 1px solid #bfdbfe;
             border-radius: 999px;
-            background: var(--soft);
+            background: #eff6ff;
             color: var(--primary-dark);
             font-size: 12px;
             font-weight: 800;
@@ -293,41 +460,42 @@
         }
 
         .compact-tree {
-            overflow-x: auto;
+            overflow: visible;
             padding-bottom: 6px;
+            scrollbar-color: #94a3b8 transparent;
         }
 
         .node {
             position: relative;
-            margin: 10px 0 10px 28px;
+            margin: 7px 0 7px 22px;
         }
 
         .node::before {
             content: "";
             position: absolute;
-            left: -18px;
-            top: -10px;
+            left: -14px;
+            top: -6px;
             width: 1px;
-            height: calc(100% + 20px);
-            background: var(--line);
+            height: calc(100% + 12px);
+            background: #d8e0eb;
         }
 
         .node::after {
             content: "";
             position: absolute;
-            left: -18px;
-            top: 18px;
-            width: 18px;
+            left: -14px;
+            top: 15px;
+            width: 14px;
             height: 1px;
-            background: var(--line);
+            background: #d8e0eb;
         }
 
         .node:first-child::before {
-            top: 18px;
+            top: 15px;
         }
 
         .node:last-child::before {
-            height: 28px;
+            height: 21px;
         }
 
         .pill {
@@ -335,42 +503,74 @@
             align-items: center;
             gap: 8px;
             max-width: 100%;
-            min-height: 36px;
-            padding: 8px 12px;
+            min-height: 32px;
+            padding: 7px 10px;
             border: 1px solid transparent;
             border-radius: 8px;
-            line-height: 1.35;
-            font-size: 14px;
-            font-weight: 760;
+            line-height: 1.3;
+            font-size: 13px;
+            font-weight: 780;
             vertical-align: top;
+            box-shadow: 0 1px 0 rgba(15, 23, 42, .03);
         }
 
         .root>.pill {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            background: linear-gradient(135deg, #020617, #1d4ed8);
             color: #fff;
+            min-height: 38px;
+            padding: 9px 14px;
+            font-size: 15px;
+            font-weight: 900;
         }
 
         .l2>.pill {
-            background: #e9f2ff;
-            border-color: #c7dcf8;
-            color: var(--primary-dark);
+            background: #f8fbff;
+            border-color: #bfdbfe;
+            color: #1e3a8a;
         }
 
         .l3>.pill {
-            background: var(--soft-2);
-            border-color: #d8e9f9;
-            color: #24445f;
+            background: #fff;
+            border-color: #dbe5f0;
+            color: #263549;
         }
 
         .l4>.pill {
-            background: #fff;
-            border-color: #e1ebf5;
-            color: #526177;
+            background: #fbfdff;
+            border-color: #e6edf5;
+            color: #4b5563;
             font-weight: 650;
         }
 
+        .primary-module {
+            border-left: 4px solid var(--primary);
+        }
+
+        .primary-module>.pill {
+            background: linear-gradient(135deg, #f8fbff, #eef6ff);
+            border-color: #93c5fd;
+            color: #0f172a;
+            font-size: 14px;
+            font-weight: 900;
+            box-shadow: inset 0 0 0 1px rgba(29, 78, 216, .08);
+        }
+
+        .compact-tree>.root>.children>.primary-module {
+            background: linear-gradient(180deg, #ffffff, #f8fbff);
+            border-color: #b7c9e6;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .compact-tree>.root>.children>.primary-module>.pill {
+            background: linear-gradient(135deg, #0f172a, #1d4ed8);
+            border-color: transparent;
+            color: #fff;
+            min-height: 42px;
+            font-size: 15px;
+        }
+
         .children {
-            margin-left: 26px;
+            margin-left: 20px;
         }
 
         .collapsed>.children {
@@ -392,10 +592,11 @@
 
         .compact-tree>.root>.children {
             display: grid;
-            grid-template-columns: repeat(3, minmax(250px, 1fr));
+            grid-template-columns: repeat(3, minmax(300px, 1fr));
             gap: 14px;
             margin-left: 0;
-            min-width: 820px;
+            min-width: 960px;
+            align-items: start;
         }
 
         .compact-tree>.root.collapsed>.children {
@@ -404,10 +605,11 @@
 
         .compact-tree>.root>.children>.node {
             margin: 0;
+            overflow: visible;
             padding: 14px;
             border: 1px solid var(--border);
             border-radius: 8px;
-            background: #fbfdff;
+            background: #fff;
         }
 
         .compact-tree>.root>.children>.node::before,
@@ -421,24 +623,155 @@
         }
 
         .compact-tree>.root>.children>.node>.children {
-            margin-left: 6px;
-            padding-top: 8px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 8px;
+            margin-left: 0;
+            padding-top: 12px;
+        }
+
+        .compact-tree>.root>.children>.node>.children>.node {
+            margin: 0;
+        }
+
+        .compact-tree>.root>.children>.node>.children>.node::before,
+        .compact-tree>.root>.children>.node>.children>.node::after {
+            display: none;
+        }
+
+        .compact-tree>.root>.children>.node>.children>.node>.pill {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .compact-tree>.root>.children>.node>.children>.node>.children {
+            margin-left: 10px;
+            padding-top: 6px;
+        }
+
+        .compact-tree .node.collapsed>.children {
+            display: none;
         }
 
         .toggle {
             display: inline-grid;
             place-items: center;
-            width: 24px;
-            height: 24px;
-            min-height: 24px;
+            flex: 0 0 auto;
+            width: 22px;
+            height: 22px;
+            min-height: 22px;
             padding: 0;
             border-radius: 6px;
-            background: rgba(255, 255, 255, .72);
-            border-color: rgba(23, 63, 138, .2);
+            background: rgba(255, 255, 255, .82);
+            border-color: rgba(15, 23, 42, .16);
             color: inherit;
             box-shadow: none;
-            font-size: 15px;
+            font-size: 14px;
             line-height: 1;
+        }
+
+        .toggle:hover {
+            background: #fff;
+            border-color: rgba(29, 78, 216, .32);
+        }
+
+        .architecture-board>.root {
+            margin: 0;
+        }
+
+        .architecture-board>.root>.pill {
+            display: none;
+        }
+
+        .architecture-board .node::before,
+        .architecture-board .node::after {
+            display: none;
+        }
+
+        .architecture-board>.root>.children {
+            min-width: 0;
+            grid-template-columns: minmax(260px, .95fr) minmax(420px, 1.35fr) minmax(240px, .75fr);
+            gap: 16px;
+        }
+
+        .architecture-board>.root>.children>.node {
+            padding: 16px;
+            border: 1px solid #c9d8ea;
+            background: linear-gradient(180deg, #ffffff, #f8fbff);
+        }
+
+        .architecture-board>.root>.children>.node>.pill {
+            min-height: 46px;
+            margin-bottom: 14px;
+            padding: 10px 12px;
+            font-size: 16px;
+        }
+
+        .architecture-board>.root>.children>.node>.children {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 10px;
+            padding-top: 0;
+        }
+
+        .architecture-board>.root>.children>.node>.children>.node {
+            margin: 0;
+            padding: 10px;
+            border: 1px solid #e1e8f2;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .86);
+        }
+
+        .architecture-board>.root>.children>.node>.children>.primary-module {
+            border-color: #b9cdef;
+            background: linear-gradient(180deg, #f8fbff, #eef6ff);
+        }
+
+        .architecture-board>.root>.children>.node>.children>.node>.pill {
+            min-height: 34px;
+            padding: 6px 8px;
+            border-color: transparent;
+            background: transparent;
+            box-shadow: none;
+            color: #0f172a;
+            font-size: 13px;
+            font-weight: 900;
+            justify-content: space-between;
+        }
+
+        .architecture-board>.root>.children>.node>.children>.node>.children {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-left: 0;
+            padding-top: 6px;
+        }
+
+        .architecture-board>.root>.children>.node>.children>.node>.children>.node {
+            margin: 0;
+        }
+
+        .architecture-board>.root>.children>.node>.children>.node>.children>.node>.pill {
+            min-height: 28px;
+            padding: 5px 8px;
+            border-color: #dbe5f0;
+            background: #fff;
+            color: #475569;
+            font-size: 12px;
+            font-weight: 750;
+        }
+
+        .architecture-board>.root>.children>.node>.children>.node>.children>.node>.children {
+            flex-basis: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 0;
+            padding: 0 0 4px 8px;
+        }
+
+        .architecture-board .node.collapsed>.children {
+            display: none;
         }
 
         .feature-list {
@@ -475,13 +808,8 @@
         }
 
         @media (max-width: 980px) {
-            .app {
+            .executive-hero {
                 grid-template-columns: 1fr;
-            }
-
-            .sidebar {
-                position: relative;
-                height: auto;
             }
 
             .toolbar {
@@ -495,6 +823,14 @@
                 padding: 18px;
             }
 
+            .report-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .level-guide {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
             .summary,
             .feature-list {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -502,8 +838,23 @@
         }
 
         @media (max-width: 640px) {
+
             .summary,
+            .report-summary,
+            .level-guide,
             .feature-list {
+                grid-template-columns: 1fr;
+            }
+
+            .executive-hero {
+                padding: 22px;
+            }
+
+            .executive-hero h1 {
+                font-size: 28px;
+            }
+
+            .hero-stats {
                 grid-template-columns: 1fr;
             }
 
@@ -514,6 +865,23 @@
             .children {
                 margin-left: 16px;
             }
+
+            .compact-tree {
+                max-height: none;
+            }
+
+            .compact-tree>.root>.children {
+                min-width: 0;
+                grid-template-columns: 1fr;
+            }
+
+            .architecture-board>.root>.children {
+                grid-template-columns: 1fr;
+            }
+
+            .compact-tree>.root>.children>.node {
+                max-height: none;
+            }
         }
 
         @media print {
@@ -521,7 +889,6 @@
                 background: #fff;
             }
 
-            .sidebar,
             .actions {
                 display: none;
             }
@@ -535,6 +902,9 @@
             }
 
             .toolbar,
+            .executive-hero,
+            .level-guide,
+            .report-summary,
             .hero,
             .card {
                 box-shadow: none;
@@ -551,18 +921,29 @@
 
 <body>
     <div class="app">
-        <aside class="sidebar">
-            <div class="brand">
-                <h1>DodoWheels 系统架构</h1>
-                <p>三大系统：网站系统-WEB、核心系统-CORE、财务系统-QBO。仅按已提供功能截图整理。</p>
-            </div>
-            <div class="nav-title">页面导航</div>
-            <nav class="nav">
-                <a href="#mindmap"><span class="dot"></span>总体功能树</a>
-            </nav>
-        </aside>
-
         <main class="main">
+            <section class="executive-hero">
+                <div class="hero-copy">
+                    <div class="eyebrow">SYSTEM ARCHITECTURE</div>
+                    <h1>DodoWheels 功能架构</h1>
+                    <p>围绕网站前台、核心业务中台与 QBO 财务集成，梳理系统边界、一级模块和关键功能菜单，便于管理层快速理解整体能力版图。</p>
+                </div>
+                <div class="hero-stats" aria-label="架构概览">
+                    <div class="hero-stat">
+                        <strong>3</strong>
+                        <span>核心系统</span>
+                    </div>
+                    <div class="hero-stat">
+                        <strong>全量</strong>
+                        <span>功能覆盖</span>
+                    </div>
+                    <div class="hero-stat">
+                        <strong>4</strong>
+                        <span>展示层级</span>
+                    </div>
+                </div>
+            </section>
+
             <section class="toolbar">
                 <div class="window-left">
                     <div class="lights">
@@ -571,126 +952,190 @@
                         <span class="light green"></span>
                     </div>
                     <div>
-                        <div class="title">DodoWheels 三大系统功能架构 PRD</div>
-                        <div class="subtitle">L1 三大系统 -> L2 子系统 / 子模块 -> L3 功能模块 -> L4 功能节点</div>
+                        <div class="title">DodoWheels 功能架构汇报</div>
+                        <div class="subtitle">三大系统 / 一级模块 / 功能菜单 / 子功能节点</div>
                     </div>
                 </div>
                 <div class="actions">
                     <button type="button" onclick="window.print()">打印 / 导出 PDF</button>
+                    <button type="button" class="secondary depth-action" data-depth="2" onclick="setTreeDepth(2)">模块视图</button>
+                    <button type="button" class="secondary depth-action" data-depth="3" onclick="setTreeDepth(3)">功能视图</button>
                     <button type="button" class="secondary" onclick="toggleAll(false)">展开全部</button>
                     <button type="button" class="secondary" onclick="toggleAll(true)">收起全部</button>
+                </div>
+            </section>
+
+            <section class="level-guide" aria-label="层级说明">
+                <div class="level-item">
+                    <span class="level-mark">L1</span>
+                    <div>
+                        <strong>系统层</strong>
+                        <span>WEB / CORE / QBO</span>
+                    </div>
+                </div>
+                <div class="level-item">
+                    <span class="level-mark">L2</span>
+                    <div>
+                        <strong>一级模块</strong>
+                        <span>业务域或管理域</span>
+                    </div>
+                </div>
+                <div class="level-item">
+                    <span class="level-mark">L3</span>
+                    <div>
+                        <strong>功能菜单</strong>
+                        <span>用户可见入口</span>
+                    </div>
+                </div>
+                <div class="level-item">
+                    <span class="level-mark">L4</span>
+                    <div>
+                        <strong>子功能</strong>
+                        <span>具体操作能力</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="report-summary" aria-label="系统概览">
+                <div class="summary-item">
+                    <strong>网站系统-WEB</strong>
+                    <span>客户注册、登录、产品浏览查询、购物车及客户工具箱。</span>
+                    <div class="summary-tags">
+                        <em>客户入口</em>
+                        <em>产品查询</em>
+                        <em>在线下单</em>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <strong>核心系统-CORE</strong>
+                    <span>采购、网站管理、订单、客服、仓储、运力和系统管理。</span>
+                    <div class="summary-tags">
+                        <em>订单履约</em>
+                        <em>仓储作业</em>
+                        <em>客服运营</em>
+                        <em>运力管理</em>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <strong>财务系统-QBO</strong>
+                    <span>产品、库存与财务单据同步，支撑 QuickBooks Online。</span>
+                    <div class="summary-tags">
+                        <em>产品同步</em>
+                        <em>库存同步</em>
+                        <em>财务单据</em>
+                    </div>
                 </div>
             </section>
 
             <div class="grid">
                 <section class="card" id="mindmap">
                     <div class="card-head">
-                        <h3>总体功能树</h3>
-                        <span class="badge">System Architecture</span>
+                        <h3>功能架构总览</h3>
+                        <span class="badge">Board View</span>
                     </div>
-                    <div class="tree compact-tree">
+                    <p class="card-note">按系统横向分区、按业务模块卡片化展示。默认展示到功能菜单层，点击节点上的加号可继续查看子功能。</p>
+                    <div class="tree compact-tree architecture-board">
                         <div class="node root">
                             <span class="pill">DodoWheels 系统</span>
                             <div class="children">
-                                <div class="node l2">
+                                <div class="node l2 primary-module">
                                     <span class="pill">网站系统-WEB</span>
                                     <div class="children">
-                                <div class="node l2">
-                                    <span class="pill">客户注册</span>
-                                    <div class="children">
-                                        <div class="node l3"><span class="pill">注册信息</span></div>
-                                        <div class="node l3"><span class="pill">注册审核</span></div>
-                                    </div>
-                                </div>
-                                <div class="node l2">
-                                    <span class="pill">客户登录</span>
-                                    <div class="children">
-                                        <div class="node l3"><span class="pill">登录成功</span></div>
-                                        <div class="node l3">
-                                            <span class="pill">登录失败</span>
+                                        <div class="node l2">
+                                            <span class="pill">客户注册</span>
                                             <div class="children">
-                                                <div class="node l4"><span class="pill">找回密码</span></div>
+                                                <div class="node l3"><span class="pill">注册信息</span></div>
+                                                <div class="node l3"><span class="pill">注册审核</span></div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="node l2">
-                                    <span class="pill">客户信息</span>
-                                    <div class="children">
-                                        <div class="node l3"><span class="pill">基本信息</span></div>
-                                        <div class="node l3"><span class="pill">订单信息</span></div>
-                                        <div class="node l3"><span class="pill">修改密码</span></div>
-                                    </div>
-                                </div>
-                                <div class="node l2"><span class="pill">购物车</span></div>
-                                <div class="node l2">
-                                    <span class="pill">产品浏览</span>
-                                    <div class="children">
-                                        <div class="node l3"><span class="pill">轮胎展示信息</span></div>
-                                        <div class="node l3"><span class="pill">轮毂展示信息</span></div>
-                                        <div class="node l3"><span class="pill">配件展示信息</span></div>
-                                    </div>
-                                </div>
-                                <div class="node l2">
-                                    <span class="pill">产品查询</span>
-                                    <div class="children">
-                                        <div class="node l3">
-                                            <span class="pill">Mounted Package 查询</span>
+                                        <div class="node l2">
+                                            <span class="pill">客户登录</span>
                                             <div class="children">
-                                                <div class="node l4"><span class="pill">按照车型查询</span></div>
+                                                <div class="node l3"><span class="pill">登录成功</span></div>
+                                                <div class="node l3">
+                                                    <span class="pill">登录失败</span>
+                                                    <div class="children">
+                                                        <div class="node l4"><span class="pill">找回密码</span></div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="node l3">
-                                            <span class="pill">轮胎查询</span>
+                                        <div class="node l2">
+                                            <span class="pill">客户信息</span>
                                             <div class="children">
-                                                <div class="node l4"><span class="pill">按照车型查询</span></div>
-                                                <div class="node l4"><span class="pill">按照尺寸查询</span></div>
+                                                <div class="node l3"><span class="pill">基本信息</span></div>
+                                                <div class="node l3"><span class="pill">订单信息</span></div>
+                                                <div class="node l3"><span class="pill">修改密码</span></div>
                                             </div>
                                         </div>
-                                        <div class="node l3">
-                                            <span class="pill">轮毂查询</span>
+                                        <div class="node l2"><span class="pill">购物车</span></div>
+                                        <div class="node l2">
+                                            <span class="pill">产品浏览</span>
                                             <div class="children">
-                                                <div class="node l4"><span class="pill">按照车型查询</span></div>
-                                                <div class="node l4"><span class="pill">按照尺寸查询</span></div>
+                                                <div class="node l3"><span class="pill">轮胎展示信息</span></div>
+                                                <div class="node l3"><span class="pill">轮毂展示信息</span></div>
+                                                <div class="node l3"><span class="pill">配件展示信息</span></div>
                                             </div>
                                         </div>
-                                        <div class="node l3">
-                                            <span class="pill">配件查询</span>
+                                        <div class="node l2">
+                                            <span class="pill">产品查询</span>
                                             <div class="children">
-                                                <div class="node l4"><span class="pill">按照车型查询</span></div>
+                                                <div class="node l3">
+                                                    <span class="pill">Mounted Package 查询</span>
+                                                    <div class="children">
+                                                        <div class="node l4"><span class="pill">按照车型查询</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="node l3">
+                                                    <span class="pill">轮胎查询</span>
+                                                    <div class="children">
+                                                        <div class="node l4"><span class="pill">按照车型查询</span></div>
+                                                        <div class="node l4"><span class="pill">按照尺寸查询</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="node l3">
+                                                    <span class="pill">轮毂查询</span>
+                                                    <div class="children">
+                                                        <div class="node l4"><span class="pill">按照车型查询</span></div>
+                                                        <div class="node l4"><span class="pill">按照尺寸查询</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="node l3">
+                                                    <span class="pill">配件查询</span>
+                                                    <div class="children">
+                                                        <div class="node l4"><span class="pill">按照车型查询</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="node l3"><span class="pill">特惠产品查询</span></div>
                                             </div>
                                         </div>
-                                        <div class="node l3"><span class="pill">特惠产品查询</span></div>
+                                        <div class="node l2">
+                                            <span class="pill">客户工具箱</span>
+                                            <div class="children">
+                                                <div class="node l3"><span class="pill">轮胎计算器</span></div>
+                                                <div class="node l3"><span class="pill">轮毂计算器</span></div>
+                                                <div class="node l3"><span class="pill">轮毂TryOn</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="node l2"><span class="pill">关于我们</span></div>
+                                        <div class="node l2"><span class="pill">联系我们</span></div>
+                                        <div class="node l2"><span class="pill">配送信息</span></div>
+                                        <div class="node l2"><span class="pill">Privacy Policy</span></div>
+                                        <div class="node l2"><span class="pill">Term of Service</span></div>
                                     </div>
                                 </div>
-                                <div class="node l2">
-                                    <span class="pill">客户工具箱</span>
-                                    <div class="children">
-                                        <div class="node l3"><span class="pill">轮胎计算器</span></div>
-                                        <div class="node l3"><span class="pill">轮毂计算器</span></div>
-                                        <div class="node l3"><span class="pill">轮毂TryOn</span></div>
-                                    </div>
-                                </div>
-                                <div class="node l2"><span class="pill">关于我们</span></div>
-                                <div class="node l2"><span class="pill">联系我们</span></div>
-                                <div class="node l2"><span class="pill">配送信息</span></div>
-                                <div class="node l2"><span class="pill">Privacy Policy</span></div>
-                                <div class="node l2"><span class="pill">Term of Service</span></div>
-                                    </div>
-                                </div>
-                                <div class="node l2">
+                                <div class="node l2 primary-module">
                                     <span class="pill">核心系统-CORE</span>
                                     <div class="children">
-                                        <div class="node l3">
-                                            <span class="pill">优惠码</span>
-                                        </div>
+                                        <div class="node l3"><span class="pill">仪表盘</span></div>
+                                        <div class="node l3"><span class="pill">Kpi数据分析</span></div>
                                         <div class="node l3">
                                             <span class="pill">采购管理</span>
                                             <div class="children">
-                                                <div class="node l4"><span class="pill">采购配置</span></div>
+                                                <div class="node l4"><span class="pill">集装箱追踪</span></div>
                                             </div>
                                         </div>
-                                        <div class="node l3">
+                                        <div class="node l3 primary-module">
                                             <span class="pill">网站管理-WEBADMIN</span>
                                             <div class="children">
                                                 <div class="node l4">
@@ -700,15 +1145,15 @@
                                                         <div class="node l4"><span class="pill">类别管理</span></div>
                                                         <div class="node l4"><span class="pill">品牌管理</span></div>
                                                         <div class="node l4"><span class="pill">客户类别</span></div>
-                                                        <div class="node l4"><span class="pill">价格管理</span></div>
-                                                        <div class="node l4"><span class="pill">供应商库存配置</span></div>
+                                                        <div class="node l4"><span class="pill">级联管理</span></div>
+                                                        <div class="node l4"><span class="pill">级联基础数据</span></div>
                                                     </div>
                                                 </div>
-                                                <div class="node l4"><span class="pill">管理员组织结构</span></div>
-                                                <div class="node l4"><span class="pill">管理员-企业子结构</span></div>
+                                                <div class="node l4"><span class="pill">网站滚动图片维护</span></div>
+                                                <div class="node l4"><span class="pill">网站产品手册维护</span></div>
                                             </div>
                                         </div>
-                                        <div class="node l3">
+                                        <div class="node l3 primary-module">
                                             <span class="pill">订单管理-OMS</span>
                                             <div class="children">
                                                 <div class="node l4">
@@ -720,28 +1165,25 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="node l3">
+                                        <div class="node l3 primary-module">
                                             <span class="pill">客服管理-CSM</span>
                                             <div class="children">
                                                 <div class="node l4">
                                                     <span class="pill">客服管理</span>
                                                     <div class="children">
-                                                        <div class="node l4"><span class="pill">预约处理</span></div>
-                                                        <div class="node l4"><span class="pill">站点菜单维护</span></div>
-                                                        <div class="node l4"><span class="pill">活动管理</span></div>
+                                                        <div class="node l4"><span class="pill">网单处理</span></div>
+                                                        <div class="node l4"><span class="pill">出库单创建</span></div>
+                                                        <div class="node l4"><span class="pill">订单取消</span></div>
                                                         <div class="node l4"><span class="pill">客户管理</span></div>
-                                                        <div class="node l4"><span class="pill">库存查询</span></div>
-                                                        <div class="node l4"><span class="pill">AI智能工具</span></div>
-                                                        <div class="node l4"><span class="pill">佣金查询</span></div>
-                                                        <div class="node l4"><span class="pill">调拨管理</span></div>
-                                                        <div class="node l4"><span class="pill">退货管理</span></div>
+                                                        <div class="node l4"><span class="pill">库存报表</span></div>
+                                                        <div class="node l4"><span class="pill">AI推荐</span></div>
+                                                        <div class="node l4"><span class="pill">销售报表</span></div>
+                                                        <div class="node l4"><span class="pill">Webex集成</span></div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="node l3"><span class="pill">客户管理</span></div>
-                                        <div class="node l3"><span class="pill">Webex集成</span></div>
-                                        <div class="node l3">
+                                        <div class="node l3 primary-module">
                                             <span class="pill">仓储管理-WMS</span>
                                             <div class="children">
                                                 <div class="node l4">
@@ -774,14 +1216,12 @@
                                             </div>
                                         </div>
                                         <div class="node l3">
-                                            <span class="pill">客户服务</span>
+                                            <span class="pill">运力管理</span>
                                             <div class="children">
-                                                <div class="node l4"><span class="pill">问题管理</span></div>
+                                                <div class="node l4"><span class="pill">司机管理</span></div>
                                                 <div class="node l4"><span class="pill">车辆管理</span></div>
                                             </div>
                                         </div>
-                                        <div class="node l3"><span class="pill">订单提醒分析</span></div>
-                                        <div class="node l3"><span class="pill">系统使用权限</span></div>
                                         <div class="node l3">
                                             <span class="pill">系统管理</span>
                                             <div class="children">
@@ -791,9 +1231,11 @@
                                                 <div class="node l4"><span class="pill">仓库管理</span></div>
                                             </div>
                                         </div>
+                                        <div class="node l3"><span class="pill">操作指南</span></div>
+                                        <div class="node l3"><span class="pill">系统设置</span></div>
                                     </div>
                                 </div>
-                                <div class="node l2">
+                                <div class="node l2 primary-module">
                                     <span class="pill">财务系统-QBO</span>
                                     <div class="children">
                                         <div class="node l3"><span class="pill">产品信息同步</span></div>
@@ -814,14 +1256,47 @@
     </div>
 
     <script>
+        function getNodeDepth(node) {
+            let depth = 0;
+            let current = node;
+
+            while (current.parentElement) {
+                current = current.parentElement.closest(".node");
+                if (!current) break;
+                depth += 1;
+            }
+
+            return depth;
+        }
+
+        function syncToggle(node) {
+            const toggle = node.querySelector(":scope > .pill > .toggle");
+            if (toggle) toggle.textContent = node.classList.contains("collapsed") ? "+" : "-";
+        }
+
+        function setActiveDepth(depth) {
+            document.querySelectorAll(".depth-action").forEach((button) => {
+                button.classList.toggle("active", Number(button.dataset.depth) === depth);
+            });
+        }
+
+        function setTreeDepth(depth) {
+            document.querySelectorAll(".node").forEach((node) => {
+                if (!node.querySelector(":scope > .children")) return;
+                node.classList.toggle("collapsed", getNodeDepth(node) >= depth);
+                syncToggle(node);
+            });
+            setActiveDepth(depth);
+        }
+
         function toggleAll(close) {
             document.querySelectorAll(".node").forEach((node) => {
                 if (node.querySelector(":scope > .children")) {
                     node.classList.toggle("collapsed", close);
-                    const toggle = node.querySelector(":scope > .pill > .toggle");
-                    if (toggle) toggle.textContent = close ? "+" : "-";
+                    syncToggle(node);
                 }
             });
+            setActiveDepth(null);
         }
 
         document.querySelectorAll(".node").forEach((node) => {
@@ -835,13 +1310,14 @@
             toggle.addEventListener("click", (event) => {
                 event.stopPropagation();
                 node.classList.toggle("collapsed");
-                toggle.textContent = node.classList.contains("collapsed") ? "+" : "-";
+                syncToggle(node);
+                setActiveDepth(null);
             });
 
             node.querySelector(":scope > .pill").appendChild(toggle);
         });
 
-        toggleAll(true);
+        setTreeDepth(2);
     </script>
 </body>
 
