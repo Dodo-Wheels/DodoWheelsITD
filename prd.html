@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DodoWheels 功能架构汇报</title>
+    <title>DodoWheels 功能架构</title>
     <style>
         :root {
             --bg: #f3f6fa;
@@ -668,6 +668,7 @@
             box-shadow: none;
             font-size: 14px;
             line-height: 1;
+            cursor: pointer;
         }
 
         .toggle:hover {
@@ -771,7 +772,11 @@
         }
 
         .architecture-board .node.collapsed>.children {
-            display: none;
+            display: none !important;
+        }
+
+        .architecture-board>.root.collapsed>.children {
+            display: none !important;
         }
 
         .feature-list {
@@ -926,7 +931,7 @@
                 <div class="hero-copy">
                     <div class="eyebrow">SYSTEM ARCHITECTURE</div>
                     <h1>DodoWheels 功能架构</h1>
-                    <p>围绕网站前台、核心业务中台与 QBO 财务集成，梳理系统边界、一级模块和关键功能菜单，便于管理层快速理解整体能力版图。</p>
+                    <p>围绕网站前台、核心业务中台与 QBO 财务集成，梳理系统边界、一级模块和关键功能菜单，便于快速理解整体能力版图。</p>
                 </div>
                 <div class="hero-stats" aria-label="架构概览">
                     <div class="hero-stat">
@@ -952,7 +957,7 @@
                         <span class="light green"></span>
                     </div>
                     <div>
-                        <div class="title">DodoWheels 功能架构汇报</div>
+                        <div class="title">DodoWheels 功能架构</div>
                         <div class="subtitle">三大系统 / 一级模块 / 功能菜单 / 子功能节点</div>
                     </div>
                 </div>
@@ -1269,9 +1274,21 @@
             return depth;
         }
 
+        function getDirectChild(node, className) {
+            return Array.from(node.children).find((child) => child.classList.contains(className)) || null;
+        }
+
+        function hasDirectChildren(node) {
+            return Boolean(getDirectChild(node, "children"));
+        }
+
+        function getDirectPill(node) {
+            return getDirectChild(node, "pill");
+        }
+
         function syncToggle(node) {
-            const toggle = node.querySelector(":scope > .pill > .toggle");
-            if (toggle) toggle.textContent = node.classList.contains("collapsed") ? "+" : "-";
+            const toggle = getDirectChild(node, "toggle");
+            if (toggle) toggle.textContent = node.classList.contains("collapsed") ? "▸" : "▾";
         }
 
         function setActiveDepth(depth) {
@@ -1282,7 +1299,7 @@
 
         function setTreeDepth(depth) {
             document.querySelectorAll(".node").forEach((node) => {
-                if (!node.querySelector(":scope > .children")) return;
+                if (!hasDirectChildren(node)) return;
                 node.classList.toggle("collapsed", getNodeDepth(node) >= depth);
                 syncToggle(node);
             });
@@ -1291,7 +1308,7 @@
 
         function toggleAll(close) {
             document.querySelectorAll(".node").forEach((node) => {
-                if (node.querySelector(":scope > .children")) {
+                if (hasDirectChildren(node)) {
                     node.classList.toggle("collapsed", close);
                     syncToggle(node);
                 }
@@ -1300,13 +1317,15 @@
         }
 
         document.querySelectorAll(".node").forEach((node) => {
-            if (!node.querySelector(":scope > .children")) return;
+            if (!hasDirectChildren(node)) return;
 
+            const pill = getDirectPill(node);
             const toggle = document.createElement("button");
             toggle.type = "button";
             toggle.className = "toggle";
-            toggle.textContent = "-";
+            toggle.textContent = "▾";
             toggle.setAttribute("aria-label", "展开或收起");
+            toggle.title = "展开或收起";
             toggle.addEventListener("click", (event) => {
                 event.stopPropagation();
                 node.classList.toggle("collapsed");
@@ -1314,10 +1333,19 @@
                 setActiveDepth(null);
             });
 
-            node.querySelector(":scope > .pill").appendChild(toggle);
+            if (pill) {
+                pill.style.cursor = "pointer";
+                pill.addEventListener("click", (event) => {
+                    if (event.target.closest(".toggle")) return;
+                    node.classList.toggle("collapsed");
+                    syncToggle(node);
+                    setActiveDepth(null);
+                });
+                pill.appendChild(toggle);
+            }
         });
 
-        setTreeDepth(2);
+        setTreeDepth(1);
     </script>
 </body>
 
