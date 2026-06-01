@@ -2098,7 +2098,7 @@
                 t: '轮胎基础信息字段',
                 sub: '轮胎产品主数据，支撑官网展示、车型/尺寸查询、报价、下单、库存和财务同步。',
                 metrics: [['数据类型', '产品主数据'], ['适用模块', 'WEB / OMS / WMS'], ['主要用途', '查询与销售'], ['同步方向', 'Core → WEB / QBO']],
-                fields: ['名称（Name）', 'SKU编号（SKU）', 'DOT编号（DOT）', '描述（Description）', '价格（4种 / 4 Prices）', '尺寸（Size）', '品牌（Brand）', '型号（Model）', '是否防爆胎（Run Flat）', '胎面磨耗指数（Treadwear）', '层级（PR）', '库存（Stocks）', '季节（Summer / Winter / AS / AW）', '速度级别（Speed）', '载重指数（Load）', 'UTQG（UTQG）', '保修（Warranty）', '产品状态（Status）', '图片（Image）', 'QBO商品映射（QBO Item Mapping）', '卡车胎肩型（Open / Close Shoulder）', '卡车胎位置（Position: Drive / Steering / Trailer）'],
+                fields: ['名称（Name）', 'SKU编号（SKU）', 'DOT编号（DOT）', '描述（Description）', '价格（4种 / 4 Prices）', '尺寸（Size）', '品牌（Brand）', '型号（Model）', '是否防爆胎（Run Flat）', '层级（PR）', '库存（Stocks）', '季节（Summer / Winter / AS / AW）', '速度级别（Speed）', '载重指数（Load）', 'UTQG（UTQG）', '保修（Warranty）', '产品状态（Status）', '图片（Image）', 'QBO商品映射（QBO Item Mapping）', '卡车胎肩型（Open / Close Shoulder）', '卡车胎位置（Position: Drive / Steering / Trailer）'],
                 notes: ['轮胎规格字段必须标准化，否则会影响尺寸查询和车型适配。', 'DOT 建议作为库存批次维度展示，不同 DOT 的同 SKU 库存应分开记录和展示。', 'warranty 是否展示建议按产品类型配置，不作为强制字段。', '如果是 truck tire，建议补充肩部类型和 position，便于门店与仓储识别安装位置。', '价格、库存和 QBO Item 映射需要保持一致。']
             },
             wheel: {
