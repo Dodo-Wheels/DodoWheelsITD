@@ -672,9 +672,52 @@
             position: relative
         }
 
+        .baseline-sections {
+            display: grid;
+            gap: 12px
+        }
+
+        .baseline-section {
+            border: 1px solid #dbe7f5;
+            border-radius: 18px;
+            background: linear-gradient(180deg, #fff, #f8fbff);
+            padding: 12px
+        }
+
+        .baseline-section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 10px
+        }
+
+        .baseline-section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #172033;
+            font-size: 13px;
+            font-weight: 900
+        }
+
+        .baseline-section-title::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--section-color, #2563eb);
+            box-shadow: 0 0 0 4px color-mix(in srgb, var(--section-color, #2563eb) 14%, #fff)
+        }
+
+        .baseline-section-meta {
+            color: #64748b;
+            font-size: 11px
+        }
+
         .baseline-grid {
             display: grid;
-            grid-template-columns: repeat(6, minmax(0, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(188px, 1fr));
             gap: 10px
         }
 
@@ -684,6 +727,7 @@
             border-radius: 14px;
             background: #fff;
             cursor: pointer;
+            min-height: 96px;
             transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease
         }
 
@@ -871,6 +915,32 @@
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 9px;
             margin-bottom: 16px
+        }
+
+        .modal-group {
+            margin-top: 10px
+        }
+
+        .modal-group:first-child {
+            margin-top: 0
+        }
+
+        .modal-group-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: #334155;
+            font-size: 12px;
+            font-weight: 900
+        }
+
+        .modal-group-title::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--group-color, #2563eb)
         }
 
         .modal-field {
@@ -1150,7 +1220,7 @@
     <div class="page">
         <div class="header">
             <div class="title">DodoWheels 全链路业务流程汇总</div>
-            <div class="headline-sub">面向管理层展示销售入口、订单审核、仓储执行、库存同步与财务闭环。页面默认采用分层流程看板，减少交叉连线，便于快速理解职责边界和数据流向。</div>
+            <div class="headline-sub">展示销售入口、订单审核、仓储执行、库存同步与财务闭环。页面默认采用分层流程看板，减少交叉连线，便于快速理解职责边界和数据流向。</div>
             <div class="exec-cards">
                 <div class="exec-card">
                     <strong>9</strong>
@@ -1177,9 +1247,9 @@
                         <div>
                             <div class="flow-kicker">Main Flowchart</div>
                             <h2>主流程图：销售订单到库存与财务闭环</h2>
-                            <p>按“客户入口 → 订单处理 → 仓储执行 → 库存同步 → 财务闭环”的顺序呈现。上方是标准业务主链路，下方是职责分区和异常支线，阅读路径更接近业务流程图。</p>
+                            <p>按“客户入口 → 订单处理 → 仓储执行 → 库存同步 → 财务闭环”的顺序呈现。财务闭环重点包含产品及价格同步、库存同步和发票生成。上方是标准业务主链路，下方是职责分区和业务场景，阅读路径更接近业务流程图。</p>
                         </div>
-                        <div class="flow-pill">主线流程图 · 支线独立说明</div>
+                        <div class="flow-pill">主线流程图 · 业务场景独立说明</div>
                     </div>
 
                     <div class="flow-path" aria-label="主流程路径">
@@ -1275,9 +1345,9 @@
                                     <div class="lane-sub">QBO</div>
                                 </div>
                             </div>
-                            <div class="flow-card primary" data-scenes="s2 s3 s5 s8"><strong>自动生成发票</strong><span>出库或现金销售后触发 QBO 发票。</span></div>
-                            <div class="flow-card" data-scenes="s4 s7"><strong>冲销 / 退款</strong><span>取消、退货、换货时同步财务调整。</span></div>
-                            <div class="flow-card" data-scenes="s6"><strong>库存成本同步</strong><span>入库后同步库存成本，保证财务记录准确。</span></div>
+                            <div class="flow-card primary" data-scenes="s2 s3 s5 s8"><strong>产品及价格同步</strong><span>商品、规格、状态和不同客户价格同步到 QBO。</span></div>
+                            <div class="flow-card" data-scenes="s2 s3 s5 s6 s7 s8"><strong>库存同步</strong><span>出入库后同步库存变化，保持前后端一致。</span></div>
+                            <div class="flow-card" data-scenes="s2 s3 s5 s8"><strong>发票生成</strong><span>订单完成后在 QBO 生成发票并回写状态。</span></div>
                         </div>
                     </div>
 
@@ -1298,45 +1368,104 @@
                     </div>
 
                     <div class="branch-title">基础数据</div>
-                    <div class="baseline-grid">
-                        <div class="baseline-card" style="--sys-color:#1d4ed8" data-base="tire" onclick="showBaseline('tire', this)">
-                            <i></i>
-                            <strong>轮胎基础信息</strong>
-                            <span>规格、品牌、季节、花纹、价格和展示信息。</span>
+                    <div class="baseline-sections">
+                        <div class="baseline-section" style="--section-color:#2563eb">
+                            <div class="baseline-section-head">
+                                <div class="baseline-section-title">核心主数据</div>
+                                <div class="baseline-section-meta">轮胎、轮毂、客户、订单、适配、库存</div>
+                            </div>
+                            <div class="baseline-grid">
+                                <div class="baseline-card" style="--sys-color:#1d4ed8" data-base="tire" onclick="showBaseline('tire', this)">
+                                    <i></i>
+                                    <strong>轮胎基础信息</strong>
+                                    <span>规格、品牌、季节、花纹、价格和展示信息。</span>
+                                </div>
+                                <div class="baseline-card" style="--sys-color:#0d9488" data-base="wheel" onclick="showBaseline('wheel', this)">
+                                    <i></i>
+                                    <strong>轮毂基础信息</strong>
+                                    <span>尺寸、孔距、中心孔、偏距、品牌和车型适配。</span>
+                                </div>
+                                <div class="baseline-card" style="--sys-color:#16a34a" data-base="customer" onclick="showBaseline('customer', this)">
+                                    <i></i>
+                                    <strong>客户基础信息</strong>
+                                    <span>客户主体、等级、账期、联系人和地址信息。</span>
+                                </div>
+                                <div class="baseline-card" style="--sys-color:#2563eb" data-base="order" onclick="showBaseline('order', this)">
+                                    <i></i>
+                                    <strong>订单基础信息</strong>
+                                    <span>订单编号、客户、状态、金额、仓库和交付方式。</span>
+                                </div>
+                                <div class="baseline-card" style="--sys-color:#7e22ce" data-base="fitment" onclick="showBaseline('fitment', this)">
+                                    <i></i>
+                                    <strong>车型适配信息</strong>
+                                    <span>年份、品牌、车型、配置、原厂尺寸和适配规则。</span>
+                                </div>
+                                <div class="baseline-card" style="--sys-color:#be123c" data-base="inventory" onclick="showBaseline('inventory', this)">
+                                    <i></i>
+                                    <strong>库存基础信息</strong>
+                                    <span>仓库、库位、数量、批次、可售库存和锁定库存。</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="baseline-card" style="--sys-color:#0d9488" data-base="wheel" onclick="showBaseline('wheel', this)">
-                            <i></i>
-                            <strong>轮毂基础信息</strong>
-                            <span>尺寸、孔距、中心孔、偏距、品牌和车型适配。</span>
-                        </div>
-                        <div class="baseline-card" style="--sys-color:#16a34a" data-base="customer" onclick="showBaseline('customer', this)">
-                            <i></i>
-                            <strong>客户基础信息</strong>
-                            <span>客户主体、等级、账期、联系人和地址信息。</span>
-                        </div>
-                        <div class="baseline-card" style="--sys-color:#d97706" data-base="part" onclick="showBaseline('part', this)">
-                            <i></i>
-                            <strong>配件基础信息</strong>
-                            <span>配件 SKU、型号、适配、品牌、价格和库存状态。</span>
-                        </div>
-                        <div class="baseline-card" style="--sys-color:#7e22ce" data-base="fitment" onclick="showBaseline('fitment', this)">
-                            <i></i>
-                            <strong>车型适配信息</strong>
-                            <span>年份、品牌、车型、配置、原厂尺寸和适配规则。</span>
-                        </div>
-                        <div class="baseline-card" style="--sys-color:#be123c" data-base="inventory" onclick="showBaseline('inventory', this)">
-                            <i></i>
-                            <strong>库存基础信息</strong>
-                            <span>仓库、库位、数量、批次、可售库存和锁定库存。</span>
+
+                        <div class="baseline-section" style="--section-color:#7c3aed">
+                            <div class="baseline-section-head">
+                                <div class="baseline-section-title">配套基础数据</div>
+                                <div class="baseline-section-meta">轮胎周边配件与门店包装类</div>
+                            </div>
+                            <div class="baseline-grid">
+                                <div class="baseline-card" style="--sys-color:#334155" data-base="weights" onclick="showBaseline('weights', this)">
+                                    <i></i>
+                                    <strong>Weights / 平衡块</strong>
+                                    <span>卡扣式、粘贴式两类平衡块，支持常规与 AW。</span>
+                                </div>
+                                <div class="baseline-card" style="--sys-color:#0f766e" data-base="bolts" onclick="showBaseline('bolts', this)">
+                                    <i></i>
+                                    <strong>Bolts / 螺栓</strong>
+                                    <span>按尺寸、长度、驱动位和座型统一维护。</span>
+                                </div>
+                                <div class="baseline-card" style="--sys-color:#7c3aed" data-base="nuts" onclick="showBaseline('nuts', this)">
+                                    <i></i>
+                                    <strong>Nuts / 螺母</strong>
+                                    <span>带锁与不带锁螺母，按尺寸和包装清单管理。</span>
+                                </div>
+                                <div class="baseline-card" style="--sys-color:#b45309" data-base="spacer" onclick="showBaseline('spacer', this)">
+                                    <i></i>
+                                    <strong>Spacer / 垫片</strong>
+                                    <span>螺栓式与套装式垫片，按厚度和孔距区分。</span>
+                                </div>
+                                <div class="baseline-card" style="--sys-color:#0284c7" data-base="valve" onclick="showBaseline('valve', this)">
+                                    <i></i>
+                                    <strong>Valve / Stem</strong>
+                                    <span>标准气嘴与带传感器版本，按长度管理。</span>
+                                </div>
+                                <div class="baseline-card" style="--sys-color:#16a34a" data-base="centerring" onclick="showBaseline('centerring', this)">
+                                    <i></i>
+                                    <strong>Center Ring / 中心环</strong>
+                                    <span>按材质、外径、内径和颜色快速识别。</span>
+                                </div>
+                                <div class="baseline-card" style="--sys-color:#ef4444" data-base="wiperblade" onclick="showBaseline('wiperblade', this)">
+                                    <i></i>
+                                    <strong>Wiper Blade / 雨刮片</strong>
+                                    <span>按型号和长度维护，便于门店快速选配。</span>
+                                </div>
+                                <div class="baseline-card" style="--sys-color:#6366f1" data-base="tirebag" onclick="showBaseline('tirebag', this)">
+                                    <i></i>
+                                    <strong>Tire Bag / 轮胎袋</strong>
+                                    <span>按尺寸和 logo 版本管理，便于出库包装。</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="branch-title">异常 / 特殊支线</div>
+                    <div class="branch-title">特殊业务场景</div>
                     <div class="exception-row">
-                        <div class="exception-card"><strong>取消 / 修改</strong><span>先判断是否出库，未出库可 VOID，已出库进入财务冲销。</span></div>
-                        <div class="exception-card"><strong>退货 / 换货</strong><span>核查原订单，WMS 处理回仓，QBO 同步冲销或重开。</span></div>
-                        <div class="exception-card"><strong>零售 WALK-IN</strong><span>现场开现金单、即时拣货、QBO 生成现金发票。</span></div>
-                        <div class="exception-card"><strong>调货</strong><span>CSM 查库存价位，OMS 建单，WMS 装车调拨。</span></div>
+                        <div class="exception-card"><strong>取消</strong><span>发票产生前才能操作取消；若已产生发票，则需走财务冲销流程。</span></div>
+                        <div class="exception-card"><strong>修改</strong><span>发票产生前才能操作修改；若已产生发票，则需重新生成发票。</span></div>
+                        <div class="exception-card"><strong>退货</strong><span>需要手工创建 Credit Memo，并拿单据完成退货；WMS 处理回仓后再同步财务。</span></div>
+                        <div class="exception-card"><strong>零售 WALK-IN</strong><span>个人开通账号后，按照流程下单、拣货、出库并生成发票。</span></div>
+                        <div class="exception-card"><strong>紧急加单</strong><span>按照系统流程创建相关订单信息，并线下与配送团队沟通。</span></div>
+                        <div class="exception-card"><strong>调货</strong><span>通过调货单功能，按照需求进行调货操作。</span></div>
                     </div>
                 </section>
 
@@ -1944,15 +2073,14 @@
                 <div class="modal-metrics" id="dataModalMetrics"></div>
                 <div class="branch-title">字段清单</div>
                 <div class="modal-field-grid" id="dataModalFields"></div>
-                <div class="branch-title">关键说明</div>
-                <div class="modal-notes" id="dataModalNotes"></div>
+                <div class="note" id="dataModalSpecialNote" style="margin-top: 8px; display: none;"></div>
             </div>
         </div>
     </div>
 
     <script>
         const D = {
-            all: { c: '#444', t: '全景总览', sub: '展示公司从客户入口、下单审核、仓储作业、库存同步到财务记录的完整闭环。', metrics: [['业务场景', '9 个'], ['涉及系统', '6 套'], ['流程节点', '29 个'], ['核心目标', '销售与库存财务联动']], steps: [['客户通过 WEB、电联、到店等入口进入业务流程', '总入口', '#F5F5F5', '#666'], ['订单由 CORE-OMS / WEBADMIN 等系统审核、确认或处理特殊情况', '订单管控', '#E8F5E9', '#2E7D32'], ['仓储由 CORE-WMS 执行拣货、出库、入库、退货等动作', '仓储执行', '#FFF3E0', '#E65100'], ['库存变动通过 CORE-CSM 同步回 WEB，保证前端库存展示实时更新', '库存同步', '#F3E5F5', '#6A1B9A'], ['QBO 根据出库、取消、退货等动作生成发票、冲销或更新成本', '财务闭环', '#FFEBEE', '#B71C1C']], notes: ['该图适合用于管理层理解系统边界和跨部门协作。', '主流程采用分阶段展示，避免大量交叉线影响阅读。', '异常流程单独归纳，便于快速识别取消、退换货、调货等处理路径。'] },
+            all: { c: '#444', t: '全景总览', sub: '展示公司从客户入口、下单审核、仓储作业、库存同步到财务记录的完整闭环。', metrics: [['业务场景', '9 个'], ['涉及系统', '6 套'], ['流程节点', '29 个'], ['核心目标', '销售与库存财务联动']], steps: [['客户通过 WEB、电联、到店等入口进入业务流程', '总入口', '#F5F5F5', '#666'], ['订单由 CORE-OMS / WEBADMIN 等系统审核、确认或处理特殊情况', '订单管控', '#E8F5E9', '#2E7D32'], ['仓储由 CORE-WMS 执行拣货、出库、入库、退货等动作', '仓储执行', '#FFF3E0', '#E65100'], ['库存变动通过 CORE-CSM 同步回 WEB，保证前端库存展示实时更新', '库存同步', '#F3E5F5', '#6A1B9A'], ['QBO 根据出库、取消、退货等动作生成发票、冲销或更新成本', '财务闭环', '#FFEBEE', '#B71C1C']], notes: ['该图用于理解系统边界和跨部门协作。', '主流程采用分阶段展示，避免大量交叉线影响阅读。', '异常流程单独归纳，便于快速识别取消、退换货、调货等处理路径。'] },
             s1: { c: '#1565C0', t: '① 新客注册开户', sub: '新客户通过官网提交注册申请，后台完成资质核实与权限激活，最终开通 distributor 账户。', metrics: [['涉及系统', 'WEB / WEBADMIN'], ['关键动作', '资质核实'], ['完成结果', '激活登录权限'], ['流程类型', '开户准入']], steps: [['新客访问 WEB，填写公司信息并提交注册申请', 'WEB', '#E3F2FD', '#1565C0'], ['CORE-WEBADMIN 核实公司真实性与资料完整性', 'CORE-WEBADMIN', '#E0F2F1', '#00695C'], ['核实通过后，修改客户类别并同意开户', 'CORE-WEBADMIN', '#E0F2F1', '#00695C'], ['为客户激活 distributor 权限，具备登录与下单资格', 'CORE-WEBADMIN', '#E0F2F1', '#00695C'], ['客户回到 WEB 登录并开始使用线上业务功能', 'WEB', '#E3F2FD', '#1565C0']], notes: ['若信息不符或资料不足，可暂缓处理并等待客户补充资料。', '该流程的重点是准入控制，确保后续订单交易建立在真实、可核验的客户基础上。', '建议将常见驳回原因整理成标准模板，减少重复沟通成本。'] },
             s2: { c: '#2E7D32', t: '② 线上下单（老客）', sub: '老客户在官网自助下单，订单进入审核、备注、仓储出库与财务开票联动流程。', metrics: [['涉及系统', 'WEB/OMS/WMS/CSM/QBO'], ['关键动作', '审核后出库'], ['完成结果', '开票并同步库存'], ['流程类型', '标准销售']], steps: [['老客登录 WEB，选择商品、数量、配送时间并提交订单', 'WEB', '#E3F2FD', '#1565C0'], ['客服在 CORE-OMS 审核折扣、VIP、轮胎税等规则', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['在订单中补充客户备注和特殊要求', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['CORE-WMS 打印拣货单，安排人员拣货、扫码下架', 'CORE-WMS', '#FFF3E0', '#E65100'], ['订单按配送或自取方式完成出库，库存实时扣减', 'CORE-WMS', '#FFF3E0', '#E65100'], ['CORE-CSM 将库存变化同步到 WEB，QBO 自动生成发票', 'CORE-CSM/QBO', '#F3E5F5', '#6A1B9A']], notes: ['这是最完整、最标准的闭环场景，涉及销售、仓储、库存与财务全链路。', '若备注不完整，最容易在出库和配送环节出现执行偏差。', '建议在明细页加入税费和折扣校验规则，减少人工审核压力。'] },
             s3: { c: '#E65100', t: '③ 电话下单', sub: '客户通过电话询价、查库存、确认价格后，由客服在 OMS 中代为下单并推进仓储执行。', metrics: [['涉及系统', 'CORE-OMS / CORE-WMS'], ['关键动作', '人工报价'], ['完成结果', '代客做单出库'], ['流程类型', '人工接单']], steps: [['客户来电后，客服先在 CORE-OMS 锁定账户', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['根据库存和价格进行电话报价，确认是否适用现金价', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['客服在 CORE-OMS 代客做单，通常不走折扣逻辑', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['若缺货可推荐替代品；仍无法满足则进入 QC/ON 调货', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['确认有货后，将订单提交给 CORE-WMS 执行拣货出库', 'CORE-WMS', '#FFF3E0', '#E65100']], notes: ['电话下单的核心风险点在于口头信息遗漏，建议沉淀统一话术与确认清单。', '与线上下单相比，该场景更依赖客服经验与即时沟通能力。', '如后续量大，可考虑沉淀半自动录单模板。'] },
@@ -1970,48 +2098,123 @@
                 t: '轮胎基础信息字段',
                 sub: '轮胎产品主数据，支撑官网展示、车型/尺寸查询、报价、下单、库存和财务同步。',
                 metrics: [['数据类型', '产品主数据'], ['适用模块', 'WEB / OMS / WMS'], ['主要用途', '查询与销售'], ['同步方向', 'Core → WEB / QBO']],
-                fields: ['SKU / Item No.', '产品名称', '品牌', '类别', '季节', '花纹', '宽度', '扁平比', '轮辋尺寸', '速度级别', '载重指数', 'XL / RunFlat', '价格', '成本', '状态', '产品图片', '产品描述', 'QBO Item 映射'],
-                notes: ['轮胎规格字段必须标准化，否则会影响尺寸查询和车型适配。', '价格、成本、库存和 QBO Item 映射需要保持一致。']
+                fields: ['名称（Name）', 'SKU编号（SKU）', 'DOT编号（DOT）', '描述（Description）', '价格（4种 / 4 Prices）', '尺寸（Size）', '品牌（Brand）', '型号（Model）', '是否防爆胎（Run Flat）', '胎面磨耗指数（Treadwear）', '层级（PR）', '库存（Stocks）', '季节（Summer / Winter / AS / AW）', '速度级别（Speed）', '载重指数（Load）', 'UTQG（UTQG）', '保修（Warranty）', '产品状态（Status）', '图片（Image）', 'QBO商品映射（QBO Item Mapping）', '卡车胎肩型（Open / Close Shoulder）', '卡车胎位置（Position: Drive / Steering / Trailer）'],
+                notes: ['轮胎规格字段必须标准化，否则会影响尺寸查询和车型适配。', 'DOT 建议作为库存批次维度展示，不同 DOT 的同 SKU 库存应分开记录和展示。', 'warranty 是否展示建议按产品类型配置，不作为强制字段。', '如果是 truck tire，建议补充肩部类型和 position，便于门店与仓储识别安装位置。', '价格、库存和 QBO Item 映射需要保持一致。']
             },
             wheel: {
                 c: '#0d9488',
                 t: '轮毂基础信息字段',
                 sub: '轮毂产品主数据，支撑轮毂展示、尺寸查询、车型适配和 Mounted Package 组合销售。',
                 metrics: [['数据类型', '产品主数据'], ['适用模块', 'WEB / OMS'], ['主要用途', '轮毂查询'], ['同步方向', 'Core → WEB']],
-                fields: ['SKU / Item No.', '产品名称', '品牌', '尺寸', '宽度', '孔距 PCD', '中心孔 CB', '偏距 Offset', '颜色', '材质', '载重', '适配车型', '图片', '价格', '成本', '状态', 'QBO Item 映射'],
+                fields: ['SKU编号（SKU / Item No.）', '产品名称（Product Name）', '品牌（Brand）', '直径（Diameter）', '宽度（Size / Width）', '孔距（PCD）', '中心孔（Center Bore）', '偏距（Offset / ET）', '安装类型（DIRECT FIT / MULTI）', '颜色（Color）', '材质（Material）', '载重（Load Rating）', '适配车型（Fitment Vehicle）', '图片（Image）', '价格（4种 / 4 Prices）', '状态（Status）'],
                 notes: ['PCD、CB、Offset 是轮毂适配的关键字段。', '轮毂数据需要与车型适配数据联动，避免前台推荐错误。']
             },
             customer: {
                 c: '#16a34a',
                 t: '客户基础信息字段',
-                sub: '客户主数据，支撑开户审核、客户等级、价格权限、订单处理、财务开票和客服跟进。',
+                sub: '客户主数据，支撑开户审核、客户等级、订单处理、财务开票和客服跟进。',
                 metrics: [['数据类型', '客户主数据'], ['适用模块', 'WEB / OMS / QBO'], ['主要用途', '客户交易'], ['同步方向', 'WEB / Core → QBO']],
-                fields: ['Customer ID', '公司名称', '客户类别', '客户等级', '审核状态', '联系人', '电话', 'Email', 'Billing Address', 'Shipping Address', '税号 / 注册号', '账期', '信用额度', '价格权限', '默认仓库', 'QBO Customer 映射'],
-                notes: ['客户类别和价格权限会影响前台价格和订单审核。', '客户信息需要与 QBO Customer 保持映射关系。']
+                fields: ['客户编号（Customer ID）', '公司名称（Company Name）', '客户类别（个人 / 公司）（Customer Type）', '客户等级（价格等级）（Customer Tier / Price Tier）', '审核状态（Status）', '联系人（Contact）', '电话（Phone）', '邮箱（Email）', '账单地址（Billing Address）', '收货地址（Shipping Address）', '账期（Terms）', '信用开关（Credit Switch）', 'NEQ编号（NEQ）', '是否消费税（Sales Tax）', '是否轮胎税（Tire Tax）', '仓库归属（Warehouse Ownership）', '配送偏好（自提 / 派送）（Delivery Preference）', '是否 YU 客人（YU Customer）', '备注（Notes）'],
+                notes: ['客户类别会影响前台价格和订单审核。', '信用开关用于控制客户是否可以继续下单。']
             },
-            part: {
-                c: '#d97706',
-                t: '配件基础信息字段',
-                sub: '配件产品主数据，支撑配件查询、装配关系、库存展示和销售下单。',
-                metrics: [['数据类型', '产品主数据'], ['适用模块', 'WEB / OMS / WMS'], ['主要用途', '配件查询'], ['同步方向', 'Core → WEB']],
-                fields: ['SKU / Item No.', '配件名称', '品牌', '类别', '适配车型', '适配轮胎 / 轮毂', '型号', '规格', '价格', '成本', '库存状态', '图片', '产品描述', 'QBO Item 映射'],
-                notes: ['配件数据通常依赖车型适配，建议与适配规则联动维护。', '配件库存信息需要和仓位、库存状态同步。']
+            order: {
+                c: '#2563eb',
+                t: '订单基础信息字段',
+                sub: '订单主数据，支撑下单审核、仓储出库、库存扣减和财务开票闭环。',
+                metrics: [['数据类型', '订单主数据'], ['适用模块', 'OMS / WMS / QBO'], ['主要用途', '销售履约'], ['同步方向', 'WEB / OMS → WMS / QBO']],
+                fields: ['订单号（Order No.）', '参考 PO（PO Reference）', '下单时间（Order Date）', '账单地址（Billing Address）', '收货地址（Shipping Address）', '联系方式（Contact）', '派送日期（Delivery Date）', '派送偏好（上午 / 下午 / 加急）（Delivery Preference）', '订单状态（Order Status）', '付款方式（Terms）', '开票日期（Invoice Date）', '到期日期（Due Date）', '税费（Tax）', '折扣（Discount）', '产品信息（Product Info）', '数量（Quantity）', '单价（Unit Price）', '订单备注（Order Notes）'],
+                notes: ['派送日期建议明确到日期，必要时补充时间段，便于仓储和配送执行。', 'Due Date 通常按 terms 从 Invoice Date 计算，具体规则由财务配置。']
             },
             fitment: {
                 c: '#7e22ce',
                 t: '车型适配基础信息字段',
                 sub: '车型和适配规则数据，支撑按车型查询轮胎、轮毂、配件和 Mounted Package。',
                 metrics: [['数据类型', '适配规则'], ['适用模块', 'WEB 查询'], ['主要用途', '车型匹配'], ['同步方向', 'Core → WEB']],
-                fields: ['Year', 'Make', 'Model', 'Trim', 'Sub Model', 'OE Tire Size', 'Optional Tire Size', 'Bolt Pattern', 'Center Bore', 'Offset Range', 'Nut / Bolt Type', 'TPMS', 'Fitment Note', '配件适配规则', '数据来源', '维护时间'],
+                fields: ['年份（Year）', '品牌（Make）', '车型（Model）', '配置（Trim）', '子车型（Sub Model）', '原厂轮胎尺寸（OE Tire Size）', '可选轮胎尺寸（Optional Tire Size）', '螺距（Bolt Pattern）', '中心孔（Center Bore）', '偏距范围（Offset Range）', '螺母/螺栓类型（Nut / Bolt Type）', '胎压监测（TPMS）', '适配说明（Fitment Note）', '配件适配规则（Accessory Fitment Rules）', '数据来源（Source）', '维护时间（Updated At）'],
                 notes: ['车型适配数据直接影响客户查询体验和下单准确性。', '建议保留 Fitment Note，用于说明特殊年份或配置差异。']
             },
             inventory: {
                 c: '#be123c',
                 t: '库存基础信息字段',
-                sub: '库存和仓储基础数据，支撑库存查询、WEB 展示、拣货、出库、入库和调拨。',
+                sub: '库存和仓储基础数据，支撑库存查询、WEB 展示、拣货、出库、入库和调拨；轮胎库存需额外记录 DOT 批次。',
                 metrics: [['数据类型', '库存主数据'], ['适用模块', 'WMS / CSM / WEB'], ['主要用途', '库存可用性'], ['同步方向', 'WMS → CSM → WEB']],
-                fields: ['SKU', '仓库', '库位', 'On Hand 数量', 'Available 数量', 'Allocated 数量', 'Locked 数量', '批次', '入库日期', '最后出库日期', '库存成本', '安全库存', '调拨中数量', '供应商库存', '库存同步状态', '盘点差异'],
-                notes: ['WEB 前台展示应使用 Available 数量，而不是 On Hand 数量。', '锁定库存和调拨中库存需要单独管理，避免超卖。']
+                fields: ['SKU编码（SKU）', '产品名称（Product Name）', '产品分类（Product Category）', '归属仓库（Warehouse / Default: All）', '在途库存（In Transit）', '锁定库存（Locked）', '调拨库存（Transfer）', '可用库存（Available）', '总库存（Total）', 'DOT批次（DOT Batch，仅轮胎）', '入库日期（Received Date）', '库存属性（Stock Attribute: 正品 / 次品）'],
+                notes: ['WEB 前台展示应使用可用库存（Available），而不是总库存（Total）。', '轮胎库存必须按 DOT 批次管理，便于追踪不同批次。', '锁定库存和调拨库存需要单独管理，避免超卖。']
+            },
+            weights: {
+                c: '#334155',
+                t: 'Weights / 平衡块基础信息字段',
+                sub: '平衡块基础数据，分为卡扣式（Clip-on）与粘贴式（Sticky）两类，支撑轮毂配套、型号区分、库存和销售展示。',
+                metrics: [['数据类型', '配套基础数据'], ['适用模块', 'WEB / OMS / WMS'], ['主要用途', '轮胎配套'], ['同步方向', 'Core → WEB']],
+                groups: [
+                    {
+                        title: '卡扣式（Clip-on）',
+                        color: '#334155',
+                        fields: ['常规（Regular）', 'AW（AW）']
+                    },
+                    {
+                        title: '粘贴式（Sticky）',
+                        color: '#0f766e',
+                        fields: ['类型（Type）', '重量（Weight）', '颜色（Color）', '件数（PCS）', '价格（4种 / 4 Prices）']
+                    }
+                ],
+                notes: ['卡扣式和粘贴式是两种独立展示和维护的基础类型。', '卡扣式下再按 Regular 和 AW 细分。']
+            },
+            bolts: {
+                c: '#0f766e',
+                t: 'Bolts / 螺栓基础信息字段',
+                sub: '螺栓基础数据，支撑轮毂配套、安装工具匹配和销售展示。',
+                metrics: [['数据类型', '配套基础数据'], ['适用模块', 'WEB / OMS / WMS'], ['主要用途', '轮毂安装'], ['同步方向', 'Core → WEB']],
+                fields: ['尺寸（Size）', '长度（Length）', '驱动花型（Drive Pattern）', '工具尺寸（Tool Size）', '座型（Seat）', '颜色（Color）'],
+                notes: ['drive pattern 和 seat 是螺栓适配的重要参数。', '字段后续可根据业务需要补充成中文展示。']
+            },
+            nuts: {
+                c: '#7c3aed',
+                t: 'Nuts / 螺母基础信息字段',
+                sub: '螺母基础数据，支撑轮毂配套、锁止类型区分和销售展示。',
+                metrics: [['数据类型', '配套基础数据'], ['适用模块', 'WEB / OMS / WMS'], ['主要用途', '轮毂安装'], ['同步方向', 'Core → WEB']],
+                fields: ['是否有锁（Has Lock）', '尺寸（Size）', '长度（Length）', '包装清单（Package List）', '颜色（Color）', '价格（4种 / 4 Prices）'],
+                notes: ['是否有锁用于区分安全锁止类螺母。', 'Package List 建议后续统一成标准包装清单格式。']
+            },
+            spacer: {
+                c: '#b45309',
+                t: 'Spacer / 垫片基础信息字段',
+                sub: '轮毂垫片基础数据，支撑轮毂间距调整、PCD 配套和销售展示。',
+                metrics: [['数据类型', '配套基础数据'], ['适用模块', 'WEB / OMS / WMS'], ['主要用途', '轮毂间距调整'], ['同步方向', 'Core → WEB']],
+                fields: ['类型（Type: bolts on / slip-on flat）', 'PCD花型（PCD Pattern）', '厚度（Thickness）', '颜色（Color）', '对数（Qty / Pair）', '中心孔（Center Bore）'],
+                notes: ['spacer 主要用于调整轮毂外扩与安装间距。', 'pair 表示按一对销售时需要注意库存单位。']
+            },
+            valve: {
+                c: '#0284c7',
+                t: 'Valve / Stem 基础信息字段',
+                sub: '气嘴基础数据，支撑轮胎配套、传感器区分和销售展示。',
+                metrics: [['数据类型', '配套基础数据'], ['适用模块', 'WEB / OMS / WMS'], ['主要用途', '轮胎配套'], ['同步方向', 'Core → WEB']],
+                fields: ['标准（Standard）', '长度（Length）', '材质（Material）', '件数（PCS）', '颜色（Color）', '价格（4种 / 4 Prices）', '是否带传感器（With Sensor）'],
+                notes: ['是否带传感器建议作为独立属性，便于轮胎配套与库存区分。', '字段后续可根据业务需要补充成中文展示。']
+            },
+            centerring: {
+                c: '#16a34a',
+                t: 'Center Ring / 中心环基础信息字段',
+                sub: '中心环基础数据，支撑轮毂孔径匹配、安装适配和销售展示。',
+                metrics: [['数据类型', '配套基础数据'], ['适用模块', 'WEB / OMS / WMS'], ['主要用途', '轮毂适配'], ['同步方向', 'Core → WEB']],
+                fields: ['材质（Material）', '外径（OD）', '内径（ID）', '颜色（Color）', '对数（Qty）', '价格（4种 / 4 Prices）'],
+                notes: ['中心环用于轮毂中心孔匹配。', 'OD / ID 建议后续统一标准命名。']
+            },
+            wiperblade: {
+                c: '#ef4444',
+                t: 'Wiper Blade / 雨刮片基础信息字段',
+                sub: '雨刮片基础数据，支撑车辆配套、长度区分和销售展示。',
+                metrics: [['数据类型', '配套基础数据'], ['适用模块', 'WEB / OMS / WMS'], ['主要用途', '车辆配套'], ['同步方向', 'Core → WEB']],
+                fields: ['类型（Type）', '长度（Length）', '价格（4种 / 4 Prices）'],
+                notes: ['雨刮片主要按类型和长度区分。', '后续可根据需要补充左右位、接口类型等字段。']
+            },
+            tirebag: {
+                c: '#6366f1',
+                t: 'Tire Bag / 轮胎袋基础信息字段',
+                sub: '轮胎袋基础数据，支撑轮胎包装、门店交付和销售展示。',
+                metrics: [['数据类型', '配套基础数据'], ['适用模块', 'WEB / OMS / WMS'], ['主要用途', '包装交付'], ['同步方向', 'Core → WEB']],
+                fields: ['尺寸（Size）', '件数（PCS）', '是否有 logo（With Logo）', '价格（4种 / 4 Prices）'],
+                notes: ['轮胎袋通常按尺寸和是否印 logo 区分。', '如后续需要可补充材质、颜色和包装规格。']
             }
         };
 
@@ -2063,21 +2266,46 @@
 
             const fields = document.getElementById('dataModalFields');
             fields.innerHTML = '';
-            d.fields.forEach((field) => {
-                const el = document.createElement('div');
-                el.className = 'modal-field';
-                el.textContent = field;
-                fields.appendChild(el);
-            });
+            if (d.groups && d.groups.length) {
+                d.groups.forEach((group) => {
+                    const wrap = document.createElement('div');
+                    wrap.className = 'modal-group';
+                    wrap.style.setProperty('--group-color', group.color || d.c);
+                    const title = document.createElement('div');
+                    title.className = 'modal-group-title';
+                    title.textContent = group.title;
+                    wrap.appendChild(title);
+                    const grid = document.createElement('div');
+                    grid.className = 'modal-field-grid';
+                    group.fields.forEach((field) => {
+                        const el = document.createElement('div');
+                        el.className = 'modal-field';
+                        el.textContent = field;
+                        grid.appendChild(el);
+                    });
+                    wrap.appendChild(grid);
+                    fields.appendChild(wrap);
+                });
+            } else {
+                d.fields.forEach((field) => {
+                    const el = document.createElement('div');
+                    el.className = 'modal-field';
+                    el.textContent = field;
+                    fields.appendChild(el);
+                });
+            }
 
-            const notes = document.getElementById('dataModalNotes');
-            notes.innerHTML = '';
-            d.notes.forEach(text => {
-                const el = document.createElement('div');
-                el.className = 'note';
-                el.textContent = text;
-                notes.appendChild(el);
-            });
+            const specialNote = document.getElementById('dataModalSpecialNote');
+            if (specialNote) {
+                if (key === 'customer') {
+                    specialNote.style.display = 'block';
+                    specialNote.textContent = '特殊说明：Frank 和 YU 涉及帮客人下单，需要特殊处理账号，并可按权限选择客户。';
+                } else {
+                    specialNote.style.display = 'none';
+                    specialNote.textContent = '';
+                }
+            }
+
         }
 
         function closeDataModal(event) {
