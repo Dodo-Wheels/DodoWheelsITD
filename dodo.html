@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DodoWheels 全数字化链路系统项目</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #eef3f8;
+            --text: #172033;
+            --muted: #64748b;
+            --line: #dbe5f1;
+            --shadow: 0 24px 60px rgba(15, 23, 42, .12)
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(255, 255, 255, .98), rgba(234, 242, 250, .92) 30%, rgba(238, 243, 248, 1) 70%),
+                linear-gradient(180deg, #f8fbff 0%, #eef3f8 100%);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased
+        }
+
+        .page {
+            width: min(1560px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 22px 0 28px;
+            min-height: 100vh
+        }
+
+        .hero {
+            padding: 28px 28px 24px;
+            border-radius: 28px;
+            background:
+                radial-gradient(circle at top right, rgba(255, 255, 255, .12), transparent 34%),
+                linear-gradient(135deg, #0f172a, #1d4ed8);
+            color: #fff;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: minmax(0, 1.3fr) minmax(320px, .7fr);
+            gap: 22px;
+            align-items: stretch
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, .14);
+            pointer-events: none
+        }
+
+        .hero::before {
+            width: 320px;
+            height: 320px;
+            right: -110px;
+            top: -130px
+        }
+
+        .hero::after {
+            width: 180px;
+            height: 180px;
+            right: 130px;
+            bottom: -90px
+        }
+
+        .kicker {
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: rgba(219, 234, 254, .92)
+        }
+
+        h1 {
+            margin-top: 10px;
+            font-size: 38px;
+            line-height: 1.15;
+            font-weight: 900
+        }
+
+        .sub {
+            max-width: 760px;
+            margin-top: 12px;
+            color: rgba(255, 255, 255, .78);
+            line-height: 1.7;
+            font-size: 14px
+        }
+
+        .hero-panel {
+            position: relative
+        }
+
+        .hero-meta {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 18px
+        }
+
+        .hero-metric {
+            padding: 14px 16px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, .14);
+            background: rgba(255, 255, 255, .08);
+            backdrop-filter: blur(10px)
+        }
+
+        .hero-metric strong {
+            display: block;
+            font-size: 22px;
+            font-weight: 900;
+            line-height: 1.1
+        }
+
+        .hero-metric span {
+            display: block;
+            margin-top: 6px;
+            color: rgba(255, 255, 255, .76);
+            font-size: 12px;
+            line-height: 1.5
+        }
+
+        .hero-side {
+            display: grid;
+            gap: 12px;
+            position: relative
+        }
+
+        .hero-side-card {
+            padding: 18px;
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, .14);
+            background: rgba(255, 255, 255, .08);
+            backdrop-filter: blur(10px)
+        }
+
+        .hero-side-card strong {
+            display: block;
+            font-size: 14px;
+            font-weight: 900;
+            margin-bottom: 10px
+        }
+
+        .hero-side-card p {
+            color: rgba(255, 255, 255, .74);
+            font-size: 12px;
+            line-height: 1.6
+        }
+
+        .portal {
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: minmax(0, 1.28fr) minmax(320px, .72fr);
+            gap: 16px
+        }
+
+        .portal-main,
+        .portal-stack {
+            display: grid;
+            gap: 16px
+        }
+
+        .portal-stack {
+            align-content: start
+        }
+
+        .portal-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: #eef4ff;
+            color: #1d4ed8;
+            font-size: 11px;
+            font-weight: 800;
+            width: fit-content
+        }
+
+        .portal-badge::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+            box-shadow: 0 0 0 4px rgba(29, 78, 216, .12)
+        }
+
+        .portal-card {
+            position: relative;
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            padding: 24px;
+            border: 1px solid rgba(219, 229, 241, .95);
+            border-radius: 28px;
+            background: rgba(255, 255, 255, .9);
+            box-shadow: 0 14px 34px rgba(15, 23, 42, .08);
+            color: inherit;
+            text-decoration: none;
+            transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+            min-height: 320px;
+            overflow: hidden
+        }
+
+        .portal-card:hover {
+            transform: translateY(-2px);
+            border-color: #9db7df;
+            box-shadow: 0 18px 44px rgba(15, 23, 42, .12)
+        }
+
+        .portal-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 10px;
+            background: var(--accent, #1d4ed8)
+        }
+
+        .portal-card::after {
+            content: attr(data-order);
+            position: absolute;
+            right: 18px;
+            top: 10px;
+            font-size: 72px;
+            font-weight: 900;
+            letter-spacing: -.05em;
+            color: rgba(148, 163, 184, .12)
+        }
+
+        .portal-card h2 {
+            font-size: 28px;
+            line-height: 1.15;
+            font-weight: 900;
+            margin-top: 2px
+        }
+
+        .portal-card .card-hero strong {
+            font-size: 54px;
+            line-height: 1;
+            font-weight: 900;
+            color: var(--accent, #1d4ed8)
+        }
+
+        .portal-card .card-hero span {
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        .portal-card p {
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7
+        }
+
+        .portal-card .meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 14px
+        }
+
+        .portal-card .card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 18px;
+            color: #0f172a;
+            font-size: 12px;
+            font-weight: 900
+        }
+
+        .portal-card .card-link::after {
+            content: "→";
+            color: var(--accent, #1d4ed8);
+            font-size: 16px
+        }
+
+        .portal-card .mini-flow {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px
+        }
+
+        .mini-flow span {
+            padding: 9px 10px;
+            border-radius: 12px;
+            background: #f5f8fc;
+            color: #334155;
+            font-size: 11px;
+            font-weight: 800;
+            text-align: center
+        }
+
+        .stack-card {
+            min-height: 196px
+        }
+
+        .stack-card .card-hero strong {
+            font-size: 46px
+        }
+
+        .stack-card h2 {
+            font-size: 24px
+        }
+
+        .portal-card.compact {
+            min-height: 186px
+        }
+
+        .overview-strip {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 16px
+        }
+
+        .overview-item {
+            padding: 12px 13px;
+            border-radius: 14px;
+            background: linear-gradient(180deg, #f8fbff 0%, #eef4fb 100%);
+            border: 1px solid #dbe7f5
+        }
+
+        .overview-item strong {
+            display: block;
+            margin-bottom: 4px;
+            color: #0f172a;
+            font-size: 12px;
+            font-weight: 900
+        }
+
+        .overview-item span {
+            color: #64748b;
+            font-size: 11px;
+            line-height: 1.45
+        }
+
+        .overview-foot {
+            margin-top: 14px;
+            padding: 12px 14px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(29, 78, 216, .08), rgba(14, 165, 233, .08));
+            border: 1px solid rgba(29, 78, 216, .12);
+            color: #1e3a8a;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.6
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr
+            }
+
+            .portal {
+                grid-template-columns: 1fr
+            }
+
+            .hero-meta {
+                grid-template-columns: 1fr
+            }
+
+            .overview-strip {
+                grid-template-columns: 1fr
+            }
+
+            h1 {
+                font-size: 28px
+            }
+
+            .page {
+                min-height: auto;
+                padding-top: 16px
+            }
+
+            .tree-branches {
+                grid-template-columns: 1fr;
+                gap: 14px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <section class="hero">
+            <div class="hero-panel">
+                <div class="kicker">DodoWheels Portal</div>
+                <h1>DodoWheels 全数字化链路系统项目</h1>
+                <div class="sub">统一入口用于快速进入项目总览、业务流程图和系统功能说明。</div>
+                <div class="hero-meta" aria-label="项目概览">
+                    <div class="hero-metric">
+                        <strong>3</strong>
+                        <span>核心入口模块</span>
+                    </div>
+                    <div class="hero-metric">
+                        <strong>1</strong>
+                        <span>统一门户首页</span>
+                    </div>
+                    <div class="hero-metric">
+                        <strong>直达</strong>
+                        <span>点击即进入对应内容</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-side">
+                <div class="hero-side-card">
+                    <strong>项目总览</strong>
+                    <p>面向项目目标、里程碑和整体推进节奏，适合先看全局再进入细节。</p>
+                </div>
+                <div class="hero-side-card">
+                    <strong>业务流程图</strong>
+                    <p>围绕销售、仓储、库存与财务闭环，展示业务链路和特殊场景。</p>
+                </div>
+                <div class="hero-side-card">
+                    <strong>系统功能说明</strong>
+                    <p>按系统和模块归档功能菜单，适合定位责任归属和功能边界。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="portal" aria-label="三个入口">
+            <div class="portal-main">
+                <a class="portal-card" href="project.html" data-order="01" style="--accent:#1d4ed8">
+                    <div class="portal-badge">PROJECT OVERVIEW</div>
+                    <h2>项目总览</h2>
+                    <div class="card-hero">
+                        <strong>01</strong>
+                        <span>项目范围 / 里程碑 / 全局说明</span>
+                    </div>
+                    <p>快速查看项目目标、里程碑和整体建设进度。</p>
+                    <div class="overview-strip" aria-hidden="true">
+                        <div class="overview-item">
+                            <strong>项目目标</strong>
+                            <span>统一建设方向，明确交付边界。</span>
+                        </div>
+                        <div class="overview-item">
+                            <strong>里程碑</strong>
+                            <span>按阶段推进，方便跟踪。</span>
+                        </div>
+                        <div class="overview-item">
+                            <strong>当前状态</strong>
+                            <span>全链路整理中，入口已打通。</span>
+                        </div>
+                    </div>
+                    <div class="mini-flow" aria-hidden="true">
+                        <span>目标</span>
+                        <span>里程碑</span>
+                        <span>进度</span>
+                    </div>
+                    <div class="overview-foot">聚焦项目总览、阶段节奏和整体建设进度。</div>
+                    <div class="meta">
+                        <span class="pill">项目汇总</span>
+                        <span class="pill">里程碑</span>
+                    </div>
+                    <div class="card-link">进入项目总览</div>
+                </a>
+            </div>
+
+            <div class="portal-stack">
+                <a class="portal-card stack-card compact" href="bpa.html" data-order="02" style="--accent:#be123c">
+                    <div class="portal-badge" style="background:#fff1f2;color:#be123c">BUSINESS FLOW</div>
+                    <h2>业务流程图</h2>
+                    <div class="card-hero">
+                        <strong>02</strong>
+                        <span>销售 / 仓储 / 库存 / 财务</span>
+                    </div>
+                    <p>用于查看销售、仓储、库存和财务之间的完整业务闭环。</p>
+                    <div class="meta">
+                        <span class="pill">特殊场景</span>
+                        <span class="pill">基础数据</span>
+                        <span class="pill">流程闭环</span>
+                    </div>
+                    <div class="card-link">进入业务流程图</div>
+                </a>
+
+                <a class="portal-card stack-card compact" href="prd.html" data-order="03" style="--accent:#0d9488">
+                    <div class="portal-badge" style="background:#ecfeff;color:#0d9488">SYSTEM FUNCTION</div>
+                    <h2>系统功能说明</h2>
+                    <div class="card-hero">
+                        <strong>03</strong>
+                        <span>功能架构 / 模块归属 / 能力清单</span>
+                    </div>
+                    <p>用于查看系统功能结构、模块边界和业务能力归属。</p>
+                    <div class="meta">
+                        <span class="pill">功能架构</span>
+                        <span class="pill">模块说明</span>
+                        <span class="pill">业务能力</span>
+                    </div>
+                    <div class="card-link">进入系统功能说明</div>
+                </a>
+            </div>
+        </section>
+
+    </div>
+</body>
+
+</html>
