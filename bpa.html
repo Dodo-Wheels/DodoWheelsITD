@@ -781,10 +781,27 @@
             line-height: 1.65
         }
 
+        .exception-section {
+            display: grid;
+            gap: 12px;
+            padding: 14px;
+            border: 1px solid #dbe7f5;
+            border-radius: 18px;
+            background: linear-gradient(180deg, #f8fbff, #fff);
+            box-shadow: 0 12px 30px rgba(15, 23, 42, .055)
+        }
+
         .exception-row {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 10px
+        }
+
+        .exception-process-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            align-items: start
         }
 
         .branch-title {
@@ -806,24 +823,223 @@
         }
 
         .exception-card {
+            position: relative;
             padding: 13px;
-            border: 1px solid #e8edf5;
-            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
             background: #fff;
-            box-shadow: 0 8px 20px rgba(15, 23, 42, .045)
+            box-shadow: 0 8px 20px rgba(15, 23, 42, .04);
+            transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease
+        }
+
+        .exception-card.expanded {
+            cursor: pointer
+        }
+
+        .exception-card.expanded:hover {
+            transform: translateY(-2px);
+            border-color: color-mix(in srgb, var(--exception-accent, #2563eb) 35%, #cfdced);
+            box-shadow: 0 14px 28px rgba(15, 23, 42, .09)
         }
 
         .exception-card strong {
             display: block;
-            margin-bottom: 5px;
-            color: #334155;
-            font-size: 12px
+            margin-bottom: 6px;
+            color: #172033;
+            font-size: 12px;
+            line-height: 1.35
         }
 
         .exception-card span {
+            display: block;
             color: #64748b;
             font-size: 11px;
             line-height: 1.55
+        }
+
+        .exception-card.expanded {
+            padding: 16px 17px 17px;
+            border-color: #cfdced;
+            background: linear-gradient(180deg, #fff, #f9fbff)
+        }
+
+        .exception-card.expanded::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 4px;
+            border-radius: 12px 0 0 12px;
+            background: var(--exception-accent, #be123c)
+        }
+
+        .exception-flow {
+            margin: 0 0 12px;
+            padding: 9px 10px;
+            border: 1px solid #dbeafe;
+            border-radius: 10px;
+            background: #f8fbff;
+            color: #334155;
+            font-size: 11.5px;
+            font-weight: 800;
+            line-height: 1.65
+        }
+
+        .exception-card.expanded>.exception-flow {
+            display: -webkit-box;
+            min-height: 56px;
+            overflow: hidden;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2
+        }
+
+        .exception-card.expanded>.exception-subtitle,
+        .exception-card.expanded>ul,
+        .exception-card.expanded>ol {
+            display: none
+        }
+
+        .exception-card.expanded::after {
+            content: "点击查看完整流程";
+            display: inline-flex;
+            margin-top: 2px;
+            color: var(--exception-accent, #2563eb);
+            font-size: 11px;
+            font-weight: 900
+        }
+
+        .exception-card ol,
+        .exception-card ul {
+            margin: 0;
+            padding-left: 17px;
+            color: #64748b;
+            font-size: 11.2px;
+            line-height: 1.6
+        }
+
+        .exception-card li+li {
+            margin-top: 4px
+        }
+
+        .exception-card .exception-subtitle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin: 12px 0 6px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: #eef6ff;
+            color: #1e3a5f;
+            font-size: 11px;
+            font-weight: 900
+        }
+
+        .exception-card .exception-subtitle::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--exception-accent, #2563eb)
+        }
+
+        .exception-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 120;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: rgba(15, 23, 42, .46);
+            backdrop-filter: blur(8px)
+        }
+
+        .exception-modal.active {
+            display: flex
+        }
+
+        .exception-dialog {
+            width: min(920px, 100%);
+            max-height: min(82vh, 900px);
+            overflow: auto;
+            border: 1px solid #dbe7f5;
+            border-radius: 18px;
+            background: #fff;
+            box-shadow: 0 26px 70px rgba(15, 23, 42, .26)
+        }
+
+        .exception-dialog-head {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 16px 18px;
+            border-bottom: 1px solid #e2e8f0;
+            background: linear-gradient(180deg, #fff, #f8fbff)
+        }
+
+        .exception-dialog-title {
+            color: #172033;
+            font-size: 16px;
+            font-weight: 950
+        }
+
+        .exception-dialog-body {
+            --exception-accent: #2563eb;
+            padding: 18px
+        }
+
+        .exception-dialog-body .exception-flow {
+            margin-bottom: 14px
+        }
+
+        .exception-dialog-body .exception-subtitle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin: 14px 0 7px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: #eef6ff;
+            color: #1e3a5f;
+            font-size: 11px;
+            font-weight: 900
+        }
+
+        .exception-dialog-body .exception-subtitle::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--exception-accent, #2563eb)
+        }
+
+        .exception-dialog-body ul,
+        .exception-dialog-body ol {
+            display: block;
+            margin: 0;
+            padding-left: 19px;
+            color: #475569;
+            font-size: 12px;
+            line-height: 1.72
+        }
+
+        .exception-dialog-body li+li {
+            margin-top: 5px
+        }
+
+        .exception-close {
+            width: 34px;
+            height: 34px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            background: #fff;
+            color: #334155;
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 1
         }
 
         .data-modal {
@@ -1151,6 +1367,10 @@
                 grid-template-columns: repeat(2, minmax(0, 1fr))
             }
 
+            .exception-process-grid {
+                grid-template-columns: 1fr
+            }
+
             .lane:not(:last-child)::after {
                 display: none
             }
@@ -1191,6 +1411,14 @@
             .modal-field-grid,
             .exception-row {
                 grid-template-columns: 1fr
+            }
+
+            .exception-section {
+                padding: 10px
+            }
+
+            .exception-card.expanded {
+                grid-column: span 1
             }
 
             .path-arrow {
@@ -1459,13 +1687,214 @@
                     </div>
 
                     <div class="branch-title">特殊业务场景</div>
-                    <div class="exception-row">
-                        <div class="exception-card"><strong>取消</strong><span>发票产生前才能操作取消；若已产生发票，则需走财务冲销流程。</span></div>
-                        <div class="exception-card"><strong>修改</strong><span>发票产生前才能操作修改；若已产生发票，则需重新生成发票。</span></div>
-                        <div class="exception-card"><strong>退货</strong><span>需要手工创建 Credit Memo，并拿单据完成退货；WMS 处理回仓后再同步财务。</span></div>
-                        <div class="exception-card"><strong>零售 WALK-IN</strong><span>个人开通账号后，按照流程下单、拣货、出库并生成发票。</span></div>
-                        <div class="exception-card"><strong>紧急加单</strong><span>按照系统流程创建相关订单信息，并线下与配送团队沟通。</span></div>
-                        <div class="exception-card"><strong>调货</strong><span>通过调货单功能，按照需求进行调货操作。</span></div>
+                    <div class="exception-section">
+                        <div class="exception-process-grid">
+                            <div class="exception-card expanded" style="--exception-accent:#ad1457">
+                                <strong>一、取消订单（未发货场景）</strong>
+                                <p class="exception-flow">客户下了单（线下支付模式）→ 货还没出库 → 客户取消 → 电商平台取消/作废订单 → WMS 接收拦截指令 → QBO 按是否已建账处理</p>
+                                <div class="exception-subtitle">特征</div>
+                                <ul>
+                                    <li>客户下了单（线下支付模式），货还没出库，客户突然取消。</li>
+                                    <li>因为不是在线扣款，不存在“退款”这个动作。</li>
+                                </ul>
+                                <div class="exception-subtitle">电商平台</div>
+                                <ul>
+                                    <li>客服直接取消/作废该订单。</li>
+                                </ul>
+                                <div class="exception-subtitle">WMS</div>
+                                <ul>
+                                    <li>电商发送拦截指令。</li>
+                                    <li>若未拣货，直接取消。</li>
+                                    <li>若已拣货，货物拉回货架做物理移库上架，可用库存加回。</li>
+                                </ul>
+                                <div class="exception-subtitle">QBO 处理</div>
+                                <ul>
+                                    <li>情况 A（QBO 还没操作）：既然没收钱，也没发货，QBO 里什么都不需要做。这笔订单在财务上当作从未存在过。</li>
+                                    <li>情况 B（QBO 已经建了 Invoice）：如果之前为了给客户发账单已经建了 Invoice（应收账款），此时在 QBO 里直接将该 Invoice 作废（Void）即可。不需要做任何库存调整，因为 WMS 根本没发货。</li>
+                                </ul>
+                            </div>
+                            <div class="exception-card expanded" style="--exception-accent:#be123c">
+                                <strong>二、退货逻辑（已发货场景）</strong>
+                                <p class="exception-flow">货已经发走（WMS 已扣库存）→ 客户把货寄回 → 电商开启 RMA → WMS 处理物理入库，库存 +1 → QBO 按客户是否已付款处理 Credit Memo</p>
+                                <div class="exception-subtitle">特征</div>
+                                <ul>
+                                    <li>货已经发走了，WMS 已经扣减库存，客户把货寄回。</li>
+                                    <li>由于采用线下支付，可能存在“客户还没给钱（账期中）”或“客户已经打款（收到水单）”两种财务状态。</li>
+                                </ul>
+                                <div class="exception-subtitle">1. 客户还没有给钱（挂账/账期内退货）</div>
+                                <ul>
+                                    <li>电商平台：开启 RMA 退货流程，标记商品已退回。</li>
+                                    <li>WMS：处理 RMA 物理入库，WMS 库存 +1。</li>
+                                </ul>
+                                <div class="exception-subtitle">QBO 操作（核心：核销应收）</div>
+                                <ul>
+                                    <li>QBO：由于之前的 Invoice（应收账款）还挂在系统中，根据 WMS 入库通知创建一张 Credit Memo（贷记通知单）。</li>
+                                    <li>Credit Memo 自动把商品重新计入 QBO 库存资产（冲回 COGS），并产生一个额度。</li>
+                                    <li>在 QBO 中将这张 Credit Memo 应用（Apply）到之前那张未付的 Invoice 上，Invoice 的应付金额自动减少。</li>
+                                    <li>最终结果：客户不需要为退回的这件商品付钱了，财务账目完美冲平。</li>
+                                </ul>
+                                <div class="exception-subtitle">2. 客户已经给钱了（收到线下打款后退货）</div>
+                                <ul>
+                                    <li>电商平台：正常记录 RMA 物理退货。</li>
+                                    <li>WMS：处理 RMA 物理入库，WMS 库存 +1。</li>
+                                </ul>
+                                <div class="exception-subtitle">QBO 操作（核心：转为退款或留作下次抵扣）</div>
+                                <ul>
+                                    <li>由于钱已经收到了，QBO 里的 Invoice 已经被 Receive Payment 结清。</li>
+                                    <li>此时根据退货，在 QBO 里创建一张 Credit Memo，库存资产加回并冲回 COGS。</li>
+                                </ul>
+                                <div class="exception-subtitle">财务抉择</div>
+                                <ul>
+                                    <li>如果决定线下把钱转回给客户：在 QBO 里基于这张 Credit Memo 建立 Refund Cheque/Expense，记录银行资金出账，后续与银行流水匹配。</li>
+                                    <li>如果客户同意留作下次抵扣（推荐）：让 Credit Memo 挂在客户名下（Unapplied Credit），下次新 Invoice 可直接抵扣，不发生实际资金往来。</li>
+                                </ul>
+                            </div>
+                            <div class="exception-card expanded" style="--exception-accent:#0f766e">
+                                <strong>三、换货逻辑（核心：以物易物，多退少补）</strong>
+                                <p class="exception-flow">线下支付下，换货本质是更新应收账款单（Invoice）→ WMS 对旧商品做 RMA 入库 → 对新商品做补发出库 → QBO 更新 Invoice 并做库存调整</p>
+                                <div class="exception-subtitle">核心逻辑</div>
+                                <ul>
+                                    <li>既然不用在线支付，换货的本质就变成了“更新应收账款单（Invoice）”。</li>
+                                    <li>无论同价还是不同价，线下流向都应保持 WMS 一进一出、QBO Invoice 与库存同步。</li>
+                                </ul>
+                                <div class="exception-subtitle">1. 换同价/等价产品（如 $100 的 A 换 $100 的 B）</div>
+                                <ol>
+                                    <li>电商平台/中台：客服直接在原订单（或创建专门换货单）里修改明细，商品 A 数量减 1（备注退回），商品 B 数量加 1（备注补发）。总价不变，应付金额维持原样。</li>
+                                    <li>WMS：系统触发两个物理动作。</li>
+                                    <li>生成商品 A 的 RMA，等待客户寄回，收到后 WMS 库存 A +1。</li>
+                                    <li>生成商品 B 的补发单（Manual Fulfillment），仓库直接出库，WMS 库存 B -1。</li>
+                                    <li>QBO：如果 Invoice 还没核销，直接修改那张 Invoice，把商品 A 行项目删掉，换成商品 B，金额不变。</li>
+                                    <li>QBO：同时做一笔 Inventory Adjustment（库存调整），库存 A +1，库存 B -1。</li>
+                                    <li>客户最终银行线下转账付款时，财务正常对这张 Invoice 进行收款标记。</li>
+                                </ol>
+                                <div class="exception-subtitle">2. 换不等价产品（产生差价，如 $100 的 A 换 $130 的 B）</div>
+                                <ul>
+                                    <li>电商平台：客服修改订单或重开换货单，商品改为 B，系统重新计算，订单总额增加 $30。</li>
+                                    <li>WMS：同样是一进一出，A 进 B 出。</li>
+                                    <li>QBO：集成系统直接更新（Update）QBO 里那张 Invoice，将明细改为商品 B，并将总金额变为 $130。</li>
+                                    <li>QBO：通过 Inventory Adjustment 平衡 QBO 里的 A、B 物理库存。</li>
+                                    <li>最终收款：客户通过线下银行转账把 $130（或者补交的 $30 尾款连同前款）打过来时，财务在 QBO 里的 Bank Feeds 看到这笔总款项，直接 Match 到这张 $130 的 Invoice 上，整笔交易完美闭环。</li>
+                                </ul>
+                            </div>
+                            <div class="exception-card expanded" style="--exception-accent:#00838f">
+                                <strong>四、订单调货</strong>
+                                <p class="exception-flow">创建调货指令 → 调出仓拣货并确认出库 → 库存进入 In-Transit 在途锁定 → 调入仓清点、质检、上架 → 调入仓库存转为 Available</p>
+                                <div class="exception-subtitle">1. 创建调货指令</div>
+                                <ul>
+                                    <li>操作：仓管或供应链人员在 WMS 后台（或自研中台）创建一张库存调拨单。</li>
+                                    <li>核心字段：调出仓库ID、调入仓库ID、SKU、计划调拨数量。</li>
+                                    <li>系统状态：此时单据为 Draft（草稿）或 Pending（待执行）。</li>
+                                </ul>
+                                <div class="exception-subtitle">2. 调出仓物理作业（减库存）</div>
+                                <ul>
+                                    <li>拣货提示：调出仓（如 Toronto 仓）的工人在扫描枪（HHT）上收到调拨任务。</li>
+                                    <li>移库出库：工人去货架把货搬下来，推到打包区装箱，并在系统里点击确认出库（Dispatch / Shipped）。</li>
+                                    <li>WMS 库存变化：调出仓的该 SKU 物理库存立刻减少。</li>
+                                </ul>
+                                <div class="exception-subtitle">3. 在途状态控制（防止超卖）</div>
+                                <ul>
+                                    <li>核心逻辑：当货在马路上运的时候，这批货既不在 A 仓，也不在 B 仓。</li>
+                                    <li>系统控制：WMS 会将这部分商品标记为 In-Transit（在途状态）。</li>
+                                    <li>此时无论是前台电商还是后台销售，都不能把这批在途的货卖掉；它们处于被锁定的非销售状态，直到进入新仓库。</li>
+                                </ul>
+                                <div class="exception-subtitle">4. 调入仓物理接收（加库存）</div>
+                                <ul>
+                                    <li>清点入库：货车到达调入仓（如 Montreal 仓），工人用扫描枪扫描调拨单号，清点实际到货数量。</li>
+                                    <li>质检上架：确认没有破损后，扫描枪会提示工人将货物放到 B 仓的具体货位（Bin Location），点击确认上架（Putaway / Received）。</li>
+                                    <li>WMS 库存变化：调入仓的该 SKU 物理库存立刻增加，状态转为“可售（Available）”。</li>
+                                </ul>
+                            </div>
+                            <div class="exception-card expanded" style="--exception-accent:#f57f17">
+                                <strong>五、零售 WALK-IN</strong>
+                                <p class="exception-flow">现场下单 → OMS 选择 Local Pickup → 订单 Paid / Awaiting Pickup → High Priority 推送 WMS → 仓库特快拣货到 Pickup Area → Confirm Pickup → QBO 自动 Invoice + Payment</p>
+                                <div class="exception-subtitle">1. 销售下单与标记（OMS 端）</div>
+                                <ul>
+                                    <li>现场下单：销售在 OMS 录入商品，挂在 Walk-In 或散客名下。</li>
+                                    <li>选择自提：配送方式必须勾选为 Local Pickup（现场自提）。</li>
+                                    <li>状态插队：订单提交后，OMS 状态变为 Paid（已付款）或 Awaiting Pickup（待自提）。</li>
+                                    <li>系统通过接口将该订单以最高优先级（High Priority）推送到仓库 WMS。</li>
+                                </ul>
+                                <div class="exception-subtitle">2. 仓库特快拣货（WMS 端）</div>
+                                <ul>
+                                    <li>物理拣货：仓库工人开着叉车或拿着推车，迅速去货架把轮胎/轮毂取下来，运到展厅的自提区（Pickup Area）。</li>
+                                    <li>现场交货：散客核对无误后把货提走，点击 Confirm Pickup（确认提货）。</li>
+                                    <li>库存变动：点下的瞬间，WMS 纯物理库存正式扣减。</li>
+                                </ul>
+                                <div class="exception-subtitle">3. 财务秒级闭环（QBO 端）</div>
+                                <ul>
+                                    <li>中间件监测到 WMS 的 Confirm Pickup 信号，在后台全自动完成财务记账。</li>
+                                    <li>自动生成 Invoice：QBO 收到请求，财务库存同步扣减，并结转销货成本（COGS）。</li>
+                                    <li>自动挂载 Payment：因为现场已经付过钱（刷卡/转账），系统紧接着自动把付款凭证绑上。</li>
+                                    <li>最终结果：QBO 里的发票一出生就是 Paid（已付清）状态。</li>
+                                </ul>
+                            </div>
+                            <div class="exception-card expanded" style="--exception-accent:#7c3aed">
+                                <strong>六、紧急加单</strong>
+                                <p class="exception-flow">WMS 正在拣货中（QBO 发票尚未生成）→ OMS 原订单追加商品 → 中间件更新 WMS 拣货任务 → HHT 提示多拣 → 拣货完成后 QBO 开完整发票 → WMS/QBO 库存一次性扣减正确</p>
+                                <div class="exception-subtitle">适用条件</div>
+                                <ul>
+                                    <li>WMS 正在拣货中，QBO 发票尚未生成。</li>
+                                    <li>这是最简单的情况，系统直接“原地追加”。</li>
+                                </ul>
+                                <div class="exception-subtitle">OMS 指令</div>
+                                <ul>
+                                    <li>客服在电商/OMS 后台直接编辑原订单，追加 2 条轮胎。</li>
+                                </ul>
+                                <div class="exception-subtitle">WMS 联动</div>
+                                <ul>
+                                    <li>中间件检测到订单修改，直接更新 WMS 中的拣货任务。</li>
+                                    <li>仓库工人的扫描枪（HHT）上会弹出提示：“订单已更新，请多拣 2 条轮胎”。</li>
+                                </ul>
+                                <div class="exception-subtitle">QBO 财务端</div>
+                                <ul>
+                                    <li>仓库全部拣完货后，WMS 点下“拣货完成”。</li>
+                                    <li>系统正常调用 API，开出一张包含原商品和追加商品的完整 QBO 发票。</li>
+                                </ul>
+                                <div class="exception-subtitle">库存结果</div>
+                                <ul>
+                                    <li>QBO 和 WMS 的库存数量一次性扣减正确。</li>
+                                </ul>
+                            </div>
+                            <div class="exception-card expanded" style="--exception-accent:#6366f1">
+                                <strong>七、订单修改</strong>
+                                <p class="exception-flow">按仓储进度分三段处理：未拣货直接覆盖 → 已拣货未发出按加单/减单换货处理 → 已发货启动标准售后 RMA / Credit Memo / 新 Invoice</p>
+                                <div class="exception-subtitle">流程一：仓库尚未拣货（直接覆盖）</div>
+                                <ul>
+                                    <li>订单刚同步到 WMS，工人还没开始拿扫描枪拣货，QBO 也尚未开出发票。</li>
+                                    <li>OMS（客服操作）：客服在后台直接修改订单，如 4 条轮胎改为 2 条轮胎。</li>
+                                    <li>中间件（数据同步）：捕获修改事件，立刻向 WMS 发送阻断指令，将 WMS 中原有的拣货任务作废/撤回。</li>
+                                    <li>WMS（物理端）：接收新的商品明细，重新生成一份高优先级的拣货任务送回工人扫描枪。</li>
+                                    <li>QBO（财务端）：不触发任何 QBO 动作，因为还没出发票；等仓库未来真正拣完货时，再正常出一次正确的发票。</li>
+                                </ul>
+                                <div class="exception-subtitle">流程二：已拣货完成、但货未发出</div>
+                                <ul>
+                                    <li>业务场景：WMS 显示 Picked，意味着 QBO 发票已经开出，但卡车还没走，客户突发要修改。</li>
+                                </ul>
+                                <div class="exception-subtitle">方向 A：紧急加单（增加商品/数量）</div>
+                                <ul>
+                                    <li>系统处理逻辑：原单不动，自动切分子订单。</li>
+                                    <li>OMS 不去动已拣货完成的订单，而是在后台触发“追加”，系统自动生成一张关联的影子子订单（Order_A_ADD）。</li>
+                                    <li>WMS 收到子订单后直接标记为最高优先级（插队）。工人扫描枪收到任务，去货架把多要的货拣出来，推到打包台跟原单的货拼车合并发走。</li>
+                                    <li>QBO 通过 API 对这笔子订单单独追加开一张副发票。财务后续核销时，把原发票和副发票打包一起 Match 银行流水。</li>
+                                </ul>
+                                <div class="exception-subtitle">方向 B：减单或换货（减少数量/换别的商品）</div>
+                                <ul>
+                                    <li>系统处理逻辑：修改原发票，保持总价不变，WMS 物理一进一出。</li>
+                                    <li>OMS 修改明细。</li>
+                                    <li>QBO（自动化）：中间件调用 Update Invoice API，把发票里的 A 商品换成 B 商品。如果产生差价，通过加一行负的“折扣/调整行”，强行把发票总金额锁死在修改前的金额不变，防止影响财务已发送的账单。</li>
+                                    <li>QBO 会自动在后台完成 A、B 的财务库存置换。</li>
+                                    <li>WMS（物理端）：自动生成一笔 RMA 入库（把减掉的货放回货架，库存 +1）和一笔补发（把换的新货拿下来，库存 -1）。</li>
+                                </ul>
+                                <div class="exception-subtitle">流程三：卡车已发货（标准售后流程）</div>
+                                <ul>
+                                    <li>业务场景：WMS 状态已变成 Shipped，货已经运在马路上，物理上已无法拦截。</li>
+                                    <li>OMS（客服操作）：线上拦截失败，客服在 OMS 启动售后服务工单（RMA / Return Merchandise Authorization）。</li>
+                                    <li>QBO 财务端（自动化）：如果是直接退部分货（减钱），接口自动在 QBO 里开出 Credit Memo（贷记单/红字发票）挂在客户名下，客户下一步打款时直接扣除这部分红字金额。</li>
+                                    <li>如果是整单换货：API 自动开一张 Credit Memo 把旧发票金额全额冲平（收入清零）；然后自动开一张全新的 Invoice（新发票号），明细写上正确的商品重新计账。</li>
+                                    <li>WMS 仓储端：仓库等待物流把客户退回的商品拉回仓库，工人清点扫描入库，WMS 纯物理库存完成对齐。</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -1714,14 +2143,14 @@
                         <text font-size="11" fill="#1b7a43" x="1400" y="488" text-anchor="middle"
                             dominant-baseline="central">检查特殊要求</text>
                     </g>
-                    <!-- N13: VOID / 取消  col5 行偏下 -->
+                    <!-- N13: 未发货取消  col5 行偏下 -->
                     <g class="nd" id="N13" data-scenes="s4">
                         <rect x="1290" y="532" width="220" height="52" rx="8" fill="#edfcf2" stroke="#a5e8c4"
                             stroke-width="1.2" />
                         <text font-size="13" font-weight="700" fill="#1b7a43" x="1400" y="554" text-anchor="middle"
-                            dominant-baseline="central">CORE-OMS VOID/取消</text>
+                            dominant-baseline="central">未发货取消</text>
                         <text font-size="11" fill="#1b7a43" x="1400" y="572" text-anchor="middle"
-                            dominant-baseline="central">未出库直接作废</text>
+                            dominant-baseline="central">WMS 拦截 / QBO Void</text>
                     </g>
 
                     <!-- ─── ROW OMS-下/特殊场景 (y=688~930) ─── -->
@@ -1734,50 +2163,50 @@
                         <text font-size="11" fill="#1b7a43" x="820" y="740" text-anchor="middle"
                             dominant-baseline="central">核查原订单</text>
                     </g>
-                    <!-- N22: 打印 estimate×2  col4 -->
+                    <!-- N22: Invoice 换货  col4 -->
                     <g class="nd" id="N22" data-scenes="s7">
                         <rect x="1010" y="700" width="220" height="52" rx="8" fill="#edfcf2" stroke="#a5e8c4"
                             stroke-width="1.2" />
                         <text font-size="13" font-weight="700" fill="#1b7a43" x="1120" y="722" text-anchor="middle"
-                            dominant-baseline="central">打印 estimate ×2</text>
+                            dominant-baseline="central">Invoice 换货</text>
                         <text font-size="11" fill="#1b7a43" x="1120" y="740" text-anchor="middle"
-                            dominant-baseline="central">不收款，换货凭单</text>
+                            dominant-baseline="central">一进一出/多退少补</text>
                     </g>
-                    <!-- N23: OMS 现金单  col3 walk-in -->
+                    <!-- N23: OMS Local Pickup  col3 walk-in -->
                     <g class="nd" id="N23" data-scenes="s8">
                         <rect x="710" y="790" width="220" height="52" rx="8" fill="#edfcf2" stroke="#a5e8c4"
                             stroke-width="1.2" />
                         <text font-size="13" font-weight="700" fill="#1b7a43" x="820" y="812" text-anchor="middle"
-                            dominant-baseline="central">CORE-OMS 现金单</text>
+                            dominant-baseline="central">OMS Local Pickup</text>
                         <text font-size="11" fill="#1b7a43" x="820" y="830" text-anchor="middle"
-                            dominant-baseline="central">13% + 零售价</text>
+                            dominant-baseline="central">Paid / Awaiting Pickup</text>
                     </g>
-                    <!-- N24: 建调货单  col2 -->
+                    <!-- N24: 建调拨单  col2 -->
                     <g class="nd" id="N24" data-scenes="s9">
                         <rect x="415" y="700" width="220" height="52" rx="8" fill="#edfcf2" stroke="#a5e8c4"
                             stroke-width="1.2" />
                         <text font-size="13" font-weight="700" fill="#1b7a43" x="525" y="722" text-anchor="middle"
-                            dominant-baseline="central">CORE-OMS 建调货单</text>
+                            dominant-baseline="central">WMS 建调拨单</text>
                         <text font-size="11" fill="#1b7a43" x="525" y="740" text-anchor="middle"
-                            dominant-baseline="central">通知分部装车</text>
+                            dominant-baseline="central">Draft / Pending</text>
                     </g>
-                    <!-- N25: 调货 QC/ON  col1 -->
+                    <!-- N25: 跨仓调拨  col1 -->
                     <g class="nd" id="N25" data-scenes="s3 s9">
                         <rect x="125" y="790" width="220" height="52" rx="8" fill="#edfcf2" stroke="#a5e8c4"
                             stroke-width="1.2" />
                         <text font-size="13" font-weight="700" fill="#1b7a43" x="235" y="812" text-anchor="middle"
-                            dominant-baseline="central">调货 QC / ON</text>
+                            dominant-baseline="central">跨仓调拨</text>
                         <text font-size="11" fill="#1b7a43" x="235" y="830" text-anchor="middle"
-                            dominant-baseline="central">就近仓库调拨</text>
+                            dominant-baseline="central">In-Transit 锁定</text>
                     </g>
-                    <!-- N09: 查库存价位(调货报价)  col1 下 -->
+                    <!-- N09: 调拨字段  col1 下 -->
                     <g class="nd" id="N09" data-scenes="s9">
                         <rect x="125" y="870" width="220" height="52" rx="8" fill="#faf5ff" stroke="#e9d5ff"
                             stroke-width="1.2" />
                         <text font-size="13" font-weight="700" fill="#7e22ce" x="235" y="892" text-anchor="middle"
-                            dominant-baseline="central">查库存价位</text>
+                            dominant-baseline="central">调出/调入仓库</text>
                         <text font-size="11" fill="#7e22ce" x="235" y="910" text-anchor="middle"
-                            dominant-baseline="central">CORE-CSM 调货报价</text>
+                            dominant-baseline="central">SKU / 数量</text>
                     </g>
 
                     <!-- ─── ROW WMS (y=988~1170) ─── -->
@@ -1826,14 +2255,14 @@
                         <text font-size="11" fill="#b45309" x="1400" y="1028" text-anchor="middle"
                             dominant-baseline="central">入库触发</text>
                     </g>
-                    <!-- Nret: 安排退货回仓  col5 下 -->
+                    <!-- Nret: 退货入库单  col5 下 -->
                     <g class="nd" id="Nret" data-scenes="s7">
                         <rect x="1290" y="1068" width="220" height="52" rx="8" fill="#fef7ed" stroke="#fcd39e"
                             stroke-width="1.2" />
                         <text font-size="13" font-weight="700" fill="#b45309" x="1400" y="1090" text-anchor="middle"
-                            dominant-baseline="central">安排退货回仓</text>
+                            dominant-baseline="central">退货入库单</text>
                         <text font-size="11" fill="#b45309" x="1400" y="1108" text-anchor="middle"
-                            dominant-baseline="central">WMS 入库处理</text>
+                            dominant-baseline="central">收货质检回传</text>
                     </g>
                     <!-- N19: WMS 收货核对  col6 -->
                     <g class="nd" id="N19" data-scenes="s6">
@@ -1871,9 +2300,9 @@
                         <rect x="710" y="1448" width="220" height="52" rx="8" fill="#fff1f2" stroke="#fecdd3"
                             stroke-width="1.2" />
                         <text font-size="13" font-weight="700" fill="#be123c" x="820" y="1470" text-anchor="middle"
-                            dominant-baseline="central">QBO 生成发票</text>
+                            dominant-baseline="central">QBO Invoice / Payment</text>
                         <text font-size="11" fill="#be123c" x="820" y="1488" text-anchor="middle"
-                            dominant-baseline="central">出库自动触发</text>
+                            dominant-baseline="central">Confirm Pickup 触发</text>
                     </g>
                     <!-- N28: QBO 冲销/退款  col4 -->
                     <g class="nd" id="N28" data-scenes="s4 s7">
@@ -2078,18 +2507,28 @@
         </div>
     </div>
 
+    <div class="exception-modal" id="exceptionModal" onclick="closeExceptionModal(event)">
+        <div class="exception-dialog" role="dialog" aria-modal="true" aria-labelledby="exceptionModalTitle">
+            <div class="exception-dialog-head">
+                <div class="exception-dialog-title" id="exceptionModalTitle">特殊业务场景</div>
+                <button class="exception-close" type="button" onclick="closeExceptionModal()">×</button>
+            </div>
+            <div class="exception-dialog-body" id="exceptionModalBody"></div>
+        </div>
+    </div>
+
     <script>
         const D = {
             all: { c: '#444', t: '全景总览', sub: '展示公司从客户入口、下单审核、仓储作业、库存同步到财务记录的完整闭环。', metrics: [['业务场景', '9 个'], ['涉及系统', '6 套'], ['流程节点', '29 个'], ['核心目标', '销售与库存财务联动']], steps: [['客户通过 WEB、电联、到店等入口进入业务流程', '总入口', '#F5F5F5', '#666'], ['订单由 CORE-OMS / WEBADMIN 等系统审核、确认或处理特殊情况', '订单管控', '#E8F5E9', '#2E7D32'], ['仓储由 CORE-WMS 执行拣货、出库、入库、退货等动作', '仓储执行', '#FFF3E0', '#E65100'], ['库存变动通过 CORE-CSM 同步回 WEB，保证前端库存展示实时更新', '库存同步', '#F3E5F5', '#6A1B9A'], ['QBO 根据出库、取消、退货等动作生成发票、冲销或更新成本', '财务闭环', '#FFEBEE', '#B71C1C']], notes: ['该图用于理解系统边界和跨部门协作。', '主流程采用分阶段展示，避免大量交叉线影响阅读。', '异常流程单独归纳，便于快速识别取消、退换货、调货等处理路径。'] },
             s1: { c: '#1565C0', t: '① 新客注册开户', sub: '新客户通过官网提交注册申请，后台完成资质核实与权限激活，最终开通 distributor 账户。', metrics: [['涉及系统', 'WEB / WEBADMIN'], ['关键动作', '资质核实'], ['完成结果', '激活登录权限'], ['流程类型', '开户准入']], steps: [['新客访问 WEB，填写公司信息并提交注册申请', 'WEB', '#E3F2FD', '#1565C0'], ['CORE-WEBADMIN 核实公司真实性与资料完整性', 'CORE-WEBADMIN', '#E0F2F1', '#00695C'], ['核实通过后，修改客户类别并同意开户', 'CORE-WEBADMIN', '#E0F2F1', '#00695C'], ['为客户激活 distributor 权限，具备登录与下单资格', 'CORE-WEBADMIN', '#E0F2F1', '#00695C'], ['客户回到 WEB 登录并开始使用线上业务功能', 'WEB', '#E3F2FD', '#1565C0']], notes: ['若信息不符或资料不足，可暂缓处理并等待客户补充资料。', '该流程的重点是准入控制，确保后续订单交易建立在真实、可核验的客户基础上。', '建议将常见驳回原因整理成标准模板，减少重复沟通成本。'] },
             s2: { c: '#2E7D32', t: '② 线上下单（老客）', sub: '老客户在官网自助下单，订单进入审核、备注、仓储出库与财务开票联动流程。', metrics: [['涉及系统', 'WEB/OMS/WMS/CSM/QBO'], ['关键动作', '审核后出库'], ['完成结果', '开票并同步库存'], ['流程类型', '标准销售']], steps: [['老客登录 WEB，选择商品、数量、配送时间并提交订单', 'WEB', '#E3F2FD', '#1565C0'], ['客服在 CORE-OMS 审核折扣、VIP、轮胎税等规则', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['在订单中补充客户备注和特殊要求', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['CORE-WMS 打印拣货单，安排人员拣货、扫码下架', 'CORE-WMS', '#FFF3E0', '#E65100'], ['订单按配送或自取方式完成出库，库存实时扣减', 'CORE-WMS', '#FFF3E0', '#E65100'], ['CORE-CSM 将库存变化同步到 WEB，QBO 自动生成发票', 'CORE-CSM/QBO', '#F3E5F5', '#6A1B9A']], notes: ['这是最完整、最标准的闭环场景，涉及销售、仓储、库存与财务全链路。', '若备注不完整，最容易在出库和配送环节出现执行偏差。', '建议在明细页加入税费和折扣校验规则，减少人工审核压力。'] },
             s3: { c: '#E65100', t: '③ 电话下单', sub: '客户通过电话询价、查库存、确认价格后，由客服在 OMS 中代为下单并推进仓储执行。', metrics: [['涉及系统', 'CORE-OMS / CORE-WMS'], ['关键动作', '人工报价'], ['完成结果', '代客做单出库'], ['流程类型', '人工接单']], steps: [['客户来电后，客服先在 CORE-OMS 锁定账户', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['根据库存和价格进行电话报价，确认是否适用现金价', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['客服在 CORE-OMS 代客做单，通常不走折扣逻辑', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['若缺货可推荐替代品；仍无法满足则进入 QC/ON 调货', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['确认有货后，将订单提交给 CORE-WMS 执行拣货出库', 'CORE-WMS', '#FFF3E0', '#E65100']], notes: ['电话下单的核心风险点在于口头信息遗漏，建议沉淀统一话术与确认清单。', '与线上下单相比，该场景更依赖客服经验与即时沟通能力。', '如后续量大，可考虑沉淀半自动录单模板。'] },
-            s4: { c: '#AD1457', t: '④ 取消 / 修改订单', sub: '根据订单是否已经出库，分别走 VOID 作废或退单冲销路径。', metrics: [['涉及系统', 'CORE-OMS/CORE-WMS/QBO'], ['关键动作', '判断出库状态'], ['完成结果', '库存与财务一致'], ['流程类型', '异常调整']], steps: [['先在 CORE-OMS 查询订单当前状态', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['若仓库尚未出库，可直接 VOID/取消，库存自动归还', 'CORE-OMS/CORE-WMS', '#FFF3E0', '#E65100'], ['若已出库，则需了解物流与收货情况，同步财务处理', 'QBO', '#FFEBEE', '#B71C1C'], ['涉及退货回仓时，需补做退单归库，并在 QBO 执行冲销', 'QBO', '#FFEBEE', '#B71C1C']], notes: ['取消/修改流程的关键是先判断出库状态，再决定走库存回退还是财务冲销。', '这类场景若处理不及时，最容易造成库存与发票状态不一致。', '建议增加"已出库/未出库"醒目标识，方便客服快速判断。'] },
+            s4: { c: '#AD1457', t: '④ 取消 / 修改 / 紧急加单', sub: '覆盖未发货取消、订单修改三阶段，以及发票生成前的紧急加单；核心是按 WMS 状态决定直接覆盖、子单追加、就地改单或售后流程。', metrics: [['涉及系统', '电商/OMS/WMS/QBO'], ['关键动作', '按 WMS 状态分流'], ['完成结果', '订单/库存/发票一致'], ['流程类型', '异常调整']], steps: [['取消订单：未发货且线下支付时，客服取消/作废订单，WMS 拦截；QBO 未建账不处理，已建 Invoice 则 Void', '电商/OMS/WMS/QBO', '#E8F5E9', '#2E7D32'], ['修改流程一：仓库尚未拣货，客服直接改订单；中间件撤回原 WMS 拣货任务并生成新的高优先级任务，QBO 不动作，未来拣完再开正确发票', 'OMS/WMS', '#FFF3E0', '#E65100'], ['修改流程二：WMS 已 Picked 但未发货，若增加商品/数量，则原单不动，系统生成影子子订单 Order_A_ADD，WMS 插队拣货，QBO 单独追加副发票', 'OMS/WMS/QBO', '#F3E5F5', '#6A1B9A'], ['修改流程二：若减单或换货，中间件调用 Update Invoice API 修改原发票；有差价时通过负的折扣/调整行锁死原金额，WMS 同步 RMA 入库和补发出库', 'OMS/WMS/QBO', '#FFEBEE', '#B71C1C'], ['修改流程三：WMS 已 Shipped，物理无法拦截，客服启动 RMA 售后工单；退部分货开 Credit Memo，整单换货则 Credit Memo 冲平旧发票并开新 Invoice', 'OMS/WMS/QBO', '#FFEBEE', '#B71C1C'], ['紧急加单：WMS 正在拣货且 QBO 发票尚未生成时，客服在原订单追加 2 条轮胎，中间件更新 WMS 拣货任务，HHT 提示多拣', 'OMS/WMS/HHT', '#FFF3E0', '#E65100'], ['拣货完成后，系统调用 API 开出包含原商品和追加商品的完整 QBO 发票，QBO 和 WMS 库存数量一次性扣减正确', 'QBO', '#FFEBEE', '#B71C1C']], notes: ['订单修改必须先看 WMS 状态：未拣货、Picked 未发出、Shipped 三种处理方式完全不同。', 'Picked 后加单用子订单和副发票，减单/换货用 Update Invoice + RMA/补发。', 'Shipped 后不再尝试线上拦截，进入标准售后 RMA / Credit Memo / 新 Invoice 流程。'] },
             s5: { c: '#00695C', t: '⑤ 仓储出库', sub: '聚焦仓储执行环节，从订单确认到拣货、下架、配送或自取，再到库存同步。', metrics: [['涉及系统', 'CORE-OMS/CORE-WMS/CORE-CSM'], ['关键动作', '拣货下架'], ['完成结果', '库存扣减同步'], ['流程类型', '仓储执行']], steps: [['CORE-OMS 审核确认订单后，将其提交到仓储执行', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['CORE-WMS 打印拣货单并安排拣货人员开始作业', 'CORE-WMS', '#FFF3E0', '#E65100'], ['拣货人员按照单据扫码下架，确保商品与数量准确', 'CORE-WMS', '#FFF3E0', '#E65100'], ['根据交付方式，进入直接配送或客户自取两条支线', 'CORE-WMS', '#FFF3E0', '#E65100'], ['完成出库记录后，库存实时扣减，通过 CORE-CSM 回写 WEB', 'CORE-CSM', '#F3E5F5', '#6A1B9A']], notes: ['这是影响客户体验最直接的环节，出库准确率和时效都很重要。', '扫码确认是降低错拣、漏拣风险的关键控制点。', '如果配送和自取规则不同，可以进一步拆分两套执行 SOP。'] },
             s6: { c: '#4527A0', t: '⑥ 仓储入库', sub: '适用于集装箱到货、采购收货、退货回仓等入库场景，重点在核对、上架与成本同步。', metrics: [['涉及系统', 'CORE-WMS/CORE-CSM/QBO'], ['关键动作', '收货核对'], ['完成结果', '上架并更新成本'], ['流程类型', '补货入库']], steps: [['集装箱、采购 PO 或退货回仓触发入库流程', 'CORE-WMS', '#FFF3E0', '#E65100'], ['CORE-WMS 对照 PO、数量和品质执行收货核对', 'CORE-WMS', '#FFF3E0', '#E65100'], ['若发现异常，记录差异并通知采购或相关责任人', '异常处理', '#F5F5F5', '#777'], ['核对通过后扫码上架，录入具体货位信息', 'CORE-WMS', '#FFF3E0', '#E65100'], ['库存增加后由 CORE-CSM 回写 WEB，QBO 同步更新库存成本', 'CORE-CSM/QBO', '#F3E5F5', '#6A1B9A']], notes: ['入库流程直接影响库存准确性和成本准确性。', '异常差异最好形成台账，便于后续追责与供应商对账。', '若入库频繁，建议加入批次、质检结果和货位热区优化。'] },
-            s7: { c: '#B71C1C', t: '⑦ 退货 / 换货', sub: '处理客户退货与换货，覆盖原订单核查、回仓、估价单和发票冲销/重开。', metrics: [['涉及系统', 'CORE-OMS/CORE-WMS/QBO'], ['关键动作', '核查原订单'], ['完成结果', '退库与发票调整'], ['流程类型', '售后处理']], steps: [['客户来电后，在 CORE-OMS 查询原订单确认历史交易', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['退货时先出退单，再安排退货回仓并在 CORE-WMS 执行入库', 'CORE-WMS', '#FFF3E0', '#E65100'], ['换货时打印 estimate ×2，不再重复收款，安排换发货', 'CORE-WMS', '#FFF3E0', '#E65100'], ['QBO 对原发票执行冲销，必要时重新生成新发票', 'QBO', '#FFEBEE', '#B71C1C']], notes: ['退换货不仅影响库存，也会影响收入确认和客户关系。', '建议明确退换货的可接受条件、时效和责任归属。', '若换货量大，可在估价单环节增加标准模板减少人工输入。'] },
-            s8: { c: '#F57F17', t: '⑧ 零售 WALK-IN', sub: '客户到店现场购买，由客服开现金单、仓储即时拣货、财务现场收款。', metrics: [['涉及系统', 'CORE-OMS/CORE-WMS/QBO'], ['关键动作', '现场收款'], ['完成结果', '即买即取'], ['流程类型', '门店零售']], steps: [['客户到店或现场沟通需求，确认购买内容', '门店现场', '#F5F5F5', '#777'], ['CORE-OMS 开现金单，按 13% + 零售价规则计价', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['客服补充备注或特殊要求，并确认订单内容', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['CORE-WMS 现场拣货，客户当场取货', 'CORE-WMS', '#FFF3E0', '#E65100'], ['QBO 生成现金发票并完成现场收款', 'QBO', '#FFEBEE', '#B71C1C']], notes: ['零售 WALK-IN 对响应速度要求高，适合流程尽量短、动作尽量少。', '现场取货时仍建议保留扫码与单据记录，避免库存失真。', '如未来门店零售规模扩大，可进一步拆出 POS 风格界面。'] },
-            s9: { c: '#00838F', t: '⑨ 调货', sub: '用于跨地区或跨分部之间的库存协调、报价和装车安排。', metrics: [['涉及系统', 'CORE-CSM/CORE-OMS/CORE-WMS'], ['关键动作', '调货报价'], ['完成结果', '装车调拨'], ['流程类型', '库存协调']], steps: [['CORE-CSM 查看库存与价位信息，判断是否需要调货', 'CORE-CSM', '#F3E5F5', '#6A1B9A'], ['CORE-OMS 编辑 estimate，形成调货报价或调拨单据', 'CORE-OMS', '#E8F5E9', '#2E7D32'], ['在团队沟通群内确认调货内容、数量和接收方安排', '协同沟通', '#F5F5F5', '#777'], ['提前打印调货单，CORE-WMS 按计划安排装车与发运', 'CORE-WMS', '#FFF3E0', '#E65100']], notes: ['调货场景的难点主要在跨团队协同和时间安排。', '如果能把群消息确认沉淀为系统状态，会更方便追踪执行。', '建议后续把调货的发起、确认、装车、签收做成更完整的状态流。'] }
+            s7: { c: '#B71C1C', t: '⑦ 退货 / 换货', sub: '退货适用于已发货场景，按客户是否已付款分别核销应收或形成退款/抵扣；换货按线下支付逻辑更新 Invoice，并由 WMS 完成旧品入库、新品出库。', metrics: [['涉及系统', '电商/OMS/WMS/QBO'], ['关键动作', 'RMA + Invoice 更新'], ['完成结果', '库存与应收闭环'], ['流程类型', '售后处理']], steps: [['退货场景：货已经发走且 WMS 已扣库存，客户把货寄回，电商开启 RMA 并标记商品已退回', '电商/OMS', '#E8F5E9', '#2E7D32'], ['WMS 处理 RMA 物理入库，退回商品库存 +1', 'CORE-WMS', '#FFF3E0', '#E65100'], ['客户未付款时：QBO 根据 WMS 入库通知创建 Credit Memo，冲回 COGS 并产生额度，再 Apply 到未付 Invoice 上减少应付金额', 'QBO', '#FFEBEE', '#B71C1C'], ['客户已付款时：QBO 创建 Credit Memo 加回库存资产并冲回 COGS；可转 Refund Cheque/Expense 退款，或作为 Unapplied Credit 留作下次抵扣', 'QBO', '#FFEBEE', '#B71C1C'], ['同价换货：电商/中台修改原订单或换货单，商品 A 减 1、商品 B 加 1，总价不变', '电商/OMS', '#E8F5E9', '#2E7D32'], ['WMS 生成商品 A 的 RMA 入库和商品 B 的 Manual Fulfillment 补发出库，实现 A +1、B -1', 'CORE-WMS', '#FFF3E0', '#E65100'], ['QBO 对未核销 Invoice 直接替换行项目；不等价换货则更新 Invoice 总额，并通过 Inventory Adjustment 平衡 A、B 库存，最终 Bank Feeds Match 到更新后的 Invoice', 'QBO', '#FFEBEE', '#B71C1C']], notes: ['退货是已发货场景：WMS 已扣库存，退回后必须通过 RMA 做物理入库。', '未付款退货的核心是 Credit Memo Apply 到未付 Invoice，核销应收；已付款退货则在退款和 Unapplied Credit 之间选择。', '换货的核心不是 $0 新单，而是更新 Invoice：同价保持金额，不等价更新总额，并用 Inventory Adjustment 保持 QBO 库存准确。'] },
+            s8: { c: '#F57F17', t: '⑧ 零售 WALK-IN', sub: '现场销售在 OMS 下单并选择 Local Pickup，订单以 High Priority 推送 WMS，Confirm Pickup 后自动触发 QBO Invoice 与 Payment 闭环。', metrics: [['涉及系统', 'OMS/WMS/QBO'], ['关键动作', 'Confirm Pickup'], ['完成结果', 'Invoice 已付清'], ['流程类型', '门店零售']], steps: [['现场下单：销售在 OMS 录入商品，挂在 Walk-In 或散客名下', 'OMS', '#E8F5E9', '#2E7D32'], ['选择自提：配送方式必须勾选 Local Pickup（现场自提）', 'OMS', '#E8F5E9', '#2E7D32'], ['状态插队：订单提交后，OMS 状态变为 Paid（已付款）或 Awaiting Pickup（待自提），并以 High Priority 推送到 WMS', 'OMS/WMS', '#E8F5E9', '#2E7D32'], ['仓库特快拣货：工人开叉车或拿推车取下轮胎/轮毂，运到展厅自提区（Pickup Area）', 'CORE-WMS', '#FFF3E0', '#E65100'], ['现场交货：散客核对无误后提走商品，点击 Confirm Pickup（确认提货）', 'CORE-WMS', '#FFF3E0', '#E65100'], ['库存变动：点击 Confirm Pickup 的瞬间，WMS 纯物理库存正式扣减', 'CORE-WMS', '#F3E5F5', '#6A1B9A'], ['财务闭环：中间件监测到 Confirm Pickup 信号，QBO 自动生成 Invoice，扣减财务库存并结转 COGS', 'QBO', '#FFEBEE', '#B71C1C'], ['自动挂载 Payment：现场已刷卡或转账，系统自动绑定付款凭证，QBO 发票一出生就是 Paid（已付清）状态', 'QBO', '#FFEBEE', '#B71C1C']], notes: ['Walk-In 必须选择 Local Pickup，确保订单走现场自提链路。', 'WMS 只有在 Confirm Pickup 时正式扣减物理库存。', 'QBO 由 Confirm Pickup 自动触发 Invoice 和 Payment，形成秒级财务闭环。'] },
+            s9: { c: '#00838F', t: '⑨ 调货', sub: '仓管或供应链人员创建库存调拨单，调出仓扣减库存，货品进入 In-Transit 在途锁定，调入仓收货上架后转为可售。', metrics: [['涉及系统', 'WMS/中台/HHT'], ['关键动作', '库存调拨单'], ['完成结果', '跨仓库存转移'], ['流程类型', '库存协调']], steps: [['仓管或供应链人员在 WMS 后台或自研中台创建库存调拨单，填写调出仓库ID、调入仓库ID、SKU、计划调拨数量', 'WMS/中台', '#E8F5E9', '#2E7D32'], ['单据状态为 Draft（草稿）或 Pending（待执行），等待调出仓执行', 'WMS', '#E8F5E9', '#2E7D32'], ['调出仓工人在扫描枪（HHT）上收到调拨任务，去货架取货并搬到打包区装箱', '调出仓/HHT', '#FFF3E0', '#E65100'], ['工人在系统里确认出库（Dispatch / Shipped），调出仓该 SKU 物理库存立刻减少', 'CORE-WMS', '#FFF3E0', '#E65100'], ['货物运输途中标记为 In-Transit，在途库存既不属于 A 仓也不属于 B 仓，前台电商和后台销售均不可售', 'WMS', '#F3E5F5', '#6A1B9A'], ['货车到达调入仓后，工人扫描调拨单号，清点实际到货数量', '调入仓/HHT', '#FFF3E0', '#E65100'], ['确认无破损后，扫描枪提示具体货位（Bin Location），工人确认上架（Putaway / Received）', 'CORE-WMS', '#FFF3E0', '#E65100'], ['调入仓该 SKU 物理库存立刻增加，状态转为可售（Available）', 'CORE-WMS', '#F3E5F5', '#6A1B9A']], notes: ['调货必须有在途状态控制，避免货在路上时被前台或销售再次售出。', '调出仓确认 Dispatch / Shipped 后立即扣减物理库存。', '调入仓确认 Putaway / Received 后库存增加并转为 Available。'] }
         };
 
         const BASE = {
@@ -2314,6 +2753,46 @@
             document.querySelectorAll('.baseline-card').forEach(item => item.classList.remove('active'));
         }
 
+        function openExceptionModal(card) {
+            const modal = document.getElementById('exceptionModal');
+            const title = document.getElementById('exceptionModalTitle');
+            const body = document.getElementById('exceptionModalBody');
+            if (!modal || !title || !body || !card) return;
+
+            const accent = card.style.getPropertyValue('--exception-accent') || '#2563eb';
+            const heading = card.querySelector('strong');
+            title.textContent = heading ? heading.textContent : '特殊业务场景';
+            body.style.setProperty('--exception-accent', accent);
+            body.innerHTML = '';
+
+            Array.from(card.children).forEach((child) => {
+                if (child.tagName === 'STRONG') return;
+                body.appendChild(child.cloneNode(true));
+            });
+
+            modal.classList.add('active');
+        }
+
+        function closeExceptionModal(event) {
+            if (event && event.target !== document.getElementById('exceptionModal')) return;
+            const modal = document.getElementById('exceptionModal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function initExceptionCards() {
+            document.querySelectorAll('.exception-card.expanded').forEach((card) => {
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+                card.addEventListener('click', () => openExceptionModal(card));
+                card.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        openExceptionModal(card);
+                    }
+                });
+            });
+        }
+
         function toggleGroup(id) {
             const el = document.getElementById(id); if (el) el.classList.toggle('open');
         }
@@ -2350,8 +2829,12 @@
         }
 
         renderDetail('all');
+        initExceptionCards();
         document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') closeDataModal();
+            if (event.key === 'Escape') {
+                closeDataModal();
+                closeExceptionModal();
+            }
         });
     </script>
 </body>
