@@ -320,6 +320,84 @@
             font-size: 16px
         }
 
+        .portal-main .portal-card {
+            grid-template-columns: minmax(0, 1fr) 220px;
+            grid-template-areas:
+                "badge hero"
+                "title hero"
+                "desc hero"
+                "strip strip"
+                "foot flow"
+                "meta link";
+            gap: 14px 20px;
+            min-height: 0
+        }
+
+        .portal-main .portal-badge {
+            position: relative;
+            z-index: 1;
+            grid-area: badge
+        }
+
+        .portal-main .portal-card h2 {
+            grid-area: title;
+            font-size: 40px
+        }
+
+        .portal-main .portal-card .card-hero {
+            grid-area: hero;
+            align-self: stretch;
+            justify-content: center;
+            padding: 22px 20px;
+            border-radius: 20px;
+            background: linear-gradient(180deg, rgba(29, 78, 216, .1), rgba(29, 78, 216, .035));
+            border: 1px solid rgba(29, 78, 216, .14)
+        }
+
+        .portal-main .portal-card .card-hero strong {
+            font-size: 76px
+        }
+
+        .portal-main .portal-card .card-hero span {
+            max-width: 160px;
+            font-size: 14px;
+            color: #334155
+        }
+
+        .portal-main .portal-card p {
+            grid-area: desc;
+            max-width: 520px
+        }
+
+        .portal-main .overview-strip {
+            grid-area: strip
+        }
+
+        .portal-main .portal-card .mini-flow {
+            grid-area: flow;
+            align-self: stretch;
+            grid-template-columns: 1fr;
+            gap: 7px
+        }
+
+        .portal-main .overview-foot {
+            grid-area: foot;
+            align-self: stretch;
+            display: flex;
+            align-items: center
+        }
+
+        .portal-main .meta {
+            grid-area: meta;
+            align-self: center
+        }
+
+        .portal-main .card-link {
+            grid-area: link;
+            justify-self: end;
+            align-self: center
+        }
+
         .portal-card .mini-flow {
             margin-top: 0;
             display: grid;
@@ -409,6 +487,32 @@
 
             .overview-strip {
                 grid-template-columns: 1fr
+            }
+
+            .portal-main .portal-card {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "badge"
+                    "title"
+                    "hero"
+                    "desc"
+                    "strip"
+                    "flow"
+                    "foot"
+                    "meta"
+                    "link"
+            }
+
+            .portal-main .portal-card .card-hero strong {
+                font-size: 56px
+            }
+
+            .portal-main .portal-card .mini-flow {
+                grid-template-columns: repeat(3, minmax(0, 1fr))
+            }
+
+            .portal-main .card-link {
+                justify-self: start
             }
 
             h1 {
